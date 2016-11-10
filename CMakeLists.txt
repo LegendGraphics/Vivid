@@ -1,0 +1,41 @@
+project(TinyEngine)
+cmake_minimum_required(VERSION 2.8)
+
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+
+find_package(OpenGL REQUIRED)
+find_package(Boost REQUIRED)
+find_package(Boost REQUIRED COMPONENTS system filesystem chrono)
+find_package(lua REQUIRED)
+find_package(3rdParty)
+
+
+include_directories (${CMAKE_SOURCE_DIR})
+include_directories(${Boost_INCLUDE_DIRS})
+include_directories(${GLEW_INCLUDE_DIR})
+include_directories(${GLFW_INCLUDE_DIR})
+include_directories(${FREEGLUT_INCLUDE_DIR})
+include_directories(${SOIL_INCLUDE_DIR})
+include_directories(${LUA_INCLUDE_DIR})
+include_directories(${TOLUAPP_INCLUDE_DIR})
+
+  
+FILE( GLOB common 			  		"common/*.*" ) 
+FILE( GLOB math 			  		"math/*.*" )  
+FILE( GLOB renderer 			  	"renderer/*.*" ) 
+FILE( GLOB base 			  		"base/*.*" ) 
+FILE( GLOB ui 			  		    "ui/*.*" ) 
+FILE( GLOB scripting 			  	"scripting/*.*" )
+					 
+source_group("common" 			FILES ${common} )
+source_group("math" 			FILES ${math} )
+source_group("renderer" 		FILES ${renderer} )
+source_group("base" 		    FILES ${base} )
+source_group("ui" 		        FILES ${ui} )
+source_group("scripting" 		FILES ${scripting} )
+
+
+ADD_EXECUTABLE ( TinyEngine main.cpp ${common} ${math} ${renderer} ${base} ${ui} ${scripting})
+target_link_libraries(TinyEngine ${OPENGL_LIBRARIES} ${Boost_LIBRARIES} 
+${FREEGLUT_LIBRARY}  ${GLEW_LIBRARY} ${SOIL_LIBRARY} ${GLFW_LIBRARY} ${LUA_LIBRARIES} ${TOLUAPP_LIBRARY})
+

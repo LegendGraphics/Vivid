@@ -1,0 +1,13 @@
+
+class Animation: public Ref
+{
+    Animation();
+    Animation(const std::string& animation_folder);
+    virtual ~Animation();
+
+    void bindSprite(Sprite* sprite);
+
+    void setDuration(float duration);
+
+    void update(float delta_time);
+};

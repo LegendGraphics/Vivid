@@ -1,0 +1,30 @@
+
+class Sprite: public Node
+{
+    Sprite();
+    virtual ~Sprite();
+
+    virtual void accept(NodeVisitor* node_visitor);
+    virtual void draw(Renderer* renderer);
+
+    bool loadTexture(const std::string& image_file);
+    bool loadTexture(Image* image);
+
+    virtual void update(float delta_time);
+
+    void registerAnimation(const std::string& anim_name, Animation* animation);
+    void play(const std::string& anim_name);
+    void stop(const std::string& anim_name);
+    
+    void addEventListener(EventType event_type, LUA_CALLBACK callback);
+    void removeEventListener(EventType event_type);
+    
+    
+    void setPosition(float x, float y);
+    Vec2& getPosition();
+    void schedule(const std::string& key);
+    
+    void setContentSize(float x, float y);
+    
+    void setUI(bool ui);
+};

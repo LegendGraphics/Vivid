@@ -1,0 +1,19 @@
+
+class UIButton: public UIWidget
+{
+    UIButton();
+    virtual ~UIButton();
+    
+    bool setImage(const std::string& image_file);
+    
+    void setPosition(float x, float y);
+    Vec2& getPosition();
+    
+    void setContentSize(float x, float y);
+    void setWidgetName(const std::string& name);
+    void addChild(Node* child);
+    
+    bool isInWidget(float x, float y);
+    
+    void addEventListener(EventType event_type, LUA_CALLBACK callback);
+};

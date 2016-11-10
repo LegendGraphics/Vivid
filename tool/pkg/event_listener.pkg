@@ -1,0 +1,10 @@
+
+class EventListener: public Ref
+{
+    EventListener(int key, const LUA_CALLBACK callback);
+    virtual ~EventListener();
+
+    int getKey() const {return _key; }
+    int getLuaCallback() const { return _lua_callback; }
+
+};
