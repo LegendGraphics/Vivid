@@ -63,7 +63,6 @@ public:
     void unschedule(const std::string& key);
 
     void addEventListener(EventType event_type, const EventListener::EventCallback& callback);
-    void addEventListener(EventType event_type, LUA_CALLBACK callback);
     void removeEventListener(EventType event_type);
 
 protected:

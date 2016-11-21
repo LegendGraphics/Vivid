@@ -171,11 +171,6 @@ void Node::addEventListener(EventType event_type, const EventListener::EventCall
     director->getEventDispatcher()->addEventListener(new EventListener(event_type, callback));
 }
 
-void Node::addEventListener(EventType event_type, LUA_CALLBACK callback)
-{
-    Director* director = Director::getInstance();
-    director->getEventDispatcher()->addEventListener(new EventListener(event_type, callback));
-}
 
 void Node::removeEventListener(EventType event_type)
 {
