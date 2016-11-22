@@ -165,10 +165,10 @@ void Node::unschedule(const std::string& key)
     director->getScheduler()->unschedule(key);
 }
 
-void Node::addEventListener(EventType event_type, const EventListener::EventCallback& callback)
+void Node::addEventListener(EventType event_type, Node* node)
 {
     Director* director = Director::getInstance();
-    director->getEventDispatcher()->addEventListener(new EventListener(event_type, callback));
+    director->getEventDispatcher()->addEventListener(new EventListener<dynam>(event_type, callback));
 }
 
 

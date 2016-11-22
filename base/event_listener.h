@@ -39,6 +39,4 @@ protected:
     EventCallback _callback;
 };
 
-
-
 #endif // BASE_EVENT_LISTENER_H
