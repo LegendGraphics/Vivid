@@ -15,6 +15,9 @@
 class NodeVisitor;
 class Renderer;
 
+class ComponentContainer;
+class Component;
+
 class Node: public Ref
 {
 public:
@@ -72,6 +75,10 @@ protected:
 
     void assembleTransform();
 
+public:
+    void addComponent(Component* component);
+    void removeComponent(Component* component);
+
 protected:
     std::vector<Node*> _children;   // in traversal order which is from max to min by z order
     Node* _parent;
@@ -85,6 +92,8 @@ protected:
     Vec2 _world_position;
 
     bool _visible;
+
+    ComponentContainer* _component_container;
 };
 
 #endif // COMMON_NODE_H
