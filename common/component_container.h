@@ -16,7 +16,7 @@ public:
     ComponentContainer(Node* owner);
     ~ComponentContainer();
 
-    Component* get(const std::string& name) const;
+    Component* get(const std::string& name);
 
     bool add(Component* component);
     bool remove(const std::string& name);

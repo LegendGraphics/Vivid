@@ -11,14 +11,14 @@ ComponentContainer::~ComponentContainer()
 {  
 }
 
-Component* ComponentContainer::get(const std::string& name) const
+Component* ComponentContainer::get(const std::string& name)
 {
     Component* ret = nullptr;
 
     auto& it = _component_map.find(name);
     if (it != _component_map.end())
     {
-        ret = it->second;
+        ret = it->second.get();
     }
 
     return ret;
