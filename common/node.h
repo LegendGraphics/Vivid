@@ -2,14 +2,10 @@
 #define COMMON_NODE_H
 
 #include <vector>
+#include <type_traits>
 
 #include "base/ref.h"
-#include "base/data_types.h"
-#include "base/event.h"
-#include "base/event_listener.h"
-#include "math/vec2.h"
-#include "math/transform.h"
-
+#include "base/refptr.hpp"
 
 
 class NodeVisitor;
@@ -24,76 +20,79 @@ public:
     Node();
     virtual ~Node();
 
-    void setLocalZOrder(int local_z_order);
-    inline int getLocalZOrder() { return _local_z_order; }
-
-    void addChild(Node* child, int local_order);
     void addChild(Node* child);
     void removeChild(Node* child);
-    inline std::vector<Node*>& getChildren() { return _children; }
-    inline Node* getChild(int index) { return _children[index]; }
+    inline std::vector<RefPtr<Node>>& getChildren() { return _children; }
+    inline Node* getChild(int index) { return _children[index].get(); }
 
     void setParent(Node* parent);
-    inline Node* getParent() { return _parent; }
-
-    void setPosition(const Vec2& pos);
-    void setPosition(float x, float y);
-    inline const Vec2& getPosition() const { return _position; }
-
-    void setAnchorPoint(const Vec2& anchor_point);
-    void setAnchorPoint(float x, float y);
-    inline const Vec2& getAnchorPoint() const { return _anchor_point; }
-
-    void setContentSize(const Size& content_size);
-    void setContentSize(float x, float y);
-    inline const Size& getContentSize() const { return _content_size; }
-
-    inline const Transform& getTransform() const { return _transform; }
-    inline const Vec2& getWorldPosition() const { return _world_position; }
+    inline Node* getParent() { return _parent.get(); }
 
     void setVisible(bool visible);
     inline bool getVisible() { return _visible; }
 
     virtual void accept(NodeVisitor* node_visitor);
-
     virtual void draw(Renderer* renderer);
+    virtual void update(float delta_time);
 
     void traversal(NodeVisitor* node_visitor);
 
-    virtual void update(float delta_time);
+    template <typename C, typename ... Args>
+    C& addComponent(Args&& ... args);
 
-    void schedule(const std::string& key);
-    void unschedule(const std::string& key);
+    template <typename C>
+    void removeComponent();
 
+    template <typename C>
+    C& getComponent() const;
 
-    void addEventListener(EventType event_type, Node* node);
-    void removeEventListener(EventType event_type);
+    template <typename C>
+    bool hasComponent() const;
 
-protected:
-    void insertChildByZOrder(Node* child);
-    void ReorderByZOrder(Node* child);
-
-    void assembleTransform();
-
-public:
+private:
     void addComponent(Component* component);
-    void removeComponent(Component* component);
+    void removeComponent();
+    Component& getComponent();
+    bool hasComponent();
 
 protected:
-    std::vector<Node*> _children;   // in traversal order which is from max to min by z order
-    Node* _parent;
-    int _local_z_order;
-
-    Vec2 _position;
-    Vec2 _anchor_point;
-    Size _content_size;
-
-    Transform _transform;
-    Vec2 _world_position;
+    std::vector<RefPtr<Node>> _children;
+    RefPtr<Node> _parent;
 
     bool _visible;
 
     ComponentContainer* _component_container;
 };
+
+template <typename C, typename ... Args>
+C& Node::addComponent(Args&& ... args);
+{
+    TE_ASSERT(std::is_base_of<Component, C>(), "C is not a component, cannot add C to node");
+    auto component = new C{std::forward<Args>(args)...};
+    // to do component type
+    addComponent(component);
+    return *component;
+}
+
+template <typename C>
+void Node::removeComponent()
+{
+    TE_ASSERT(std::is_base_of<Component, C>(), "C is not a component, cannot remove C from node");
+    removeComponent();
+}
+
+template <typename C>
+C& Node::getComponent() const
+{
+    TE_ASSERT(std::is_base_of<Component, C>(), "C is not a component, cannot retrieve C from node");
+    return static_cast<C&>(getComponent());
+}
+
+template <typename C>
+bool Node::hasComponent() const
+{
+    static_assert(std::is_base_of<Component, C>(), "C is not a component, cannot determine if node has C");
+    return hasComponent();
+}
 
 #endif // COMMON_NODE_H
