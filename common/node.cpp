@@ -5,6 +5,9 @@
 #include "common/node.h"
 #include "common/node_visitor.h"
 
+#include "common/component.h"
+#include "common/component_container.h"
+
 Node::Node()
 :_parent(NULL),
 _local_z_order(0),
@@ -178,3 +181,12 @@ void Node::removeEventListener(EventType event_type)
    // director->getEventDispatcher()->removeEventListener()
 }
 
+void Node::addComponent(Component* component)
+{
+    _component_container->add(component);
+}
+
+void Node::removeComponent(Component* component)
+{
+    _component_container->remove(component);
+}
