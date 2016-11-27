@@ -2,15 +2,17 @@
 #define COMMON_COMPONENT_H
 
 #include <string>
+#include <array>
+#include <bitset>
 
 #include "base/ref.h"
-
-class Node;
+#include "base/refptr.hpp"
 
 class Component: public Ref
 {
 public:
-    virtual bool init();
+    virtual void init();
+    virtual void update();
 
     bool isEnabled() const { return _enabled; }
     void setEnabled(bool enabled);
@@ -18,15 +20,10 @@ public:
     const std::string& getName() const { return _name; }
     void setName(const std::string& name);
 
-    Node* getOwner() const { return _owner; }
-    void setOwner(Node *owner);
-
-    virtual void update(float delta);
-
 protected:
-    Node* _owner;
     std::string _name;
     bool _enabled;
 };
+
 
 #endif // COMMON_COMPONENT_H
