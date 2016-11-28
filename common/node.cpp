@@ -66,12 +66,22 @@ void Node::traversal(NodeVisitor* node_visitor)
 }
 
 
-void Node::addComponent(Component* component)
+void Node::addComponent(Component* component, int component_id)
 {
-    _component_container->add(component);
+    _component_container->add(component, component_id);
 }
 
-void Node::removeComponent(Component* component)
+void Node::removeComponent(int component_id)
 {
-    _component_container->remove(component);
+    _component_container->remove(component_id);
+}
+
+Component* Node::getComponent(int component_id)
+{
+    return _component_container->get(component_id);
+}
+
+bool Node::hasComponent(int component_id)
+{
+    return _component_container->has(component_id);
 }

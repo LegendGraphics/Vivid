@@ -1,17 +1,20 @@
 #include "common/component.h"
 
 Component::Component()
-    :_owner(nullptr),
-    _enabled(true)
+    :_enabled(true)
 {
 
 }
 
 Component::~Component(){}
 
-bool Component::init()
+void Component::init()
 {
-    return true;
+}
+
+void Component::update()
+{
+
 }
 
 void Component::setEnabled(bool enabled)
@@ -24,10 +27,6 @@ void Component::setName(const std::string& name)
     _name = name;
 }
 
-void Component::setOwner(Node *owner)
-{
-    _owner = owner;
-}
 
 
 

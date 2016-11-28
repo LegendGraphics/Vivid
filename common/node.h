@@ -38,22 +38,22 @@ public:
     void traversal(NodeVisitor* node_visitor);
 
     template <typename C, typename ... Args>
-    C& addComponent(Args&& ... args);
+    C* addComponent(Args&& ... args);
 
     template <typename C>
     void removeComponent();
 
     template <typename C>
-    C& getComponent() const;
+    C* getComponent() const;
 
     template <typename C>
     bool hasComponent() const;
 
 private:
-    void addComponent(Component* component);
-    void removeComponent();
-    Component& getComponent();
-    bool hasComponent();
+    void addComponent(Component* component, int component_id);
+    void removeComponent(int component_id);
+    Component* getComponent(int component_id);
+    bool hasComponent(int component_id);
 
 protected:
     std::vector<RefPtr<Node>> _children;
@@ -65,34 +65,33 @@ protected:
 };
 
 template <typename C, typename ... Args>
-C& Node::addComponent(Args&& ... args);
+C* Node::addComponent(Args&& ... args);
 {
-    TE_ASSERT(std::is_base_of<Component, C>(), "C is not a component, cannot add C to node");
+    static_assert(std::is_base_of<Component, C>(), "C is not a component, cannot add C to node");
     auto component = new C{std::forward<Args>(args)...};
-    // to do component type
-    addComponent(component);
-    return *component;
+    addComponent(component, getComponentTypeId<C>());
+    return component;
 }
 
 template <typename C>
 void Node::removeComponent()
 {
-    TE_ASSERT(std::is_base_of<Component, C>(), "C is not a component, cannot remove C from node");
-    removeComponent();
+    static_assert(std::is_base_of<Component, C>(), "C is not a component, cannot remove C from node");
+    removeComponent(getComponentTypeId<C>());
 }
 
 template <typename C>
-C& Node::getComponent() const
+C* Node::getComponent() const
 {
-    TE_ASSERT(std::is_base_of<Component, C>(), "C is not a component, cannot retrieve C from node");
-    return static_cast<C&>(getComponent());
+    static_assert(std::is_base_of<Component, C>(), "C is not a component, cannot retrieve C from node");
+    return static_cast<C*>(getComponent(getComponentTypeId<C>()));
 }
 
 template <typename C>
 bool Node::hasComponent() const
 {
     static_assert(std::is_base_of<Component, C>(), "C is not a component, cannot determine if node has C");
-    return hasComponent();
+    return hasComponent(getComponentTypeId<C>());
 }
 
 #endif // COMMON_NODE_H
