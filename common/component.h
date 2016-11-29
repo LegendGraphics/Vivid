@@ -7,23 +7,28 @@
 
 #include "base/ref.h"
 #include "base/refptr.hpp"
+#include "common/object.h"
 
-class Component: public Ref
+namespace te
 {
-public:
-    virtual void init();
-    virtual void update();
+    class Component: public Object
+    {
+    public:
+        virtual void init();
+        virtual void update();
 
-    bool isEnabled() const { return _enabled; }
-    void setEnabled(bool enabled);
+        bool isEnabled() const { return _enabled; }
+        void setEnabled(bool enabled);
 
-    const std::string& getName() const { return _name; }
-    void setName(const std::string& name);
+        const std::string& getName() const { return _name; }
+        void setName(const std::string& name);
 
-protected:
-    std::string _name;
-    bool _enabled;
-};
+    protected:
+        std::string _name;
+        bool _enabled;
+    };
+
+}
 
 
 #endif // COMMON_COMPONENT_H

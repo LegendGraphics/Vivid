@@ -1,16 +1,18 @@
 #include "common/copy_operator.h"
+#include "common/object.h"
+#include "common/node.h"
 
-namespace te
-{
-#define COPY_OP( TYPE, FLAG ) \
+
+using namespace te;
+
+#define COPY_FUNCTOR( TYPE ) \
     TYPE* CopyOperator::operator() (const TYPE* obj) const \
     { \
-    if (obj && _flags&FLAG) \
-    return osg::clone(obj, *this); \
+    if (obj && (_flag == DEEP_COPY)) \
+    return te::clone(obj, *this); \
     else \
     return const_cast<TYPE*>(obj); \
 }
 
-    COPY_OP(Object, DEEP_COPY_OBJECTS)
-    COPY_OP(Node, DEEP_COPY_NODES)
-}
+COPY_FUNCTOR(Object)
+COPY_FUNCTOR(Node)

@@ -4,6 +4,7 @@
 #include <string>
 
 #include "base/ref.h"
+#include "common/copy_operator.h"
 
 namespace te
 {
@@ -11,7 +12,7 @@ namespace te
     {
     public:
         Object();
-        Object(const Object& object, const CopyOperator& copyop = CopyOp::SHALLOW_COPY);
+        Object(const Object& object, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
         virtual Object* cloneType() const = 0;
         virtual Object* clone(const CopyOperator& copyop) const = 0;

@@ -2,6 +2,8 @@
 #include "common/component.h"
 #include "base/macros.h"
 
+using namespace te;
+
 ComponentContainer::ComponentContainer(Node* owner)
     : _owner(owner)
 {

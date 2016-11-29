@@ -6,35 +6,41 @@
 
 #include "base/ref.h"
 #include "base/refptr.hpp"
+#include "common/object.h"
 
-class Component;
-class Node;
+namespace te
+{
 
-class ComponentContainer: public Ref
-{    
-private:
-    typedef std::array<RefPtr<Component>, te::MAX_AMOUNT_OF_COMPONENTS> ComponentMap;
-    typedef std::bitset<te::MAX_AMOUNT_OF_COMPONENTS> ComponentTypeList;
+    class Component;
+    class Node;
 
-public:
-    ComponentContainer(Node* owner);
-    ~ComponentContainer();
+    class ComponentContainer: public Object
+    {    
+    private:
+        typedef std::array<RefPtr<Component>, te::MAX_AMOUNT_OF_COMPONENTS> ComponentMap;
+        typedef std::bitset<te::MAX_AMOUNT_OF_COMPONENTS> ComponentTypeList;
 
-    void add(Component* component, int component_id);
-    void remove(int component_id);
-    void removeAll();
-    Component* get(int component_id);
-    bool has(int component_id);
+    public:
+        ComponentContainer(Node* owner);
+        ~ComponentContainer();
 
-    bool isEmpty() const { return _component_map.empty(); } 
+        void add(Component* component, int component_id);
+        void remove(int component_id);
+        void removeAll();
+        Component* get(int component_id);
+        bool has(int component_id);
 
-    virtual void update();
+        bool isEmpty() const { return _component_map.empty(); } 
 
-private:
-    ComponentMap _component_map;
-    ComponentTypeList _component_types;
-    Node *_owner;
-};
+        virtual void update();
+
+    private:
+        ComponentMap _component_map;
+        ComponentTypeList _component_types;
+        Node *_owner;
+    };
+
+}
 
 namespace te
 {

@@ -7,6 +7,11 @@
 #include "common/component.h"
 #include "common/component_container.h"
 
+using namespace te;
+
+//namespace te
+//{
+
 Node::Node()
     :_parent(nullptr),
     _visible(true)
@@ -85,3 +90,5 @@ bool Node::hasComponent(int component_id)
 {
     return _component_container->has(component_id);
 }
+
+//}
