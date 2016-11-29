@@ -29,6 +29,9 @@ namespace te
         virtual ~Object();
 
         std::string _name;
+        unsigned int _id;
+
+        TE_DECLARE_INTERFACE()
     };
 }
 

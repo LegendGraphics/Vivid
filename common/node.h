@@ -68,7 +68,7 @@ namespace te
     };
 
     template <typename C, typename ... Args>
-    C* Node::addComponent(Args&& ... args);
+    C* Node::addComponent(Args&& ... args)
     {
         static_assert(std::is_base_of<Component, C>(), "C is not a component, cannot add C to node");
         auto component = new C{std::forward<Args>(args)...};

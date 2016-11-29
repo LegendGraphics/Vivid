@@ -11,11 +11,12 @@
 
 namespace te
 {
-    class Component: public Object
-    {
-    public:
-        virtual void init();
-        virtual void update();
+protected:
+    Component();
+    virtual ~Component();
+public:
+    virtual void init();
+    virtual void update();
 
         bool isEnabled() const { return _enabled; }
         void setEnabled(bool enabled);
