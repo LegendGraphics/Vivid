@@ -10,6 +10,9 @@
 
 class Component: public Ref
 {
+protected:
+    Component();
+    virtual ~Component();
 public:
     virtual void init();
     virtual void update();
