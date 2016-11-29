@@ -9,9 +9,6 @@
 class Ref
 {
     // We don't want those guys....
-    // ... unless we
-    // a. find a way of copying interfaces...
-    // b. handle refs
     Ref(const Ref& src);
     Ref& operator=(const Ref& rhs);
 
@@ -20,10 +17,18 @@ protected:
     virtual ~Ref() = 0;
 
 public:
-	void retain();
-	void release();
+    inline void retain()
+    {
+        TE_ASSERT(_reference_count >= 0, "reference count should not be less than zero");
+        _reference_count++;
+    };
+    inline void release()
+    {
+        TE_ASSERT(_reference_count > 0, "reference count should be greater than zero");
+        _reference_count--;
+    };
 	
-	unsigned int getReferenceCount();
+    unsigned int getReferenceCount() { return _reference_count; };
 
 private:
 	unsigned int _reference_count;

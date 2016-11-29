@@ -14,7 +14,7 @@ public:
     T* operator->();
     const T* operator->() const;
     operator bool() const;
-    T* get() const;
+    T* get();
     const T* get() const;
 
 private:
@@ -75,13 +75,13 @@ const T* RefPtr<T>::operator->() const
 }
 
 template <typename T>
-T* RefPtr<T>::get() const
+T* RefPtr<T>::get()
 {
     return _ptr;
 }
 
 template <typename T>
-const T* RefPtr<T>::get()
+const T* RefPtr<T>::get() const
 {
     return _ptr;
 }

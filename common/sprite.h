@@ -7,7 +7,6 @@
 #include "base/refptr.hpp"
 #include "common/node.h"
 
-
 class Image;
 class Animation;
 
