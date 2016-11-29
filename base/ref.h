@@ -1,6 +1,8 @@
 #ifndef COMMON_REF_H
 #define COMMON_REF_H
 
+#include "InterfaceHeaderMacros.h"
+
 /// Ref` is a base class for an object whose lifetime is managed by a ref.
 
 /// See \ref topic_refs for details. This class is often used in 
@@ -32,6 +34,8 @@ public:
 
 private:
 	unsigned int _reference_count;
+
+    TE_DECLARE_INTERFACE()
 };
 
 #endif // COMMON_REF_H

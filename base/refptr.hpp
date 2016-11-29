@@ -1,6 +1,12 @@
 #ifndef COMMON_REFPTR_HPP
 #define COMMON_REFPTR_HPP
 
+// non-template parts of RefPtr
+class RefPtrBase
+{
+
+};
+
 template <typename T>
 class RefPtr
 {
