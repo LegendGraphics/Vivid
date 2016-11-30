@@ -47,6 +47,7 @@ namespace te {
     private:                                                        \
         static const te::UniqueString* _interfaceId();
 
+#define QUERY_CAST(CastTo, obj) (obj != NULL ? static_cast<CastTo*>(obj->queryInterface(CastTo::interfaceId())) : NULL)
 
 namespace te
 {
