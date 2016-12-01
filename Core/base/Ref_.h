@@ -8,6 +8,7 @@
 /// See \ref topic_refs for details. This class is often used in 
 /// conjunction with `RefPtr`. When the ref count on the 
 /// object reaches under zero, it will be deleted.
+
 class Ref
 {
     // We don't want those guys....

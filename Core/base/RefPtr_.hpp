@@ -7,6 +7,7 @@ class RefPtrBase
 
 };
 
+
 template <typename T>
 class RefPtr
 {

@@ -2,6 +2,7 @@
 
  using namespace te;
 
+
 Component::Component()
     :_enabled(true)
 {
