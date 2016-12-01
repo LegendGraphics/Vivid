@@ -11,10 +11,9 @@ namespace te
     class Object: public Ref 
     {
     public:
-        Object();
-        Object(const Object& object, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
-        virtual Object* cloneType() const = 0;
+        // some meta macros needed
+        // and what is meta data for object?
         virtual Object* clone(const CopyOperator& copyop) const = 0;
 
         virtual bool isSameKindAs(const Object*) const { return true; }
