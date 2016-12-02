@@ -13,10 +13,10 @@ namespace te
 {
 
     class NodeVisitor;
-    class Renderer;
-
     class ComponentContainer;
     class Component;
+
+    typedef std::vector<Node*> NodePath;
 
     class Node: public Object
     {
@@ -36,10 +36,8 @@ namespace te
         inline bool getVisible() { return _visible; }
 
         virtual void accept(NodeVisitor* node_visitor);
-        virtual void draw(Renderer* renderer);
-        virtual void update(float delta_time);
-
-        void traversal(NodeVisitor* node_visitor);
+        virtual void ascend(NodeVisitor* node_visitor);
+        virtual void descend(NodeVisitor* node_visitor);
 
         template <typename C, typename ... Args>
         C* addComponent(Args&& ... args);

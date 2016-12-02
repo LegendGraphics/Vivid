@@ -7,11 +7,9 @@
 #include "common/component.h"
 #include "common/component_container.h"
 
-using namespace te;
 
-
-//namespace te
-//{
+namespace te
+{
 
 Node::Node()
     :_parent(nullptr),
@@ -48,29 +46,16 @@ void Node::accept(NodeVisitor* node_visitor)
     node_visitor->apply(this);
 }
 
-void Node::draw(Renderer* renderer)
+void Node::ascend(NodeVisitor* node_visitor)
 {
-
+    if (_parent) _parent->accept(node_visitor);
 }
 
-void Node::update(float delta_time)
+void Node::descend(NodeVisitor* node_visitor)
 {
-
+    for (auto& itr = _children.begin(); itr != _children.end(); itr ++)
+        (*itr)->accept(node_visitor);
 }
-
-// pre-order traversal
-void Node::traversal(NodeVisitor* node_visitor)
-{
-    if (!_visible) return;
-
-    this->accept(node_visitor);
-
-    for (std::vector<RefPtr<Node>>::iterator child_itr = _children.begin(); child_itr != _children.end(); ++ child_itr)
-    {
-        (*child_itr)->traversal(node_visitor);
-    }
-}
-
 
 void Node::addComponent(Component* component, int component_id)
 {
@@ -92,4 +77,4 @@ bool Node::hasComponent(int component_id)
     return _component_container->has(component_id);
 }
 
-//}
+}
