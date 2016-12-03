@@ -32,12 +32,16 @@ namespace te
         void setParent(Node* parent);
         inline Node* getParent() { return _parent.get(); }
 
+        inline bool hasParent() { return _parent != nullptr; }
+
         void setVisible(bool visible);
         inline bool getVisible() { return _visible; }
 
         virtual void accept(NodeVisitor* node_visitor);
         virtual void ascend(NodeVisitor* node_visitor);
         virtual void descend(NodeVisitor* node_visitor);
+
+        Matrix getWorldMatrix();
 
         template <typename C, typename ... Args>
         C* addComponent(Args&& ... args);

@@ -32,11 +32,11 @@ namespace te
 
         virtual void apply(Node* node);
 
+        void traverse(Node* node);
+
     protected:
         TraversalMode   _traversal_mode;
         VisitorType     _visitor_type;
-
-        NodePath        _node_path;
     };
 
 }
