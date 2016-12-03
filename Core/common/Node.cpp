@@ -83,13 +83,7 @@ namespace te
         this->accept(ppv);
         
         NodePath* parent_path = ppv.getParentPath();
-        if (parent_path->empty()) return; // return Identity
+        if (parent_path->empty()) return Matrix::identity();
         else return te::computeLocalToWorld(parent_path);
     }
-
-    Matrix computeLocalToWorld(NodePath* node_path)
-    {
-        // accumulate transforms from the path...
-    }
-
 }

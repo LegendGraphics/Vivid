@@ -3,13 +3,14 @@
 
 #include "common/component.h"
 
-class TransformComponent: public Component
+class Transform: public Component
 {
 public:
-    TransformComponent();
-    virtual ~TransformComponent();
+    Transform();
+    virtual ~Transform();
 
-    virtual void update(float delta_time);
+    virtual void init();
+    virtual void update();
 
     void setX(float x);
     inline float getX() const { return _x; }
@@ -21,6 +22,14 @@ public:
     inline float getZ() const { return _z; }
 
     void setPosition(float x, float y, float z);
+
+    Matrix getPositionMatrix();
+    Matrix getScaleMatrix();
+    Matrix getRotationMatrix();
+
+    Matrix getXAxisRotation();
+    Matrix getYAxisRotation();
+    Matrix getZAxisRotation();
 
 protected:
     float _x, _y, _z;
