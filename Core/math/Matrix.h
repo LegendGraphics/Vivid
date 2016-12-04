@@ -2,7 +2,7 @@
 #define MATH_MAT4X4_H
 
 #include "base/macros.h"
-#include "math/vec4.h"
+#include "Core/math/Vector4.h"
 
 namespace te
 {
@@ -13,14 +13,11 @@ namespace te
     public:
         Mat4x4();
         Mat4x4(const Mat4x4& m);
-        ~Mat4x4();
-
         Mat4x4& operator=(const Mat4x4& m);
+        virtual ~Mat4x4();
 
-        friend inline const Vec4 operator*(const Mat4x4& m, const Vec4& v);
+        friend inline const Vector4 operator*(const Mat4x4& m, const Vector4& v);
         friend inline const Mat4x4 operator*(const Mat4x4& m1, const Mat4x4& m2);
-
-        inline const float* getMatAddress() const { return &_m[0][0];}
 
         inline float& operator()(int i, int j)
         {
@@ -36,36 +33,37 @@ namespace te
             return _m[i][j];
         }
 
-        static Mat4x4 zero()
-        {
-            Mat4x4 mat;
-            for (int i = 0; i < 4; ++ i)
-                for (int j = 0; j < 4; ++ j)
-                    mat(i, j) = 0;
-            return mat;
-        }
-
-        static Mat4x4 identity()
-        {
-            Mat4x4 mat;
-            for (int i = 0; i < 4; ++ i)
-                for (int j = 0; j < 4; ++ j)
-                    if (i == j) mat(i, j) = 1;
-                    else mat(i, j) = 0;
-                    return mat;
-        }
+        inline const float* getMatAddress() const { return &_m[0][0];}
+        inline float determinant() const { return _determinant; }
+        inline const Mat4x4& inverse() const { return _inverse; }
+        inline const Mat4x4& transpose() const { return _transpose; }
 
     private:
+        void computeDeterminant();
+        void computeInverse();
+        void computeTranspose();
+
+    protected:
         float _m[4][4];
+        float _determinant;
+        Mat4x4 _inverse;
+        Mat4x4 _transpose;
+
+    public:
+        static Mat4x4 zero();
+        static Mat4x4 identity();
+        static Mat4x4 ortho(float left, float right, float bottom, float top, float znear, float zfar);
+        static Mat4x4 perspective(float fov, float aspect, float znear, float zfar);
+        
     };
 
-    inline const Vec4 operator*(const Mat4x4& m, const Vec4& v)
+    inline const Vector4 operator*(const Mat4x4& m, const Vector4& v)
     {
-        float x = m(0, 0) * v.x() + m(0, 1) * v.y() + m(0, 2) * v.z() + m(0, 3) * v.w();
-        float y = m(1, 0) * v.x() + m(1, 1) * v.y() + m(1, 2) * v.z() + m(1, 3) * v.w();
-        float z = m(2, 0) * v.x() + m(2, 1) * v.y() + m(2, 2) * v.z() + m(2, 3) * v.w();
-        float w = m(3, 0) * v.x() + m(3, 1) * v.y() + m(3, 2) * v.z() + m(3, 3) * v.w();
-        return Vec4(x, y, z, w);
+        float x = m(0, 0) * v.x + m(0, 1) * v.y + m(0, 2) * v.z + m(0, 3) * v.w;
+        float y = m(1, 0) * v.x + m(1, 1) * v.y + m(1, 2) * v.z + m(1, 3) * v.w;
+        float z = m(2, 0) * v.x + m(2, 1) * v.y + m(2, 2) * v.z + m(2, 3) * v.w;
+        float w = m(3, 0) * v.x + m(3, 1) * v.y + m(3, 2) * v.z + m(3, 3) * v.w;
+        return Vector4(x, y, z, w);
     }
 
     inline const Mat4x4 operator*(const Mat4x4& m1, const Mat4x4& m2)
