@@ -5,9 +5,10 @@ namespace te
 {
     Mat4x4::Mat4x4()
     {
-        for (int i = 0; i < 4; ++ i)
-            for (int j = 0; j < 4; ++ j)
-                _m[i][j] = 0;
+        SET_ROW(0,  1, 0, 0, 0)
+        SET_ROW(1,  0, 1, 0, 0)
+        SET_ROW(2,  0, 0, 1, 0)
+        SET_ROW(3,  0, 0, 0, 1)
     }
 
     Mat4x4::Mat4x4(const Mat4x4& m)
@@ -25,6 +26,39 @@ namespace te
             for (int j = 0; j < 4; ++ j)
                 _m[i][j] = m(i, j);
         return *this;
+    }
+
+    void Mat4x4::makeZero()
+    {
+        SET_ROW(0,  0, 0, 0, 0)
+        SET_ROW(1,  0, 0, 0, 0)
+        SET_ROW(2,  0, 0, 0, 0)
+        SET_ROW(3,  0, 0, 0, 0)
+    }
+
+    void Mat4x4::makeIdentity()
+    {
+        SET_ROW(0,  1, 0, 0, 0)
+        SET_ROW(1,  0, 1, 0, 0)
+        SET_ROW(2,  0, 0, 1, 0)
+        SET_ROW(3,  0, 0, 0, 1)
+    }
+
+    void Mat4x4::makeOrtho(float left, float right, float bottom, float top, float znear, float zfar)
+    {
+        float tx = - (right + left) / (right - left);
+        float ty = - (top + bottom) / (top - bottom);
+        float tz = - (zfar + znear) / (zfar - znear);
+
+        SET_ROW(0, 2.0/(right-left),               0.0,                0.0, 0.0)
+        SET_ROW(1,              0.0,  2.0/(top-bottom),                0.0, 0.0)
+        SET_ROW(2,              0.0,               0.0,  -2.0/(zfar-znear), 0.0)
+        SET_ROW(3,               tx,                ty,                 tz, 1.0)
+    }
+
+    void Mat4x4::makePerspective(float fov, float aspect, float znear, float zfar)
+    {
+        
     }
 
     void Mat4x4::computeDeterminant()
@@ -45,40 +79,29 @@ namespace te
     Mat4x4 Mat4x4::zero()
     {
         Mat4x4 mat;
-        for (int i = 0; i < 4; ++ i)
-            for (int j = 0; j < 4; ++ j)
-                mat(i, j) = 0;
+        mat.makeZero();
         return mat;
     }
 
     Mat4x4 Mat4x4::identity()
     {
         Mat4x4 mat;
-        for (int i = 0; i < 4; ++ i)
-            for (int j = 0; j < 4; ++ j)
-                if (i == j) mat(i, j) = 1;
-                else mat(i, j) = 0;
+        mat.makeIdentity();
         return mat;
     }
 
-    // this relationship means that we use left-handed coordinate
     Mat4x4 Mat4x4::ortho(float left, float right, float bottom, float top, float znear, float zfar)
     {
         Mat4x4 mat;
-        mat(0, 0) = 2 / (right - left);
-        mat(1, 1) = 2 / (top - bottom);
-        mat(2, 2) = -2 / (zfar - znear);
-        mat(0, 3) = - (right + left) / (right - left);
-        mat(1, 3) = - (top + bottom) / (top - bottom);
-        mat(2, 3) = - (zfar + znear) / (zfar - znear);
-        mat(3, 3) = 1;
-
+        mat.makeOrtho(left, right, bottom, top, znear, zfar);
         return mat;
     }
 
     Mat4x4 Mat4x4::perspective(float fov, float aspect, float znear, float zfar)
     {
-
+        Mat4x4 mat;
+        mat.perspective(fov, aspect, znear, zfar);
+        return mat;
     }
 }
 

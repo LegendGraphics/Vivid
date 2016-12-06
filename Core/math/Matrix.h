@@ -4,6 +4,12 @@
 #include "base/macros.h"
 #include "Core/math/Vector4.h"
 
+#define SET_ROW(row, v1, v2, v3, v4 )    \
+                    _m[(row)][0] = (v1); \
+                    _m[(row)][1] = (v2); \
+                    _m[(row)][2] = (v3); \
+                    _m[(row)][3] = (v4);
+
 namespace te
 {
     typedef Mat4x4 Matrix;
@@ -37,6 +43,11 @@ namespace te
         inline float determinant() const { return _determinant; }
         inline const Mat4x4& inverse() const { return _inverse; }
         inline const Mat4x4& transpose() const { return _transpose; }
+
+        void makeZero();
+        void makeIdentity();
+        void makeOrtho(float left, float right, float bottom, float top, float znear, float zfar);
+        void makePerspective(float fov, float aspect, float znear, float zfar);
 
     private:
         void computeDeterminant();
