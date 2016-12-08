@@ -24,6 +24,7 @@ namespace te
 
         friend inline const Vector4 operator*(const Mat4x4& m, const Vector4& v);
         friend inline const Mat4x4 operator*(const Mat4x4& m1, const Mat4x4& m2);
+        friend inline Mat4x4& operator*(Mat4x4& m, float s);
 
         inline float& operator()(int i, int j)
         {
@@ -39,26 +40,24 @@ namespace te
             return _m[i][j];
         }
 
-        inline const float* getMatAddress() const { return &_m[0][0];}
-        inline float determinant() const { return _determinant; }
-        inline const Mat4x4& inverse() const { return _inverse; }
-        inline const Mat4x4& transpose() const { return _transpose; }
+        inline const float* ptr() const { return (float*)_m;}
+        inline float determinant() const { return computeDeterminant(); }
+        inline const Mat4x4 inverse() const { return computeInverse(); }
+        inline const Mat4x4 transpose() const { return computeTranspose(); }
 
         void makeZero();
         void makeIdentity();
         void makeOrtho(float left, float right, float bottom, float top, float znear, float zfar);
         void makePerspective(float fov, float aspect, float znear, float zfar);
+        void makeFrustum(float left, float right, float bottom, float top, float znear, float zfar);
 
     private:
-        void computeDeterminant();
-        void computeInverse();
-        void computeTranspose();
+        float computeDeterminant() const;
+        const Mat4x4 computeInverse() const;
+        const Mat4x4 computeTranspose() const;
 
     protected:
         float _m[4][4];
-        float _determinant;
-        Mat4x4 _inverse;
-        Mat4x4 _transpose;
 
     public:
         static Mat4x4 zero();
@@ -87,6 +86,14 @@ namespace te
         return mat;
     }
 
+    inline Mat4x4& operator*(Mat4x4& m, float s)
+    {
+        for (int i = 0; i < 4; ++ i)
+            for (int j = 0; j < 4; ++ j)
+                m(i, j) *= s;
+        return m;
+    }
+
     Matrix computeLocalToWorld(NodePath* node_path)
     {
         // accumulate transforms from the path...
@@ -100,7 +107,6 @@ namespace te
 
         return world_matrix;
     }
-
 }
 
 #endif // MATH_MAT4X4_H
