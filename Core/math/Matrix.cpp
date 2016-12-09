@@ -28,6 +28,17 @@ namespace te
         return *this;
     }
 
+    void Mat4x4::set(float m00, float m01, float m02, float m03,
+                     float m10, float m11, float m12, float m13,
+                     float m20, float m21, float m22, float m23,
+                     float m30, float m31, float m32, float m33)
+    {
+        SET_ROW(0,  m00, m01, m02, m03)
+        SET_ROW(1,  m10, m11, m12, m13)
+        SET_ROW(2,  m20, m21, m22, m23)
+        SET_ROW(3,  m30, m31, m32, m33)
+    }
+
     void Mat4x4::makeZero()
     {
         SET_ROW(0,  0, 0, 0, 0)
@@ -100,6 +111,7 @@ namespace te
 
     // Cramer's rule
     // inv(A) = adj(A) / det(A)
+    // http://www.euclideanspace.com/maths/algebra/matrix/functions/inverse/fourD/index.htm
     const Mat4x4 Mat4x4::computeInverse() const
     {
         Mat4x4 inv_mat;
