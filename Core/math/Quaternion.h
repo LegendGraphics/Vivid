@@ -60,7 +60,9 @@ namespace te
             return ret;
         }
         Matrix convertToMatrix() const;
+        Vector3 convertToEulerAngles() const;
         Quaternion(const Matrix& m);
+        Quaternion(const Vector3& euler_angles);
 
     public:
         Vector3 v;

@@ -3,101 +3,73 @@
 
 #include <cmath>
 
-Transform::Transform()
-    :_x(0.0), _y(0.0), _z(0.0),
-    _sx(0.0), _sy(0.0), _sz(0.0),
-    _rx(0.0), _ry(0.0), _rz(0.0)
-{}
-
-Transform::~Transform(){}
-
-void Transform::init()
+namespace te
 {
+    Transform::Transform()
+    {}
+
+    Transform::~Transform(){}
+
+    void Transform::init()
+    {
+
+    }
+
+    void Transform::update()
+    {
+
+    }
+
+    void Transform::translate(const Vector3& translation)
+    {
+        _local_pos.set(translation.x, translation.y, translation.z);
+    }
+
+    void Transform::translate(float x, float y, float z)
+    {
+        _local_pos.set(x, y, z);
+    }
+
+    void Transform::rotate(const Vector3& euler_angles)
+    {
+        _local_euler_angles = euler_angles;
+    }
+    void Transform::rotate(float rx, float ry, float rz)
+    {
+        _local_euler_angles = Vector3(rx, ry, rz);
+    }
+
+    void Transform::scale(const Vector3& scale)
+    {
+        _local_scale = scale;
+    }
+    void Transform::scale(float sx, float sy, float sz)
+    {
+        _local_scale = Vector3(sx, sy, sz);
+    }
+
+    const Vector3& Transform::getPosition()
+    {
+        return _local_pos;
+    }
+    const Vector3& Transform::getScale()
+    {
+        return _local_scale;
+    }
+    const Vector3& Transform::getEulerAngles()
+    {
+        return _local_euler_angles;
+    }
+    const Quaternion& Transform::getRotation()
+    {
+        return Quaternion(_local_euler_angles);
+    }
 
 }
 
-void Transform::update()
-{
 
-}
 
-void Transform::setX(float x)
-{
-    _x = x;
-}
 
-void Transform::setY(float y)
-{
-    _y = y;
-}
-
-void Transform::setZ(float z)
-{
-    _z = z;
-}
-
-void Transform::setPosition(float x, float y, float z)
-{
-    _x = x; _y = y; _z = z;
-}
-
-Matrix Transform::getPositionMatrix()
-{
-    Matrix mat = Matrix::identity();
-    mat(0, 3) = _x;
-    mat(1, 3) = _y;
-    mat(2, 3) = _z;
-
-    return mat;
-}
-
-Matrix Transform::getScaleMatrix()
-{
-    Matrix mat = Matrix::identity();
-    mat(0, 0) = _sx;
-    mat(1, 1) = _sy;
-    mat(2, 2) = _sz;
-
-    return mat;
-}
-
-Matrix Transform::getRotationMatrix()
-{
-   
-}
-
-Matrix Transform::getXAxisRotation()
-{
-    Matrix mat = Matrix::identity();
-    mat(1, 1) = cos(_rx);
-    mat(1, 2) = -sin(_rx);
-    mat(2, 1) = sin(_rx);
-    mat(2, 2) = cos(_rx);
-
-    return mat;
-}
-
-Matrix Transform::getYAxisRotation()
-{
-    Matrix mat = Matrix::identity();
-    mat(0, 0) = cos(_ry);
-    mat(0, 2) = sin(_ry);
-    mat(2, 0) = -sin(_ry);
-    mat(2, 2) = cos(_ry);
-
-    return mat;
-}
-
-Matrix Transform::getZAxisRotation()
-{
-    Matrix mat = Matrix::identity();
-    mat(0, 0) = cos(_rz);
-    mat(0, 1) = -sin(_rz);
-    mat(1, 0) = sin(_rz);
-    mat(1, 1) = cos(_rz);
-
-    return mat;
-}
 
 
 

@@ -1,6 +1,9 @@
 
 #include "Core/math/Quaternion.h"
 
+// the matrix forms may be not consistent, as for the difference between left-hand and right-hand rotation
+// the order of euler angles also matters
+// need to debug with model data
 namespace te
 {
     // https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix
@@ -17,6 +20,26 @@ namespace te
               3,                   0.0,                   0.0,                   0.0,     1);
 
         return m;
+    }
+
+    // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_Angles_Conversion
+    Vector3 Quaternion::convertToEulerAngles() const
+    {
+        float roll, pitch, yaw;
+        float t0 = -2.0f * (v.y * v.y + v.z * v.z) + 1.0f;
+        float t1 = +2.0f * (v.x * v.y - w * v.z);
+        float t2 = -2.0f * (v.x * v.z + w * v.y);
+        float t3 = +2.0f * (v.y * v.z - w * v.x);
+        float t4 = -2.0f * (v.x * v.x + v.y * v.y) + 1.0f;
+
+        t2 = t2 > 1.0f ? 1.0f : t2;
+        t2 = t2 < -1.0f ? -1.0f : t2;
+
+        pitch = std::asin(t2);
+        roll = std::atan2(t3, t4);
+        yaw = std::atan2(t1, t0);
+
+        return Vector3(roll, pitch, yaw);
     }
 
     // https://en.wikipedia.org/wiki/Rotation_matrix#Quaternion
@@ -55,6 +78,26 @@ namespace te
             v.y = q[1];
             v.z = q[2];
         }
+    }
+
+    // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Euler_Angles_to_Quaternion_Conversion
+    Quaternion::Quaternion(const Vector3& euler_angles)
+    {
+        float roll = euler_angles.x;
+        float pitch = euler_angles.y;
+        float yaw = euler_angles.z;
+
+        double t0 = std::cos(yaw * 0.5f);
+        double t1 = std::sin(yaw * 0.5f);
+        double t2 = std::cos(roll * 0.5f);
+        double t3 = std::sin(roll * 0.5f);
+        double t4 = std::cos(pitch * 0.5f);
+        double t5 = std::sin(pitch * 0.5f);
+
+        w = t0 * t2 * t4 + t1 * t3 * t5;
+        v.x = t0 * t3 * t4 - t1 * t2 * t5;
+        v.y = t0 * t2 * t5 + t1 * t3 * t4;
+        v.z = t1 * t2 * t4 - t0 * t3 * t5;
     }
 
 
