@@ -22,5 +22,24 @@ namespace te
         _uvs = uvs;
     }
 
+    void Mesh::setTangentArray(const Vec4Array& tangents)
+    {
+        _tangents = tangents;
+    }
+
+    void Mesh::setTriangleArray(const Vec3Array& triangles)
+    {
+        _triangles = triangles;
+    }
+
+    int Mesh::getVertexCount() const 
+    {
+        return _vertices->size();
+    }
+
+    int Mesh::getIndexCount() const
+    {
+        return _triangles->size();
+    }
 
 }
