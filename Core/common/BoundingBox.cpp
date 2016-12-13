@@ -11,7 +11,11 @@ namespace te
 
     bool BoundingBox::contains(const Vector3& point)
     {
-
+        if ((point.x >= _min.x && point.x <= _max.x) &&
+            (point.y >= _min.y && point.y <= _max.y) &&
+            (point.z >= _min.z && point.z <= _max.z))
+            return true;
+        else return false;
     }
 
     bool BoundingBox::intersectRay(const Ray& ray)
