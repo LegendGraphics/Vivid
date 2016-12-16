@@ -20,7 +20,7 @@ include_directories(${GLFW_INCLUDE_DIR})
   
 FILE( GLOB common 			  		"common/*.*" ) 
 FILE( GLOB math 			  		"math/*.*" )  
-FILE( GLOB renderer 			  	"renderer/*.*" ) 
+FILE( GLOB renderer 			  	"renderer/*.*" "renderer/*/*.*") 
 FILE( GLOB base 			  		"base/*.*" ) 
 FILE( GLOB ui 			  		    "ui/*.*" ) 
 FILE( GLOB scripting 			  	"scripting/*.*" )
