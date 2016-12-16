@@ -2,32 +2,12 @@
 
 namespace te
 {
-    void Mesh::setVertexArray(const Vec3Array& vertices)
+    void Mesh::setVertexArray(const std::vector<Vertex>& vertices)
     {
         _vertices = vertices;
     }
 
-    void Mesh::setNormalArray(const Vec3Array& normals)
-    {
-        _normals = normals;
-    }
-
-    void Mesh::setColorArray(const Vec3Array& colors)
-    {
-        _colors = colors;
-    }
-
-    void Mesh::setUVArray(const Vec2Array& uvs)
-    {
-        _uvs = uvs;
-    }
-
-    void Mesh::setTangentArray(const Vec4Array& tangents)
-    {
-        _tangents = tangents;
-    }
-
-    void Mesh::setTriangleArray(const Vec3Array& triangles)
+    void Mesh::setTriangleArray(const std::vector<int>& triangles)
     {
         _triangles = triangles;
     }

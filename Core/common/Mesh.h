@@ -8,25 +8,25 @@
 
 namespace te
 {
-    struct TE_VERTEX_P3T4TG4N3
+    struct Vertex
     {
         Vector3 position;
-        Vector4 texcoord;
+        Vector2 texcoord;
         Vector4 tangent;
         Vector3 normal;
 
-        TE_VERTEX_ATTRIBUTE getVertexType()
+        VertexAttribute getVertexType()
         {
-            TE_VERTEX_ATTRIBUTE type = 
-                TE_VERTEX_ATTRIBUTE::TE_VERTEX_POSITION | 
-                TE_VERTEX_ATTRIBUTE::TE_VERTEX_TEXCOORD0 |
-                TE_VERTEX_ATTRIBUTE::TE_VERTEX_TANGENT |
-                TE_VERTEX_ATTRIBUTE::TE_VERTEX_NORMAL;
+            VertexAttribute type =
+                VertexAttribute::TE_VERTEX_POSITION |
+                VertexAttribute::TE_VERTEX_TEXCOORD0 |
+                VertexAttribute::TE_VERTEX_TANGENT |
+                VertexAttribute::TE_VERTEX_NORMAL;
             return type;
         };
     };
 
-    enum class TE_VERTEX_ATTRIBUTE
+    enum class VertexAttribute
     {
         TE_VERTEX_POSITION =        1 << 0,
         TE_VERTEX_COLOR =           1 << 1,
@@ -66,14 +66,6 @@ namespace te
         int getSize()
         {
             return element_size * element_count;
-        }
-
-        void setData(void* src_data, int index)
-        {
-            if (index < element_count)
-            {
-                memcpy( data + element_size * index, src_data, element_size);
-            }
         }
 
         void write()
@@ -118,14 +110,6 @@ namespace te
             return element_size * element_count;
         }
 
-        void setData(void* src_data, int index)
-        {
-            if (index < element_count)
-            {
-                memcpy( data + element_size * index, src_data, element_size);
-            }
-        }
-
         void write()
         {
             if (!data)
@@ -138,6 +122,24 @@ namespace te
         IndexBuffer& operator = (const IndexBuffer& other) = delete;
     };
 
+    struct MeshSubset
+    {
+        VertexBuffer*       vb;
+        IndexBuffer*        ib;
+        int                 index_start;
+        int                 index_count;
+        std::string         mtl_name;
+
+        MeshSubset()
+        {
+            vb = 0;
+            ib = 0;
+            index_start = 0;
+            index_count = 0;
+        }
+    };
+    typedef std::vector<MeshSubset> MeshSubsets;
+
     class Mesh: public Object
     {
     public:
@@ -146,23 +148,19 @@ namespace te
 
         void clear();
 
-        void setVertexArray(const Vec3Array& vertices);
-        void setNormalArray(const Vec3Array& normals);
-        void setColorArray(const Vec3Array& colors);
-        void setUVArray(const Vec2Array& uvs);
-        void setTangentArray(const Vec4Array& tangents);
-        void setTriangleArray(const Vec3Array& triangles);
+        void setVertexArray(const std::vector<Vertex>& vertices);
+        void setTriangleArray(const std::vector<int>& triangles);
 
         int getVertexCount() const;
         int getIndexCount() const;
 
     protected:
-        RefPtr<Vec3Array> _vertices;
-        RefPtr<Vec3Array> _normals;
-        RefPtr<Vec3Array> _colors;
-        RefPtr<Vec2Array> _uvs;
-        RefPtr<Vec4Array> _tangents;
-        RefPtr<Vec3Array> _triangles;
+
+        VertexBuffer* _vertex_buffer;
+        IndexBuffer* _index_buffer;
+
+        std::vector<Vertex> _vertices;
+        std::vector<int>    _indices;
 
         RefPtr<BoundingBox> _bounding;
 
