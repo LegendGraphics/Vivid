@@ -26,6 +26,17 @@ namespace te
 
         virtual int dispatch() = 0;
 
+        enum class CommandType : uint8
+        {
+            UPDATE_VERTEX_BUFFER,
+            UPDATE_INDEX_BUFFER,
+            UPDATE_TEXTURE,
+            SET_RENDER_TARGET,
+            CLEAR,
+            RENDER,
+            COMMANDS_COUNTER
+        }; ///< 256 should be enough for now
+
     private:
         Commands _commands;
     };
