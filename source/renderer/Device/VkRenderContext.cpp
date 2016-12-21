@@ -15,5 +15,6 @@ namespace te
   int VkRenderContext::dispatch()
   {
     // run commands here
+      return 0;
   }
 }

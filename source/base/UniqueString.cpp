@@ -1,5 +1,7 @@
 #include "UniqueString.h"
 
+#include <utility>
+
 using namespace te;
 
 UniqueString::UniqueString(const te::String& theName)
@@ -15,7 +17,7 @@ UniqueString*
 UniqueString::find(const te::String& theName, bool bCreateIfNotFound /* = true */)
 {
     UniqueStrings::iterator iter;
-    iter = uniqueStrings().find(theName);
+    iter = UniqueString::uniqueStrings().find(theName);
     if (iter != uniqueStrings().end())
         return iter->second.get();
 
@@ -23,7 +25,7 @@ UniqueString::find(const te::String& theName, bool bCreateIfNotFound /* = true *
         return NULL;
 
     UniqueString* pRet = new UniqueString(theName);
-    uniqueStrings().insert(std::make_pair<te::String, UniqueStringPtr>(theName, UniqueStringPtr(pRet)));
+    UniqueString::uniqueStrings()[theName] = UniqueStringPtr(pRet);
     return pRet;
 }
 

@@ -2,6 +2,9 @@
 
 #include "Globals.h"
 
+#include <memory>
+#include <unordered_map>
+
 namespace te
 {
     class UniqueString
@@ -22,7 +25,7 @@ namespace te
         typedef std::shared_ptr<UniqueString> UniqueStringPtr;
         typedef std::unordered_map<te::String, UniqueStringPtr> UniqueStrings;
 
-        static UniqueString& uniqueStrings();
+        static UniqueStrings& uniqueStrings();
         te::String m_name;
     };
 }

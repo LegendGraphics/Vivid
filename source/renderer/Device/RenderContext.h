@@ -1,7 +1,7 @@
 #ifndef RENDERER_RENDERCONTEXT_H
 #define RENDERER_RENDERCONTEXT_H
 
-#include "Core\base\Globals.h"
+#include "base\Globals.h"
 
 namespace te
 {
