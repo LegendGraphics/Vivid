@@ -16,7 +16,7 @@ namespace te
     class ComponentContainer;
     class Component;
 
-    typedef std::vector<Node*> NodePath;
+    //typedef std::vector<Node*> NodePath;
 
     class Node: public Object
     {

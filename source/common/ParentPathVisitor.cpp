@@ -3,8 +3,8 @@
 namespace te
 {
     ParentPathVisitor::ParentPathVisitor()
-        :_visitor_type(VisitorType::VISITOR_NODE),
-        _traversal_mode(TraversalMode::TRAVERSE_PARENTS)
+        /*:_visitor_type(VisitorType::VISITOR_NODE),
+        _traversal_mode(TraversalMode::TRAVERSE_PARENTS)*/
     {
 
     }
@@ -19,6 +19,6 @@ namespace te
 
     void ParentPathVisitor::pushNodeToPath(Node* node)
     {
-        _parent_path->push_back(node);
+        //_parent_path->push_back(node);
     }
 }

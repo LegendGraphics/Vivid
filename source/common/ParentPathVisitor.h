@@ -16,10 +16,10 @@ namespace te
 
         void pushNodeToPath(Node* node);
 
-        inline NodePath* getParentPath() { return _parent_path.get(); }
+        //inline NodePath* getParentPath() { return _parent_path.get(); }
 
     protected:
-        RefPtr<NodePath>    _parent_path;
+        //RefPtr<NodePath>    _parent_path;
     };
 }
 

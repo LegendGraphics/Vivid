@@ -33,7 +33,7 @@ namespace te
 
     void Node::removeChild(Node* child)
     {
-        _children.erase(std::remove(_children.begin(), _children.end(), child));
+        //_children.erase(std::remove(_children.begin(), _children.end(), child));
     }
 
     void Node::setVisible(bool visible)

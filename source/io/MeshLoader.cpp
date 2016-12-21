@@ -1,4 +1,6 @@
 #include "io/MeshLoader.h"
+#include <sstream>
+#include "common/Mesh.h"
 
 namespace te
 {
@@ -38,7 +40,7 @@ namespace te
                 // Vertex Normal
                 float x, y, z;
                 in_file >> x >> y >> z;
-                _normals.push_back(Vec3(x, y, z));
+                _normals.push_back(Vector3(x, y, z));
             }
             else if (0 == strcmp(command, "f"))
             {
@@ -112,12 +114,13 @@ namespace te
             _subsets.push_back(subset);
         }
 
-        return CreateObjMesh();
+        return createObjMesh();
     }
 
     Mesh* MeshLoader::createObjMesh()
     {
-        Mesh* mesh = new Mesh;
+        return nullptr;
+        /*Mesh* mesh = new Mesh();
 
         std::vector<Vertex> vertices;
         std::vector<int>    indices;
@@ -143,7 +146,7 @@ namespace te
         mesh->setVertexArray(vertices);
         mesh->setTriangleArray(indices);
 
-        return mesh;
+        return mesh;*/
 
         //// create vb and ib
         //VertexBuffer* cached_vb = new VertexBuffer(sizeof(Vertex), vertices.size());

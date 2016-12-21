@@ -4,6 +4,8 @@
 #include <string>
 #include <vector>
 
+#include "common/Mesh.h"
+
 namespace te
 {
     class Mesh;
