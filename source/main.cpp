@@ -1,8 +1,14 @@
+#include <iostream>
+#include "io/MeshLoader.h"
+#include "common/Mesh.h"
 
+using namespace te;
 
 int main(int argc, char** argv)
 { 
-
+	MeshLoader mesh_loader;
+	Mesh* m = mesh_loader.readObjFile("cube.obj");
+	getchar();
 	return 0;
 }
 

@@ -19,8 +19,8 @@ namespace te
         CopyOperator(const Options& flag = SHALLOW_COPY):_flag(flag) {}
         virtual ~CopyOperator() {}
 
-        virtual Object* operator()(const Object* object) const;
-        virtual Node*   operator()(const Node* node) const;
+        //virtual Object* operator()(const Object* object) const;
+        //virtual Node*   operator()(const Node* node) const;
 
     private:
         Options _flag;

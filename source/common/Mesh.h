@@ -28,6 +28,13 @@ namespace te
         };*/
     };
 
+	struct VertexIndices
+	{
+		int pos_idx;
+		int tex_idx;
+		int nrm_idx;
+	};
+
     enum class VertexAttribute
     {
         TE_VERTEX_POSITION =        1 << 0,
@@ -145,8 +152,8 @@ namespace te
     class Mesh: public Object
     {
     public:
-        Mesh();
-        virtual ~Mesh();
+        Mesh() = default;
+        virtual ~Mesh() = default;
 
         void clear();
 

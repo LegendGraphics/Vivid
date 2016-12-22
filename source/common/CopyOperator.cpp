@@ -14,5 +14,5 @@ using namespace te;
     return const_cast<TYPE*>(obj); \
 }
 
-COPY_FUNCTOR(Object)
-COPY_FUNCTOR(Node)
+//COPY_FUNCTOR(Object)
+//COPY_FUNCTOR(Node)

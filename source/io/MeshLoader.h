@@ -32,7 +32,8 @@ namespace te
 
     protected:
         Mesh* createObjMesh();
-        int addVertex(Vertex* vertex, std::vector<Vertex>& vertices);
+        int addVertex(Vertex* vertex, VertexIndices* ver_idx, 
+			std::vector<Vertex>& vertices, std::vector<VertexIndices>& ver_indices);
 
     protected:
         Vec3Array _positions;

@@ -1,13 +1,20 @@
 #include "io/MeshLoader.h"
 #include <sstream>
+#include <fstream>
 #include "common/Mesh.h"
 
 namespace te
 {
+	// I need to write a file manager to read/write...
+
     Mesh* MeshLoader::readObjFile(const std::string& filename)
     {
+		std::ifstream ifs(filename);
+		std::string content((std::istreambuf_iterator<char>(ifs)),
+			(std::istreambuf_iterator<char>()));
+
         char command[256] = { 0 };
-        std::stringstream in_file(filename);
+        std::stringstream in_file(content);
 
         if (!in_file)
             return nullptr;
@@ -119,26 +126,36 @@ namespace te
 
     Mesh* MeshLoader::createObjMesh()
     {
-        return nullptr;
-        /*Mesh* mesh = new Mesh();
+        Mesh* mesh = new Mesh();
 
         std::vector<Vertex> vertices;
         std::vector<int>    indices;
+		std::vector<VertexIndices> ver_indices;
 
         for (int i = 0; i < _triangles.size(); ++i)
         {
             for (int j = 0; j < 3; ++j)
             {
                 Vertex vertex;
+				VertexIndices ver_idx;
                 int pos_idx = _triangles[i].pos_idx[j];
                 int tex_idx = _triangles[i].tex_idx[j];
                 int nrm_idx = _triangles[i].nrm_idx[j];
 
                 vertex.position = _positions[pos_idx];
-                vertex.texcoord = _uvs[tex_idx];
-                vertex.normal = _normals[nrm_idx];
+				ver_idx.pos_idx = pos_idx;
+				if (!_uvs.empty())
+				{
+					vertex.texcoord = _uvs[tex_idx];
+					ver_idx.tex_idx = tex_idx;
+				}
+				if (!_normals.empty())
+				{
+					vertex.normal = _normals[nrm_idx];
+					ver_idx.nrm_idx = nrm_idx;
+				}	
 
-                int index = addVertex(&vertex, vertices);
+                int index = addVertex(&vertex, &ver_idx, vertices, ver_indices);
                 indices.push_back(index);
             }
         }
@@ -146,7 +163,7 @@ namespace te
         mesh->setVertexArray(vertices);
         mesh->setTriangleArray(indices);
 
-        return mesh;*/
+        return mesh;
 
         //// create vb and ib
         //VertexBuffer* cached_vb = new VertexBuffer(sizeof(Vertex), vertices.size());
@@ -156,11 +173,27 @@ namespace te
         //memcpy(cached_ib->data, &(indices[0]), sizeof(int) * indices.size());
     }
 
-    int MeshLoader::addVertex(Vertex* vertex, std::vector<Vertex>& vertices)
+    int MeshLoader::addVertex(Vertex* vertex, VertexIndices* ver_idx, std::vector<Vertex>& vertices, std::vector<VertexIndices>& ver_indices)
     {
-        // need to detect redundant vertex
-        int index = vertices.size();
-        vertices.push_back(*vertex);
-        return index;
+		// check whether has the same vertex indices
+		bool has_same = false;
+		for (int i = 0, i_end = ver_indices.size(); i < i_end; ++ i)
+		{
+			if (ver_indices[i].pos_idx == ver_idx->pos_idx &&
+				ver_indices[i].tex_idx == ver_idx->tex_idx &&
+				ver_indices[i].nrm_idx == ver_idx->nrm_idx)
+			{
+				has_same = true;
+				return i;
+			}
+		}
+		
+		if (!has_same)
+		{
+			int index = vertices.size();
+			vertices.push_back(*vertex);
+			ver_indices.push_back(*ver_idx);
+			return index;
+		}
     }
 }
