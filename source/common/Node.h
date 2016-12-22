@@ -7,7 +7,7 @@
 #include "base/ref.h"
 #include "base/refptr.hpp"
 #include "common/object.h"
-
+#include "common/ClassType.hpp"
 
 namespace te
 {

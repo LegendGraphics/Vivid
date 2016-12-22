@@ -9,6 +9,7 @@ namespace te
     class MeshFilter: public Component
     {
     public:
+		void setMesh(Mesh* mesh);
         inline Mesh* getMesh() { return _mesh.get(); }
 
     protected:

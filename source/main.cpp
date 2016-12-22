@@ -1,6 +1,8 @@
 #include <iostream>
 #include "io/MeshLoader.h"
 #include "common/Mesh.h"
+#include "common/MeshFilter.h"
+#include "common/Node.h"
 
 using namespace te;
 
@@ -8,6 +10,10 @@ int main(int argc, char** argv)
 { 
 	MeshLoader mesh_loader;
 	Mesh* m = mesh_loader.readObjFile("cube.obj");
+	MeshFilter mesh_filter;
+	mesh_filter.setMesh(m);
+	Node node;
+	node.addComponent<MeshFilter>();
 	getchar();
 	return 0;
 }
