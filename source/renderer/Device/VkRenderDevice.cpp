@@ -15,6 +15,6 @@ namespace te
 
   void VkRenderDevice::dispatch(RenderContext* context_)
   {
-    context_->dispatch();
+    //context_->dispatch();
   }
 }

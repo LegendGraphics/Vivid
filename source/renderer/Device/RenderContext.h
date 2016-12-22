@@ -24,8 +24,6 @@ namespace te
         Commands& commands() { return _commands; };
         const Commands& commands() const { return _commands; };
 
-        virtual int dispatch() = 0;
-
         enum class CommandType : uint8
         {
             UPDATE_VERTEX_BUFFER,

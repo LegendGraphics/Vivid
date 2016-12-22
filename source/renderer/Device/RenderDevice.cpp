@@ -1,5 +1,7 @@
 #include "RenderDevice.h"
 
+#include "RenderContext.h"
+
 namespace te
 {
     RenderDevice::RenderDevice()
