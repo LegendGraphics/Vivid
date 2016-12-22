@@ -9,16 +9,20 @@ namespace te
 
     RenderDevice::~RenderDevice()
     {
-
+        for (RenderContext* i : _render_contexts)
+        {
+            delete i;
+        }
+        _render_contexts.erase(_render_contexts.begin(), _render_contexts.end());
     }
 
     RenderContext* RenderDevice::newContext()
     {
-        return nullptr;
+        _render_contexts.push_back(new RenderContext);
+        return _render_contexts.back();
     }
 
     void RenderDevice::releaseContext(RenderContext* context)
     {
-
     }
 }
