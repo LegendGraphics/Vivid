@@ -5,6 +5,7 @@ namespace te
 {
     class Object;
     class Node;
+	class ComponentContainer;
 
 
     class CopyOperator
@@ -17,10 +18,14 @@ namespace te
         };
 
         CopyOperator(const Options& flag = SHALLOW_COPY):_flag(flag) {}
+		CopyOperator& operator=(const Options& flag) { _flag = flag; return *this; }
         virtual ~CopyOperator() {}
 
-        //virtual Object* operator()(const Object* object) const;
-        //virtual Node*   operator()(const Node* node) const;
+		inline bool operator==(const Options& flag) const { return _flag == flag; }
+
+        virtual Object*	operator()(const Object* object) const;
+        virtual Node* operator()(const Node* node) const;
+		virtual ComponentContainer*	operator()(const ComponentContainer* ccontainer) const;
 
     private:
         Options _flag;
@@ -35,9 +40,9 @@ namespace te
     {
         if (t)
         {
-            RefPtr<te::Object> obj = t->clone(copyop);
+            Object* obj = t->clone(copyop);
 
-            T* ptr = dynamic_cast<T*>(obj.get());
+            T* ptr = dynamic_cast<T*>(obj);
             if (ptr) return ptr;
             else
             {

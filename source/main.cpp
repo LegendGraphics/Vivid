@@ -1,4 +1,5 @@
 #include <iostream>
+#include <memory>
 #include "io/MeshLoader.h"
 #include "common/Mesh.h"
 #include "common/MeshFilter.h"
@@ -10,10 +11,29 @@ int main(int argc, char** argv)
 { 
 	MeshLoader mesh_loader;
 	Mesh* m = mesh_loader.readObjFile("cube.obj");
-	MeshFilter mesh_filter;
-	mesh_filter.setMesh(m);
-	Node node;
-	node.addComponent<MeshFilter>();
+
+	Node* root = new Node;
+	root->addComponent<MeshFilter>(m);
+
+	Node* n1 = new Node;
+	n1->addComponent<MeshFilter>(m);
+
+	Node* n2 = new Node;
+	n2->addComponent<MeshFilter>(m);
+
+	Node* m1 = new Node;
+	m1->addComponent<MeshFilter>(m);
+
+	Node* m2 = new Node;
+	m2->addComponent<MeshFilter>(m);
+
+	root->addChild(n1);
+	root->addChild(n2);
+	n1->addChild(m1);
+	n2->addChild(m2);
+
+	delete root;
+
 	getchar();
 	return 0;
 }

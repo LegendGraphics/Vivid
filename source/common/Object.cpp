@@ -2,11 +2,17 @@
 
 #include "base/InterfaceSourceMacros.h"
 
-using namespace te;
 
+namespace te
+{
+	Object::Object()
+	{
+		_id = ObjectId ++;
+	}
 
+	TE_IMPLEMENT_INTERFACE(te::Object)
+	TE_INPLEMENT_START_QUERYINTERFACE(Object)
+	TE_IMPLEMENT_BASE_QUERYINTERFACE(Ref)
+	TE_IMPLEMENT_END_QUERYINTERFACE()
+}
 
-TE_IMPLEMENT_INTERFACE(te::Object)
-TE_INPLEMENT_START_QUERYINTERFACE(Object)
-TE_IMPLEMENT_BASE_QUERYINTERFACE(Ref)
-TE_IMPLEMENT_END_QUERYINTERFACE()

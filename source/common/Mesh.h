@@ -154,6 +154,9 @@ namespace te
     public:
         Mesh() = default;
         virtual ~Mesh() = default;
+		Mesh(const Mesh& mesh, const CopyOperator& copypo = CopyOperator::SHALLOW_COPY);
+
+		OBJECT_META_FUNCTION(Mesh);
 
         void clear();
 

@@ -13,10 +13,18 @@ namespace te
 
     Node::Node()
         :_parent(nullptr),
-        _visible(true)
+        _visible(true),
+		_component_container(new ComponentContainer(this))
     {
 
     }
+
+	Node::Node(const Node& node, const CopyOperator& copyop)
+		:_parent(node._parent),
+		_visible(node._visible),
+		_component_container(copyop(node._component_container))
+	{
+	}
 
     Node::~Node(){}
 
@@ -27,7 +35,7 @@ namespace te
 
     void Node::addChild(Node* child)
     {
-        child->setParent(this);
+        //child->setParent(this);
         _children.insert(_children.end(), child);
     }
 

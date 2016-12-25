@@ -9,6 +9,12 @@ ComponentContainer::ComponentContainer(Node* owner)
 {
 }
 
+ComponentContainer::ComponentContainer(const ComponentContainer& ccontainer, const CopyOperator& copyop)
+	:_owner(ccontainer._owner)
+{
+}
+
+
 ComponentContainer::~ComponentContainer()
 {  
 }

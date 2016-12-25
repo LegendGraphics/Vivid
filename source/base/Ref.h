@@ -12,15 +12,15 @@
 
 namespace te
 {
+	// cycle reference problem exists...
     class Ref
     {
-        // We don't want those guys....
-        Ref(const Ref& src);
-        Ref& operator=(const Ref& rhs);
+	protected:
+		Ref();
+		virtual ~Ref();
 
-    protected:
-        Ref();
-        virtual ~Ref() = 0;
+        Ref(const Ref& src) = delete;
+        Ref& operator=(const Ref& rhs) = delete;
 
     public:
         inline void retain()

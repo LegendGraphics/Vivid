@@ -16,7 +16,10 @@ namespace te
     {
         public:
             Component();
+			Component(const Component& component, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
             virtual ~Component();
+
+			OBJECT_META_FUNCTION(Component);
 
             virtual void init();
             virtual void update();
