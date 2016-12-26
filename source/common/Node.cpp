@@ -68,6 +68,7 @@ namespace te
     void Node::addComponent(Component* component, int component_id)
     {
         _component_container->add(component, component_id);
+		component->setOwner(this);
     }
 
     void Node::removeComponent(int component_id)

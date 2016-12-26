@@ -24,15 +24,19 @@ namespace te
             virtual void init();
             virtual void update();
 
-            bool isEnabled() const { return _enabled; }
+            inline bool isEnabled() const { return _enabled; }
             void setEnabled(bool enabled);
 
-            const std::string& getName() const { return _name; }
+            inline const std::string& getName() const { return _name; }
             void setName(const std::string& name);
+
+			inline Node* getOwner() const { return _owner; }
+			void setOwner(Node* owner);
 
         protected:
             std::string _name;
             bool _enabled;
+			Node* _owner;
     };
 
 }

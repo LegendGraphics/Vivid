@@ -11,6 +11,8 @@ namespace te
     {
     public:
         Transform();
+		Transform(const Vector3& position);
+		Transform(float x, float y, float z);
         virtual ~Transform();
 
         virtual void init();
@@ -27,21 +29,28 @@ namespace te
 
         // using local as example
         // but I need to keep both local and world transform data
-        const Vector3& getPosition();
-        const Vector3& getScale();
-        const Vector3& getEulerAngles();
-        const Quaternion& getRotation();
+        const Vector3& getLocalPosition();
+        const Vector3& getLocalScale();
+        const Vector3& getLocalEulerAngles();
+        const Quaternion& getLocalRotation();
+
+		const Vector3& getWorldPosition();
+		const Vector3& getWorldScale();
+		const Vector3& getWorldEulerAngles();
+		const Quaternion& getWorldRotation();
 
     protected:
+		Vector3 _local_pos;
+		Vector3 _local_scale;
+		Vector3 _local_euler_angles;
+		Quaternion _local_rot;
+
         Vector3 _world_pos;
         Vector3 _world_scale;
         Vector3 _world_euler_angles; // (x, y, z) = (roll, pitch, yaw)
-        Quaternion _world_rot; // use quaternion to represent rotation? how about euler angles?
+        Quaternion _world_rot; // use quaternion to represent rotation? how about euler angles?    
 
-        Vector3 _local_pos;
-        Vector3 _local_scale;
-        Vector3 _local_euler_angles;
-        Quaternion _local_rot;
+		bool _dirty;
 
     };
 }
