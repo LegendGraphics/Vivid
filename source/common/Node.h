@@ -7,7 +7,7 @@
 #include "base/ref.h"
 #include "base/refptr.hpp"
 #include "common/object.h"
-
+#include "common/ClassType.hpp"
 
 namespace te
 {
@@ -22,7 +22,10 @@ namespace te
     {
     public:
         Node();
+		Node(const Node& node, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Node();
+
+		OBJECT_META_FUNCTION(Node);
 
         void addChild(Node* child);
         void removeChild(Node* child);
@@ -30,9 +33,9 @@ namespace te
         inline Node* getChild(int index) { return _children[index].get(); }
 
         void setParent(Node* parent);
-        inline Node* getParent() { return _parent.get(); }
+        inline Node* getParent() { return _parent; }
 
-        inline bool hasParent() { return /*_parent != nullptr*/ true; }
+        inline bool hasParent() { return _parent != nullptr; }
 
         void setVisible(bool visible);
         inline bool getVisible() { return _visible; }
@@ -50,7 +53,7 @@ namespace te
         void removeComponent();
 
         template <typename C>
-        C* getComponent() const;
+        C* getComponent();
 
         template <typename C>
         bool hasComponent() const;
@@ -63,7 +66,7 @@ namespace te
 
     protected:
         std::vector<RefPtr<Node>> _children;
-        RefPtr<Node> _parent;
+        Node* _parent;
 
         bool _visible;
 
@@ -87,7 +90,7 @@ namespace te
     }
 
     template <typename C>
-    C* Node::getComponent() const
+    C* Node::getComponent()
     {
         static_assert(std::is_base_of<Component, C>(), "C is not a component, cannot retrieve C from node");
         return static_cast<C*>(getComponent(getComponentTypeId<C>()));

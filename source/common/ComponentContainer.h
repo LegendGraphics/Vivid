@@ -27,7 +27,10 @@ namespace te
 
     public:
         ComponentContainer(Node* owner);
+		ComponentContainer(const ComponentContainer& ccontainer, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         ~ComponentContainer();
+
+		OBJECT_META_FUNCTION(ComponentContainer);
 
         void add(Component* component, int component_id);
         void remove(int component_id);
