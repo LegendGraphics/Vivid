@@ -17,6 +17,10 @@ namespace te
     {
     public:
         Mat4x4();
+        Mat4x4(float m00, float m01, float m02, float m03,
+               float m10, float m11, float m12, float m13,
+               float m20, float m21, float m22, float m23,
+               float m30, float m31, float m32, float m33);
         Mat4x4(const Mat4x4& m);
         Mat4x4& operator=(const Mat4x4& m);
         virtual ~Mat4x4();

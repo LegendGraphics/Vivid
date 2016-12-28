@@ -57,7 +57,7 @@ namespace te
     Vector2 Vector4to2(const Vector4& vec4);
     Vector3 Vector4to3(const Vector4& vec4);
     Vector4 Vector2to4(const Vector2& vec2);
-    Vector4 Vector3to4(const Vector3& vec2);
+    Vector4 Vector3to4(const Vector3& vec3);
 }
 
 
