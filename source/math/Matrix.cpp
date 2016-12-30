@@ -180,7 +180,7 @@ namespace te
     Mat4x4 Mat4x4::perspective(float fov, float aspect, float znear, float zfar)
     {
         Mat4x4 mat;
-        mat.perspective(fov, aspect, znear, zfar);
+        mat.makePerspective(fov, aspect, znear, zfar);
         return mat;
     }
 }
