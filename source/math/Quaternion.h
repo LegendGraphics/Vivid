@@ -59,6 +59,27 @@ namespace te
             ret.w /= f;
             return ret;
         }
+        inline Quaternion& operator*=(const Quaternion& q)
+        {
+            float tw = w * q.w - v.x * q.v.x - v.y * q.v.y - v.z * q.v.z;
+            float vx = w * q.v.x + v.x * q.w + v.y * q.v.z - v.z * q.v.y;
+            float vy = w * q.v.y - v.x * q.v.z + v.y * q.w + v.z * q.v.z;
+            float vz = w * q.v.z + v.x * q.v.y - v.y * q.v.x + v.z * q.w;
+            v = Vector3(vx, vy, vz);
+            w = tw;
+            return *this;
+        }
+        friend inline Quaternion operator*(const Quaternion& q1, const Quaternion& q2)
+        {
+            /*float tw = w * q.w - v.x * q.v.x - v.y * q.v.y - v.z * q.v.z;
+            float vx = w * q.v.x + v.x * q.w + v.y * q.v.z - v.z * q.v.y;
+            float vy = w * q.v.y - v.x * q.v.z + v.y * q.w + v.z * q.v.z;
+            float vz = w * q.v.z + v.x * q.v.y - v.y * q.v.x + v.z * q.w;
+            v = Vector3(vx, vy, vz);
+            w = tw;*/
+            return Quaternion();
+        }
+
         Matrix convertToMatrix() const;
         Vector3 convertToEulerAngles() const;
         Quaternion(const Matrix& m);
