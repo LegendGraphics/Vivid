@@ -15,6 +15,9 @@ namespace te
 		//bool intersectRay(const Ray& ray);
 		bool intersect(const BoundingSphere& bb);
 
+		inline Vector3 getCenter() const { return _center; }
+		inline float   getRadius() const { return _radius; }
+
 	protected:
 		Vector3 _center;
 		float _radius;

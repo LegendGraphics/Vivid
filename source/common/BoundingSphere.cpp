@@ -22,6 +22,12 @@ namespace te
 
 	bool BoundingSphere::intersect(const BoundingSphere& bb)
 	{
-		return true;
+		Vector3 centerDist = bb.getCenter() - _center;
+		float radiusDist = bb.getRadius() + _radius;
+
+		if (Vector3::dot(centerDist, centerDist) <= radiusDist * radiusDist)
+			return true;
+		else
+			return false;
 	}
 }
