@@ -25,6 +25,15 @@ namespace te
 
     bool BoundingBox::intersect(const BoundingBox& bb)
     {
-        return true;
+        Vector3 halfDiag1 = (_max - _min) / 2.0;
+        Vector3 halfDiag2 = (bb.getMax() - bb.getMin()) / 2.0;
+        Vector3 centerDist = bb.getCenter() - _center;
+
+        if (fabs(centerDist.x) <= (halfDiag1.x + halfDiag2.x) &&
+            fabs(centerDist.y) <= (halfDiag1.y + halfDiag2.y) &&
+            fabs(centerDist.z) <= (halfDiag1.z + halfDiag2.z))
+            return true;
+        else
+            return false;
     }
 }

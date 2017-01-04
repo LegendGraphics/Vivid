@@ -10,10 +10,15 @@ namespace te
     {
     public:
         BoundingBox(const Vector3& center, const Vector3& size);
+        // @note why not just using bboxMin and bboxMax to initialize BoundingBox?
 
         bool contains(const Vector3& point);
         //bool intersectRay(const Ray& ray);
         bool intersect(const BoundingBox& bb);
+
+        inline Vector3 getMax() const { return _max; }
+        inline Vector3 getMin() const { return _min; }
+        inline Vector3 getCenter() const { return _center; }
 
     protected:
         Vector3 _center;
