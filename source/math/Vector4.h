@@ -26,12 +26,12 @@ namespace te
         inline Vector4& operator*=(float s) { this->x *= s; this->y *= s; this->z *= s; this->w *= s; return *this; }
         inline const Vector4 operator/(float s) const { return Vector4(x / s, y / s, z / s, w / s); }
         inline Vector4& operator/=(float s) { this->x /= s; this->y /= s; this->z /= s; this->w /= s; return *this; }
-        inline bool operator==(const Vector4& v)
+        inline bool operator==(const Vector4& v) const
         {
             if ((x == v.x) && (y == v.y) && (z == v.z) && (w == v.w)) return true;
             else return false;
         }
-        inline bool operator!=(const Vector4& v)
+        inline bool operator!=(const Vector4& v) const
         {
             return !(*this == v);
         }  

@@ -25,12 +25,12 @@ namespace te
         inline Vector2& operator*=(float s) { this->x *= s; this->y *= s; return *this; }
         inline const Vector2 operator/(float s) const { return Vector2(x / s, y / s); }
         inline Vector2& operator/=(float s) { this->x /= s; this->y /= s; return *this; }
-        inline bool operator==(const Vector2& v)
+        inline bool operator==(const Vector2& v) const
         {
             if ((x == v.x) && (y == v.y)) return true;
             else return false;
         }
-        inline bool operator!=(const Vector2& v)
+        inline bool operator!=(const Vector2& v) const
         {
             return !(*this == v);
         }  

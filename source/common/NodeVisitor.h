@@ -28,7 +28,12 @@ namespace te
         };
 
         NodeVisitor();
+        NodeVisitor(const TraversalMode& tm, const VisitorType& vt);
+        NodeVisitor(const NodeVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+
         virtual ~NodeVisitor();
+
+        OBJECT_META_FUNCTION(NodeVisitor);
 
         virtual void apply(Node* node);
 

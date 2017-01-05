@@ -23,12 +23,12 @@ namespace te
         inline Vector3& operator*=(float s) { this->x *= s; this->y *= s; this->z *= s; return *this; }
         inline const Vector3 operator/(float s) const { return Vector3(x / s, y / s, z / s); }
         inline Vector3& operator/=(float s) { this->x /= s; this->y /= s; this->z /= s; return *this; }
-        inline bool operator==(const Vector3& v)
+        inline bool operator==(const Vector3& v) const
         {
             if ((x == v.x) && (y == v.y) && (z == v.z)) return true;
             else return false;
         }
-        inline bool operator!=(const Vector3& v)
+        inline bool operator!=(const Vector3& v) const
         {
             return !(*this == v);
         }  

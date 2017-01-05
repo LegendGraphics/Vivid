@@ -3,22 +3,35 @@
 
 #include "common/Object.h"
 #include "common/Plane.h"
+#include "common/BoundingBox.h"
+#include "math/Matrix.h"
 
 namespace te
 {
-	class Node;
+    class Node;
 
-	class Frustum : public Object
-	{
-	public:
-		Frustum();
-		virtual ~Frustum();
+    class Frustum : public Object
+    {
+    public:
+        Frustum() = default;
+        virtual ~Frustum() = default;
 
-		bool isInsideFrustum(Node* node);
+        const Vector3& getOrigin() const { return _origin; }
+        const Vector3& getCorner(int index) const { return _corners[index]; }
 
-	protected:
-		Plane _planes[6];
-	};
+        void buildViewFrustum(const Matrix& view_mat, const Matrix& proj_mat);
+
+        bool cullSphere(Vector3 pos, float rad) const;
+        bool cullBox(const BoundingBox& bb) const;
+        bool cullFrustum(const Frustum& frust) const;
+
+        void calcAABB(Vector3& min, Vector3& max) const;
+
+    protected:
+        Plane _planes[6];
+        Vector3 _origin;
+        Vector3 _corners[8];
+    };
 }
 
 

@@ -22,10 +22,10 @@ namespace te
     {
     public:
         Node();
-		Node(const Node& node, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        Node(const Node& node, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Node();
 
-		OBJECT_META_FUNCTION(Node);
+        OBJECT_META_FUNCTION(Node);
 
         void addChild(Node* child);
         void removeChild(Node* child);

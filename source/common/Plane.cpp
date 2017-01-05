@@ -2,31 +2,46 @@
 
 namespace te
 {
-	Plane::Plane(){}
+    Plane::Plane() {}
 
-	Plane::Plane(const Vector3& normal, float distance)
-		:_normal(normal),
-		_distance(distance)
-	{}
+    Plane::Plane(const float a, const float b, const float c, const float d)
+    {
+        _normal = Vector3(a, b, c);
+        _distance = d;
+    }
 
-	Plane::Plane(const Plane& plane, const CopyOperator& copyop)
-	{
-	}
+    Plane::Plane(const Vector3& normal, float distance)
+        :_normal(normal),
+        _distance(distance)
+    {}
 
-	Plane::~Plane(){}
+    Plane::Plane(const Plane& plane, const CopyOperator& copyop)
+    {
+    }
 
-	void Plane::setNormal(const Vector3& normal)
-	{
-		_normal = normal;
-	}
+    Plane& Plane::operator=(const Plane& plane)
+    {
+        _normal = plane._normal;
+        _distance = plane._distance;
+        return *this;
+    }
 
-	void Plane::setDistance(float distance)
-	{
-		_distance = distance;
-	}
+    Plane::~Plane() {}
 
-	bool Plane::sphereInPlane(const Vector3& position, float radius) const
-	{
-		return true;
-	}
+    void Plane::setNormal(const Vector3& normal)
+    {
+        _normal = normal;
+    }
+
+    void Plane::setDistance(float distance)
+    {
+        _distance = distance;
+    }
+
+    // signed distance
+    float Plane::distToPlane(const Vector3& position) const
+    {
+        return (Vector3::dot(_normal, position) + _distance) / _normal.length();
+    }
+
 }

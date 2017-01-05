@@ -10,11 +10,24 @@ namespace te
     {
     }
 
+    NodeVisitor::NodeVisitor(const TraversalMode& tm, const VisitorType& vt)
+        :_traversal_mode(tm),
+        _visitor_type(vt)
+    {}
+
+    NodeVisitor::NodeVisitor(const NodeVisitor& node_visitor, const CopyOperator& copyop)
+        :_traversal_mode(node_visitor._traversal_mode),
+        _visitor_type(node_visitor._visitor_type)
+    {
+
+    }
+
     NodeVisitor::~NodeVisitor()
     {}
 
     void NodeVisitor::apply(Node* node)
     {
+        std::cout << node->getName() << std::endl;
         traverse(node);
     }
 
