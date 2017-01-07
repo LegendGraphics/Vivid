@@ -16,10 +16,10 @@ namespace te
     {
         public:
             Component();
-			Component(const Component& component, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+            Component(const Component& component, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
             virtual ~Component();
 
-			OBJECT_META_FUNCTION(Component);
+            OBJECT_META_FUNCTION(Component);
 
             virtual void init();
             virtual void update();
@@ -30,13 +30,13 @@ namespace te
             inline const std::string& getName() const { return _name; }
             void setName(const std::string& name);
 
-			inline Node* getOwner() const { return _owner; }
-			void setOwner(Node* owner);
+            inline Node* getOwner() const { return _owner; }
+            void setOwner(Node* owner);
 
         protected:
             std::string _name;
             bool _enabled;
-			Node* _owner;
+            Node* _owner;
     };
 
 }

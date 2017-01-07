@@ -27,7 +27,7 @@ namespace te
         float distToPlane(const Vector3& position) const;
 
     protected:
-        Vector3	_normal;
+        Vector3 _normal;
         float _distance;
     };
 }

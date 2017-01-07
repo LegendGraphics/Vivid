@@ -28,12 +28,12 @@ namespace te
         };*/
     };
 
-	struct VertexIndices
-	{
-		int pos_idx;
-		int tex_idx;
-		int nrm_idx;
-	};
+    struct VertexIndices
+    {
+        int pos_idx;
+        int tex_idx;
+        int nrm_idx;
+    };
 
     enum class VertexAttribute
     {
@@ -154,9 +154,9 @@ namespace te
     public:
         Mesh() = default;
         virtual ~Mesh() = default;
-		Mesh(const Mesh& mesh, const CopyOperator& copypo = CopyOperator::SHALLOW_COPY);
+        Mesh(const Mesh& mesh, const CopyOperator& copypo = CopyOperator::SHALLOW_COPY);
 
-		OBJECT_META_FUNCTION(Mesh);
+        OBJECT_META_FUNCTION(Mesh);
 
         void clear();
 

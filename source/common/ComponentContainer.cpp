@@ -10,13 +10,13 @@ ComponentContainer::ComponentContainer(Node* owner)
 }
 
 ComponentContainer::ComponentContainer(const ComponentContainer& ccontainer, const CopyOperator& copyop)
-	:_owner(ccontainer._owner)
+    : _owner(ccontainer._owner)
 {
 }
 
 
 ComponentContainer::~ComponentContainer()
-{  
+{
 }
 
 Component* ComponentContainer::get(int component_id)
@@ -30,7 +30,7 @@ void ComponentContainer::add(Component *component, int component_id)
 {
     TE_ASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
     TE_ASSERT(_component_types[component_id] == false, "Component already exists!");
-    
+
     _component_map[component_id] = component;
     _component_types[component_id] = true;
 }
@@ -53,7 +53,7 @@ void ComponentContainer::removeAll()
 bool ComponentContainer::has(int component_id)
 {
     TE_ASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
-    
+
     return _component_types[component_id];
 }
 

@@ -2,10 +2,10 @@
 
 namespace te
 {
-	Mesh::Mesh(const Mesh& mesh, const CopyOperator& copypo)
-	{
+    Mesh::Mesh(const Mesh& mesh, const CopyOperator& copypo)
+    {
 
-	}
+    }
     void Mesh::setVertexArray(const std::vector<Vertex>& vertices)
     {
         _vertices = vertices;

@@ -12,12 +12,12 @@
 
 namespace te
 {
-	// cycle reference problem exists...
+    // cycle reference problem exists...
     class Ref
     {
-	protected:
-		Ref();
-		virtual ~Ref();
+    protected:
+        Ref();
+        virtual ~Ref();
 
         Ref(const Ref& src) = delete;
         Ref& operator=(const Ref& rhs) = delete;
