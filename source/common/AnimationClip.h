@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "common/Object.h"
+#include "common/Resource.h"
 #include "math/Quaternion.h"
 
 namespace te
@@ -16,6 +17,33 @@ namespace te
     };
 
     using AnimationPoses = std::vector<AnimationPose>;
+
+
+    class AnimationRes : public Resource
+    {
+    private:
+        struct Frame
+        {
+            Quaternion  rotation;
+            Vector3     translation;
+            Vector3     scale;
+            Matrix      baked_mat;
+        };
+
+        // a single joint's animation clip
+        struct AnimResEnitity 
+        {
+            std::string name;
+            bool compressed;
+            std::vector<Frame> frames;
+        };
+    public:
+        bool load(const char *data, int size);
+        void release();
+    protected:
+        int _frame_num;
+        std::vector<AnimResEnitity>  _entities;
+    };
 
     class AnimationClip: public Object
     {
