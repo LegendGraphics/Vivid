@@ -7,27 +7,14 @@
 
 namespace te
 {
-    struct SkeletonJoint
-    {
-        std::string name;
-        int parent_idx;
-        Matrix inv_binding;
-    };
-
-    using SkeletonJoints = std::vector<SkeletonJoint>;
-
-    struct Skeleton
-    {
-        int id;
-        int joint_count;
-        SkeletonJoints joints;
-    };
-
     class Animation : public Component
     {
     public:
         Animation() = default;
         virtual ~Animation() = default;
+
+        void setSkeleton(SkeletonRes* skel_res);
+        void addAnimClip(AnimClipRes* clip_res);
 
     protected:
         Skeleton*   _skeleton;
