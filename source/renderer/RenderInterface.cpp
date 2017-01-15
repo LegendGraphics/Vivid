@@ -11,7 +11,7 @@ namespace te
     bool RenderInterface::init()
     {
         // init render device here
-        //if (!_renderDevice) _renderDevice = new RenderDevice();
+        if (!_renderDevice->open()) return false;
         // init render resource here
 
         return true;

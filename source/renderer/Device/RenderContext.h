@@ -17,6 +17,7 @@ namespace te
             UPDATE_VERTEX_BUFFER,
             UPDATE_INDEX_BUFFER,
             UPDATE_TEXTURE,
+            BIND_SHADER_OBJECT,
             SET_RENDER_TARGET,
             CLEAR,
             RENDER,
@@ -26,7 +27,7 @@ namespace te
         struct Command
         {
             uint64 sort_key;
-            // not sure if we should use inheritage to trigger different behavior or not
+            // not sure if we should use inherit to trigger different behavior or not
             void* head; // command stream, use flag to get correct type
             CommandType command_type;
         };

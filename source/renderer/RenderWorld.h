@@ -18,6 +18,9 @@ namespace te
             RenderCamera* _camera;
         };
         void render(RenderParams& params);
+
+    private:
+        //ShaderObject _defaultColorShader;
     };
 }
 

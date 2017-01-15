@@ -18,6 +18,9 @@ namespace te
         ~RenderMeshObject();
 
         void render(RenderContext* context, RenderCamera* camera, RenderDevice* device);
+
+    private:
+        uint32 _shader_object_handle;
     };
 }
 
