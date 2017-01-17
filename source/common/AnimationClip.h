@@ -103,6 +103,8 @@ namespace te
 
         void setFrameNum(int num);
         AnimationPoses& getAnimPose(int index) { return _key_frames[index]; }
+        float getDuration() const { return _duration; }
+        int getFrameNum() const { return _key_frames.size(); }
 
     protected:
         float _duration;
