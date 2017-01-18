@@ -5,7 +5,26 @@
 
 namespace te
 {
-   
+
+    // this seems to be a common concept
+    // in all platforms, put it here for now
+    // Vertex Layout is to tell the GPU
+    // how attributes of a vertex is
+    // stored in a chunk of memory
+    struct VertexLayoutAttrib
+    {
+        std::string  semanticName;
+        uint32       vbSlot;
+        uint32       size;
+        uint32       offset;
+    };
+
+    enum class IndexFormat : uint8
+    {
+        IDXFMT_16,
+        IDXFMT_32
+    };
+
     class RenderContext
     {
     public:
@@ -23,6 +42,17 @@ namespace te
             RENDER,
             COMMANDS_COUNTER
         }; ///< 256 should be enough for now
+
+        struct IndexCmdStream
+        {
+            uint32 bufHandle;
+            IndexFormat idxFormat;
+        };
+
+        struct VertexCmdStream
+        {
+
+        };
 
         struct Command
         {

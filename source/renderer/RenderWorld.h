@@ -1,6 +1,8 @@
 #ifndef RENDERER_RENDERWORLD_H
 #define RENDERER_RENDERWORLD_H
 
+#include "base/Globals.h"
+
 namespace te
 {
     class RenderCamera;
@@ -19,8 +21,14 @@ namespace te
         };
         void render(RenderParams& params);
 
+    protected:
+        void createPrimitives(RenderDevice* device);
+
     private:
         //ShaderObject _defaultColorShader;
+
+        //uint32  _vbCube, _ibCube, _vbSphere, _ibSphere;
+        //uint32  _vbCone, _ibCone, _vbFSPoly;
     };
 }
 

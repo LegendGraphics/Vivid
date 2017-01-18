@@ -52,6 +52,7 @@ namespace te
     };
 
     typedef std::vector<Vector3> Vec3Array;
+    typedef Vector3 Vec3f;
 }
 
 #endif // MATH_VECTOR3_H

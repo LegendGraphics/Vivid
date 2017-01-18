@@ -1,5 +1,7 @@
 #include "GLRenderDevice.h"
 
+#include "RenderContext.h"
+
 #include "../3rdparty/glew/include/GL/glew.h"
 
 namespace te
@@ -39,6 +41,82 @@ namespace te
         return true;
     }
 
+    void GLRenderDevice::dispatch(RenderContext * context_)
+    {
+        // do actual command
+        // in stingray, this is done by GLRenderContext, which is an internal
+        // class within GLRenderDevice and has nothing to do with RenderContext
+        // XXXRenderDevice may hold an immediate_context. For deferred rendering
+        // there might be other context, need investigation
+
+        // For current dev stage, we simply let the device do the actual command
+        for (RenderContext::Command& command : context_->commands())
+        {
+            if (RenderContext::CommandType::UPDATE_INDEX_BUFFER == command.command_type)
+            {
+                RenderContext::IndexCmdStream* c_stream = static_cast<RenderContext::IndexCmdStream*>(command.head);
+                _newIndexBuf = c_stream->bufHandle;
+                _indexFormat = c_stream->idxFormat;
+            }
+            else if (RenderContext::CommandType::UPDATE_VERTEX_BUFFER == command.command_type)
+            {
+
+            }
+        }
+    }
+
+    uint32 GLRenderDevice::createVertexBuffer(uint32 size, const void * data)
+    {
+        GLBuffer buf;
+        buf.type = GL_ARRAY_BUFFER;
+        buf.size = size;
+        glGenBuffers(1, &buf.glObj);
+        glBindBuffer(buf.type, size, data, GL_DYNAMIC_DRAW);
+        glBindBuffer(buf.type, 0);
+
+        return _buffers.add(buf);
+    }
+
+    uint32 GLRenderDevice::createIndexBuffer(uint32 size, const void * data)
+    {
+        GLBuffer buf;
+
+        buf.type = GL_ELEMENT_ARRAY_BUFFER;
+        buf.size = size;
+        glGenBuffers(1, &buf.glObj);
+        glBindBuffer(buf.type, buf.glObj);
+        glBufferData(buf.type, size, data, GL_DYNAMIC_DRAW);
+        glBindBuffer(buf.type, 0);
+
+        return _buffers.add(buf);
+    }
+
+    void GLRenderDevice::destroyBuffer(uint32 bufObj)
+    {
+        if (0 == bufObj) return;
+
+        GLBuffer& buf = _buffers.getRef(bufObj);
+        glDeleteBuffers(1, &buf.glObj);
+
+        _buffers.remove(bufObj);
+    }
+
+    void GLRenderDevice::updateBufferData(uint32 bufObj, uint32 offset, uint32 size, void * data)
+    {
+        const GLBuffer& buf = _buffers.getRef(bufObj);
+        TE_ASSERT(offset + size <= buf.size, "offset + size should be no larger than buf.size!");
+
+        glBindBuffer(buf.type, buf.glObj);
+        
+        if (0 == offset && size == buf.size)
+        {
+            glBufferData(buf.type, size, data, GL_DYNAMIC_DRAW);
+            return;
+        }
+
+        glBufferSubData(buf.type, offset, size, data);
+    }
+
     const char* GLRenderDevice::getDefaultVSCode()
     {
         return defaultShaderVS;
@@ -48,6 +126,7 @@ namespace te
     {
         return defaultShaderFS;
     }
+
     uint32 GLRenderDevice::createShader(const char * vertexShaderSrc, const char * fragmentShaderSrc)
     {
         uint32 programObj = createShaderProgram(vertexShaderSrc, fragmentShaderSrc);
@@ -60,6 +139,7 @@ namespace te
 
         return shaderHandle;
     }
+
     uint32 GLRenderDevice::createShaderProgram(const char * vertexShaderSrc, const char * fragmentShaderSrc)
     {
         int infologLength = 0;
@@ -118,6 +198,7 @@ namespace te
 
         return program;
     }
+
     bool GLRenderDevice::linkShaderProgram(uint32 programObj)
     {
         int infologLength = 0;
@@ -142,11 +223,13 @@ namespace te
 
         return true;
     }
+
     int GLRenderDevice::getShaderConstLoc(uint32 shaderHandle, const char* name)
     {
         GLShader& shader = _shaders.getRef(shaderHandle);
         return glGetUniformLocation(shader.oglProgramObj, name);
     }
+
     void GLRenderDevice::bindShader(uint32 shaderHandle)
     {
         if (0 != shaderHandle)
