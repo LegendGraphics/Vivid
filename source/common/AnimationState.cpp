@@ -41,4 +41,23 @@ namespace te
     {
         return _loop;
     }
+
+    AnimationState* AnimationStateSet::getAnimationState(const std::string& name)
+    {
+        if (hasAnimationState(name)) return _states[name];
+        else return nullptr;
+    }
+    bool AnimationStateSet::hasAnimationState(const std::string& name)
+    {
+        if (_states.find(name) != _states.end()) return true;
+        else return false;
+    }
+    void AnimationStateSet::removeAnimationState(const std::string& name)
+    {
+        if (hasAnimationState(name)) _states.erase(name);
+    }
+    void AnimationStateSet::removeAllAnimationStates()
+    {
+        _states.clear();
+    }
 }

@@ -110,8 +110,6 @@ namespace te
         float _duration;
         std::vector<AnimationPoses> _key_frames;
     };
-
-    using AnimationClips = std::vector<AnimationClip*>;
 }
 
 #endif // COMMON_ANIMATION_CLIP_H

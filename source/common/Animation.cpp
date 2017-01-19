@@ -2,35 +2,72 @@
 
 namespace te
 {
-    void Animation::setSkeleton(SkeletonRes* skel_res)
+    int AnimClipContainer::getAnimClipNum()
     {
-        // build skeleton
-        skel_res->buildSkeleton(_skeleton);
+        return _clips.size();
     }
 
-    void Animation::addClipFromRes(AnimClipRes* clip_res)
+    AnimationClip* AnimClipContainer::getAnimClip(const std::string& name)
     {
-        // build AnimationClip
-        AnimationClip* clip = new AnimationClip;
-        clip_res->buildAnimClip(clip);
-        addClip(clip);
+        if (hasAnimClip(name)) return _clips[name];
+        else return nullptr;
     }
 
-    void Animation::addClip(AnimationClip* clip)
+    AnimationClip* AnimClipContainer::createAnimClip(const std::string& name, float length)
     {
-        _clips->push_back(clip);
+        if (!hasAnimClip(name)) 
+            _clips.insert({ name, new AnimationClip });
+        return _clips[name];
     }
 
-    void Animation::removeClip(AnimationClip* clip)
+    void AnimClipContainer::addAnimClip(const std::string& name, AnimationClip* clip)
     {
-        AnimationClips::iterator position = std::find(_clips->begin(), _clips->end(), clip);
-        if (position != _clips->end())
-            _clips->erase(position);
+        if (!hasAnimClip(name))
+            _clips.insert({ name, clip });
     }
 
-    int Animation::getClipCount() const
+    bool AnimClipContainer::hasAnimClip(const std::string& name)
     {
-        return _clips->size();
+        if (_clips.find(name) != _clips.end()) return true;
+        else return false;
+    }
+    void AnimClipContainer::removeAnimClip(const std::string& name)
+    {
+        if (hasAnimClip(name)) _clips.erase(name);
+    }
+
+    //void Animation::setSkeleton(SkeletonRes* skel_res)
+    //{
+    //    // build skeleton
+    //    skel_res->buildSkeleton(_skeleton);
+    //}
+
+    //void Animation::addClipFromRes(AnimClipRes* clip_res)
+    //{
+    //    // build AnimationClip
+    //    AnimationClip* clip = new AnimationClip;
+    //    clip_res->buildAnimClip(clip);
+    //    addClip(clip);
+    //}
+
+    void Animation::addAnimClip(const std::string& name, AnimationClip* clip)
+    {
+        _clip_container->addAnimClip(name, clip);
+    }
+
+    void Animation::removeAnimClip(const std::string& name)
+    {
+        _clip_container->removeAnimClip(name);
+    }
+
+    int Animation::getAnimClipNum() const
+    {
+        return _clip_container->getAnimClipNum();
+    }
+
+    bool Animation::hasAnimClip(const std::string& name)
+    {
+        return _clip_container->hasAnimClip(name);
     }
 
     void Animation::play(const std::string& anim_name)
@@ -66,7 +103,7 @@ namespace te
 
     AnimationPoses Animation::interpolate(float time, int clip_index)
     {
-        AnimationClip* clip = (*_clips)[clip_index];
+        AnimationClip* clip = nullptr; //(*_clips)[clip_index];
         float delta = 1.0 / (clip->getFrameNum() - 1);
         int key = int(time / delta);
         float weight = time - delta * key;

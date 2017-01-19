@@ -1,6 +1,7 @@
 #ifndef COMMON_ANIMATION_STATE_H
 #define COMMON_ANIMATION_STATE_H
 
+#include <unordered_map>
 #include "common/Object.h"
 
 namespace te
@@ -27,6 +28,21 @@ namespace te
         float _weight;
         bool _enabled;
         bool _loop;
+    };
+
+    class AnimationStateSet : public Object
+    {
+    private:
+        using AnimationStateMap = std::unordered_map<std::string, AnimationState*>;
+
+    public:
+        AnimationState* getAnimationState(const std::string& name);
+        bool hasAnimationState(const std::string& name);
+        void removeAnimationState(const std::string& name);
+        void removeAllAnimationStates();
+
+    private:
+        AnimationStateMap _states;
     };
 }
 
