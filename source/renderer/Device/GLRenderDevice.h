@@ -20,7 +20,11 @@ namespace te
     struct GLVertexLayout
     {
         uint32              numAttribs;
-        VertexLayoutAttrib  attribs[16]; // TODO: need to investigate here
+        //VertexLayoutAttrib  attribs[16]; // TODO: need to investigate here
+        // there is a corresponding structure in Shader
+        // one layout may have at most 16 attributes (attributes is a key world in GLSL)
+        // for different purpose, there might be different layouts
+        // for example, light, overlay(ui, font, etc), model, etc
     };
 
     class GLRenderDevice : public RenderDevice

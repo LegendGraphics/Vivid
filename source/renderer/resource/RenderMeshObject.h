@@ -20,7 +20,10 @@ namespace te
         void render(RenderContext* context, RenderCamera* camera, RenderDevice* device);
 
     private:
-        uint32 _shader_object_handle;
+        uint32  _shader_object_handle;
+        uint32  _indexBuf, _posVBuf; // temporary to put it here
+        // TODO: consider move this to a GeometryObject? Shader belongs to Material, Material
+        // belongs to Mesh (Mesh should be a Node ?), Geometry also belongs to Mesh
     };
 }
 

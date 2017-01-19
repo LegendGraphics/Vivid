@@ -51,7 +51,7 @@ namespace te
 
         struct VertexCmdStream
         {
-
+            uint32 bufHandle;
         };
 
         struct Command

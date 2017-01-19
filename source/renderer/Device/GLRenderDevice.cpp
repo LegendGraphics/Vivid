@@ -57,6 +57,7 @@ namespace te
                 RenderContext::IndexCmdStream* c_stream = static_cast<RenderContext::IndexCmdStream*>(command.head);
                 _newIndexBuf = c_stream->bufHandle;
                 _indexFormat = c_stream->idxFormat;
+                delete c_stream;
             }
             else if (RenderContext::CommandType::UPDATE_VERTEX_BUFFER == command.command_type)
             {
