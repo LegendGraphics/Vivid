@@ -9,17 +9,30 @@
 
 namespace te
 {
-    struct AnimationPose
+    class Skeleton;
+    class AnimationClip;
+
+    class SkeletonRes : public Resource
     {
-        Vector3 translation;
-        Vector3 scale;
-        Quaternion rotation;
+    private:
+        struct JointEntity
+        {
+            std::string name;
+            int parent_idx;
+            Matrix inv_binding;
+        };
+    public:
+        bool load(const char *data, int size);
+        void release();
+
+        void buildSkeleton(Skeleton* skeleton);
+
+    protected:
+        std::vector<JointEntity> _entities;
     };
 
-    using AnimationPoses = std::vector<AnimationPose>;
 
-
-    class AnimationRes : public Resource
+    class AnimClipRes : public Resource
     {
     private:
         struct Frame
@@ -31,7 +44,7 @@ namespace te
         };
 
         // a single joint's animation clip
-        struct AnimResEnitity 
+        struct AnimResEntity 
         {
             std::string name;
             bool compressed;
@@ -40,23 +53,63 @@ namespace te
     public:
         bool load(const char *data, int size);
         void release();
+
+        void buildAnimClip(AnimationClip* anim_clip);
     protected:
         int _frame_num;
-        std::vector<AnimResEnitity>  _entities;
+        std::vector<AnimResEntity>  _entities;
+    };
+
+
+    struct SkeletonJoint
+    {
+        std::string name;
+        int parent_idx;
+        Matrix inv_binding;
+    };
+
+    using SkeletonJoints = std::vector<SkeletonJoint>;
+
+    struct AnimationPose
+    {
+        Vector3 translation;
+        Vector3 scale;
+        Quaternion rotation;
+    };
+
+    using AnimationPoses = std::vector<AnimationPose>;
+
+    class Skeleton : public Object
+    {
+    public:
+        Skeleton() = default;
+        virtual ~Skeleton() = default;
+
+        void resize(int size);
+        SkeletonJoint& getJoint(int index) { return _joints[index]; }
+        int getJointNum() const{ return _joints.size(); }
+    protected:
+        SkeletonJoints _joints;
     };
 
     class AnimationClip: public Object
     {
     public:
         AnimationClip() = default;
+        AnimationClip(const AnimationClip& anim_clip, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~AnimationClip() = default;
+
+        OBJECT_META_FUNCTION(AnimationClip);
+
+        void setFrameNum(int num);
+        AnimationPoses& getAnimPose(int index) { return _key_frames[index]; }
+        float getDuration() const { return _duration; }
+        int getFrameNum() const { return _key_frames.size(); }
 
     protected:
         float _duration;
-        AnimationPoses _poses;
+        std::vector<AnimationPoses> _key_frames;
     };
-
-    using AnimationClips = std::vector<AnimationClip*>;
 }
 
 #endif // COMMON_ANIMATION_CLIP_H
