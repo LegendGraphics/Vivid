@@ -25,7 +25,7 @@ namespace te
         bool load(const char *data, int size);
         void release();
 
-        void buildSkeleton(Skeleton* skeleton);
+        void initSkeleton(Skeleton* skeleton);
 
     protected:
         std::vector<JointEntity> _entities;
@@ -54,13 +54,13 @@ namespace te
         bool load(const char *data, int size);
         void release();
 
-        void buildAnimClip(AnimationClip* anim_clip);
+        void initAnimClip(AnimationClip* anim_clip);
     protected:
         int _frame_num;
         std::vector<AnimResEntity>  _entities;
     };
 
-
+    // using linear array to store skeleton and related poses
     struct SkeletonJoint
     {
         std::string name;
@@ -85,8 +85,11 @@ namespace te
         Skeleton() = default;
         virtual ~Skeleton() = default;
 
+        void init(SkeletonRes* res);
+
         void resize(int size);
-        SkeletonJoint& getJoint(int index) { return _joints[index]; }
+        SkeletonJoint& getJoint(int index);
+        SkeletonJoint& getParentJoint(int index);
         int getJointNum() const{ return _joints.size(); }
     protected:
         SkeletonJoints _joints;
@@ -101,8 +104,10 @@ namespace te
 
         OBJECT_META_FUNCTION(AnimationClip);
 
+        void init(AnimClipRes* res);
+
         void setFrameNum(int num);
-        AnimationPoses& getAnimPose(int index) { return _key_frames[index]; }
+        AnimationPoses& getAnimPoses(int index) { return _key_frames[index]; }
         float getDuration() const { return _duration; }
         int getFrameNum() const { return _key_frames.size(); }
 

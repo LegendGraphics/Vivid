@@ -41,7 +41,12 @@ namespace te
         ResourceType getType() const { return _type; }
         bool isLoaded() const { return _loaded; }
         ResourceHandle getResourceHandle() const { return _handle; }
-        void setResourceHandle(ResourceHandle handle);
+
+    protected:
+        void setResourceHandle();
+
+    protected:
+        static ResourceHandle HANDLE_COUNT;
 
     protected:
         ResourceType    _type;
@@ -49,14 +54,14 @@ namespace te
         bool            _loaded;
     };
 
-    class ResoureManager : public Object
+    class ResourceManager : public Object
     {
     public:
-        ResoureManager(ResourceType type);
-        ResoureManager(const ResoureManager& res_mgr, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
-        virtual ~ResoureManager();
+        ResourceManager(ResourceType type);
+        ResourceManager(const ResourceManager& res_mgr, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        virtual ~ResourceManager();
 
-        OBJECT_META_FUNCTION(ResoureManager);
+        OBJECT_META_FUNCTION(ResourceManager);
 
         ResourceType getType() const { return _type; }
 
@@ -66,7 +71,7 @@ namespace te
         bool hasResource(ResourceHandle handle);
         
     protected:
-        std::vector<RefPtr<Resource>> _resources;
+        std::unordered_map<ResourceHandle, RefPtr<Resource>> _resources;
         ResourceType    _type;
     };
 
@@ -84,7 +89,7 @@ namespace te
         bool hasRegistered(ResourceType type);
 
     protected:
-        std::unordered_map<ResourceType, RefPtr<ResoureManager>>    _res_map;
+        std::unordered_map<ResourceType, RefPtr<ResourceManager>>    _res_map;
     };
 }
 

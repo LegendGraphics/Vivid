@@ -2,6 +2,9 @@
 
 namespace te
 {
+    AnimClipContainer::AnimClipContainer(const AnimClipContainer& container, const CopyOperator& copyop)
+    {}
+
     int AnimClipContainer::getAnimClipNum()
     {
         return _clips.size();
@@ -50,14 +53,21 @@ namespace te
     //    addClip(clip);
     //}
 
+    Animation::Animation()
+        :_clip_container(new AnimClipContainer),
+        _state_set(new AnimStateSet)
+    {}
+
     void Animation::addAnimClip(const std::string& name, AnimationClip* clip)
     {
         _clip_container->addAnimClip(name, clip);
+        _state_set->addAnimationState(name);
     }
 
     void Animation::removeAnimClip(const std::string& name)
     {
         _clip_container->removeAnimClip(name);
+        _state_set->removeAnimationState(name);
     }
 
     int Animation::getAnimClipNum() const
@@ -85,7 +95,7 @@ namespace te
         return true;
     }
 
-    AnimationPoses Animation::blend(const AnimationPoses& ps1, const AnimationPoses& ps2, float w)
+    AnimationPoses Animation::blend(const AnimationPoses& ps1, const AnimationPoses& ps2, float w1, float w2)
     {
         assert(ps1.size() == ps2.size());
         AnimationPoses poses(ps1.size());
@@ -93,22 +103,21 @@ namespace te
         {
             const AnimationPose& p1 = ps1[i];
             const AnimationPose& p2 = ps2[i];
-            poses[i].translation = p1.translation * w + p2.translation * (1 - w);
-            poses[i].scale = p1.scale * w + p2.scale * (1 - w);
-            poses[i].rotation = p1.rotation * w + p2.rotation * (1 - w);
+            poses[i].translation = p1.translation * w1 + p2.translation * w2;
+            poses[i].scale = p1.scale * w1 + p2.scale * w2;
+            poses[i].rotation = p1.rotation * w1 + p2.rotation * w2;
         }
 
         return poses;
     }
 
-    AnimationPoses Animation::interpolate(float time, int clip_index)
+    AnimationPoses Animation::interpolate()
     {
-        AnimationClip* clip = nullptr; //(*_clips)[clip_index];
-        float delta = 1.0 / (clip->getFrameNum() - 1);
-        int key = int(time / delta);
-        float weight = time - delta * key;
+        AnimationClip* clip = _clip_container->getAnimClip(_current_anim);
+        AnimationState* state = _state_set->getAnimationState(_current_anim);
+        AnimBlendParas paras = state->getBlendParas();
         
-        return blend(clip->getAnimPose(key), clip->getAnimPose(key + 1), weight);
+        return blend(clip->getAnimPoses(paras.first), clip->getAnimPoses(paras.second), paras.fw, paras.sw);
     }
 
     void Animation::init()
