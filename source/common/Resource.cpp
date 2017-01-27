@@ -2,6 +2,8 @@
 
 namespace te
 {
+    ResourceHandle Resource::HANDLE_COUNT = 0;
+
     Resource::Resource(ResourceType type)
         :_type(type),
         _handle(0),
@@ -39,51 +41,48 @@ namespace te
         _loaded = false;
     }
 
-    void Resource::setResourceHandle(ResourceHandle handle)
+    void Resource::setResourceHandle()
     {
-        _handle = handle;
+        if (_loaded) _handle = HANDLE_COUNT++;
     }
 
-    ResoureManager::ResoureManager(ResourceType type)
+    ResourceManager::ResourceManager(ResourceType type)
         :_type(type)
     {
 
     }
 
-    ResoureManager::ResoureManager(const ResoureManager& res_mgr, const CopyOperator& copyop)
+    ResourceManager::ResourceManager(const ResourceManager& res_mgr, const CopyOperator& copyop)
     {}
 
-    ResoureManager::~ResoureManager()
+    ResourceManager::~ResourceManager()
     {}
 
-    void ResoureManager::addResource(Resource* resource)
+    void ResourceManager::addResource(Resource* resource)
     {
         if (resource->getType() == _type && !hasResource(resource))
         {
-            _resources.push_back(resource);
-            resource->setResourceHandle(_resources.size());
+            _resources.insert({ resource->getResourceHandle(), resource });
         }
     }
 
-    void ResoureManager::removeResource(ResourceHandle handle)
+    void ResourceManager::removeResource(ResourceHandle handle)
     {
         if (hasResource(handle))
         {
-            int index = handle - 1;
-            _resources[index] = nullptr;
+            _resources.erase(handle);
         }
     }
 
-    bool ResoureManager::hasResource(Resource* resource)
+    bool ResourceManager::hasResource(Resource* resource)
     {
         ResourceHandle handle = resource->getResourceHandle();
         return hasResource(handle);
     }
 
-    bool ResoureManager::hasResource(ResourceHandle handle)
+    bool ResourceManager::hasResource(ResourceHandle handle)
     {
-        ResourceHandle max_handle = _resources.size();
-        if (handle <= max_handle) return true;
+        if (_resources.find(handle) != _resources.end()) return true;
         else return false;
     }
 
@@ -99,7 +98,7 @@ namespace te
     void ResourceMap::registerResource(ResourceType type)
     {
         if (!hasRegistered(type))
-            _res_map.insert({type, new ResoureManager(type)});
+            _res_map.insert({type, new ResourceManager(type)});
     }
 
     void ResourceMap::unregisterResource(ResourceType type)

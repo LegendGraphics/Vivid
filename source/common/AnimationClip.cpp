@@ -40,13 +40,15 @@ namespace te
             entity.parent_idx = parent_idx;
         }
 
+        setResourceHandle();
+
         return true;
     }
 
     void SkeletonRes::release()
     {}
 
-    void SkeletonRes::buildSkeleton(Skeleton* skeleton)
+    void SkeletonRes::initSkeleton(Skeleton* skeleton)
     {
         int entity_num = _entities.size();
         skeleton->resize(entity_num);
@@ -127,6 +129,8 @@ namespace te
             }
         }
 
+        setResourceHandle();
+
         return true;
     }
 
@@ -135,12 +139,12 @@ namespace te
 
     }
 
-    void AnimClipRes::buildAnimClip(AnimationClip* anim_clip)
+    void AnimClipRes::initAnimClip(AnimationClip* anim_clip)
     {
         anim_clip->setFrameNum(_frame_num);
         for (int i = 0; i < _frame_num; ++i)
         {
-            AnimationPoses& poses = anim_clip->getAnimPose(i);
+            AnimationPoses& poses = anim_clip->getAnimPoses(i);
             for (int j = 0, j_end = _entities.size(); j < j_end; ++ j)
             {
                 poses[j].rotation = _entities[j].frames[i].rotation;
@@ -150,14 +154,37 @@ namespace te
         }
     }
 
+    void Skeleton::init(SkeletonRes* res)
+    {
+        res->initSkeleton(this);
+    }
+
     void Skeleton::resize(int size)
     {
         _joints.resize(size);
     }
 
+    SkeletonJoint& Skeleton::getJoint(int index)
+    {
+        assert(index < _joints.size());
+        return _joints[index];
+    }
+
+    SkeletonJoint& Skeleton::getParentJoint(int index)
+    {
+        int pid = _joints[index].parent_idx;
+        assert(pid != -1);
+        return getJoint(pid);
+    }
+
     AnimationClip::AnimationClip(const AnimationClip& anim_clip, const CopyOperator& copyop)
     {
 
+    }
+
+    void AnimationClip::init(AnimClipRes* res)
+    {
+        res->initAnimClip(this);
     }
 
     void AnimationClip::setFrameNum(int num)
