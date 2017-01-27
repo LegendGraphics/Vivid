@@ -39,6 +39,7 @@ namespace te
     void RenderWorld::render(RenderParams& params)
     {
         RenderContext* renderContext = (params._device->newContext());
+        renderContext->_camera = params._camera;
 
         // process pipeline config here
         for (PipelineStage& stage :params._pipelineRes->_stages)

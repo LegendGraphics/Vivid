@@ -44,8 +44,8 @@ namespace te
     void GLRenderDevice::dispatch(RenderContext * context_)
     {
         // do actual command
-        // in stingray, this is done by GLRenderContext, which is an internal
-        // class within GLRenderDevice and has nothing to do with RenderContext
+        // in stingray, this is done by XXXRenderContext, which is an internal
+        // class within XXXRenderDevice and has nothing to do with RenderContext
         // XXXRenderDevice may hold an immediate_context. For deferred rendering
         // there might be other context, need investigation
 
@@ -61,9 +61,31 @@ namespace te
             }
             else if (RenderContext::CommandType::UPDATE_VERTEX_BUFFER == command.command_type)
             {
+                RenderContext::VertexCmdStream* c_stream = static_cast<RenderContext::VertexCmdStream*>(command.head);
+                // each shader has an array of a structure InputLayouts { bool valid; int8 attribIndices[16]; }
+                // it's related to how the vertex buffer is organized in OpenGL
+
+            }
+            else if (RenderContext::CommandType::BIND_SHADER_OBJECT == command.command_type)
+            {
+                RenderContext::ShaderCmdStream* c_stream = static_cast<RenderContext::ShaderCmdStream*>(command.head);
+                if (c_stream)
+                {
+                    // TODO
+                    // use setShaderConst()
+                    // header of all uniform data is in ShaderCmdStream::data
+                    // ShaderCmdStream::variables give information for how to read
+                }
+                else
+                {
+                    // debug mode, use default shader
+
+                }
 
             }
         }
+
+        context_->commands().clear();
     }
 
     uint32 GLRenderDevice::createVertexBuffer(uint32 size, const void * data)
@@ -244,5 +266,10 @@ namespace te
         }
 
         _curShaderHandle = shaderHandle;
+    }
+
+    void GLRenderDevice::commitGeneralUniforms()
+    {
+
     }
 }

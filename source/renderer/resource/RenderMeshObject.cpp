@@ -27,10 +27,12 @@ namespace te
 
         // set vertex buffer
         RenderContext::VertexCmdStream* vcs = new RenderContext::VertexCmdStream;
-        vcs->bufHandle = _posVBuf;
+        vcs->vAttribs.push_back(_posVBuf);
         RenderContext::Command setVertexBuffer = { 0, (void*)vcs, RenderContext::CommandType::UPDATE_VERTEX_BUFFER };
+        context->commands().push_back(setVertexBuffer);
 
         // prepare for shader object
+        // Lin 1/19/2017
         // Two ways here, (choose #2 in current dev stage)
         // Shader require different constants (uniform in GLSL) set before rendering
         // 1. set the constants here (I think to prevent too much memory copy, we need to use handle)
@@ -47,9 +49,32 @@ namespace te
         // General uniforms should be set outside of the scope of RenderMeshObject
         // Seems in Stingray they are all written to the command stream but with a global/local tag
         // it's a pointer (resources) in the stream, not sure where the resources are managed
-
-        RenderContext::Command setShaderObject = { 0, nullptr, RenderContext::CommandType::BIND_SHADER_OBJECT };
-        context->commands().push_back(setShaderObject);
+        //
+        // Lin 1/20/2017
+        // investigate how stingray do this
+        //
+        // local shader uniforms(custom unifomrs in Horde3D): std::vector<ShaderVar> local_vars and a pointer to buffer memory
+        // struct ShaderVar { uint32 offset (offset for pointer); uint8 type; uint32 num_elem; };
+        // buffer can be hold in MaterialResource and MaterialResource belongs to a Mesh node
+        //
+        // global shader uniforms(camera matrix): there is a resource manager to deal with that in Stingray
+        // I will put the RenderCamera into RenderContext for current dev stage, since RenderContext is passed
+        // into XXXRenderDevice.
+        bool useDebug = true;
+        if (useDebug)
+        {
+            RenderContext::Command setShaderObject = { 0, nullptr, RenderContext::CommandType::BIND_SHADER_OBJECT };
+            context->commands().push_back(setShaderObject);
+        }
+        else
+        {
+            RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
+            scs->shaderHandle = _shader_object_handle;
+            // set data
+            // set variable
+            RenderContext::Command setShaderObject = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
+            context->commands().push_back(setShaderObject);
+        }
     }
 
 }

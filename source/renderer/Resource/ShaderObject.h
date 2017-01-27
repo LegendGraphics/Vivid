@@ -5,6 +5,42 @@
 
 namespace te
 {
+    namespace shader_data 
+    {
+        enum Class {
+            SCALAR = 0,
+            VECTOR2,
+            VECTOR3,
+            VECTOR4,
+            MATRIX4X4,
+            UINT,
+            INT,
+            BOOL,
+
+            SCALAR_ARRAY,
+            VECTOR2_ARRAY,
+            VECTOR3_ARRAY,
+            VECTOR4_ARRAY,
+            MATRIX4X4_ARRAY,
+            UINT_ARRAY,
+            INT_ARRAY,
+            BOOL_ARRAY,
+
+            UNKNOWN_CLASS,
+            NUM_CLASSES = UNKNOWN_CLASS
+        };
+    }
+
+    struct ShaderVariable
+    {
+        unsigned klass;
+        unsigned elements;
+        unsigned offset;
+        unsigned element_stride;
+
+        ShaderVariable() : klass(shader_data::UNKNOWN_CLASS), elements(0), offset(0xffffffff), element_stride(0) {}
+    };
+
     struct ShaderObject
     {
         uint32 shader_handle;
