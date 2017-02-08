@@ -5,10 +5,7 @@
 
 namespace te
 {
-    struct GLShader
-    {
-        uint32 oglProgramObj;
-    };
+    const uint32 MaxNumVertexLayouts = 16;
 
     struct GLBuffer
     {
@@ -17,14 +14,51 @@ namespace te
         uint32 size;
     };
 
+    // =====================================
+    // attribute related definition start
+    // =====================================
+    struct VertexLayoutAttrib
+    {
+        std::string sematicName;
+        uint32      vbslot; // to get the VertexBufferSlot from GLRenderDevice::_vertBufSlots
+                            // which is set dynamically by shader
+    };
+
     struct GLVertexLayout
     {
         uint32              numAttribs;
-        //VertexLayoutAttrib  attribs[16]; // TODO: need to investigate here
+        VertexLayoutAttrib  attribs[16]; // TODO: need to investigate here
         // there is a corresponding structure in Shader
         // one layout may have at most 16 attributes (attributes is a key world in GLSL)
         // for different purpose, there might be different layouts
         // for example, light, overlay(ui, font, etc), model, etc
+    };
+
+    struct GLVertBufSlot
+    {
+        uint32 vbObj; // it is the vertex buffer object handle in engine side
+                      // which is used to get the opengl buffer object from GLRenderDevice::_buffers
+        uint32 offset;
+        uint32 stride;
+    };
+
+    struct GLShaderInputLayout
+    {
+        bool valid;
+        int8 attribBindPointer[16]; // the corresponding binding point for glVertexAttribPointer
+                                    // it's set from glGetAttribLocation
+                                    // it seems that OpenGL supports 16 attributes for a shader at most
+    };
+
+    // ==================================
+    // attribute related definition end
+    // - not sure if these are general paradigm, may be moved to base class???
+    // ==================================
+
+    struct GLShader
+    {
+        uint32 oglProgramObj;
+        GLShaderInputLayout inputLayouts[MaxNumVertexLayouts];
     };
 
     class GLRenderDevice : public RenderDevice
@@ -55,6 +89,9 @@ namespace te
 
         // RenderBuffer
         //uint32 createRenderBuffer(uint32 width, uint32 height, )
+
+    protected:
+        void commitGeneralUniforms();
 
     protected:
         std::string   _shaderLog;
