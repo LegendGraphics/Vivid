@@ -5,22 +5,19 @@ namespace te
     bool SkeletonRes::load(const char *data, int size)
     {
         if (!Resource::load(data, size)) return false;
-
-        // Make sure header is available
-        if (size < 8) return false; //("Invalid skeleton resource");
         
         char *data_ptr = (char *)data;
 
         // Check header and version
-        char id[4];
-        memcpy(&id, data_ptr, 4); data_ptr += 4;
-        if (id[0] != 'H' || id[1] != '3' || id[2] != 'D' || id[3] != 'A')
-            return false; //("Invalid animation resource");
+        char id[3];
+        memcpy(&id, data_ptr, 3); data_ptr += 3;
+        if (id[0] != 'T' || id[1] != 'E' || id[2] != 'S')
+            return false; //("Invalid skeleton resource");
 
         int version;
         memcpy(&version, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-        if (version != 2 && version != 3)
-            return false; //("Unsupported version of animation resource");
+        if (version != 1)
+            return false; //("Unsupported version of skeleton resource");
 
         // Load skeleton data
         int entity_num;
@@ -33,11 +30,19 @@ namespace te
 
             char name[256];
             int parent_idx;
+            float pose_values[16];
+            Matrix inv_binding;
             memcpy(name, data_ptr, 256); data_ptr += 256;
             entity.name = name;
 
             memcpy(&parent_idx, data_ptr, sizeof(int)); data_ptr += sizeof(int);
             entity.parent_idx = parent_idx;
+
+            for (int k = 0; k < 16; ++ k) memcpy(&pose_values[k], data_ptr, sizeof(float)); data_ptr += sizeof(float);
+            entity.inv_binding.set(pose_values[0], pose_values[1], pose_values[2],pose_values[3],
+                                   pose_values[4], pose_values[5], pose_values[6],pose_values[7],
+                                   pose_values[8], pose_values[9], pose_values[10],pose_values[11],
+                                   pose_values[12], pose_values[13], pose_values[14],pose_values[15]);
         }
 
         setResourceHandle();
@@ -48,39 +53,22 @@ namespace te
     void SkeletonRes::release()
     {}
 
-    void SkeletonRes::initSkeleton(Skeleton* skeleton)
-    {
-        int entity_num = _entities.size();
-        skeleton->resize(entity_num);
-
-        for (int i = 0; i < entity_num; ++i)
-        {
-            SkeletonJoint& joint = skeleton->getJoint(i);
-            joint.name = _entities[i].name;
-            joint.parent_idx = _entities[i].parent_idx;
-            joint.inv_binding = _entities[i].inv_binding;
-        }
-    }
-
     // now using horde3d animation format
     bool AnimClipRes::load(const char *data, int size)
     {
         if (!Resource::load(data, size)) return false;
 
-        // Make sure header is available
-        if (size < 8) return false; //("Invalid animation resource");
-
         char *data_ptr = (char *)data;
 
         // Check header and version
-        char id[4];
-        memcpy(&id, data_ptr, 4); data_ptr += 4;
-        if (id[0] != 'H' || id[1] != '3' || id[2] != 'D' || id[3] != 'A')
+        char id[3];
+        memcpy(&id, data_ptr, 3); data_ptr += 3;
+        if (id[0] != 'T' || id[1] != 'E' || id[2] != 'A')
             return false; //("Invalid animation resource");
 
         int version;
         memcpy(&version, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-        if (version != 2 && version != 3)
+        if (version != 1)
             return false; //("Unsupported version of animation resource");
 
         // Load animation data
@@ -156,7 +144,15 @@ namespace te
 
     void Skeleton::init(SkeletonRes* res)
     {
-        res->initSkeleton(this);
+        int entity_num = res._entities.size();
+        _joints.resize(entity_num);
+
+        for (int i = 0; i < entity_num; ++i)
+        {
+            _joints[i].name = res._entities[i].name;
+            _joints[i].parent_idx = res._entities[i].parent_idx;
+            _joints[i].inv_binding = res._entities[i].inv_binding;
+        }
     }
 
     void Skeleton::resize(int size)
