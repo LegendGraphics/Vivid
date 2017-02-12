@@ -7,6 +7,7 @@
 #include "math/Vector2.h"
 #include "common/BoundingBox.h"
 #include "base/RefPtr.hpp"
+#include "common/Resource.h"
 
 namespace te
 {
@@ -47,8 +48,8 @@ namespace te
 
     struct Vertex_PNTB_Skinned
     {
-        typedef int[4] JointIndices;
-        typedef float[4] JointWeights;
+        using JointIndices = int[4];
+        using JointWeights = float[4];
 
         Vector3 position;
         Vector3 normal;
@@ -57,7 +58,6 @@ namespace te
         JointIndices joint_indices;
         JointWeights joint_weights;
     };
-
 
     class MeshRes : public Resource
     {
@@ -71,23 +71,6 @@ namespace te
         bool _skinned;
         std::vector<Vertex_PNTB_Skinned> _vertices;
         std::vector<int>    _triangles;
-    };
-
-
-    class Skeleton : public Object
-    {
-    public:
-        Skeleton() = default;
-        virtual ~Skeleton() = default;
-
-        void init(SkeletonRes* res);
-
-        void resize(int size);
-        SkeletonJoint& getJoint(int index);
-        SkeletonJoint& getParentJoint(int index);
-        int getJointNum() const{ return _joints.size(); }
-    protected:
-        SkeletonJoints _joints;
     };
 
 

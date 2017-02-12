@@ -1,5 +1,7 @@
 #include "common/AnimationClip.h"
 
+#include <numeric>
+
 namespace te
 {
     bool SkeletonRes::load(const char *data, int size)
@@ -19,9 +21,12 @@ namespace te
         if (version != 1)
             return false; //("Unsupported version of skeleton resource");
 
-        // Load skeleton data
-        int entity_num;
-        memcpy(&entity_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        memcpy(&_skel_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+
+        _num_list.resize(_skel_num);
+        memcpy(&_num_list, data_ptr, _skel_num * sizeof(int)); data_ptr += _skel_num * sizeof(int);
+
+        int entity_num = std::accumulate(_num_list.begin(), _num_list.end(), 0);
         _entities.resize(entity_num);
 
         for (int i = 0; i < entity_num; ++i)
@@ -38,7 +43,7 @@ namespace te
             memcpy(&parent_idx, data_ptr, sizeof(int)); data_ptr += sizeof(int);
             entity.parent_idx = parent_idx;
 
-            for (int k = 0; k < 16; ++ k) memcpy(&pose_values[k], data_ptr, sizeof(float)); data_ptr += sizeof(float);
+            memcpy(&pose_values, data_ptr, 16 * sizeof(float)); data_ptr += 16 * sizeof(float);
             entity.inv_binding.set(pose_values[0], pose_values[1], pose_values[2],pose_values[3],
                                    pose_values[4], pose_values[5], pose_values[6],pose_values[7],
                                    pose_values[8], pose_values[9], pose_values[10],pose_values[11],
@@ -144,14 +149,14 @@ namespace te
 
     void Skeleton::init(SkeletonRes* res)
     {
-        int entity_num = res._entities.size();
+        int entity_num = res->_entities.size();
         _joints.resize(entity_num);
 
         for (int i = 0; i < entity_num; ++i)
         {
-            _joints[i].name = res._entities[i].name;
-            _joints[i].parent_idx = res._entities[i].parent_idx;
-            _joints[i].inv_binding = res._entities[i].inv_binding;
+            _joints[i].name = res->_entities[i].name;
+            _joints[i].parent_idx = res->_entities[i].parent_idx;
+            _joints[i].inv_binding = res->_entities[i].inv_binding;
         }
     }
 

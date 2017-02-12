@@ -39,12 +39,12 @@ namespace te
             int identifier, element_size;
             memcpy(&identifier, data_ptr, sizeof(int)); data_ptr += sizeof(int);
             memcpy(&element_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-            if (identifier == 0) memcpy(&vertex.position, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float);
-            else if (identifier == 1) memcpy(&vertex.normal, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float);
-            else if (identifier == 2) memcpy(&vertex.tangent, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float);
-            else if (identifier == 3) memcpy(&vertex.bitangent, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float);
-            else if (identifier == 4) memcpy(&vertex.joint_indices, data_ptr, 4 * sizeof(float)); data_ptr += sizeof(float);
-            else if (identifier == 5) memcpy(&vertex.joint_weights, data_ptr, 4 * sizeof(float)); data_ptr += sizeof(float);
+            if (identifier == 0) { memcpy(&vertex.position, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float); }
+            else if (identifier == 1) { memcpy(&vertex.normal, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float); }
+            else if (identifier == 2) { memcpy(&vertex.tangent, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float); }
+            else if (identifier == 3) { memcpy(&vertex.bitangent, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float); }
+            else if (identifier == 4) { memcpy(&vertex.joint_indices, data_ptr, 4 * sizeof(float)); data_ptr += sizeof(float); }
+            else if (identifier == 5) { memcpy(&vertex.joint_weights, data_ptr, 4 * sizeof(float)); data_ptr += sizeof(float); }
         }
 
         // triangle stream
@@ -69,9 +69,9 @@ namespace te
 
     void Mesh::init(MeshRes* res)
     {
-        _skinned = res._skinned;
-        _vertices = res._vertices;
-        _triangles = res._triangles;
+        _skinned = res->_skinned;
+        _vertices = res->_vertices;
+        _triangles = res->_triangles;
     }
 
 }
