@@ -19,15 +19,18 @@ namespace te
     void RenderMeshObject::render(RenderContext* context, RenderCamera* camera, RenderDevice* device)
     {
         // set index buffer
-        RenderContext::IndexCmdStream* ics = new RenderContext::IndexCmdStream;
-        ics->bufHandle = _indexBuf;
-        ics->idxFormat = IndexFormat::IDXFMT_32;
-        RenderContext::Command setIndexBuffer = { 0, (void*)ics, RenderContext::CommandType::UPDATE_INDEX_BUFFER };
-        context->commands().push_back(setIndexBuffer);
+        //RenderContext::IndexCmdStream* ics = new RenderContext::IndexCmdStream;
+        //ics->bufHandle = _indexBuf;
+        //ics->idxFormat = IndexFormat::IDXFMT_32;
+        //RenderContext::Command setIndexBuffer = { 0, (void*)ics, RenderContext::CommandType::UPDATE_INDEX_BUFFER };
+        //context->commands().push_back(setIndexBuffer);
 
         // set vertex buffer
         RenderContext::VertexCmdStream* vcs = new RenderContext::VertexCmdStream;
-        vcs->vAttribs.push_back(_posVBuf);
+        vcs->vaoHandle = _vaoHandle;
+        vcs->baseIndex = 0;
+        vcs->baseVertex = 0;
+        vcs->numIndices = _numIndices;
         RenderContext::Command setVertexBuffer = { 0, (void*)vcs, RenderContext::CommandType::UPDATE_VERTEX_BUFFER };
         context->commands().push_back(setVertexBuffer);
 
@@ -63,6 +66,8 @@ namespace te
         bool useDebug = true;
         if (useDebug)
         {
+            RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
+            scs->shaderHandle = _shader_object_handle;
             RenderContext::Command setShaderObject = { 0, nullptr, RenderContext::CommandType::BIND_SHADER_OBJECT };
             context->commands().push_back(setShaderObject);
         }

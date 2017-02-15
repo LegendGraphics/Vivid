@@ -3,6 +3,8 @@
 
 #include "base\Globals.h"
 
+#include "renderer/resource/RenderResource.h"
+
 namespace te
 {
     namespace shader_data 
@@ -47,7 +49,7 @@ namespace te
 
         std::vector<uint32> custom_uniform_handles;
 
-        uint32 uni_view_mat, uni_proj_mat, uni_view_proj_mat, uni_view_proj_mat_int;
+        uint32 uni_view_mat, uni_proj_mat, uni_view_proj_mat, uni_view_proj_mat_inv;
     };
 
     // <del>seems in Horde3D all shader resource is managed in one

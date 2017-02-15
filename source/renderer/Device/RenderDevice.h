@@ -4,6 +4,8 @@
 #include "base\Globals.h"
 #include "base\Assert.h"
 
+#include "renderer/resource/ShaderObject.h"
+
 namespace te
 {
     class RenderContext;

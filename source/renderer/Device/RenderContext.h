@@ -3,6 +3,8 @@
 
 #include "base\Globals.h"
 
+#include "renderer/resource/ShaderObject.h"
+
 namespace te
 {
     class RenderCamera; // used in RenderContext, to pass the camera
@@ -19,12 +21,6 @@ namespace te
         uint32       vbSlot;
         uint32       size;
         uint32       offset;
-    };
-
-    enum class IndexFormat : uint8
-    {
-        IDXFMT_16,
-        IDXFMT_32
     };
 
     class RenderContext
@@ -53,7 +49,10 @@ namespace te
 
         struct VertexCmdStream
         {
-            std::vector<uint32> vAttribs;
+            uint32 vaoHandle; // vao is used in OGL, probably not a very general design here?
+            uint32 baseIndex;
+            uint32 baseVertex;
+            uint32 numIndices;
         };
 
         struct ShaderCmdStream
@@ -75,7 +74,7 @@ namespace te
         Commands& commands() { return _commands; };
         const Commands& commands() const { return _commands; };
 
-        RenderCamera* _camera;
+        RenderCamera* _camera; // TODO: can be generalized to a RenderStateObject
 
     private:
         Commands _commands;

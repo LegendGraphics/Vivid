@@ -1,8 +1,8 @@
-#include "GLRenderDevice.h"
-
-#include "RenderContext.h"
-
 #include "../3rdparty/glew/include/GL/glew.h"
+
+#include "GLRenderDevice.h"
+#include "RenderContext.h"
+#include "renderer/runtime/RenderCamera.h"
 
 namespace te
 {
@@ -38,7 +38,10 @@ namespace te
         char* renderer = (char*)glGetString(GL_RENDERER);
         char* version = (char*)glGetString(GL_VERSION);
 
-        return true;
+        bool bOK = true;
+        bOK = bOK && createDefaultShader(getDefaultVSCode(), getDefaultFSCode(), _defaultShader);
+
+        return bOK;
     }
 
     void GLRenderDevice::dispatch(RenderContext * context_)
@@ -55,8 +58,8 @@ namespace te
             if (RenderContext::CommandType::UPDATE_INDEX_BUFFER == command.command_type)
             {
                 RenderContext::IndexCmdStream* c_stream = static_cast<RenderContext::IndexCmdStream*>(command.head);
-                _newIndexBuf = c_stream->bufHandle;
-                _indexFormat = c_stream->idxFormat;
+                //_newIndexBuf = c_stream->bufHandle;
+                //_indexFormat = c_stream->idxFormat;
                 delete c_stream;
             }
             else if (RenderContext::CommandType::UPDATE_VERTEX_BUFFER == command.command_type)
@@ -64,10 +67,15 @@ namespace te
                 RenderContext::VertexCmdStream* c_stream = static_cast<RenderContext::VertexCmdStream*>(command.head);
                 // each shader has an array of a structure InputLayouts { bool valid; int8 attribIndices[16]; }
                 // it's related to how the vertex buffer is organized in OpenGL
-
+                _newVAO = c_stream->vaoHandle;
+                _curBaseIndex = c_stream->baseIndex;
+                _curBaseVertex = c_stream->baseVertex;
+                _curNumIndices = c_stream->numIndices;
+                delete c_stream;
             }
             else if (RenderContext::CommandType::BIND_SHADER_OBJECT == command.command_type)
             {
+                RenderCamera* curCamera = context_->_camera;
                 RenderContext::ShaderCmdStream* c_stream = static_cast<RenderContext::ShaderCmdStream*>(command.head);
                 if (c_stream)
                 {
@@ -79,22 +87,35 @@ namespace te
                 else
                 {
                     // debug mode, use default shader
+                    if (_curShaderHandle != _defaultShader.shader_handle)
+                        bindShader(_defaultShader.shader_handle);
+
+                    // set view params
+                    if (_defaultShader.uni_view_mat >= 0)
+                        setShaderConst(_defaultShader.uni_view_mat, shader_data::MATRIX4X4, &curCamera->getViewMat());
+                    if (_defaultShader.uni_proj_mat >= 0)
+                        setShaderConst(_defaultShader.uni_proj_mat, shader_data::MATRIX4X4, &curCamera->getProjectionMat());
+                    if (_defaultShader.uni_view_proj_mat >= 0)
+                        setShaderConst(_defaultShader.uni_view_proj_mat, shader_data::MATRIX4X4, &curCamera->getViewProjctionMat());
 
                 }
-
             }
         }
+
+        draw();
 
         context_->commands().clear();
     }
 
-    uint32 GLRenderDevice::createVertexBuffer(uint32 size, const void * data)
+    uint32 GLRenderDevice::createVertexBuffer(uint32 size, uint32 stride, const void * data)
     {
         GLBuffer buf;
         buf.type = GL_ARRAY_BUFFER;
         buf.size = size;
+        buf.stride = stride;
         glGenBuffers(1, &buf.glObj);
-        glBindBuffer(buf.type, size, data, GL_DYNAMIC_DRAW);
+        glBindBuffer(buf.type, buf.glObj);
+        glBufferData(buf.type, size, data, GL_DYNAMIC_DRAW);
         glBindBuffer(buf.type, 0);
 
         return _buffers.add(buf);
@@ -106,12 +127,29 @@ namespace te
 
         buf.type = GL_ELEMENT_ARRAY_BUFFER;
         buf.size = size;
+        buf.stride = 1; // if we use VAO, index buffer seems not important
         glGenBuffers(1, &buf.glObj);
         glBindBuffer(buf.type, buf.glObj);
         glBufferData(buf.type, size, data, GL_DYNAMIC_DRAW);
         glBindBuffer(buf.type, 0);
 
         return _buffers.add(buf);
+    }
+
+    uint32 GLRenderDevice::createVertexArray(uint32 nLoc, const GLBuffer * buffers, const uint32 * locations)
+    {
+        uint32 vao;
+        glGenVertexArrays(1, &vao);
+        glBindVertexArray(vao);
+
+        for (uint32 i = 0; i < nLoc; ++i)
+        {
+            glBindBuffer(buffers[i].type, buffers[i].glObj);
+            glVertexAttribPointer(locations[i], buffers[i].stride, GL_FLOAT, GL_FALSE, 0, NULL);
+        }
+
+        glBindVertexArray(0);
+        return _vaos.add(vao);
     }
 
     void GLRenderDevice::destroyBuffer(uint32 bufObj)
@@ -253,6 +291,28 @@ namespace te
         return glGetUniformLocation(shader.oglProgramObj, name);
     }
 
+    void GLRenderDevice::setShaderConst(int loc, shader_data::Class type, void * values, uint32 count)
+    {
+        switch (type)
+        {
+        case shader_data::SCALAR:
+            glUniform1fv(loc, count, (float*)values);
+            break;
+        case shader_data::VECTOR2:
+            glUniform2fv(loc, count, (float*)values);
+            break;
+        case shader_data::VECTOR3:
+            glUniform3fv(loc, count, (float*)values);
+            break;
+        case shader_data::VECTOR4:
+            glUniform4fv(loc, count, (float*)values);
+            break;
+        case shader_data::MATRIX4X4:
+            glUniformMatrix4fv(loc, count, false, (float*)values);
+            break;
+        }
+    }
+
     void GLRenderDevice::bindShader(uint32 shaderHandle)
     {
         if (0 != shaderHandle)
@@ -271,5 +331,43 @@ namespace te
     void GLRenderDevice::commitGeneralUniforms()
     {
 
+    }
+
+    void GLRenderDevice::draw()
+    {
+        if (commitStates())
+        {
+            glDrawElementsBaseVertex(GL_TRIANGLES,
+                _curNumIndices,
+                GL_UNSIGNED_INT,
+                (void*)(sizeof(unsigned int)*_curBaseIndex),
+                _curBaseVertex);
+        }
+    }
+
+    bool GLRenderDevice::commitStates()
+    {
+        _curVAO = _newVAO;
+        _prevShaderHandle = _curShaderHandle;
+
+        glBindVertexArray(_vaos.getRef(_curVAO));
+
+        return false;
+    }
+
+    bool GLRenderDevice::createDefaultShader(const char* vertexShader, const char* fragmentShader, ShaderObject& so)
+    {
+        uint32 shaderHandle = createShader(vertexShader, fragmentShader);
+        if (0 == shaderHandle) return false;
+
+        so.shader_handle = shaderHandle;
+        bindShader(shaderHandle);
+
+        so.uni_view_mat = getShaderConstLoc(shaderHandle, "viewMat");
+        so.uni_proj_mat = getShaderConstLoc(shaderHandle, "projMat");
+        so.uni_view_proj_mat = getShaderConstLoc(shaderHandle, "viewProjMat");
+        so.uni_view_proj_mat_inv = getShaderConstLoc(shaderHandle, "viewProjMatInv");
+
+        return true;
     }
 }

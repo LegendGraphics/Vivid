@@ -25,7 +25,7 @@ namespace te
         void createPrimitives(RenderDevice* device);
 
     private:
-        //ShaderObject _defaultColorShader;
+//        ShaderObject _defaultColorShader;
 
         //uint32  _vbCube, _ibCube, _vbSphere, _ibSphere;
         //uint32  _vbCone, _ibCone, _vbFSPoly;

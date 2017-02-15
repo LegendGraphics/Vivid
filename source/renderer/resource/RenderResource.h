@@ -23,6 +23,12 @@ namespace te
         Type type;
         Handle render_resource_handle;
     };
+
+    enum class IndexFormat : uint8
+    {
+        IDXFMT_16,
+        IDXFMT_32
+    };
 }
 
 #endif

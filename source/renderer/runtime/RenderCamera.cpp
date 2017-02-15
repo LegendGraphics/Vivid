@@ -14,4 +14,20 @@ namespace te
         _projection = projection;
         _view = view;
     }
+
+    float& RenderCamera::getViewMat()
+{
+        return _view(0, 0);
+    }
+
+    float& RenderCamera::getProjectionMat()
+{
+        return _projection(0, 0);
+    }
+
+    float& RenderCamera::getViewProjctionMat()
+{
+        return _view_projection(0, 0);
+    }
+
 }
