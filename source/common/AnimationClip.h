@@ -25,10 +25,12 @@ namespace te
         bool load(const char *data, int size);
         void release();
 
-        void initSkeleton(Skeleton* skeleton);
+        friend class Skeleton;
 
     protected:
         std::vector<JointEntity> _entities;
+        int _skel_num;
+        std::vector<int> _num_list;
     };
 
 

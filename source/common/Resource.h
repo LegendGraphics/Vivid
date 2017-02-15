@@ -13,7 +13,8 @@ namespace te
     {
         Undefined,
         SceneGraph,
-        Geometry,
+        Mesh,
+        Skeleton,
         Animation,
         Material,
         Code,
