@@ -23,46 +23,46 @@ using namespace Horde3D;
 
 struct DaeLibNodes
 {
-	std::vector< DaeNode * >  nodes;
-	std::string               id;
-	std::string               name;
+    std::vector< DaeNode * >  nodes;
+    std::string               id;
+    std::string               name;
 
-	~DaeLibNodes()
-	{
-		for( unsigned int i = 0; i < nodes.size(); ++i ) delete nodes[i];
-	}
+    ~DaeLibNodes()
+    {
+        for( unsigned int i = 0; i < nodes.size(); ++i ) delete nodes[i];
+    }
 
 
-	DaeNode *findNode( const std::string &id )
-	{
-		if( id == "" ) return 0x0;
-		
-		for( unsigned int i = 0; i < nodes.size(); ++i )
-		{
-			if( nodes[i]->id == id ) return nodes[i];
-		}
+    DaeNode *findNode( const std::string &id )
+    {
+        if( id == "" ) return 0x0;
+        
+        for( unsigned int i = 0; i < nodes.size(); ++i )
+        {
+            if( nodes[i]->id == id ) return nodes[i];
+        }
 
-		return 0x0;
-	}
+        return 0x0;
+    }
 
-	
-	bool parse( const XMLNode &rootNode )
-	{
-		XMLNode node1 = rootNode.getFirstChild( "library_nodes" );
-		if( node1.isEmpty() ) return true;
+    
+    bool parse( const XMLNode &rootNode )
+    {
+        XMLNode node1 = rootNode.getFirstChild( "library_nodes" );
+        if( node1.isEmpty() ) return true;
 
-		XMLNode node2 = node1.getFirstChild( "node" );
-		while( !node2.isEmpty() )
-		{
-			DaeNode *node = new DaeNode();
-			if( node->parse( node2 ) ) nodes.push_back( node );
-			else delete node;
+        XMLNode node2 = node1.getFirstChild( "node" );
+        while( !node2.isEmpty() )
+        {
+            DaeNode *node = new DaeNode();
+            if( node->parse( node2 ) ) nodes.push_back( node );
+            else delete node;
 
-			node2 = node2.getNextSibling( "node" );
-		}
-		
-		return true;
-	}
+            node2 = node2.getNextSibling( "node" );
+        }
+        
+        return true;
+    }
 
 };
 #endif

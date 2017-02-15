@@ -37,125 +37,125 @@ void createDirectories( const std::string &basePath, const std::string &newPath 
 
 inline bool parseString( char *&str, std::string &token )
 {
-	token.clear();
-	token.reserve( 16 );
-	
-	// Skip whitespace
-	while( *str == ' ' || *str == '\t' || *str == '\n' || *str == '\r' )
-	{
-		++str;
-	}
-	if( *str == '\0' ) return false;
+    token.clear();
+    token.reserve( 16 );
+    
+    // Skip whitespace
+    while( *str == ' ' || *str == '\t' || *str == '\n' || *str == '\r' )
+    {
+        ++str;
+    }
+    if( *str == '\0' ) return false;
 
-	// Copy token
-	while( *str && *str != ' ' && *str != '\t' && *str != '\n' && *str != '\r' )
-	{
-		token += *str++;
-	}
+    // Copy token
+    while( *str && *str != ' ' && *str != '\t' && *str != '\n' && *str != '\r' )
+    {
+        token += *str++;
+    }
 
-	return true;
+    return true;
 }
 
 inline bool parseFloat( char *&str, float &f )
 {
-	float sign = 1.0f;
-	float value = 0.0f;
-	
-	// Skip whitespace
-	while( *str == ' ' || *str == '\t' || *str == '\n' || *str == '\r' )
-	{
-		++str;
-	}
-	if( *str == '\0' ) return false;
-
-	char *firstChar = str;
-	
-	// Handle sign
-    if( *str == '-' )
-	{
-		sign = -1.0;
+    float sign = 1.0f;
+    float value = 0.0f;
+    
+    // Skip whitespace
+    while( *str == ' ' || *str == '\t' || *str == '\n' || *str == '\r' )
+    {
         ++str;
     }
-	else if( *str == '+' )
-	{
-		++str;
-	}
-	
-    // Integral part
-	while( *str >= '0' && *str <= '9' )
-	{
-        value = value * 10.0f + (*str++ - '0');
-	}
+    if( *str == '\0' ) return false;
 
-	// Fractional part
-	if( *str == '.' )
-	{
+    char *firstChar = str;
+    
+    // Handle sign
+    if( *str == '-' )
+    {
+        sign = -1.0;
         ++str;
-		float pow10 = 0.1f;
+    }
+    else if( *str == '+' )
+    {
+        ++str;
+    }
+    
+    // Integral part
+    while( *str >= '0' && *str <= '9' )
+    {
+        value = value * 10.0f + (*str++ - '0');
+    }
+
+    // Fractional part
+    if( *str == '.' )
+    {
+        ++str;
+        float pow10 = 0.1f;
 
         while( *str >= '0' && *str <= '9' )
-		{
+        {
             value += (*str++ - '0') * pow10;
             pow10 *= 0.1f;
         }
     }
-	
-	// Exponent (use standard atof in this case)
-	if( *str == 'e' || *str == 'E')
-	{
-		while( *str && *str != ' ' && *str != '\t' && *str != '\n' && *str != '\r' )
-			++str;
-		
-		if( str - firstChar < 64 )
-		{
-			char buf[64];
-			memcpy( buf, firstChar, str - firstChar );
-			buf[str - firstChar] = '\0';
+    
+    // Exponent (use standard atof in this case)
+    if( *str == 'e' || *str == 'E')
+    {
+        while( *str && *str != ' ' && *str != '\t' && *str != '\n' && *str != '\r' )
+            ++str;
+        
+        if( str - firstChar < 64 )
+        {
+            char buf[64];
+            memcpy( buf, firstChar, str - firstChar );
+            buf[str - firstChar] = '\0';
 
-			f = (float)atof( buf );
-		}
-		else
-			return false;
-	}
-	else
-	{
-		f = value * sign;
-	}
-	
-	return true;
+            f = (float)atof( buf );
+        }
+        else
+            return false;
+    }
+    else
+    {
+        f = value * sign;
+    }
+    
+    return true;
 }
 
 inline bool parseInt( char *&str, int &i )
 {
-	int value = 0;
-	int sign = 1;
-	
-	// Skip whitespace
-	while( *str == ' ' || *str == '\t' || *str == '\n' || *str == '\r' )
-	{
-		++str;
-	}
-	if( *str == '\0' ) return false;
-	
-	// Sign
-	if( *str == '-' )
-	{
-		sign = -1;
+    int value = 0;
+    int sign = 1;
+    
+    // Skip whitespace
+    while( *str == ' ' || *str == '\t' || *str == '\n' || *str == '\r' )
+    {
         ++str;
     }
-	else if( *str == '+' )
-	{
-		++str;
-	}
-	
-	// Value
-	while( *str >= '0' && *str <= '9' )
-	{
+    if( *str == '\0' ) return false;
+    
+    // Sign
+    if( *str == '-' )
+    {
+        sign = -1;
+        ++str;
+    }
+    else if( *str == '+' )
+    {
+        ++str;
+    }
+    
+    // Value
+    while( *str >= '0' && *str <= '9' )
+    {
         value = (value * 10) + (*str++ - '0');
-	}
+    }
 
-	i = value * sign;
-	return true;
+    i = value * sign;
+    return true;
 }
 
 

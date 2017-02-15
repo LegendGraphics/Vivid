@@ -27,21 +27,21 @@
 class ColladaDocument
 {
 public:
-	ColladaDocument();
-	bool parseFile( const std::string &fileName );
+    ColladaDocument();
+    bool parseFile( const std::string &fileName );
 
 public:
-	DaeLibImages       libImages;
-	DaeLibEffects      libEffects;
-	DaeLibMaterials    libMaterials;
-	DaeLibGeometries   libGeometries;
-	DaeLibVisScenes    libVisScenes;
-	DaeLibControllers  libControllers;
-	DaeLibAnimations   libAnimations;
-	DaeLibNodes        libNodes;
+    DaeLibImages       libImages;
+    DaeLibEffects      libEffects;
+    DaeLibMaterials    libMaterials;
+    DaeLibGeometries   libGeometries;
+    DaeLibVisScenes    libVisScenes;
+    DaeLibControllers  libControllers;
+    DaeLibAnimations   libAnimations;
+    DaeLibNodes        libNodes;
 
-	DaeVisualScene     *scene;
-	bool               y_up;
+    DaeVisualScene     *scene;
+    bool               y_up;
 };
 
 #endif // _daeMain_H_
