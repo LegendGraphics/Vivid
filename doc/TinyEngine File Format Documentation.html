@@ -191,7 +191,7 @@ In Horde3D materials are specified with an XML syntax.</p>
 <p><i>Filename-extension: arbitrary, usually .glsl</i></p>
 <p>Code files are pure text files that can be used to define shader code. These files can be referenced by shader resources.</p>
 
-
+ -->
 <h2>Scene Graph Files</h2>
 <p><i>Filename-extension: .scene.xml</i></p>
 <p>Scene graph files are XML documents that define a subtree of the scene graph.</p>
@@ -250,7 +250,7 @@ In Horde3D materials are specified with an XML syntax.</p>
                     <td><b>geometry</b></td>
                     <td>(file-)name of the geometry resource {required}</td>
                 </tr>
-                <tr>
+               <!--  <tr>
                     <td><b>softwareSkinning</b></td>
 					<td>see <a href="http://www.horde3d.org/docs/html/_api.html#H3DModel">ModelNodeParams</a> {optional}</td>
                 </tr>
@@ -269,7 +269,7 @@ In Horde3D materials are specified with an XML syntax.</p>
 				<tr>
                     <td><b>lodDist4</b></td>
 					<td>see <a href="http://www.horde3d.org/docs/html/_api.html#H3DModel">ModelNodeParams</a> {optional}</td>
-                </tr>
+                </tr> -->
             </tbody></table>
         </td>
     </tr>
@@ -298,14 +298,14 @@ In Horde3D materials are specified with an XML syntax.</p>
                     <td><b>vertREnd</b></td>
                     <td>maximum vertex array index contained in indices of geometry resource of parent model {required}</td>
                 </tr>
-				<tr>
+				<!-- <tr>
                     <td><b>lodLevel</b></td>
                     <td>see <a href="http://www.horde3d.org/docs/html/_api.html#H3DMesh">MeshNodeParams</a> {optional}</td>
-                </tr>
+                </tr> -->
             </tbody></table>
         </td>
     </tr>
-    <tr>
+    <!-- <tr>
         <td><b>Joint</b></td>
         <td>
             Joint scene node {*}
@@ -471,13 +471,13 @@ In Horde3D materials are specified with an XML syntax.</p>
                 </tr>
            </tbody></table>
        </td>
-    </tr>
+    </tr> -->
 </tbody></table>
 </div>
 <p>The XML document can have an arbitrary scene node as root element.</p>
 
 
-<h2>ParticleEffect Files</h2>
+<!-- <h2>ParticleEffect Files</h2>
 <p><i>Filename-extension: .particle.xml</i></p>
 <p>ParticleEffect files are used to configure particles of a particle system. Each particle has a randomly selected
 life time which is assigned when the particle is created. This time is continually decreased and when
@@ -548,8 +548,8 @@ defining its properties over the life time. The following channels are available
     &lt;ChannelOverLife channel="colR" startMin="0.4" startMax="0.4" endRate="0.5" /&gt;
 &lt;/ParticleConfig&gt;
 </pre>
-</div> -->
-
+</div>
+ -->
 
 <h2>Mesh</h2>
 <p><i>Filename-extensions: .mesh</i></p>
