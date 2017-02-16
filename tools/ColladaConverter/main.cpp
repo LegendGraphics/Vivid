@@ -243,30 +243,11 @@ int main( int argc, char **argv )
             if( assetType == AssetTypes::Model )
             {
                 log( "Compiling model data..." );
-                Converter *converter = new Converter( *daeDoc, outPath, lodDists );
+                Converter *converter = new Converter( *daeDoc, outPath);
                 converter->convertModel( geoOpt );
                 
                 createDirectories( outPath, assetPath );
                 converter->writeModel( assetPath, assetName, modelName );
-                converter->writeMaterials( assetPath, modelName, overwriteMats );
-
-                delete converter; converter = 0x0;
-            }
-            else if( assetType == AssetTypes::Animation )
-            {	
-                log( "Compiling animation data..." );
-                Converter *converter = new Converter( *daeDoc, outPath, lodDists );
-                converter->convertModel( false );
-                
-                if( converter->hasAnimation() )
-                {
-                    createDirectories( outPath, assetPath );
-                    converter->writeAnimation( assetPath, assetName );
-                }
-                else
-                {
-                    log( "Skipping file (does not contain animation data)" );
-                }
 
                 delete converter; converter = 0x0;
             }
