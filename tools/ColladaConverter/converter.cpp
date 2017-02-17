@@ -291,7 +291,6 @@ void Converter::calcTangentSpaceBasis( vector<Vertex> &verts )
     }
 }
 
-
 void Converter::processMeshes(bool optimize)
 {
     // Note: At the moment the geometry for all nodes is copied and not referenced
@@ -465,9 +464,9 @@ bool Converter::convertModel( bool optimize )
 }
 
 
-bool Converter::writeGeometry( const string &assetPath, const string &assetName )
+bool Converter::writeMesh( const string &assetPath, const string &assetName )
 {
-    string fileName = _outPath + assetPath + assetName + ".geo";
+    string fileName = _outPath + assetPath + assetName + ".mesh";
     FILE *f = fopen( fileName.c_str(), "wb" );
     if( f == 0x0 )
     {	
@@ -476,23 +475,22 @@ bool Converter::writeGeometry( const string &assetPath, const string &assetName 
     }
 
     // Write header
-    unsigned int version = 5;
-    fwrite( "H3DG", 4, 1, f );
+    unsigned int version = 1;
+    fwrite( "TEM", 3, 1, f );
     fwrite( &version, sizeof( int ), 1, f ); 
     
     bool no_joint = true;
-    unsigned int count = 6;
-    // Write vertex stream data
-    if(no_joint) count = 6; else count = 8;	// Number of streams
-    fwrite( &count, sizeof( int ), 1, f );
-    count = (unsigned int)_vertices.size();
-    fwrite( &count, sizeof( int ), 1, f );
+    fwrite(&no_joint, sizeof(bool), 1, f);
 
-    for( unsigned int i = 0; i < 8; ++i )
-    {
-        if( no_joint && (i == 4 || i == 5) ) continue;
-        
-        unsigned char uc;
+    unsigned int count = 4;
+    // Write vertex stream data
+    if(no_joint) count = 4; else count = 6;	// Number of streams
+    fwrite( &count, sizeof( int ), 1, f );
+    int vert_count = (unsigned int)_vertices.size();
+    fwrite( &vert_count, sizeof( int ), 1, f );
+
+    for( unsigned int i = 0; i < count; ++i )
+    {        
         short sh;
         unsigned int streamElemSize;
         
@@ -501,7 +499,7 @@ bool Converter::writeGeometry( const string &assetPath, const string &assetName 
         case 0:		// Position
             fwrite( &i, sizeof( int ), 1, f );
             streamElemSize = 3 * sizeof( float ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < count; ++j )
+            for( unsigned int j = 0; j < vert_count; ++j )
             {
                 fwrite( &_vertices[j].pos.x, sizeof( float ), 1, f );
                 fwrite( &_vertices[j].pos.y, sizeof( float ), 1, f );
@@ -511,7 +509,7 @@ bool Converter::writeGeometry( const string &assetPath, const string &assetName 
         case 1:		// Normal
             fwrite( &i, sizeof( int ), 1, f );
             streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < count; ++j )
+            for( unsigned int j = 0; j < vert_count; ++j )
             {
                 sh = (short)(_vertices[j].normal.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
                 sh = (short)(_vertices[j].normal.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
@@ -521,7 +519,7 @@ bool Converter::writeGeometry( const string &assetPath, const string &assetName 
         case 2:		// Tangent
             fwrite( &i, sizeof( int ), 1, f );
             streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < count; ++j )
+            for( unsigned int j = 0; j < vert_count; ++j )
             {
                 sh = (short)(_vertices[j].tangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
                 sh = (short)(_vertices[j].tangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
@@ -531,39 +529,21 @@ bool Converter::writeGeometry( const string &assetPath, const string &assetName 
         case 3:		// Bitangent
             fwrite( &i, sizeof( int ), 1, f );
             streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < count; ++j )
+            for( unsigned int j = 0; j < vert_count; ++j )
             {
                 sh = (short)(_vertices[j].bitangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
                 sh = (short)(_vertices[j].bitangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
                 sh = (short)(_vertices[j].bitangent.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
             }
             break;
-        case 6:		// Texture Coord Set 1
-            fwrite( &i, sizeof( int ), 1, f );
-            streamElemSize = 2 * sizeof( float ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < count; ++j )
-            {
-                fwrite( &_vertices[j].texCoords[0].x, sizeof( float ), 1, f );
-                fwrite( &_vertices[j].texCoords[0].y, sizeof( float ), 1, f );
-            }
-            break;
-        case 7:		// Texture Coord Set 2
-            fwrite( &i, sizeof( int ), 1, f );
-            streamElemSize = 2 * sizeof( float ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < count; ++j )
-            {
-                fwrite( &_vertices[j].texCoords[1].x, sizeof( float ), 1, f );
-                fwrite( &_vertices[j].texCoords[1].y, sizeof( float ), 1, f );
-            }
-            break;
         }
     }
 
     // Write triangle indices
-    count = (unsigned int)_indices.size();
-    fwrite( &count, sizeof( int ), 1, f );
+    int idx_count = _indices.size();
+    fwrite( &idx_count, sizeof( int ), 1, f );
 
-    for( unsigned int i = 0; i < _indices.size(); ++i )
+    for( int i = 0; i < _indices.size(); ++i )
     {
         fwrite( &_indices[i], sizeof( int ), 1, f );
     }
@@ -676,7 +656,7 @@ bool Converter::writeModel( const std::string &assetPath, const std::string &ass
 {
     bool result = true;
     
-    if( !writeGeometry( assetPath, assetName ) ) result = false;
+    if( !writeMesh( assetPath, assetName ) ) result = false;
     if( !writeSceneGraph( assetPath, assetName, modelName ) ) result = false;
 
     return result;

@@ -2,6 +2,9 @@
 
 namespace te
 {
+    MeshRes::MeshRes()
+        :Resource(ResourceType::Mesh)
+    {}
 
     bool MeshRes::load(const char *data, int size)
     {
@@ -32,25 +35,84 @@ namespace te
 
         _vertices.resize(vertex_num);
 
-        for (int i = 0; i < vertex_num; ++i)
+        for (int i = 0; i < attribute_num; ++i)
         {
-            Vertex_PNTB_Skinned& vertex = _vertices[i];
+            unsigned char uc;
+            short sh;
+            int stream_id, elem_size;
+            memcpy(&stream_id, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+            memcpy(&elem_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+            std::string errormsg;
 
-            int identifier, element_size;
-            memcpy(&identifier, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-            memcpy(&element_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-            if (identifier == 0) { memcpy(&vertex.position, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float); }
-            else if (identifier == 1) { memcpy(&vertex.normal, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float); }
-            else if (identifier == 2) { memcpy(&vertex.tangent, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float); }
-            else if (identifier == 3) { memcpy(&vertex.bitangent, data_ptr, 3 * sizeof(float)); data_ptr += sizeof(float); }
-            else if (identifier == 4) { memcpy(&vertex.joint_indices, data_ptr, 4 * sizeof(float)); data_ptr += sizeof(float); }
-            else if (identifier == 5) { memcpy(&vertex.joint_weights, data_ptr, 4 * sizeof(float)); data_ptr += sizeof(float); }
+            switch (stream_id)
+            {
+            case 0:		// Position
+                if (elem_size != 12)
+                {
+                    errormsg = "Invalid position base stream";
+                    break;
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&_vertices[j].position.x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                    memcpy(&_vertices[j].position.y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                    memcpy(&_vertices[j].position.z, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                }
+                break;
+            case 1:		// Normal
+                if (elem_size != 6)
+                {
+                    errormsg = "Invalid normal base stream";
+                    break;
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); _vertices[j].normal.x = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); _vertices[j].normal.y = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); _vertices[j].normal.z = sh / 32767.0f;
+                }
+                break;
+            case 2:		// Tangent
+                if (elem_size != 6)
+                {
+                    errormsg = "Invalid tangent base stream";
+                    break;
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); _vertices[j].tangent.x = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); _vertices[j].tangent.y = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); _vertices[j].tangent.z = sh / 32767.0f;
+                }
+                break;
+            case 3:		// Bitangent
+                if (elem_size != 6)
+                {
+                    errormsg = "Invalid bitangent base stream";
+                    break;
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); _vertices[j].bitangent.x = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); _vertices[j].bitangent.y = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); _vertices[j].bitangent.z = sh / 32767.0f;
+                }
+                break;
+            default:
+                data_ptr += elem_size * vertex_num;
+                continue;
+            }
         }
 
         // triangle stream
         int indice_num;
-        memcpy(&vertex_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-        memcpy(&_triangles, data_ptr, indice_num * sizeof(int)); data_ptr += sizeof(int);
+        memcpy(&indice_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+
+        _triangles.resize(indice_num);
+        for (int i = 0; i < indice_num; ++i)
+        {
+            memcpy(&_triangles[i], data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        }
 
         setResourceHandle();
 

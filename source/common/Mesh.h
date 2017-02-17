@@ -13,7 +13,7 @@ namespace te
 {
 
 // I have no idea about how to write different kinds of vertex with different attributes.
-// So now I use the Vertex_PNTB_Skinned as example...
+// So now I use the Vertex_PNTB as example...
     enum class VertexAttribute
     {
         TE_VERTEX_POSITION =        1 << 0,
@@ -62,6 +62,7 @@ namespace te
     class MeshRes : public Resource
     {
     public:
+        MeshRes();
         bool load(const char *data, int size);
         void release();
 
@@ -69,7 +70,7 @@ namespace te
 
     protected:
         bool _skinned;
-        std::vector<Vertex_PNTB_Skinned> _vertices;
+        std::vector<Vertex_PNTB> _vertices;
         std::vector<int>    _triangles;
     };
 
@@ -88,7 +89,7 @@ namespace te
         bool isSkinned() const { return _skinned; }
 
     protected:
-        std::vector<Vertex_PNTB_Skinned> _vertices;
+        std::vector<Vertex_PNTB> _vertices;
         std::vector<int>    _triangles;
 
         RefPtr<BoundingBox> _bounding;

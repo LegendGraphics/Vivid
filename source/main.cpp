@@ -9,10 +9,34 @@
 
 using namespace te;
 
+void FileIO(const std::string& filename, char*& data, int& size)
+{
+    // Reading size of file
+    FILE * file = fopen(filename.c_str(), "rb");
+    if (file == NULL) return;
+    fseek(file, 0, SEEK_END);
+    size = ftell(file);
+    fclose(file);
+    // Reading data to array of chars
+    file = fopen(filename.c_str(), "rb");
+    data = (char *)malloc(sizeof(char)*size);
+    int ii = fread(data, sizeof(char), size, file);
+    fclose(file);
+}
+
+
 int main(int argc, char** argv)
 { 
-    MeshLoader mesh_loader;
-    Mesh* m = mesh_loader.readObjFile("cube.obj");
+   // MeshLoader mesh_loader;
+   // Mesh* m = mesh_loader.readObjFile("cube.obj");
+    char* data = nullptr;
+    int size;
+    FileIO("cube_emptyTags.mesh", data, size);
+    MeshRes mr;
+    mr.load(data, size);
+
+    Mesh* m = new Mesh;
+    m->init(&mr);
 
     Node* root = new Node;
     root->setName("root");

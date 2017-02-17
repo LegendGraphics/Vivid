@@ -106,7 +106,7 @@ private:
     void calcTangentSpaceBasis( std::vector< Vertex > &vertices );
  
     void processMeshes( bool optimize );
-    bool writeGeometry( const std::string &assetPath, const std::string &assetName );
+    bool writeMesh( const std::string &assetPath, const std::string &assetName );
     void writeSGNode( const std::string &assetPath, const std::string &modelName, SceneNode *node, unsigned int depth, std::ofstream &outf );
     bool writeSceneGraph( const std::string &assetPath, const std::string &assetName, const std::string &modelName );
 
