@@ -1,4 +1,5 @@
 #include "common/Scene.h"
+#include "./3rdparty/rapid_xml/include/utXML.h"
 
 namespace te
 {
@@ -11,7 +12,23 @@ namespace te
     {
         if (!Resource::load(data, size)) return false;
 
-        // need to parse xml file
+        XMLDoc doc;
+        doc.parseBuffer(data, size);
+        if (doc.hasError())
+        {
+            return false;
+        }
+
+        // Parse scene nodes and load resources
+        XMLNode root = doc.getRootNode();
+        if (!root.isEmpty())
+        {
+            parseNode(root, 0x0);
+        }
+        else
+        {
+            return false;
+        }
 
         return true;
     }

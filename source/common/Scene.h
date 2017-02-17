@@ -5,6 +5,8 @@
 
 namespace te
 {
+    class XMLNode;
+
     // xml file
     class SceneGraphRes : public Resource
     {
@@ -12,8 +14,14 @@ namespace te
         void release();
         bool load(const char *data, int size);
 
+        Node* getRootNode() { return _root_node; }
+
     private:
-        friend class SceneManager;
+        void parseBaseAttributes(XMLNode &xmlNode, Node& nodeTpl);
+        void parseNode(XMLNode &xmlNode, Node* parentTpl);
+
+    private:
+        Node*   _root_node;
     };
 }
 

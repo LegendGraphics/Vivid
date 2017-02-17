@@ -31,7 +31,7 @@ int main(int argc, char** argv)
    // Mesh* m = mesh_loader.readObjFile("cube.obj");
     char* data = nullptr;
     int size;
-    FileIO("cube_emptyTags.mesh", data, size);
+    FileIO("duck.mesh", data, size);
     MeshRes mr;
     mr.load(data, size);
 

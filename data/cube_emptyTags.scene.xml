@@ -1,0 +1,3 @@
+<Model name="cube_emptyTags" geometry="cube_emptyTags.geo"
+	<Mesh name="Box" material=".material.xml" batchStart="0" batchCount="36" vertRStart="0" vertREnd="35" />
+</Model>
