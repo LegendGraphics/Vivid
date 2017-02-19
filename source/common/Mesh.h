@@ -63,7 +63,7 @@ namespace te
     {
     public:
         MeshRes();
-        bool load(const char *data, int size);
+        bool load(const std::string & res);
         void release();
 
         friend class Mesh;

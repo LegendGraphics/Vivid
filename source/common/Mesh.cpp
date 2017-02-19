@@ -1,4 +1,5 @@
 #include "common/Mesh.h"
+#include "io/FileUtils.h"
 
 namespace te
 {
@@ -6,11 +7,14 @@ namespace te
         :Resource(ResourceType::Mesh)
     {}
 
-    bool MeshRes::load(const char *data, int size)
+    bool MeshRes::load(const std::string& res)
     {
-        if (!Resource::load(data, size)) return false;
+        if (!Resource::load(res)) return false;
         
-        char *data_ptr = (char *)data;
+        char *data_ptr = nullptr;
+        int size = 0;
+
+        streamFromBinaryFile(res, data_ptr, size);
 
         // Check header and version
         char id[3];

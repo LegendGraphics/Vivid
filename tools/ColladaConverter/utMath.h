@@ -44,7 +44,7 @@ namespace Math
     const float TwoPi = 6.283185307f;
     const float PiHalf = 1.570796327f;
 
-    const float Epsilon = 0.000001f;
+    const float Epsilon = 0.00001f;
     const float ZeroEpsilon = 32.0f * MinPosFloat;  // Very small epsilon for checking against 0.0f
 #ifdef __GNUC__
     const float NaN = __builtin_nanf("");

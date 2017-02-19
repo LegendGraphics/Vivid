@@ -36,7 +36,7 @@ namespace te
         OBJECT_META_FUNCTION(Resource);
 
         virtual void release();
-        virtual bool load(const char *data, int size);
+        virtual bool load(const std::string& res);
         void unload();
 
         ResourceType getType() const { return _type; }

@@ -341,11 +341,11 @@ void Converter::processMeshes(bool optimize)
                     Vertex &v = _vertices[vertList[l]];
 
                     if (v.storedPos == iTriGroup.getPos(iTriGroup.indices[k].posIndex) &&
-                        v.storedNormal == iTriGroup.getNormal(iTriGroup.indices[k].normIndex) &&
+                        v.storedNormal == iTriGroup.getNormal(iTriGroup.indices[k].normIndex) /*&&
                         v.texCoords[0] == iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[0], 0) &&
                         v.texCoords[1] == iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[1], 1) &&
                         v.texCoords[2] == iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[2], 2) &&
-                        v.texCoords[3] == iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[3], 3))
+                        v.texCoords[3] == iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[3], 3)*/)
 
                     {
                         found = true;
@@ -634,7 +634,7 @@ bool Converter::writeSceneGraph( const string &assetPath, const string &assetNam
         return false;
     }
     
-    outf << "<Model name=\"" << assetName << "\" geometry=\"" << assetPath << assetName << ".geo\"";
+    outf << "<Model name=\"" << assetName << "\" geometry=\"" << assetPath << assetName << ".mesh\"";
 
     outf << "\n";
     

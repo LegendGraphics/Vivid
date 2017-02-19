@@ -22,7 +22,7 @@ namespace te
             Matrix inv_binding;
         };
     public:
-        bool load(const char *data, int size);
+        bool load(const std::string & res);
         void release();
 
         friend class Skeleton;
@@ -53,7 +53,7 @@ namespace te
             std::vector<Frame> frames;
         };
     public:
-        bool load(const char *data, int size);
+        bool load(const std::string & res);
         void release();
 
         void initAnimClip(AnimationClip* anim_clip);

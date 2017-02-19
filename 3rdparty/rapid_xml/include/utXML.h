@@ -28,8 +28,6 @@ inline void rapidxml::parse_error_handler( const char *what, void *where )
 }
 
 
-namespace Horde3D {
-
 class XMLAttribute
 {
 public:
@@ -137,5 +135,5 @@ private:
 #	pragma warning( pop )
 #endif
 
-}
+
 #endif // _utXML_H_

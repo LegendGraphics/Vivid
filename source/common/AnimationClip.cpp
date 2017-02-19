@@ -1,14 +1,18 @@
 #include "common/AnimationClip.h"
+#include "io/FileUtils.h"
 
 #include <numeric>
 
 namespace te
 {
-    bool SkeletonRes::load(const char *data, int size)
+    bool SkeletonRes::load(const std::string& res)
     {
-        if (!Resource::load(data, size)) return false;
-        
-        char *data_ptr = (char *)data;
+        if (!Resource::load(res)) return false;
+
+        char *data_ptr = nullptr;
+        int size = 0;
+
+        streamFromBinaryFile(res, data_ptr, size);
 
         // Check header and version
         char id[3];
@@ -59,11 +63,14 @@ namespace te
     {}
 
     // now using horde3d animation format
-    bool AnimClipRes::load(const char *data, int size)
+    bool AnimClipRes::load(const std::string& res)
     {
-        if (!Resource::load(data, size)) return false;
+        if (!Resource::load(res)) return false;
 
-        char *data_ptr = (char *)data;
+        char *data_ptr = nullptr;
+        int size = 0;
+
+        streamFromBinaryFile(res, data_ptr, size);
 
         // Check header and version
         char id[3];

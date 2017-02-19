@@ -18,17 +18,12 @@ namespace te
     void Resource::release()
     {}
 
-    bool Resource::load(const char *data, int size)
+    bool Resource::load(const std::string& res)
     {
         // Resources can only be loaded once
         if (_loaded) return false;
 
-        // A NULL pointer can be used if the file could not be loaded
-        if (data == nullptr || size <= 0)
-        {
-           // file not found
-            return false;
-        }
+        // if res does not exists, return false;
 
         _loaded = true;
 
