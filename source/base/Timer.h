@@ -9,7 +9,7 @@ using namespace std::chrono;
 
 namespace te
 {
-    class Timer: public Object
+    class Timer
     {
     private:
         using TimePoint = system_clock::time_point;
