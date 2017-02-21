@@ -5,7 +5,8 @@
 #include "common/MeshFilter.h"
 #include "common/Node.h"
 #include "common/NodeVisitor.h"
-#include "common/Transform.h"
+#include "common/PositionTransform.h"
+#include "base/Director.h"
 
 using namespace te;
 
@@ -14,7 +15,9 @@ using namespace te;
 
 int main(int argc, char** argv)
 { 
-    MeshRes mr;
+    Director::getInstance()->start();
+
+    /*MeshRes mr;
     mr.load("cube_emptyTags.mesh");
 
     Mesh* m = new Mesh;
@@ -51,12 +54,12 @@ int main(int argc, char** argv)
     n1->addChild(m1);
     n2->addChild(m2);
 
-    root->accept(new NodeVisitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, 
+    root->accept(new NodeVisitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN,
         NodeVisitor::VisitorType::VISITOR_NODE));
 
     delete root;
 
-    getchar();
+    getchar();*/
     return 0;
 }
 

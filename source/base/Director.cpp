@@ -33,9 +33,10 @@ namespace te
     void Director::calculateDeltaTime()
     {
         _delta_time = _timer.getElapsedTime();
+        std::cout << _delta_time << std::endl;
         _delta_time = std::max(0.0f, _delta_time);
 
-        _timer.setEnabled(false);
+        _timer.reset();
     }
 
     void Director::mainLoop()
@@ -44,10 +45,11 @@ namespace te
         {
             calculateDeltaTime();
             //TE_LOG("fps:%f", 1.0 / _delta_time);
-
+            std::cout << "fps:" << 1.0 / _delta_time << std::endl;
             cullUpdate();
             logicUpdate();
             sceneUpdate();
+            for (int i = 0; i < 1000000; ++i) int a = 1;
 
             // waiting events
         }
