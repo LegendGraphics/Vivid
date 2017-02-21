@@ -4,10 +4,10 @@ namespace te
 {
     Transform::Transform()
     {
-        _m = Mat4x4::identity();
+        _m = Matrix::identity();
     }
 
-    Transform::Transform(const Mat4x4& m)
+    Transform::Transform(const Matrix& m)
         :_m(m)
     {
     }
@@ -23,42 +23,49 @@ namespace te
         return *this;
     }
 
-    void Transform::translate(float x, float y, float z)
+    void Transform::makeTranslate(float x, float y, float z)
     {
-        Mat4x4 mat = Mat4x4::identity();
-        mat(0, 3) = x;
-        mat(1, 3) = y;
-        mat(2, 3) = z;
-        _m = mat * _m;
+        _m = Matrix::translate(x, y, z) * _m;
     }
 
-    Transform Transform::trans(float x, float y)
+    void Transform::makeScale(float x, float y, float z)
     {
-        Mat4x4 mat = Mat4x4::identity();
-        mat(0, 3) = x;
-        mat(1, 3) = y;
+        _m = Matrix::scale(x, y, z) * _m;
+    }
 
+    void Transform::makeRotate(float x, float y, float z)
+    {
+        _m = Matrix::rotate(x, y, z) * _m;
+    }
+
+    Transform Transform::translate(float x, float y, float z)
+    {
+        Matrix mat = Matrix::translate(x, y, z);
+        return Transform(mat);
+    }
+
+    Transform Transform::scale(float x, float y, float z)
+    {
+        Matrix mat = Matrix::scale(x, y, z);
+        return Transform(mat);
+    }
+
+    Transform Transform::rotate(float x, float y, float z)
+    {
+        Matrix mat = Matrix::rotate(x, y, z);
         return Transform(mat);
     }
 
     // this relationship means that we use left-handed coordinate
     Transform Transform::ortho(float left, float right, float bottom, float top, float znear, float zfar)
     {
-        Mat4x4 mat;
-        mat(0, 0) = 2 / (right - left);
-        mat(1, 1) = 2 / (top - bottom);
-        mat(2, 2) = -2 / (zfar - znear);
-        mat(0, 3) = -(right + left) / (right - left);
-        mat(1, 3) = -(top + bottom) / (top - bottom);
-        mat(2, 3) = -(zfar + znear) / (zfar - znear);
-        mat(3, 3) = 1;
-
+        Matrix mat = Matrix::ortho(left, right, bottom, top, znear, zfar);
         return Transform(mat);
     }
 
     Transform Transform::lookAt(const Vector3& eye, const Vector3& center, const Vector3& up)
     {
-        Mat4x4 mat;
+        Matrix mat;
         Vector3 z_axis = center - eye;
         z_axis.normalize();
         
@@ -89,18 +96,8 @@ namespace te
         return Transform(mat);
     }
 
-    Transform Transform::lookAt(const Vector2& eye)
-    {
-        Mat4x4 mat = Mat4x4::identity();
-        mat(0, 3) = -eye.x;
-        mat(1, 3) = -eye.y;
-        mat(1, 1) = 1;
-
-        return Transform(mat);
-    }
-
     Transform Transform::identity()
     {
-        return Transform(Mat4x4::identity());
+        return Transform(Matrix::identity());
     }
 }

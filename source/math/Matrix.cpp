@@ -1,5 +1,6 @@
 
 #include "math/Matrix.h"
+#include "math/Quaternion.h"
 
 namespace te
 {
@@ -64,6 +65,28 @@ namespace te
         SET_ROW(1,  0, 1, 0, 0)
         SET_ROW(2,  0, 0, 1, 0)
         SET_ROW(3,  0, 0, 0, 1)
+    }
+
+    void Mat4x4::makeTranslate(float x, float y, float z)
+    {
+        SET_ROW(0, 1, 0, 0, x)
+        SET_ROW(1, 0, 1, 0, y)
+        SET_ROW(2, 0, 0, 1, z)
+        SET_ROW(3, 0, 0, 0, 1)
+    }
+
+    void Mat4x4::makeScale(float x, float y, float z)
+    {
+        SET_ROW(0, x, 0, 0, 0)
+        SET_ROW(1, 0, y, 0, 0)
+        SET_ROW(2, 0, 0, z, 0)
+        SET_ROW(3, 0, 0, 0, 1)
+    }
+
+    // we use quaternion to build rotation
+    void Mat4x4::makeRotate(float x, float y, float z)
+    {
+        *this = Quaternion(Vector3(x, y, z)).convertToMatrix();
     }
 
     void Mat4x4::makeOrtho(float left, float right, float bottom, float top, float znear, float zfar)
@@ -167,6 +190,27 @@ namespace te
     {
         Mat4x4 mat;
         mat.makeIdentity();
+        return mat;
+    }
+
+    Mat4x4 Mat4x4::translate(float x, float y, float z)
+    {
+        Mat4x4 mat;
+        mat.makeTranslate(x, y, z);
+        return mat;
+    }
+
+    Mat4x4 Mat4x4::scale(float x, float y, float z)
+    {
+        Mat4x4 mat;
+        mat.makeScale(x, y, z);
+        return mat;
+    }
+
+    Mat4x4 Mat4x4::rotate(float x, float y, float z)
+    {
+        Mat4x4 mat;
+        mat.makeRotate(x, y, z);
         return mat;
     }
 

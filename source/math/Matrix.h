@@ -55,6 +55,9 @@ namespace te
 
         void makeZero();
         void makeIdentity();
+        void makeTranslate(float x, float y, float z);
+        void makeScale(float x, float y, float z);
+        void makeRotate(float x, float y, float z);
         void makeOrtho(float left, float right, float bottom, float top, float znear, float zfar);
         void makePerspective(float fov, float aspect, float znear, float zfar);
         void makeFrustum(float left, float right, float bottom, float top, float znear, float zfar);
@@ -70,6 +73,9 @@ namespace te
     public:
         static Mat4x4 zero();
         static Mat4x4 identity();
+        static Mat4x4 translate(float x, float y, float z);
+        static Mat4x4 scale(float x, float y, float z);
+        static Mat4x4 rotate(float x, float y, float z);
         static Mat4x4 ortho(float left, float right, float bottom, float top, float znear, float zfar);
         static Mat4x4 perspective(float fov, float aspect, float znear, float zfar);
         
