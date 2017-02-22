@@ -7,6 +7,20 @@ namespace te
 {
     class RenderCamera;
     class PipelineResource;
+    class RenderObject;
+
+    struct RenderQueueItem
+    {
+        RenderObject  *node;
+        float      sortKey;
+        uint32  type;
+
+        RenderQueueItem() {}
+        RenderQueueItem(float sortKey, RenderObject *node)
+            : node(node), sortKey(sortKey) {}
+    };
+
+    typedef std::vector< RenderQueueItem > RenderQueue;
 
     // RenderWorld is the entrance of all "render" aspect things of the game world
     class RenderWorld
@@ -18,6 +32,7 @@ namespace te
             class RenderDevice* _device;
             PipelineResource* _pipelineRes;
             RenderCamera* _camera;
+            RenderQueue* _renderQueue;
         };
         void render(RenderParams& params);
 

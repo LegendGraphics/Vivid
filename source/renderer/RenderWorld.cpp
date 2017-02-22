@@ -10,19 +10,6 @@
 
 namespace te
 {
-    struct RenderQueueItem
-    {
-        RenderObject  *node;
-        float      sortKey;
-        uint32  type;
-
-        RenderQueueItem() {}
-        RenderQueueItem(float sortKey, RenderObject *node)
-            : node(node), sortKey(sortKey) {}
-    };
-
-    typedef std::vector< RenderQueueItem > RenderQueue;
-
     void renderKernel(RenderWorld::RenderParams& params, RenderContext* rContext)
     {
         // culling, prepare RenderQueue

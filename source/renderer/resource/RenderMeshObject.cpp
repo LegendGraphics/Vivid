@@ -80,6 +80,9 @@ namespace te
             RenderContext::Command setShaderObject = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
             context->commands().push_back(setShaderObject);
         }
+
+        RenderContext::Command triggerRender = { 0, nullptr, RenderContext::CommandType::RENDER };
+        context->commands().push_back(triggerRender);
     }
 
 }

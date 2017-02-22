@@ -100,9 +100,11 @@ namespace te
 
                 }
             }
+            else if (RenderContext::CommandType::RENDER == command.command_type)
+            {
+                draw();
+            }
         }
-
-        draw();
 
         context_->commands().clear();
     }
