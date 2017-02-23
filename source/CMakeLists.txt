@@ -1,14 +1,13 @@
 project(TinyEngine)
 cmake_minimum_required(VERSION 2.8)
 
-set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake)
+set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
 
 add_definitions(-DUSE_GL)
 find_package(OpenGL REQUIRED)
 #find_package(Boost REQUIRED COMPONENTS system filesystem chrono)
 #find_package(lua REQUIRED)
-#find_package(3rdParty)
-
+find_package(3rdParty REQUIRED)
 
 include_directories (${CMAKE_SOURCE_DIR}/source)
 #include_directories(${Boost_INCLUDE_DIRS})
@@ -37,5 +36,5 @@ source_group("io" 		        FILES ${io} )
 
 
 ADD_EXECUTABLE ( TinyEngine main.cpp ${common} ${math} ${renderer} ${base} ${ui} ${scripting} ${io})
-target_link_libraries(TinyEngine ${OPENGL_LIBRARIES} )
+target_link_libraries(TinyEngine ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 
