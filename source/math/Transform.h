@@ -25,6 +25,7 @@ namespace te
         static Transform translate(float x, float y, float z);
         static Transform scale(float x, float y, float z);
         static Transform rotate(float x, float y, float z);
+        static Transform perspective(float fov, float aspect, float znear, float zfar);
         static Transform ortho(float left, float right, float bottom, float top, float znear = -1.0, float zfar = 1.0);
         static Transform lookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
         static Transform identity();

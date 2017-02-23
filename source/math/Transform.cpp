@@ -56,6 +56,12 @@ namespace te
         return Transform(mat);
     }
 
+    Transform Transform::perspective(float fov, float aspect, float znear, float zfar)
+    {
+        Matrix mat = Matrix::perspective(fov, aspect, znear, zfar);
+        return Transform(mat);
+    }
+
     // this relationship means that we use left-handed coordinate
     Transform Transform::ortho(float left, float right, float bottom, float top, float znear, float zfar)
     {

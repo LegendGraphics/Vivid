@@ -2,11 +2,19 @@
 #define COMMON_CAMERA_H
 
 #include "common/Node.h"
+#include "common/Component.h"
 #include "math/Vector3.h"
+#include "math/Transform.h"
 
 namespace te
 {
+    // make Camera a special Node ??
     class Camera : public Node
+    {
+
+    };
+
+    class CameraState : public Component
     {
     public:
         enum class CameraMode
@@ -16,14 +24,49 @@ namespace te
         };
 
     public:
+        struct CameraRefCoord
+        {
+            Vector3 position;
+            Vector3 center;
+            Vector3 up;
+        };
+
+        struct CameraPesParas
+        {
+            float fov;
+            float aspect;
+            float znear;
+            float zfar;
+        };
+
+        struct CameraOrthoParas
+        {
+            float left;
+            float right;
+            float bottom;
+            float top;
+            float znear;
+            float zfar;
+        };
+
+    public:
+        CameraState();
+        virtual ~CameraState();
+
+        virtual void init();
+        virtual void update();
+
         void setCameraMode(CameraMode mode);
 
-        void setViewTransform(const Vector3& eye, const Vector3& center, const Vector3& up);
-        void setViewTransform(float fov, float aspect, float znear, float zfar);
-        void setOrthoTransform(float left, float right, float bottom, float top, float znear = -1.0, float zfar = 1.0);
+        Transform getViewTransform() const;
+        Transform getProjectTransform() const;
 
-    protected:
-        CameraMode  _mode;
+    protected: 
+        CameraRefCoord      _camera_ref;
+        CameraPesParas      _pes_paras;
+        CameraOrthoParas    _ortho_paras;
+
+        CameraMode          _mode;
     };
 }
 

@@ -49,12 +49,17 @@ namespace te
 
     void SpaceState::update()
     {
+
+    }
+
+    void SpaceState::accumulateTransform()
+    {
         Node* parent = _owner->getParent();
         SpaceState* pt = parent->getComponent<SpaceState>();
         //world.SpaceState = pt.world.SpaceState * local.SpaceState
-        _world_pos = Vector4to3(pt->getTranslateMatrix(SpaceStateRef::RELATIVE_TO_WORLD) * 
+        _world_pos = Vector4to3(pt->getTranslateTransform(SpaceStateRef::RELATIVE_TO_WORLD) *
             Vector3to4(_local_pos));
-        _world_scale = Vector4to3(pt->getScaleMatrix(SpaceStateRef::RELATIVE_TO_WORLD) *
+        _world_scale = Vector4to3(pt->getScaleTransform(SpaceStateRef::RELATIVE_TO_WORLD) *
             Vector3to4(_local_scale));
         _world_rot = pt->getWorldRotation() * _local_rot;
     }
@@ -69,22 +74,26 @@ namespace te
         _local_pos.set(x, y, z);
     }
 
-    void SpaceState::rotate(const Vector3& euler_angles)
-    {
-        _local_euler_angles = euler_angles;
-    }
-    void SpaceState::rotate(float rx, float ry, float rz)
-    {
-        _local_euler_angles = Vector3(rx, ry, rz);
-    }
-
     void SpaceState::scale(const Vector3& scale)
     {
-        _local_scale = scale;
+        _local_scale.set(scale.x, scale.y, scale.z);
     }
+
     void SpaceState::scale(float sx, float sy, float sz)
     {
-        _local_scale = Vector3(sx, sy, sz);
+        _local_scale.set(sx, sy, sz);
+    }
+
+    void SpaceState::rotate(const Vector3& euler_angles)
+    {
+        _local_euler_angles.set(euler_angles.x, euler_angles.y, euler_angles.z);
+        _local_rot = Quaternion(_local_euler_angles);
+    }
+
+    void SpaceState::rotate(float rx, float ry, float rz)
+    {
+        _local_euler_angles.set(rx, ry, rz);
+        _local_rot = Quaternion(_local_euler_angles);
     }
 
     const Vector3& SpaceState::getLocalPosition()
@@ -101,7 +110,7 @@ namespace te
     }
     const Quaternion& SpaceState::getLocalRotation()
     {
-        return Quaternion(_local_euler_angles);
+        return _local_rot;
     }
 
     const Vector3& SpaceState::getWorldPosition()
@@ -118,16 +127,16 @@ namespace te
     }
     const Quaternion& SpaceState::getWorldRotation()
     {
-        return Quaternion(_world_euler_angles);
+        return _world_rot;
     }
 
     // we usually use the order of TRS to combine the translation, rotation and scale 
-    Matrix SpaceState::getInnerMatrix(const SpaceStateRef& tr)
+    Transform SpaceState::getInnerTransform(const SpaceStateRef& tr)
     {
-        return getTranslateMatrix(tr) * getRotateMatrix(tr) * getScaleMatrix(tr);
+        return getTranslateTransform(tr) * getRotateTransform(tr) * getScaleTransform(tr);
     }
 
-    Matrix SpaceState::getTranslateMatrix(const SpaceStateRef& tr)
+    Transform SpaceState::getTranslateTransform(const SpaceStateRef& tr)
     {
         float tx, ty, tz;
         if (tr == SpaceStateRef::RELATIVE_TO_PARENT)
@@ -142,13 +151,10 @@ namespace te
             ty = _world_pos.y;
             tz = _world_pos.z;
         }
-        return Matrix(1, 0, 0, tx,
-                      0, 1, 0, ty,
-                      0, 0, 1, tz,
-                      0, 0, 0,  1);
+        return Transform::translate(tx, ty, tz);
     }
 
-    Matrix SpaceState::getScaleMatrix(const SpaceStateRef& tr)
+    Transform SpaceState::getScaleTransform(const SpaceStateRef& tr)
     {
         float sx, sy, sz;
         if (tr == SpaceStateRef::RELATIVE_TO_PARENT)
@@ -163,22 +169,19 @@ namespace te
             sy = _world_scale.y;
             sz = _world_scale.z;
         }
-        return Matrix(sx,  0,  0, 0,
-                       0, sy,  0, 0,
-                       0,  0, sz, 0,
-                       0,  0,  0, 1);
+        return Transform::scale(sx, sy, sz);
     }
 
     // use quaternion as inner rotation
-    Matrix SpaceState::getRotateMatrix(const SpaceStateRef& tr)
+    Transform SpaceState::getRotateTransform(const SpaceStateRef& tr)
     {
         if (tr == SpaceStateRef::RELATIVE_TO_PARENT)
         {
-            return _local_rot.convertToMatrix();
+            return Transform(_local_rot.convertToMatrix());
         }
         else
         {
-            return _world_rot.convertToMatrix();
+            return Transform(_world_rot.convertToMatrix());
         }
     }
 

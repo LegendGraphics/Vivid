@@ -4,6 +4,7 @@
 #include "common/Component.h"
 #include "math/Vector3.h"
 #include "math/Quaternion.h"
+#include "math/Transform.h"
 
 namespace te
 {
@@ -47,10 +48,13 @@ namespace te
         const Vector3& getWorldEulerAngles();
         const Quaternion& getWorldRotation();
 
-        Matrix getTranslateMatrix(const SpaceStateRef& tr);
-        Matrix getScaleMatrix(const SpaceStateRef& tr);
-        Matrix getRotateMatrix(const SpaceStateRef& tr);
-        Matrix getInnerMatrix(const SpaceStateRef& tr);
+    protected:
+        Transform getTranslateTransform(const SpaceStateRef& tr);
+        Transform getScaleTransform(const SpaceStateRef& tr);
+        Transform getRotateTransform(const SpaceStateRef& tr);
+        Transform getInnerTransform(const SpaceStateRef& tr);
+
+        void accumulateTransform();
 
     protected:
         Vector3 _local_pos;
@@ -61,7 +65,7 @@ namespace te
         Vector3 _world_pos;
         Vector3 _world_scale;
         Vector3 _world_euler_angles; // (x, y, z) = (roll, pitch, yaw)
-        Quaternion _world_rot; // use quaternion to represent rotation? how about euler angles?    
+        Quaternion _world_rot; // use quaternion to represent rotation 
 
         bool _dirty;
 
