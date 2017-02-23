@@ -1,5 +1,5 @@
-#ifndef BASE_TRANSFORM_H
-#define BASE_TRANSFORM_H
+#ifndef MATH_TRANSFORM_H
+#define MATH_TRANSFORM_H
 
 #include "math/Matrix.h"
 #include "math/Quaternion.h"
@@ -35,4 +35,4 @@ namespace te
 }
 
 
-#endif // BASE_TRANSFORM_H
+#endif // MATH_TRANSFORM_H

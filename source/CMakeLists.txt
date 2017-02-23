@@ -22,19 +22,15 @@ FILE( GLOB common 			  		"common/*.*" )
 FILE( GLOB math 			  		"math/*.*" )  
 FILE( GLOB renderer 			  	"renderer/*.*" "renderer/*/*.*") 
 FILE( GLOB base 			  		"base/*.*" ) 
-FILE( GLOB ui 			  		    "ui/*.*" ) 
-FILE( GLOB scripting 			    "scripting/*.*" )
 FILE( GLOB io 			            "io/*.*" )
 					 
 source_group("common" 			FILES ${common} )
 source_group("math" 			FILES ${math} )
 source_group("renderer" 		FILES ${renderer} )
 source_group("base" 		    FILES ${base} )
-source_group("ui" 		        FILES ${ui} )
-source_group("scripting" 		FILES ${scripting} )
 source_group("io" 		        FILES ${io} )
 
 
-ADD_EXECUTABLE ( TinyEngine main.cpp ${common} ${math} ${renderer} ${base} ${ui} ${scripting} ${io})
+ADD_EXECUTABLE ( TinyEngine main.cpp ${common} ${math} ${renderer} ${base} ${io})
 target_link_libraries(TinyEngine ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
 
