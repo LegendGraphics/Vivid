@@ -9,6 +9,12 @@
 #include "common/object.h"
 #include "common/ClassType.hpp"
 
+#define ENABLE_LEAF_NODE                                    \
+void addChild(Node* child) = delete;                        \
+void removeChild(Node* child) = delete;                     \
+inline std::vector<RefPtr<Node>>& getChildren() = delete;   \
+inline Node* getChild(int index) = delete;
+
 namespace te
 {
 

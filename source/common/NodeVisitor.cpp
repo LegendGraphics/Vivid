@@ -1,6 +1,7 @@
 
 #include "common/NodeVisitor.h"
 #include "common/Node.h"
+#include "common/Camera.h"
 
 namespace te
 {
@@ -42,8 +43,8 @@ namespace te
     {
     }
 
-    CullingVisitor::CullingVisitor(const TraversalMode& tm, const VisitorType& vt)
-        :NodeVisitor(tm, vt)
+    CullingVisitor::CullingVisitor(const TraversalMode& tm)
+        :NodeVisitor(tm, VisitorType::CULLING_UPDATE)
     {}
 
     CullingVisitor::CullingVisitor(const CullingVisitor& node_visitor, const CopyOperator& copyop)
@@ -58,6 +59,7 @@ namespace te
     void CullingVisitor::apply(Node* node)
     {
         // Now simply frustrum culling for every node
+        node->setVisible(!_camera->cull(node));
         traverse(node);
     }
 
@@ -65,8 +67,8 @@ namespace te
     {
     }
 
-    SpacingVisitor::SpacingVisitor(const TraversalMode& tm, const VisitorType& vt)
-        :NodeVisitor(tm, vt)
+    SpacingVisitor::SpacingVisitor(const TraversalMode& tm)
+        :NodeVisitor(tm, VisitorType::SPACING_UPDATE)
     {}
 
     SpacingVisitor::SpacingVisitor(const SpacingVisitor& node_visitor, const CopyOperator& copyop)
@@ -88,8 +90,8 @@ namespace te
     {
     }
 
-    RenderingVisitor::RenderingVisitor(const TraversalMode& tm, const VisitorType& vt)
-        :NodeVisitor(tm, vt)
+    RenderingVisitor::RenderingVisitor(const TraversalMode& tm)
+        :NodeVisitor(tm, VisitorType::RENDERING_UPDATE)
     {}
 
     RenderingVisitor::RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop)

@@ -1,8 +1,30 @@
 
 #include "common/Camera.h"
 
+#include "common/SpaceState.h"
+
 namespace te
 {
+    Camera::Camera()
+    {
+        initComponents();
+    }
+
+    Camera::~Camera(){}
+
+    void Camera::initComponents()
+    {
+        addComponent<CameraState>();
+        addComponent<SpaceState>();
+    }
+
+    bool Camera::cull(Node* node)
+    {
+        CameraState* camera_state = getComponent<CameraState>();
+        // frustrum culling method
+        return true;
+    }
+
     CameraState::CameraState(){}
 
     CameraState::~CameraState(){}

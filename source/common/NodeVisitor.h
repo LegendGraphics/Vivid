@@ -9,6 +9,7 @@ namespace te
 {
 
     class Node;
+    class Camera;
 
     // consider two things: traversal mode and visitor type
     class NodeVisitor: public Object
@@ -50,7 +51,7 @@ namespace te
     {
     public:
         CullingVisitor();
-        CullingVisitor(const TraversalMode& tm, const VisitorType& vt);
+        CullingVisitor(const TraversalMode& tm);
         CullingVisitor(const CullingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
         virtual ~CullingVisitor();
@@ -58,13 +59,16 @@ namespace te
         OBJECT_META_FUNCTION(CullingVisitor);
 
         virtual void apply(Node* node);
+
+    protected:
+        Camera*     _camera;
     };
 
     class SpacingVisitor : public NodeVisitor
     {
     public:
         SpacingVisitor();
-        SpacingVisitor(const TraversalMode& tm, const VisitorType& vt);
+        SpacingVisitor(const TraversalMode& tm);
         SpacingVisitor(const SpacingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
         virtual ~SpacingVisitor();
@@ -78,7 +82,7 @@ namespace te
     {
     public:
         RenderingVisitor();
-        RenderingVisitor(const TraversalMode& tm, const VisitorType& vt);
+        RenderingVisitor(const TraversalMode& tm);
         RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
         virtual ~RenderingVisitor();

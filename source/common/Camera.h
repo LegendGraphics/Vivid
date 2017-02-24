@@ -8,10 +8,18 @@
 
 namespace te
 {
-    // make Camera a special Node ??
+    // Consider Camera as a special leaf node
     class Camera : public Node
     {
+    public:
+        ENABLE_LEAF_NODE
+        Camera();
+        virtual ~Camera();
 
+        bool cull(Node* node);
+
+    private:
+        void initComponents();
     };
 
     class CameraState : public Component
