@@ -6,7 +6,7 @@ namespace te
 {
     NodeVisitor::NodeVisitor()
         :_traversal_mode(TraversalMode::TRAVERSE_NONE),
-        _visitor_type(VisitorType::VISITOR_NODE)
+        _visitor_type(VisitorType::NONE_UPDATE)
     {
     }
 
@@ -36,5 +36,74 @@ namespace te
         if (_traversal_mode == TraversalMode::TRAVERSE_PARENTS) node->ascend(this);
         else if (_traversal_mode == TraversalMode::TRAVERSE_CHILDREN) node->descend(this);
 
+    }
+
+    CullingVisitor::CullingVisitor()
+    {
+    }
+
+    CullingVisitor::CullingVisitor(const TraversalMode& tm, const VisitorType& vt)
+        :NodeVisitor(tm, vt)
+    {}
+
+    CullingVisitor::CullingVisitor(const CullingVisitor& node_visitor, const CopyOperator& copyop)
+        :NodeVisitor(node_visitor, copyop)
+    {
+
+    }
+
+    CullingVisitor::~CullingVisitor()
+    {}
+
+    void CullingVisitor::apply(Node* node)
+    {
+        // Now simply frustrum culling for every node
+        traverse(node);
+    }
+
+    SpacingVisitor::SpacingVisitor()
+    {
+    }
+
+    SpacingVisitor::SpacingVisitor(const TraversalMode& tm, const VisitorType& vt)
+        :NodeVisitor(tm, vt)
+    {}
+
+    SpacingVisitor::SpacingVisitor(const SpacingVisitor& node_visitor, const CopyOperator& copyop)
+        : NodeVisitor(node_visitor, copyop)
+    {
+
+    }
+
+    SpacingVisitor::~SpacingVisitor()
+    {}
+
+    void SpacingVisitor::apply(Node* node)
+    {
+        // Now simply update space status for every node
+        traverse(node);
+    }
+
+    RenderingVisitor::RenderingVisitor()
+    {
+    }
+
+    RenderingVisitor::RenderingVisitor(const TraversalMode& tm, const VisitorType& vt)
+        :NodeVisitor(tm, vt)
+    {}
+
+    RenderingVisitor::RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop)
+        : NodeVisitor(node_visitor, copyop)
+    {
+
+    }
+
+    RenderingVisitor::~RenderingVisitor()
+    {}
+
+    void RenderingVisitor::apply(Node* node)
+    {
+        // Now simply rendering every node
+        traverse(node);
     }
 }

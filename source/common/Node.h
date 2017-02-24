@@ -41,8 +41,8 @@ namespace te
         inline bool getVisible() { return _visible; }
 
         virtual void accept(NodeVisitor* node_visitor);
-        virtual void ascend(NodeVisitor* node_visitor);
-        virtual void descend(NodeVisitor* node_visitor);
+        void ascend(NodeVisitor* node_visitor);
+        void descend(NodeVisitor* node_visitor);
 
        // Matrix getWorldMatrix();
 

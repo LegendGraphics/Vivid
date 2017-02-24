@@ -23,8 +23,10 @@ namespace te
 
         enum class VisitorType
         {
-            VISITOR_NODE,
-            // update, cull
+            NONE_UPDATE,
+            CULLING_UPDATE,
+            SPACING_UPDATE,
+            RENDERING_UPDATE
         };
 
         NodeVisitor();
@@ -43,6 +45,49 @@ namespace te
         TraversalMode   _traversal_mode;
         VisitorType     _visitor_type;
     };
+
+    class CullingVisitor : public NodeVisitor
+    {
+    public:
+        CullingVisitor();
+        CullingVisitor(const TraversalMode& tm, const VisitorType& vt);
+        CullingVisitor(const CullingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+
+        virtual ~CullingVisitor();
+
+        OBJECT_META_FUNCTION(CullingVisitor);
+
+        virtual void apply(Node* node);
+    };
+
+    class SpacingVisitor : public NodeVisitor
+    {
+    public:
+        SpacingVisitor();
+        SpacingVisitor(const TraversalMode& tm, const VisitorType& vt);
+        SpacingVisitor(const SpacingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+
+        virtual ~SpacingVisitor();
+
+        OBJECT_META_FUNCTION(SpacingVisitor);
+
+        virtual void apply(Node* node);
+    };
+
+    class RenderingVisitor : public NodeVisitor
+    {
+    public:
+        RenderingVisitor();
+        RenderingVisitor(const TraversalMode& tm, const VisitorType& vt);
+        RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+
+        virtual ~RenderingVisitor();
+
+        OBJECT_META_FUNCTION(RenderingVisitor);
+
+        virtual void apply(Node* node);
+    };
+
 
 }
 
