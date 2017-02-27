@@ -51,6 +51,12 @@ namespace te
                                     // it seems that OpenGL supports 16 attributes for a shader at most
     };
 
+    struct GLTexture
+    {
+        uint32 glObj;
+        int    width, height, depth;
+    };
+
     // ==================================
     // attribute related definition end
     // - not sure if these are general paradigm, may be moved to base class???
@@ -94,6 +100,9 @@ namespace te
         // RenderBuffer
         //uint32 createRenderBuffer(uint32 width, uint32 height, )
 
+        // Textures
+        uint32 createTexture(int width, int height, int depth);
+
     protected:
         void commitGeneralUniforms();
         void draw();
@@ -103,6 +112,7 @@ namespace te
         std::string   _shaderLog;
         RDObjects<GLShader> _shaders;
         RDObjects<GLBuffer> _buffers;
+        RDObjects<GLTexture> _textures;
         RDObjects<uint32> _vaos; // vertex array objects
 
         uint32 _prevShaderHandle, _curShaderHandle;

@@ -10,6 +10,7 @@ namespace te
         enum 
         {
             PIPELINE,
+            TEXTURE,
             NOT_INITIALIZED = 0xFFFFFFFF
         };
         typedef uint32 Type;

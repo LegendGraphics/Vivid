@@ -330,6 +330,19 @@ namespace te
         _curShaderHandle = shaderHandle;
     }
 
+    uint32 GLRenderDevice::createTexture(int width, int height, int depth)
+    {
+        GLTexture tex;
+        tex.width = width;
+        tex.height = height;
+        tex.depth = depth;
+
+        glGenTextures(1, &tex.glObj);
+
+
+        return _textures.add(tex);
+    }
+
     void GLRenderDevice::commitGeneralUniforms()
     {
 
