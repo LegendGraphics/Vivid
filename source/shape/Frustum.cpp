@@ -1,9 +1,9 @@
-#include "common/Frustum.h"
+#include "shape/Frustum.h"
 #include "math/MathUtils.h"
 
 namespace te
 {
-    void Frustum::buildViewFrustum(const Matrix& view_mat, const Matrix& proj_mat)
+    void Frustum::buildFrustum(const Matrix& view_mat, const Matrix& proj_mat)
     {
         // This routine works with the OpenGL projection matrix
         // The view matrix is the inverse camera transformation matrix

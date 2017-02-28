@@ -5,6 +5,7 @@
 #include "common/Component.h"
 #include "math/Vector3.h"
 #include "math/Transform.h"
+#include "shape/Frustum.h"
 
 namespace te
 {
@@ -20,6 +21,8 @@ namespace te
 
     private:
         void initComponents();
+        bool frustumCullingImpl(Node* node);
+        
     };
 
     class CameraState : public Component
@@ -68,11 +71,13 @@ namespace te
 
         Transform getViewTransform() const;
         Transform getProjectTransform() const;
+        const Frustum& getFrustum();
 
     protected: 
         CameraRefCoord      _camera_ref;
         CameraPesParas      _pes_paras;
         CameraOrthoParas    _ortho_paras;
+        Frustum             _frustum;
 
         CameraMode          _mode;
     };

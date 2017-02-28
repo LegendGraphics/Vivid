@@ -1,5 +1,4 @@
-#include "common/Ray.h"
-#include "math/Vector3.h"
+#include "shape/Ray.h"
 
 namespace te
 {

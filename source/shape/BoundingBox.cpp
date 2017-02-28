@@ -1,4 +1,4 @@
-#include "common/BoundingBox.h"
+#include "shape/BoundingBox.h"
 
 namespace te
 {

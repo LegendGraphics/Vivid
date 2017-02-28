@@ -20,8 +20,14 @@ namespace te
 
     bool Camera::cull(Node* node)
     {
+        return frustumCullingImpl(node);
+    }
+
+    bool Camera::frustumCullingImpl(Node* node)
+    {
+        //BoundingBox bb from node
         CameraState* camera_state = getComponent<CameraState>();
-        // frustrum culling method
+        //return camera_state->getFrustum().cullBox(bb);
         return true;
     }
 
@@ -61,5 +67,13 @@ namespace te
             return Transform::ortho(_ortho_paras.left, _ortho_paras.right, _ortho_paras.bottom,
                 _ortho_paras.top, _ortho_paras.znear, _ortho_paras.zfar);
         }
+    }
+
+    const Frustum& CameraState::getFrustum()
+    {
+        Transform view = getViewTransform();
+        Transform proj = getProjectTransform();
+        _frustum.buildFrustum(view.rawMatrix(), proj.rawMatrix());
+        return _frustum;
     }
 }

@@ -1,4 +1,4 @@
-#include "common/BoundingSphere.h"
+#include "shape/BoundingSphere.h"
 
 namespace te
 {

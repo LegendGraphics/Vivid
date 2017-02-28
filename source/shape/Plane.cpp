@@ -1,4 +1,4 @@
-#include "common/Plane.h"
+#include "shape/Plane.h"
 
 namespace te
 {

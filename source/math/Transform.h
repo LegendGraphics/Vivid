@@ -21,6 +21,8 @@ namespace te
         void makeScale(float x = 1.0f, float y = 1.0f, float z = 1.0f);
         void makeRotate(float x = 0.0f, float y = 0.0f, float z = 0.0f);
 
+        const Matrix& rawMatrix() const { return _m; }
+
     public:
         static Transform translate(float x, float y, float z);
         static Transform scale(float x, float y, float z);
