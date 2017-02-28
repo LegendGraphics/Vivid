@@ -24,3 +24,29 @@
 //}
 //
 //#endif // COMMON_SCENE_H
+
+#ifndef COMMON_SCENE_H
+#define COMMON_SCENE_H
+
+#include "common/Object.h"
+
+namespace te
+{
+    class Node;
+    class Camera;
+
+    class Scene: public Object
+    {
+    public:
+        Scene();
+        virtual ~Scene();
+
+        Node* getSceneNode() const { return _root; }
+
+    protected:
+        Node*       _root;
+        Camera*     _camera;
+    };
+}
+
+#endif // COMMON_SCENE_H

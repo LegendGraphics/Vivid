@@ -2,6 +2,7 @@
 #include "common/NodeVisitor.h"
 #include "common/Node.h"
 #include "common/Camera.h"
+#include "common/SpaceState.h"
 
 namespace te
 {
@@ -83,6 +84,7 @@ namespace te
     void SpacingVisitor::apply(Node* node)
     {
         // Now simply update space status for every node
+        if (node->hasComponent<SpaceState>()) node->getComponent<SpaceState>()->update();
         traverse(node);
     }
 

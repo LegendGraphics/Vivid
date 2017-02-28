@@ -39,9 +39,9 @@ namespace te
 
         void mainLoop();
 
-        void cullUpdate();
-        void logicUpdate();
-        void sceneUpdate();
+        void spacingUpdate();
+        void cullingUpdate();
+        void renderingUpdate();
 
     private:
         Director() {};

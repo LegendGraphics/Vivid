@@ -2,6 +2,9 @@
 
 #include <algorithm>
 
+#include "common/NodeVisitor.h"
+#include "common/Scene.h"
+
 namespace te
 {
     Director* Director::_director = nullptr;
@@ -46,31 +49,35 @@ namespace te
             calculateDeltaTime();
             //TE_LOG("fps:%f", 1.0 / _delta_time);
             std::cout << "fps:" << 1.0 / _delta_time << std::endl;
-            cullUpdate();
-            logicUpdate();
-            sceneUpdate();
+            spacingUpdate();
+            cullingUpdate();
+            renderingUpdate();
             for (int i = 0; i < 1000000; ++i) int a = 1;
 
             // waiting events
         }
     }
 
-    void Director::cullUpdate()
+    void Director::cullingUpdate()
     {
         // culling scene
+        CullingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
+        visitor.apply(_active_scene->getSceneNode());
     }
 
-    void Director::logicUpdate()
+    void Director::spacingUpdate()
     {
-        // update logic status
+        // update space status
+        SpacingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
+        visitor.apply(_active_scene->getSceneNode());
     }
 
-    void Director::sceneUpdate()
+    void Director::renderingUpdate()
     {
         // rendering scene
+        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
+        visitor.apply(_active_scene->getSceneNode());
     }
-
-
 
     void Director::start()
     {

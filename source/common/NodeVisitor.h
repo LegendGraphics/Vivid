@@ -10,6 +10,7 @@ namespace te
 
     class Node;
     class Camera;
+    class Scene;
 
     // consider two things: traversal mode and visitor type
     class NodeVisitor: public Object
@@ -76,6 +77,9 @@ namespace te
         OBJECT_META_FUNCTION(SpacingVisitor);
 
         virtual void apply(Node* node);
+
+    protected:
+        Scene*      _scene;
     };
 
     class RenderingVisitor : public NodeVisitor

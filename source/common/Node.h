@@ -62,7 +62,7 @@ namespace te
         C* getComponent();
 
         template <typename C>
-        bool hasComponent() const;
+        bool hasComponent();
 
     private:
         void addComponent(Component* component, int component_id);
@@ -103,7 +103,7 @@ namespace te
     }
 
     template <typename C>
-    bool Node::hasComponent() const
+    bool Node::hasComponent()
     {
         static_assert(std::is_base_of<Component, C>(), "C is not a component, cannot determine if node has C");
         return hasComponent(getComponentTypeId<C>());

@@ -137,4 +137,18 @@
 //        }
 //    }
 //}
-//
+
+
+#include "common/Scene.h"
+#include "common/Node.h"
+#include "common/Camera.h"
+
+namespace te
+{
+    Scene::Scene()
+        :_root(new Node),
+        _camera(new Camera)
+    {}
+
+    Scene::~Scene(){}
+}
