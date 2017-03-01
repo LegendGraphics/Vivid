@@ -62,21 +62,21 @@ namespace te
     {
         // culling scene
         CullingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
-        visitor.apply(_active_scene->getSceneNode());
+        visitor.apply(_active_scene->getSceneRoot());
     }
 
     void Director::spacingUpdate()
     {
         // update space status
         SpacingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
-        visitor.apply(_active_scene->getSceneNode());
+        visitor.apply(_active_scene->getSceneRoot());
     }
 
     void Director::renderingUpdate()
     {
         // rendering scene
         RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
-        visitor.apply(_active_scene->getSceneNode());
+        visitor.apply(_active_scene->getSceneRoot());
     }
 
     void Director::start()

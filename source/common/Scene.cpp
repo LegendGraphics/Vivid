@@ -140,15 +140,27 @@
 
 
 #include "common/Scene.h"
-#include "common/Node.h"
 #include "common/Camera.h"
+#include "common/SpaceState.h"
 
 namespace te
 {
     Scene::Scene()
-        :_root(new Node),
+        :_scene_root(new SceneTree),
         _camera(new Camera)
     {}
 
     Scene::~Scene(){}
+
+    SceneTree::SceneTree()
+    {
+        initComponents();
+    }
+
+    SceneTree::~SceneTree(){}
+
+    void SceneTree::initComponents()
+    {
+        addComponent<SpaceState>();
+    }
 }

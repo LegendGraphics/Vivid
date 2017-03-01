@@ -15,6 +15,10 @@ void removeChild(Node* child) = delete;                     \
 inline std::vector<RefPtr<Node>>& getChildren() = delete;   \
 inline Node* getChild(int index) = delete;
 
+#define DISABLE_NODE_PARENT                                 \
+void setParent(Node* parent) = delete;                      \
+inline Node* getParent() = delete;
+
 namespace te
 {
 

@@ -28,11 +28,21 @@
 #ifndef COMMON_SCENE_H
 #define COMMON_SCENE_H
 
-#include "common/Object.h"
+#include "common/Node.h"
 
 namespace te
 {
-    class Node;
+    class SceneTree : public Node
+    {
+    public:
+        DISABLE_NODE_PARENT
+        SceneTree();
+        virtual ~SceneTree();
+
+    private:
+        void initComponents();
+    };
+
     class Camera;
 
     class Scene: public Object
@@ -41,12 +51,16 @@ namespace te
         Scene();
         virtual ~Scene();
 
-        Node* getSceneNode() const { return _root; }
+        // init from SceneRes?
+
+        SceneTree* getSceneRoot() const { return _scene_root; }
+        Camera* getActiveCamera() const { return _camera; }
 
     protected:
-        Node*       _root;
+        SceneTree*  _scene_root;
         Camera*     _camera;
     };
+
 }
 
 #endif // COMMON_SCENE_H

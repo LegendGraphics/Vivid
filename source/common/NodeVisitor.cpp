@@ -59,7 +59,7 @@ namespace te
 
     void CullingVisitor::apply(Node* node)
     {
-        // Now simply frustrum culling for every node
+        // Now simply frustum culling for every node
         node->setVisible(!_camera->cull(node));
         traverse(node);
     }
