@@ -54,7 +54,15 @@ namespace te
     struct GLTexture
     {
         uint32 glObj;
+        uint32 glType;
+        image_data::Format format;
         int    width, height, depth;
+        bool   hasMips;
+    };
+
+    struct GLRenderTarget
+    {
+        uint32 glFbo;
     };
 
     // ==================================
@@ -98,10 +106,12 @@ namespace te
         void bindShader(uint32 shaderHandle);
 
         // RenderBuffer
-        //uint32 createRenderBuffer(uint32 width, uint32 height, )
+        uint32 createRenderBuffer(uint32 width, uint32 height, image_data::Format format,
+            bool depth, uint32 numColBufs);
 
         // Textures
-        uint32 createTexture(int width, int height, int depth);
+        uint32 createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool hasMips);
+        void updateTextureData(uint32 texObj, int mipLevel, const void* pixels);
 
     protected:
         void commitGeneralUniforms();
@@ -113,6 +123,7 @@ namespace te
         RDObjects<GLShader> _shaders;
         RDObjects<GLBuffer> _buffers;
         RDObjects<GLTexture> _textures;
+        RDObjects<GLRenderTarget> _renderTargets;
         RDObjects<uint32> _vaos; // vertex array objects
 
         uint32 _prevShaderHandle, _curShaderHandle;

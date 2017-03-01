@@ -330,17 +330,105 @@ namespace te
         _curShaderHandle = shaderHandle;
     }
 
-    uint32 GLRenderDevice::createTexture(int width, int height, int depth)
+    uint32 GLRenderDevice::createRenderBuffer(uint32 width, uint32 height, image_data::Format format, bool depth, uint32 numColBufs)
+    {
+        GLRenderTarget renderTarget;
+        glGenFramebuffers(1, &renderTarget.glFbo);
+
+        if (numColBufs > 0)
+        {
+            for (uint32 i = 0; i < numColBufs; ++i)
+            {
+                glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.glFbo);
+                // create color texture
+                uint32 texObj = createTexture(width, height, 1, image_data::IMAGE2D, image_data::RGBA32F, false);
+                TE_ASSERT(texObj != 0, "Not a Valid Texture Object!");
+                updateTextureData(texObj, 0, nullptr);
+                // attach the texture to fbo
+                GLTexture& tex = _textures.getRef(texObj);
+                glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0 + i, GL_TEXTURE_2D, tex.glObj, 0);
+            }
+        }
+
+        uint32 buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1,
+            GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
+        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, renderTarget.glFbo);
+        glDrawBuffers(numColBufs, buffers);
+
+        if (depth)
+        {
+            glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.glFbo);
+            // create a depth texture
+            uint32 texObj = createTexture(width, height, 1, image_data::IMAGE2D, image_data::DEPTH, false);
+            //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
+            updateTextureData(texObj, 0, nullptr);
+            GLTexture& tex = _textures.getRef(texObj);
+            glFramebufferTexture2D(GL_DRAW_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, tex.glObj, 0);
+        }
+
+        // check if everything is OK
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, renderTarget.glFbo);
+        GLenum e = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
+        TE_ASSERT(e != GL_FRAMEBUFFER_COMPLETE, "There is a problem with the FBO");
+        glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+
+        return _renderTargets.add(renderTarget);
+    }
+
+    uint32 GLRenderDevice::createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool hasMips)
     {
         GLTexture tex;
+        tex.format = format;
         tex.width = width;
         tex.height = height;
         tex.depth = depth;
+        tex.hasMips = hasMips;
+
+        switch (type)
+        {
+        case image_data::IMAGE2D:
+            tex.glType = GL_TEXTURE_2D;
+            break;
+        case image_data::IMAGE3D:
+            tex.glType = GL_TEXTURE_3D;
+            break;
+        case image_data::IMAGECUBE:
+            tex.glType = GL_TEXTURE_CUBE_MAP;
+            break;
+        }
 
         glGenTextures(1, &tex.glObj);
-
+        glBindTexture(tex.glType, tex.glObj);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glBindTexture(GL_TEXTURE_2D, 0);
 
         return _textures.add(tex);
+    }
+
+    void GLRenderDevice::updateTextureData(uint32 texObj, int mipLevel, const void* pixels)
+    {
+        const GLTexture tex = _textures.getRef(texObj);
+
+        glBindTexture(tex.glType, tex.glObj);
+
+        int inputFormat = GL_BGRA, inputType = GL_UNSIGNED_BYTE;
+        switch (tex.format)
+        {
+        case image_data::RGBA16F:
+            inputFormat = GL_RGBA;
+            inputType = GL_FLOAT;
+            break;
+        case image_data::RGBA32F:
+            inputFormat = GL_RGBA;
+            inputType = GL_FLOAT;
+            break;
+        case image_data::DEPTH:
+            inputFormat = GL_DEPTH_COMPONENT;
+            inputType = GL_FLOAT;
+        };
+        glTexImage2D(tex.glType, mipLevel, inputFormat, tex.width, tex.height, 0, inputFormat, inputType, pixels);
+        glBindTexture(tex.glType, 0);
     }
 
     void GLRenderDevice::commitGeneralUniforms()
