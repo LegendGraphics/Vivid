@@ -44,8 +44,9 @@ namespace te
     {
     }
 
-    CullingVisitor::CullingVisitor(const TraversalMode& tm)
-        :NodeVisitor(tm, VisitorType::CULLING_UPDATE)
+    CullingVisitor::CullingVisitor(const TraversalMode& tm, Camera* camera)
+        :NodeVisitor(tm, VisitorType::CULLING_UPDATE),
+        _camera(camera)
     {}
 
     CullingVisitor::CullingVisitor(const CullingVisitor& node_visitor, const CopyOperator& copyop)

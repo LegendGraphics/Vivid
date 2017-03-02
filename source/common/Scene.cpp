@@ -152,6 +152,9 @@ namespace te
 
     Scene::~Scene(){}
 
+    Scene::Scene(const Scene& scene, const CopyOperator& copyop)
+    {}
+
     SceneTree::SceneTree()
     {
         initComponents();

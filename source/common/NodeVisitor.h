@@ -52,7 +52,7 @@ namespace te
     {
     public:
         CullingVisitor();
-        CullingVisitor(const TraversalMode& tm);
+        CullingVisitor(const TraversalMode& tm, Camera* camera);
         CullingVisitor(const CullingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
         virtual ~CullingVisitor();

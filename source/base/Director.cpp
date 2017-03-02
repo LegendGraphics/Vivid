@@ -51,9 +51,9 @@ namespace te
             calculateDeltaTime();
             //TE_LOG("fps:%f", 1.0 / _delta_time);
             std::cout << "fps:" << 1.0 / _delta_time << std::endl;
-            /*spacingUpdate();
+            spacingUpdate();
             cullingUpdate();
-            renderingUpdate();*/
+            renderingUpdate();
             for (int i = 0; i < 1000000; ++i) int a = 1;
 
             // waiting events
@@ -65,7 +65,7 @@ namespace te
     void Director::cullingUpdate()
     {
         // culling scene
-        CullingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
+        CullingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, _active_scene->getActiveCamera());
         visitor.apply(_active_scene->getSceneRoot());
     }
 
