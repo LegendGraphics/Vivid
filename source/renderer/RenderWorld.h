@@ -32,7 +32,7 @@ namespace te
             class RenderDevice* _device;
             PipelineResource* _pipelineRes;
             RenderCamera* _camera;
-            RenderQueue* _renderQueue;
+            RenderQueue _renderQueue;
         };
         void render(RenderParams& params);
 

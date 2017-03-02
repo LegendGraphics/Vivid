@@ -27,6 +27,9 @@ namespace te
         // message should contain some state object camera, viewport
         RenderWorld::RenderParams params;
         params._device = _renderDevice;
+        params._pipelineRes = nullptr;
+        params._camera = message->camera;
+        params._renderQueue = RenderQueue(message->rQueue, message->rQueue + message->numQueue);
         message->world->render(params);
     }
 }

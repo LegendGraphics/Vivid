@@ -13,7 +13,7 @@ namespace te
     void renderKernel(RenderWorld::RenderParams& params, RenderContext* rContext)
     {
         // culling, prepare RenderQueue
-        RenderQueue rQueue;
+        RenderQueue& rQueue = params._renderQueue;
 
         // iterate each object
         for (RenderQueueItem& rqItem : rQueue)
