@@ -94,6 +94,7 @@ namespace te
         OBJECT_META_FUNCTION(RenderingVisitor);
 
         virtual void apply(Node* node);
+
     };
 
 

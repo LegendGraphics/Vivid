@@ -11,8 +11,8 @@ find_package(3rdParty REQUIRED)
 
 include_directories (${CMAKE_SOURCE_DIR}/source)
 #include_directories(${Boost_INCLUDE_DIRS})
-#include_directories(${GLEW_INCLUDE_DIR})
-#include_directories(${GLFW_INCLUDE_DIR})
+include_directories(${GLEW_INCLUDE_DIR})
+include_directories(${GLFW_INCLUDE_DIR})
 #include_directories(${SOIL_INCLUDE_DIR})
 #include_directories(${LUA_INCLUDE_DIR})
 #include_directories(${TOLUAPP_INCLUDE_DIR})
@@ -34,5 +34,5 @@ source_group("shape" 		    FILES ${shape} )
 
 
 ADD_EXECUTABLE ( TinyEngine main.cpp ${common} ${math} ${renderer} ${base} ${io} ${shape})
-target_link_libraries(TinyEngine ${OPENGL_LIBRARIES} ${GLEW_LIBRARY})
+target_link_libraries(TinyEngine ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY})
 
