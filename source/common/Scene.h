@@ -49,7 +49,10 @@ namespace te
     {
     public:
         Scene();
+        Scene(const Scene& scene, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Scene();
+
+        OBJECT_META_FUNCTION(Scene);
 
         // init from SceneRes?
 

@@ -3,6 +3,8 @@
 
 #include "base/Timer.h"
 
+class GLFWwindow;
+
 namespace te
 {
     // init engine modules:
@@ -43,6 +45,8 @@ namespace te
         void cullingUpdate();
         void renderingUpdate();
 
+        void initWindow();
+
     private:
         Director() {};
 
@@ -56,6 +60,8 @@ namespace te
         float _delta_time;
 
         Timer   _timer;
+
+        GLFWwindow* _window;
     };
 
 }
