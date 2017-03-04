@@ -6,6 +6,7 @@
 
 #include "common/NodeVisitor.h"
 #include "common/Scene.h"
+#include "renderer/RenderInterface.h"
 
 namespace te
 {
@@ -25,6 +26,7 @@ namespace te
     bool Director::initialize()
     {
         // init engine modules
+        _renderer = new RenderInterface;
 
         return true;
     }
@@ -79,7 +81,7 @@ namespace te
     void Director::renderingUpdate()
     {
         // rendering scene
-        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
+        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, _renderer);
         visitor.apply(_active_scene->getSceneRoot());
     }
 
@@ -88,6 +90,8 @@ namespace te
         _timer.setEnabled(true);
 
         initWindow();
+        _renderer->init();
+
         mainLoop();
     }
 

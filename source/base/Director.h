@@ -19,7 +19,7 @@ namespace te
     //   - rendering update
 
     class Scene;
-    class Renderer;
+    class RenderInterface;
 
     class Director
     {
@@ -54,7 +54,7 @@ namespace te
         static Director* _director;
 
         Scene* _active_scene;
-        Renderer* _renderer;
+        RenderInterface* _renderer;
 
         /* delta time since last tick to main loop */
         float _delta_time;

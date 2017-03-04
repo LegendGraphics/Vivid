@@ -11,6 +11,7 @@ namespace te
     class Node;
     class Camera;
     class Scene;
+    class RenderInterface;
 
     // consider two things: traversal mode and visitor type
     class NodeVisitor: public Object
@@ -82,11 +83,15 @@ namespace te
         Scene*      _scene;
     };
 
+    class RenderWorld;
+    class RenderCamera;
+    class RenderQueueItem;
+
     class RenderingVisitor : public NodeVisitor
     {
     public:
         RenderingVisitor();
-        RenderingVisitor(const TraversalMode& tm);
+        RenderingVisitor(const TraversalMode& tm, RenderInterface* renderer);
         RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
         virtual ~RenderingVisitor();
@@ -94,6 +99,15 @@ namespace te
         OBJECT_META_FUNCTION(RenderingVisitor);
 
         virtual void apply(Node* node);
+
+    private:
+        void testRenderingPipeline();
+        RenderWorld* wrapRenderWorld();
+        RenderCamera* wrapRenderCamera();
+        RenderQueueItem* wrapRenderQueueItem();
+
+    protected:
+        RenderInterface*    _renderer;
 
     };
 

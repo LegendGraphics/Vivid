@@ -1,5 +1,5 @@
 #include "RenderInterface.h"
-
+#include "renderer/Device/GLRenderDevice.h"
 #include "RenderWorld.h"
 
 #ifdef USE_GL
@@ -11,6 +11,7 @@ namespace te
     bool RenderInterface::init()
     {
         // init render device here
+        _renderDevice = new GLRenderDevice;
         if (!_renderDevice->open()) return false;
         // init render resource here
 
@@ -30,6 +31,6 @@ namespace te
         params._pipelineRes = nullptr;
         params._camera = message->camera;
         params._renderQueue = RenderQueue(message->rQueue, message->rQueue + message->numQueue);
-        message->world->render(params);
+        //message->world->render(params);
     }
 }

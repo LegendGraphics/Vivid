@@ -44,6 +44,11 @@ namespace te
         return bOK;
     }
 
+    void GLRenderDevice::close()
+    {
+
+    }
+
     void GLRenderDevice::dispatch(RenderContext * context_)
     {
         // do actual command

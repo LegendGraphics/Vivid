@@ -85,6 +85,8 @@ namespace te
 
         bool open();
 
+        void close();
+
         void dispatch(RenderContext* context_) override;
 
         // Buffers

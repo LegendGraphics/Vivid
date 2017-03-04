@@ -23,6 +23,7 @@ namespace te
     {
     public:
         static RenderObject::Type TYPE;
+        RenderCamera() = default;
         RenderCamera(CameraData::ProjectionType type, float near_range, float far_range,
             const Mat4x4& projection, const Mat4x4& view);
 

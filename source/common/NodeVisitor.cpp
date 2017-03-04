@@ -3,6 +3,10 @@
 #include "common/Node.h"
 #include "common/Camera.h"
 #include "common/SpaceState.h"
+#include "renderer/RenderInterface.h"
+#include "renderer/RenderWorld.h"
+#include "renderer/Runtime/RenderCamera.h"
+
 
 namespace te
 {
@@ -91,10 +95,12 @@ namespace te
 
     RenderingVisitor::RenderingVisitor()
     {
+        
     }
 
-    RenderingVisitor::RenderingVisitor(const TraversalMode& tm)
-        :NodeVisitor(tm, VisitorType::RENDERING_UPDATE)
+    RenderingVisitor::RenderingVisitor(const TraversalMode& tm, RenderInterface* renderer)
+        :NodeVisitor(tm, VisitorType::RENDERING_UPDATE),
+        _renderer(renderer)
     {}
 
     RenderingVisitor::RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop)
@@ -109,6 +115,39 @@ namespace te
     void RenderingVisitor::apply(Node* node)
     {
         // Now simply rendering every node
+
+        testRenderingPipeline(); // for test
+
         traverse(node);
     }
+
+    void RenderingVisitor::testRenderingPipeline()
+    {
+        RenderWorldMsg msg;
+        msg.camera = wrapRenderCamera();
+        msg.world = wrapRenderWorld();
+        msg.rQueue = wrapRenderQueueItem();
+        msg.numQueue = 1;
+
+        _renderer->renderWorld(&msg);
+    }
+
+    RenderWorld* RenderingVisitor::wrapRenderWorld()
+    {
+        RenderWorld* rw = new RenderWorld;
+        return rw;
+    }
+
+    RenderCamera* RenderingVisitor::wrapRenderCamera()
+    {
+        RenderCamera* rc = new RenderCamera;
+        return rc;
+    }
+
+    RenderQueueItem* RenderingVisitor::wrapRenderQueueItem()
+    {
+        RenderQueueItem* rqi = new RenderQueueItem;
+        return rqi;
+    }
+
 }
