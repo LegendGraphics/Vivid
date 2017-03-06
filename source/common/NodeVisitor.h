@@ -86,6 +86,7 @@ namespace te
     class RenderWorld;
     class RenderCamera;
     class RenderQueueItem;
+    class PipelineResource;
 
     class RenderingVisitor : public NodeVisitor
     {
@@ -105,6 +106,7 @@ namespace te
         RenderWorld* wrapRenderWorld();
         RenderCamera* wrapRenderCamera();
         RenderQueueItem* wrapRenderQueueItem();
+        PipelineResource* wrapPipelineResource();
 
     protected:
         RenderInterface*    _renderer;

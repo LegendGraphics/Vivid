@@ -18,6 +18,7 @@ namespace te
 
     struct RenderWorldMsg
     {
+        class PipelineResource* pipeline;
         class RenderWorld* world;
         class RenderCamera* camera;
         class RenderQueueItem* rQueue;

@@ -6,6 +6,7 @@
 #include "renderer/RenderInterface.h"
 #include "renderer/RenderWorld.h"
 #include "renderer/Runtime/RenderCamera.h"
+#include "renderer/Resource/PipelineResource.h"
 
 
 namespace te
@@ -127,6 +128,7 @@ namespace te
         msg.camera = wrapRenderCamera();
         msg.world = wrapRenderWorld();
         msg.rQueue = wrapRenderQueueItem();
+        msg.pipeline = wrapPipelineResource();
         msg.numQueue = 1;
 
         _renderer->renderWorld(&msg);
@@ -148,6 +150,13 @@ namespace te
     {
         RenderQueueItem* rqi = new RenderQueueItem;
         return rqi;
+    }
+
+    PipelineResource* RenderingVisitor::wrapPipelineResource()
+    {
+        PipelineResource* pr = new PipelineResource;
+        pr->load("forward.pipeline.xml");
+        return pr;
     }
 
 }

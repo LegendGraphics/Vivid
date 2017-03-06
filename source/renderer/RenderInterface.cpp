@@ -1,6 +1,7 @@
 #include "RenderInterface.h"
 #include "renderer/Device/GLRenderDevice.h"
 #include "RenderWorld.h"
+#include "renderer/Resource/PipelineResource.h"
 
 #ifdef USE_GL
 #include "Device/GLRenderDevice.h"
@@ -28,9 +29,9 @@ namespace te
         // message should contain some state object camera, viewport
         RenderWorld::RenderParams params;
         params._device = _renderDevice;
-        params._pipelineRes = nullptr;
+        params._pipelineRes = message->pipeline;
         params._camera = message->camera;
         params._renderQueue = RenderQueue(message->rQueue, message->rQueue + message->numQueue);
-        //message->world->render(params);
+        message->world->render(params);
     }
 }
