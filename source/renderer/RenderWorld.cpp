@@ -29,7 +29,7 @@ namespace te
         renderContext->_camera = params._camera;
 
         // process pipeline config here
-        for (PipelineStage& stage :params._pipelineRes->_stages)
+        for (PipelineStage& stage :params._pipelineRes->getStages())
         {
             for (PipelineCommand& pc : stage.commands)
             {
