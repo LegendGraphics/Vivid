@@ -36,7 +36,7 @@ namespace te
         void renderWorld(RenderWorldMsg* message);
 
     protected:
-        RenderInterface(); // not implemented
+        RenderInterface() = default; // not implemented
     private:
         static RenderInterface* _renderInterface;
         class GLRenderDevice* _renderDevice;

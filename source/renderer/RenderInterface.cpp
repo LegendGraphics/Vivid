@@ -8,7 +8,7 @@
 
 namespace te
 {
-    RenderInterface::_renderInterface = nullptr;
+    RenderInterface* RenderInterface::_renderInterface = nullptr;
     RenderInterface* RenderInterface::get()
     {
         if (!_renderInterface)
