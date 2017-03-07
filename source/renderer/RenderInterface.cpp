@@ -9,6 +9,17 @@
 
 namespace te
 {
+    RenderInterface::_renderInterface = nullptr;
+    RenderInterface* RenderInterface::get()
+    {
+        if (!_renderInterface)
+        {
+            _renderInterface = new RenderInterface();
+        }
+
+        return _renderInterface;
+    }
+
     bool RenderInterface::init()
     {
         // init render device here

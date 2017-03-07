@@ -54,7 +54,6 @@ namespace te
         static Director* _director;
 
         Scene* _active_scene;
-        RenderInterface* _renderer;
 
         /* delta time since last tick to main loop */
         float _delta_time;

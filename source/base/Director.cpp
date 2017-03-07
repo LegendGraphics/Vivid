@@ -26,7 +26,7 @@ namespace te
     bool Director::initialize()
     {
         // init engine modules
-        _renderer = new RenderInterface;
+        RenderInterface::get();
 
         return true;
     }
@@ -81,7 +81,7 @@ namespace te
     void Director::renderingUpdate()
     {
         // rendering scene
-        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, _renderer);
+        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::get());
         visitor.apply(_active_scene->getSceneRoot());
     }
 
@@ -90,7 +90,7 @@ namespace te
         _timer.setEnabled(true);
 
         initWindow();
-        _renderer->init();
+        RenderInterface::get()->init();
 
         mainLoop();
     }

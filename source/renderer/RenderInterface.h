@@ -28,12 +28,17 @@ namespace te
     class RenderInterface
     {
     public:
+        static RenderInterface* get();
+
         bool init();
         void release();
 
         void renderWorld(RenderWorldMsg* message);
 
+    protected:
+        RenderInterface(); // not implemented
     private:
+        static RenderInterface* _renderInterface;
         class GLRenderDevice* _renderDevice;
     };
 }
