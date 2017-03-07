@@ -4,9 +4,10 @@
 #include "RenderContext.h"
 #include "renderer/runtime/RenderCamera.h"
 
+#include "math/Vector4.h"
+
 namespace te
 {
-
     static const char *defaultShaderVS =
         "uniform mat4 viewProjMat;\n"
         "uniform mat4 worldMat;\n"
@@ -103,6 +104,9 @@ namespace te
                     if (_defaultShader.uni_view_proj_mat >= 0)
                         setShaderConst(_defaultShader.uni_view_proj_mat, shader_data::MATRIX4X4, &curCamera->getViewProjctionMat());
 
+                    // set default color
+                    float color[4] = { 0.75f, 0.5, 0.25f, 1 };
+                    setShaderConst(_defaultShader.custom_uniform_handles["color"], shader_data::VECTOR4, &color);
                 }
             }
             else if (RenderContext::CommandType::RENDER == command.command_type)
@@ -195,10 +199,11 @@ namespace te
         return defaultShaderFS;
     }
 
-    uint32 GLRenderDevice::createShader(const char * vertexShaderSrc, const char * fragmentShaderSrc)
+    te::uint32 GLRenderDevice::createShader(const char* vertexShaderSrc, const char* fragmentShaderSrc, vertex_layout::Type vlType)
     {
         uint32 programObj = createShaderProgram(vertexShaderSrc, fragmentShaderSrc);
         if (0 == programObj) return 0;
+        if (!configShaderVertexLayout(programObj, vlType)) return 0;
         if (!linkShaderProgram(programObj)) return 0;
 
         uint32 shaderHandle = _shaders.add(GLShader());
@@ -265,6 +270,16 @@ namespace te
         glDeleteShader(fs);
 
         return program;
+    }
+
+    bool GLRenderDevice::configShaderVertexLayout(uint32 programObj, vertex_layout::Type vlType)
+    {
+        const VertexLayout& vl = _vertexDeclaration.getLayout(vlType);
+        for (const VertexLayoutAttrib& attr : vl)
+        {
+            glBindAttribLocation(programObj, attr.vbSlot, attr.semanticName.c_str());
+        }
+        return true;
     }
 
     bool GLRenderDevice::linkShaderProgram(uint32 programObj)
@@ -465,11 +480,13 @@ namespace te
 
     bool GLRenderDevice::createDefaultShader(const char* vertexShader, const char* fragmentShader, ShaderObject& so)
     {
-        uint32 shaderHandle = createShader(vertexShader, fragmentShader);
+        uint32 shaderHandle = createShader(vertexShader, fragmentShader, vertex_layout::Position);
         if (0 == shaderHandle) return false;
 
         so.shader_handle = shaderHandle;
         bindShader(shaderHandle);
+
+        so.custom_uniform_handles["color"] = getShaderConstLoc(shaderHandle, "color");
 
         so.uni_view_mat = getShaderConstLoc(shaderHandle, "viewMat");
         so.uni_proj_mat = getShaderConstLoc(shaderHandle, "projMat");

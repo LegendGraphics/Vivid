@@ -22,7 +22,11 @@ namespace te
     bool RenderInterface::init()
     {
         // init render device here
+#ifdef USE_GL
         _renderDevice = new GLRenderDevice;
+#else
+        _renderDevice = nullptr;
+#endif // USE_GL
         if (!_renderDevice->open()) return false;
         // init render resource here
 

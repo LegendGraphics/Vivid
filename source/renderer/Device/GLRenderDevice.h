@@ -100,8 +100,9 @@ namespace te
         bool createDefaultShader(const char* vertexShader, const char* fragmentShader, ShaderObject& so);
         const char* getDefaultVSCode();
         const char* getDefaultFSCode();
-        uint32 createShader(const char* vertexShaderSrc, const char* fragmentShaderSrc);
+        uint32 createShader(const char* vertexShaderSrc, const char* fragmentShaderSrc, vertex_layout::Type vlType);
         uint32 createShaderProgram(const char* vertexShaderSrc, const char* fragmentShaderSrc);
+        bool configShaderVertexLayout(uint32 programObj, vertex_layout::Type vlType);
         bool linkShaderProgram(uint32 programObj);
         int getShaderConstLoc(uint32 shaderHandle, const char* name);
         void setShaderConst(int loc, shader_data::Class type, void* values, uint32 count = 1);
@@ -127,8 +128,7 @@ namespace te
         RDObjects<GLTexture> _textures;
         RDObjects<GLRenderTarget> _renderTargets;
         RDObjects<uint32> _vaos; // vertex array objects
-        //RDObjects<VertexLayoutAttrib> _vertexLayouts;
-        //std::map<std::string, uint32> _
+        VertexDeclaration _vertexDeclaration;
 
         uint32 _prevShaderHandle, _curShaderHandle;
         ShaderObject _defaultShader;

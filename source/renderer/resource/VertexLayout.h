@@ -39,6 +39,7 @@ namespace te
         std::unordered_map<vertex_layout::Type, VertexLayout> vertexLayoutMap;
 
         void init();
+        const VertexLayout& getLayout(vertex_layout::Type vlType);
 
         VertexDeclaration() : VertexDeclaration(VERTEX_DECLARATION) { init(); }
         VertexDeclaration(RenderResource::Type t) : RenderResource(t) { init(); }

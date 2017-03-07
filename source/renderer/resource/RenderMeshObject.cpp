@@ -66,8 +66,6 @@ namespace te
         bool useDebug = true;
         if (useDebug)
         {
-            RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
-            scs->shaderHandle = _shader_object_handle;
             RenderContext::Command setShaderObject = { 0, nullptr, RenderContext::CommandType::BIND_SHADER_OBJECT };
             context->commands().push_back(setShaderObject);
         }

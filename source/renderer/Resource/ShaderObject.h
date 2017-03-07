@@ -39,17 +39,24 @@ namespace te
         unsigned elements;
         unsigned offset;
         unsigned element_stride;
+        std::string semantic_name;
 
-        ShaderVariable() : klass(shader_data::UNKNOWN_CLASS), elements(0), offset(0xffffffff), element_stride(0) {}
+        ShaderVariable() :
+            klass(shader_data::UNKNOWN_CLASS),
+            elements(0),
+            offset(0xffffffff),
+            element_stride(0),
+            semantic_name("") {}
     };
 
     struct ShaderObject
     {
         uint32 shader_handle;
 
-        std::vector<uint32> custom_uniform_handles;
+        std::unordered_map<std::string, int> custom_uniform_handles; // TODO: reconsider if we need map here
+        std::unordered_map<std::string, int> custom_sampler_handles;
 
-        uint32 uni_view_mat, uni_proj_mat, uni_view_proj_mat, uni_view_proj_mat_inv;
+        int uni_view_mat, uni_proj_mat, uni_view_proj_mat, uni_view_proj_mat_inv;
     };
 
     // <del>seems in Horde3D all shader resource is managed in one

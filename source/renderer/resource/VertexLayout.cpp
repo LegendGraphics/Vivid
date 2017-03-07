@@ -11,7 +11,7 @@ namespace te
         vertexLayoutMap[vertex_layout::Overlay] = {
             { "vertPos", 0, 2, 0 },
             { "texCoords0", 0, 2, 8 }
-        };
+        }; // Overlay is for Game GUI
 
         vertexLayoutMap[vertex_layout::Model] = {
             { "vertPos", 0, 3, 0 },
@@ -27,5 +27,9 @@ namespace te
             { "texCoords0", 0, 2, 0 },
             { "parIdx", 0, 1, 8 }
         };
+    }
+    const VertexLayout & VertexDeclaration::getLayout(vertex_layout::Type vlType)
+    {
+        return vertexLayoutMap[vlType];
     }
 }
