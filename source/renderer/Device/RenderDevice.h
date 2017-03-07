@@ -11,6 +11,7 @@
 namespace te
 {
     class RenderContext;
+    class RenderResourceContext;
 
     // render device objects
     template<class T> class RDObjects
@@ -68,6 +69,7 @@ namespace te
         // RenderDevice will be called in the render thread loop and dispatch the 
         // commands to RenderContext, RenderContext will call actual Graphic API
         virtual void dispatch(RenderContext* context_) = 0;
+        virtual void dispatch(RenderResourceContext* context_) = 0;
 
     private:
         typedef std::vector<RenderContext*> RenderContexts;

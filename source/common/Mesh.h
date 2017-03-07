@@ -9,6 +9,8 @@
 #include "base/RefPtr.hpp"
 #include "common/Resource.h"
 
+#include "renderer/Resource/RenderResource.h"
+
 namespace te
 {
 
@@ -72,6 +74,10 @@ namespace te
         bool _skinned;
         std::vector<Vertex_PNTB> _vertices;
         std::vector<int>    _triangles;
+
+        std::vector<RenderResource> _vertex_buffers;
+        RenderResource              _index_buffer;
+        RenderResource              _vertex_declaration;
     };
 
 

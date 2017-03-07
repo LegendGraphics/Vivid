@@ -2,6 +2,7 @@
 
 #include "GLRenderDevice.h"
 #include "RenderContext.h"
+#include "renderer/Resource/RenderResourceContext.h"
 #include "renderer/runtime/RenderCamera.h"
 
 #include "math/Vector4.h"
@@ -118,6 +119,55 @@ namespace te
         context_->commands().clear();
     }
 
+    void GLRenderDevice::dispatch(RenderResourceContext * context_)
+    {
+        for (RenderResourceContext::Message& msg : context_->messages())
+        {
+            if (RenderResourceContext::MessageType::ALLOC_INDEX_BUFFER == msg.type)
+            {
+                // default type unsigned int
+                RenderResourceContext::IndexStream* i_stream
+                    = static_cast<RenderResourceContext::IndexStream*>(msg.head);
+                RenderResource* res = i_stream->res;
+                TE_ASSERT(RenderResource::INDEX_STREAM == res->type, "Render Resource Type doesn't match!");
+                res->render_resource_handle = createIndexBuffer(i_stream->size, i_stream->raw_data);
+            }
+            else if (RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER == msg.type)
+            {
+                // default type float
+                RenderResourceContext::VertexStream* v_stream
+                    = static_cast<RenderResourceContext::VertexStream*>(msg.head);
+                RenderResource* res = v_stream->res;
+                TE_ASSERT(RenderResource::VERTEX_STREAM == res->type, "Render Resource Type doesn't match!");
+                res->render_resource_handle = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
+            }
+            else if (RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION == msg.type)
+            {
+                RenderResourceContext::VertexDeclarationStream* vd_stream
+                    = static_cast<RenderResourceContext::VertexDeclarationStream*>(msg.head);
+                RenderResource* res = vd_stream->res;
+                TE_ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
+
+                const VertexLayout& vl = _vertexDeclaration.getLayout(vd_stream->layout_type);
+                TE_ASSERT(vl.size() <= vd_stream->vertex_buffers.size(),
+                    "Num of Vertex Layout Attributes should no larger than Num of Vertex Buffers!");
+
+                std::vector<uint32> locations;
+                for (auto& attri : vl)
+                {
+                    locations.push_back(attri.vbSlot);
+                }
+                std::vector<uint32> vertexHandles;
+                for (auto buffer : vd_stream->vertex_buffers)
+                {
+                    vertexHandles.push_back(buffer->render_resource_handle);
+                }
+                uint32 indexHandle = vd_stream->index_buffer->render_resource_handle;
+                createVertexArray(locations.size(), &locations[0], &vertexHandles[0], indexHandle);
+            }
+        }
+    }
+
     uint32 GLRenderDevice::createVertexBuffer(uint32 size, uint32 stride, const void * data)
     {
         GLBuffer buf;
@@ -147,7 +197,7 @@ namespace te
         return _buffers.add(buf);
     }
 
-    uint32 GLRenderDevice::createVertexArray(uint32 nLoc, const GLBuffer * buffers, const uint32 * locations)
+    te::uint32 GLRenderDevice::createVertexArray(uint32 nLoc, const uint32* locations, const uint32* vertexHandles, uint32 indexHandle)
     {
         uint32 vao;
         glGenVertexArrays(1, &vao);
@@ -155,9 +205,13 @@ namespace te
 
         for (uint32 i = 0; i < nLoc; ++i)
         {
-            glBindBuffer(buffers[i].type, buffers[i].glObj);
-            glVertexAttribPointer(locations[i], buffers[i].stride, GL_FLOAT, GL_FALSE, 0, NULL);
+            GLBuffer& vBuf = _buffers.getRef(vertexHandles[i]);
+            glBindBuffer(vBuf.type, vBuf.glObj);
+            glVertexAttribPointer(locations[i], vBuf.stride, GL_FLOAT, GL_FALSE, 0, NULL);
         }
+
+        GLBuffer& iBuf = _buffers.getRef(indexHandle);
+        glBindBuffer(iBuf.type, iBuf.glObj); // bind index buffer to VAO
 
         glBindVertexArray(0);
         return _vaos.add(vao);
@@ -460,6 +514,8 @@ namespace te
     {
         if (commitStates())
         {
+            // base index is the start index of sub-component (3*numFace)
+            // base vertex is the start vertex of sub-component (3*numVert)
             glDrawElementsBaseVertex(GL_TRIANGLES,
                 _curNumIndices,
                 GL_UNSIGNED_INT,

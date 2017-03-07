@@ -11,7 +11,10 @@ namespace te
         {
             PIPELINE,
             TEXTURE,
+            INDEX_STREAM,
+            VERTEX_STREAM,
             VERTEX_DECLARATION,
+            SHADER,
             NOT_INITIALIZED = 0xFFFFFFFF
         };
         typedef uint32 Type;

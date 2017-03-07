@@ -88,11 +88,12 @@ namespace te
         void close();
 
         void dispatch(RenderContext* context_) override;
+        void dispatch(RenderResourceContext* context_) override;
 
         // Buffers
         uint32 createVertexBuffer(uint32 size, uint32 stride, const void* data);
         uint32 createIndexBuffer(uint32 size, const void* data);
-        uint32 createVertexArray(uint32 nLoc, const GLBuffer* buffers, const uint32* locations);
+        uint32 createVertexArray(uint32 nLoc, const uint32* locations, const uint32* vertexHandles, uint32 indexHandle);
         void destroyBuffer(uint32 bufObj);
         void updateBufferData(uint32 bufObj, uint32 offset, uint32 size, void* data);
 
