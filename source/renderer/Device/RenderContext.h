@@ -10,19 +10,6 @@ namespace te
     class RenderCamera; // used in RenderContext, to pass the camera
     // matrix into XXXRenderDevice. Just for current dev stage
 
-    // this seems to be a common concept
-    // in all platforms, put it here for now
-    // Vertex Layout is to tell the GPU
-    // how attributes of a vertex is
-    // stored in a chunk of memory
-    struct VertexLayoutAttrib
-    {
-        std::string  semanticName;
-        uint32       vbSlot;
-        uint32       size;
-        uint32       offset;
-    };
-
     class RenderContext
     {
     public:

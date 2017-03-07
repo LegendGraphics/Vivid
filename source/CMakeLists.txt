@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/../cmake)
 
-add_definitions(-DUSE_GL)
 find_package(OpenGL REQUIRED)
 #find_package(Boost REQUIRED COMPONENTS system filesystem chrono)
 #find_package(lua REQUIRED)

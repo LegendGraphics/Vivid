@@ -127,6 +127,8 @@ namespace te
         RDObjects<GLTexture> _textures;
         RDObjects<GLRenderTarget> _renderTargets;
         RDObjects<uint32> _vaos; // vertex array objects
+        //RDObjects<VertexLayoutAttrib> _vertexLayouts;
+        //std::map<std::string, uint32> _
 
         uint32 _prevShaderHandle, _curShaderHandle;
         ShaderObject _defaultShader;
@@ -134,6 +136,8 @@ namespace te
         uint32                _curBaseIndex, _curBaseVertex, _curNumIndices;
         uint32                _curVAO, _newVAO;
         //uint32                _indexFormat;
+
+
     };
 }
 

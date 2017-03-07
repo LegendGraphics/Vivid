@@ -1,10 +1,9 @@
 #include "RenderInterface.h"
-#include "renderer/Device/GLRenderDevice.h"
 #include "RenderWorld.h"
 #include "renderer/Resource/PipelineResource.h"
 
 #ifdef USE_GL
-#include "Device/GLRenderDevice.h"
+#include "renderer/Device/GLRenderDevice.h"
 #endif
 
 namespace te
