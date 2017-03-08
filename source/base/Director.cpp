@@ -91,6 +91,7 @@ namespace te
 
         initWindow();
         RenderInterface::get()->init();
+        initResource();
 
         mainLoop();
     }
@@ -126,6 +127,11 @@ namespace te
             exit(EXIT_FAILURE);
         }
 
+    }
+
+    void Director::initResource()
+    {
+        // init resource
     }
 
 }

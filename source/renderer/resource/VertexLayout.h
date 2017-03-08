@@ -28,8 +28,11 @@ namespace te
     {
         std::string  semanticName;
         uint32       vbSlot;
-        uint32       size;
-        uint32       offset;
+        uint32       size; // number of component
+        uint32       offset; // offset in bytes, for example, after a size 2 of float, offset will be 2 * (32 / 8) = 8
+        //uint32       stride; // stride in bytes, for example, if two attributes XYZ and RGBA are stored together,
+                             // the stride will be 7 * (32 / 8) = 28
+                             // I decide to compute the stride when createing VAO
     };
 
     typedef std::vector<VertexLayoutAttrib> VertexLayout;

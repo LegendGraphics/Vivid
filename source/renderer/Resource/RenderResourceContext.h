@@ -40,7 +40,8 @@ namespace te
         struct VertexDeclarationStream
         {
             vertex_layout::Type layout_type;
-            std::vector<RenderResource*> vertex_buffers;
+            std::vector<RenderResource*> vertex_buffers; // notice: vertex_buffers might be duplicated here
+                                                         // because multiple attributes may share one vertex buffer
             RenderResource*              index_buffer;
             RenderResource*              res;
         };

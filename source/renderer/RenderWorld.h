@@ -2,12 +2,12 @@
 #define RENDERER_RENDERWORLD_H
 
 #include "base/Globals.h"
+#include "renderer/resource/RenderObject.h"
 
 namespace te
 {
     class RenderCamera;
     class PipelineResource;
-    class RenderObject;
 
     struct RenderQueueItem
     {
@@ -23,9 +23,13 @@ namespace te
     typedef std::vector< RenderQueueItem > RenderQueue;
 
     // RenderWorld is the entrance of all "render" aspect things of the game world
-    class RenderWorld
+    class RenderWorld : public RenderObject
     {
     public:
+        static RenderObject::Type TYPE;
+
+        RenderWorld();
+        ~RenderWorld();
 
         struct RenderParams
         {

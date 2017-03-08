@@ -109,6 +109,7 @@ namespace te
                     float color[4] = { 0.75f, 0.5, 0.25f, 1 };
                     setShaderConst(_defaultShader.custom_uniform_handles["color"], shader_data::VECTOR4, &color);
                 }
+                delete c_stream;
             }
             else if (RenderContext::CommandType::RENDER == command.command_type)
             {
@@ -131,6 +132,7 @@ namespace te
                 RenderResource* res = i_stream->res;
                 TE_ASSERT(RenderResource::INDEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 res->render_resource_handle = createIndexBuffer(i_stream->size, i_stream->raw_data);
+                delete i_stream;
             }
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER == msg.type)
             {
@@ -140,6 +142,7 @@ namespace te
                 RenderResource* res = v_stream->res;
                 TE_ASSERT(RenderResource::VERTEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 res->render_resource_handle = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
+                delete v_stream;
             }
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION == msg.type)
             {
@@ -148,24 +151,54 @@ namespace te
                 RenderResource* res = vd_stream->res;
                 TE_ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
 
+                // compute stride for each slot
                 const VertexLayout& vl = _vertexDeclaration.getLayout(vd_stream->layout_type);
-                TE_ASSERT(vl.size() <= vd_stream->vertex_buffers.size(),
-                    "Num of Vertex Layout Attributes should no larger than Num of Vertex Buffers!");
-
-                std::vector<uint32> locations;
-                for (auto& attri : vl)
+                std::unordered_map<uint32, uint32> slotStrideMap;
+                std::unordered_map<uint32, uint32>::iterator iter;
+                for (const auto& i : vl)
                 {
-                    locations.push_back(attri.vbSlot);
+                    iter = slotStrideMap.find(i.vbSlot);
+                    if (iter != slotStrideMap.end())
+                        iter->second += i.size * 4;
+                    else
+                        slotStrideMap[i.vbSlot] = i.size * 4;
                 }
+                TE_ASSERT(vl.size() == vd_stream->vertex_buffers.size(),
+                    "Requested Num of Vertex Attribute Slots should have same Num of Vertex Buffers!");
+
+                // prepare parameters for creating VAO
+                std::vector<uint32> locations;
+                std::vector<uint32> sizes;
+                std::vector<uint32> offsets;
                 std::vector<uint32> vertexHandles;
-                for (auto buffer : vd_stream->vertex_buffers)
+                for (uint32 i = 0; i < vl.size(); ++i)
                 {
+                    auto& attri = vl[i];
+                    locations.push_back(attri.vbSlot);
+                    sizes.push_back(attri.size);
+                    offsets.push_back(attri.offset);
+
+                    auto buffer = vd_stream->vertex_buffers[i];
                     vertexHandles.push_back(buffer->render_resource_handle);
+
+                    uint32 stride_in_buffer = _buffers.getRef(buffer->render_resource_handle).stride;
+                    uint32 stride_in_slot = slotStrideMap[attri.vbSlot];
+                    TE_ASSERT(stride_in_buffer == stride_in_slot, "Stride in Buffer should match Stride in Slot!");
                 }
                 uint32 indexHandle = vd_stream->index_buffer->render_resource_handle;
-                createVertexArray(locations.size(), &locations[0], &vertexHandles[0], indexHandle);
+                createVertexArray(
+                    locations.size(),
+                    &locations[0],
+                    &sizes[0],
+                    &offsets[0],
+                    &vertexHandles[0],
+                    indexHandle);
+                
+                delete vd_stream;
             }
         }
+
+        context_->messages().clear();
     }
 
     uint32 GLRenderDevice::createVertexBuffer(uint32 size, uint32 stride, const void * data)
@@ -197,7 +230,13 @@ namespace te
         return _buffers.add(buf);
     }
 
-    te::uint32 GLRenderDevice::createVertexArray(uint32 nLoc, const uint32* locations, const uint32* vertexHandles, uint32 indexHandle)
+    uint32 GLRenderDevice::createVertexArray(
+        uint32 nLoc,
+        const uint32 * locations,
+        const uint32* sizes,
+        const uint32 * offsets,
+        const uint32 * vertexHandles,
+        uint32 indexHandle)
     {
         uint32 vao;
         glGenVertexArrays(1, &vao);
@@ -207,7 +246,7 @@ namespace te
         {
             GLBuffer& vBuf = _buffers.getRef(vertexHandles[i]);
             glBindBuffer(vBuf.type, vBuf.glObj);
-            glVertexAttribPointer(locations[i], vBuf.stride, GL_FLOAT, GL_FALSE, 0, NULL);
+            glVertexAttribPointer(locations[i], sizes[i], GL_FLOAT, GL_FALSE, vBuf.stride, (void*)offsets[i]); // need to fix here, last two parameter should be set properly
         }
 
         GLBuffer& iBuf = _buffers.getRef(indexHandle);

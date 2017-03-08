@@ -102,10 +102,10 @@ namespace te
         virtual void apply(Node* node);
 
     private:
-        void testRenderingPipeline();
+        void testRenderingPipeline(Node* node);
         RenderWorld* wrapRenderWorld();
         RenderCamera* wrapRenderCamera();
-        RenderQueueItem* wrapRenderQueueItem();
+        RenderQueueItem* wrapRenderQueueItem(Node* node);
         PipelineResource* wrapPipelineResource();
 
     protected:

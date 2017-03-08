@@ -29,6 +29,13 @@ namespace te
         Handle render_resource_handle;
     };
 
+    struct ResourceStreamItem
+    {
+        RenderResource* res;
+        void* stream;
+    };
+    typedef std::vector<ResourceStreamItem> ResourceStreamQueue;
+
     enum class IndexFormat : uint8
     {
         IDXFMT_16,

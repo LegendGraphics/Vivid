@@ -23,6 +23,16 @@ namespace te
         }
     }
 
+    RenderObject::Type RenderWorld::TYPE = RenderObject::NOT_INITIALIZED;
+
+    RenderWorld::RenderWorld() : RenderObject(TYPE)
+    {
+    }
+
+    RenderWorld::~RenderWorld()
+    {
+    }
+
     void RenderWorld::render(RenderParams& params)
     {
         RenderContext* renderContext = (params._device->newContext());

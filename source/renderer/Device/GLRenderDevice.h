@@ -11,8 +11,8 @@ namespace te
     {
         uint32 type;
         uint32 glObj;
-        uint32 size;
-        uint32 stride;
+        uint32 size; // total size in byte
+        uint32 stride; // number of component for each element
     };
 
     // =====================================
@@ -93,7 +93,14 @@ namespace te
         // Buffers
         uint32 createVertexBuffer(uint32 size, uint32 stride, const void* data);
         uint32 createIndexBuffer(uint32 size, const void* data);
-        uint32 createVertexArray(uint32 nLoc, const uint32* locations, const uint32* vertexHandles, uint32 indexHandle);
+        uint32 createVertexArray(
+            uint32 nLoc,
+            const uint32* locations,
+            const uint32* sizes,
+            const uint32* offsets,
+            const uint32* vertexHandles,
+            uint32 indexHandle);
+        void createVertexDeclaration();
         void destroyBuffer(uint32 bufObj);
         void updateBufferData(uint32 bufObj, uint32 offset, uint32 size, void* data);
 

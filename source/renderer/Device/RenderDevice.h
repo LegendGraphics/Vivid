@@ -66,6 +66,8 @@ namespace te
 
         virtual RenderContext* newContext();
         virtual void releaseContext(RenderContext* context);
+        virtual RenderResourceContext* newResourceContext();
+        virtual void releaseResourceContext(RenderResourceContext* context);
         // RenderDevice will be called in the render thread loop and dispatch the 
         // commands to RenderContext, RenderContext will call actual Graphic API
         virtual void dispatch(RenderContext* context_) = 0;
@@ -74,6 +76,9 @@ namespace te
     private:
         typedef std::vector<RenderContext*> RenderContexts;
         RenderContexts _render_contexts;
+
+        typedef std::vector<RenderResourceContext*> RenderResourceContexts;
+        RenderResourceContexts _render_resource_contexts;
     };
 
     //------ notes: -------

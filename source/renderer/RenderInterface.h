@@ -25,6 +25,18 @@ namespace te
         uint32 numQueue;
     };
 
+    struct RenderResourceMsg
+    {
+        class RenderResourceGenerator* generator;
+        class ResourceStreamItem* rQueue;
+        uint32 numQueue;
+    };
+
+    union RenderMsg {
+        RenderWorldMsg rwm;
+        RenderResourceMsg rrm;
+    };
+
     class RenderInterface
     {
     public:
@@ -33,13 +45,15 @@ namespace te
         bool init();
         void release();
 
-        void renderWorld(RenderWorldMsg* message);
+        void renderWorld(RenderMsg* message);
+        void generateResource(RenderMsg* message);
 
     protected:
         RenderInterface() = default; // not implemented
     private:
         static RenderInterface* _renderInterface;
         class GLRenderDevice* _renderDevice;
+        class RenderObjectManager* _renderObjectManager;
     };
 }
 

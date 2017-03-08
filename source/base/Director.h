@@ -46,6 +46,7 @@ namespace te
         void renderingUpdate();
 
         void initWindow();
+        void initResource();
 
     private:
         Director() {};

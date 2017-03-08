@@ -117,19 +117,19 @@ namespace te
     {
         // Now simply rendering every node
 
-        testRenderingPipeline(); // for test
+        testRenderingPipeline(node); // for test
 
         traverse(node);
     }
 
-    void RenderingVisitor::testRenderingPipeline()
+    void RenderingVisitor::testRenderingPipeline(Node* node)
     {
-        RenderWorldMsg msg;
-        msg.camera = wrapRenderCamera();
-        msg.world = wrapRenderWorld();
-        msg.rQueue = wrapRenderQueueItem();
-        msg.pipeline = wrapPipelineResource();
-        msg.numQueue = 1;
+        RenderMsg msg;
+        msg.rwm.camera = wrapRenderCamera();
+        msg.rwm.world = wrapRenderWorld();
+        msg.rwm.rQueue = wrapRenderQueueItem(node);
+        msg.rwm.pipeline = wrapPipelineResource();
+        msg.rwm.numQueue = 1;
 
         _renderer->renderWorld(&msg);
     }
@@ -146,8 +146,8 @@ namespace te
         return rc;
     }
 
-    RenderQueueItem* RenderingVisitor::wrapRenderQueueItem()
-    {
+    te::RenderQueueItem* RenderingVisitor::wrapRenderQueueItem(Node* node)
+{
         RenderQueueItem* rqi = new RenderQueueItem;
         return rqi;
     }
