@@ -2,7 +2,6 @@
 #define RENDERER_RENDERRESOURCECONTEXT_H
 
 #include "RenderResource.h"
-#include "VertexLayout.h"
 
 namespace te
 {
@@ -20,35 +19,6 @@ namespace te
             ALLOC_SHADER, DEALLOC_SHADER,
             ALLOC_RENDER_TARGET, DEALLOC_RENDER_TARGET,
             ALLOC_TEXTURE, DEALLOC_TEXTURE, REALLOC_TEXTURE,
-        };
-
-        struct IndexStream
-        {
-            uint32 size; // size in bytes
-            void* raw_data;
-            RenderResource* res;
-        };
-
-        struct VertexStream
-        {
-            uint32 stride;
-            uint32 size; // size in bytes
-            void* raw_data;
-            RenderResource* res;
-        };
-
-        struct VertexDeclarationStream
-        {
-            vertex_layout::Type layout_type;
-            std::vector<RenderResource*> vertex_buffers; // notice: vertex_buffers might be duplicated here
-                                                         // because multiple attributes may share one vertex buffer
-            RenderResource*              index_buffer;
-            RenderResource*              res;
-        };
-
-        struct ShaderStream
-        {
-            RenderResource* res;
         };
 
         struct Message

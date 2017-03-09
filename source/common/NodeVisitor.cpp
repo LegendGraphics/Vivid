@@ -4,9 +4,17 @@
 #include "common/Camera.h"
 #include "common/SpaceState.h"
 #include "renderer/RenderInterface.h"
+
+// These header files will be moved in the future
 #include "renderer/RenderWorld.h"
+#include "renderer/Resource/RenderResourceGenerator.h"
 #include "renderer/Runtime/RenderCamera.h"
+#include "renderer/Resource/RenderMeshObject.h"
 #include "renderer/Resource/PipelineResource.h"
+#include "renderer/Resource/VertexLayout.h"
+
+#include "common/MeshFilter.h"
+#include "common/Mesh.h"
 
 
 namespace te
@@ -122,41 +130,125 @@ namespace te
         traverse(node);
     }
 
-    void RenderingVisitor::testRenderingPipeline(Node* node)
-    {
-        RenderMsg msg;
-        msg.rwm.camera = wrapRenderCamera();
-        msg.rwm.world = wrapRenderWorld();
-        msg.rwm.rQueue = wrapRenderQueueItem(node);
-        msg.rwm.pipeline = wrapPipelineResource();
-        msg.rwm.numQueue = 1;
-
-        _renderer->renderWorld(&msg);
-    }
-
-    RenderWorld* RenderingVisitor::wrapRenderWorld()
+    RenderWorld* wrapRenderWorld()
     {
         RenderWorld* rw = new RenderWorld;
         return rw;
     }
 
-    RenderCamera* RenderingVisitor::wrapRenderCamera()
+    RenderCamera* wrapRenderCamera()
     {
         RenderCamera* rc = new RenderCamera;
         return rc;
     }
 
-    te::RenderQueueItem* RenderingVisitor::wrapRenderQueueItem(Node* node)
-{
-        RenderQueueItem* rqi = new RenderQueueItem;
-        return rqi;
+    RenderQueueItem* wrapRenderQueueItem(Node* node, uint32& num)
+    {
+        RenderQueueItem* rqi = new RenderQueueItem[1];
+        if (MeshFilter* mf = node->getComponent<MeshFilter>())
+        {
+            // generate RenderMeshObject
+            Mesh* m = mf->getMesh();
+            RenderMeshObject* rmo = new RenderMeshObject;
+            rmo->setNumIndices(m->getTriangles().size());
+            rmo->setVertexDeclaration(&m->getVertexDeclaration());
+
+            // Put it into RenderQueueItem
+            rqi->node = rmo;
+            rqi->node->type = RenderMeshObject::TYPE;
+            rqi->sortKey = 0;
+
+            num = 1;
+            return rqi;
+        }
+
+        num = 0;
+        return nullptr;
     }
 
-    PipelineResource* RenderingVisitor::wrapPipelineResource()
+    PipelineResource* wrapPipelineResource()
     {
         PipelineResource* pr = new PipelineResource;
         pr->load("forward.pipeline.xml");
         return pr;
+    }
+
+    void RenderingVisitor::testRenderingPipeline(Node* node)
+    {
+        RenderMsg msg;
+        msg.rwm.camera = wrapRenderCamera();
+        msg.rwm.world = wrapRenderWorld();
+        msg.rwm.rQueue = wrapRenderQueueItem(node, msg.rwm.numQueue);
+        msg.rwm.pipeline = wrapPipelineResource();
+
+        _renderer->renderWorld(&msg);
+    }
+
+    RenderResourceVisitor::RenderResourceVisitor()
+    {
+    }
+
+    RenderResourceVisitor::RenderResourceVisitor(const TraversalMode & tm, RenderInterface * renderer)
+        : RenderingVisitor(tm, renderer)
+    {
+    }
+
+    RenderResourceVisitor::RenderResourceVisitor(const RenderResourceVisitor & node_visitor, const CopyOperator & copyop)
+        : RenderingVisitor(node_visitor, copyop)
+    {
+    }
+
+    RenderResourceVisitor::~RenderResourceVisitor()
+    {
+    }
+
+
+    void RenderResourceVisitor::apply(Node * node)
+    {
+        RenderMsg msg;
+        msg.rrm.generator = new RenderResourceGenerator;
+        msg.rrm.numQueue = 0;
+        if (MeshFilter* mf = node->getComponent<MeshFilter>())
+        {
+            // generate RenderMeshObject
+            Mesh* m = mf->getMesh();
+            msg.rrm.numQueue = 3;
+            msg.rrm.rQueue = new ResourceStreamItem[3];
+
+            // index stream
+            msg.rrm.rQueue[0].resType = RenderResource::INDEX_STREAM;
+            vertex_layout::IndexStream* is = new vertex_layout::IndexStream;
+            is->res = &m->getIndexBuffer();
+            is->size = 4 * m->getTriangles().size();
+            is->raw_data = &m->getTriangles()[0];
+            msg.rrm.rQueue[0].stream = is;
+
+            // vertex stream
+            msg.rrm.rQueue[1].resType = RenderResource::VERTEX_STREAM;
+            vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
+            vs->res = &m->getVertexBuffers()[0];
+            vs->size = 4 * 12 * m->getVertices().size(); // 12 float for each vertex(PNTB)
+            vs->stride = 12;
+            vs->raw_data = &m->getVertices()[0]; // assume memory in std::vector<Vertex_PNTB> is tight packed
+            msg.rrm.rQueue[1].stream = vs;
+
+            // vertex declaration stream
+            msg.rrm.rQueue[2].resType = RenderResource::VERTEX_DECLARATION;
+            vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
+            vds->res = &m->getVertexDeclaration();
+            vds->index_buffer = &m->getIndexBuffer();
+            vds->layout_type = vertex_layout::PNTB;
+            const VertexLayout& vl =
+                _renderer->getVertexDeclarationDefinition()->getLayout(vds->layout_type);
+            vds->vertex_buffers.clear();
+            for (const VertexLayoutAttrib& attr : vl)
+            {
+                vds->vertex_buffers.push_back(&m->getVertexBuffers()[attr.vbSlot]);
+            }
+            msg.rrm.rQueue[2].stream = vds;
+        }
+
+        _renderer->generateResource(&msg);
     }
 
 }

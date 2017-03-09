@@ -31,6 +31,11 @@ namespace te
             UNKNOWN_CLASS,
             NUM_CLASSES = UNKNOWN_CLASS
         };
+
+        struct ShaderStream
+        {
+            RenderResource* res;
+        };
     }
 
     struct ShaderVariable

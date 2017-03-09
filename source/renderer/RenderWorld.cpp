@@ -18,7 +18,7 @@ namespace te
         // iterate each object
         for (RenderQueueItem& rqItem : rQueue)
         {
-            if (rqItem.type == RenderMeshObject::TYPE)
+            if (rqItem.node->type == RenderMeshObject::TYPE)
                 ((RenderMeshObject*)rqItem.node)->render(rContext, params._camera, params._device);
         }
     }

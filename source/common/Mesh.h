@@ -74,10 +74,6 @@ namespace te
         bool _skinned;
         std::vector<Vertex_PNTB> _vertices;
         std::vector<int>    _triangles;
-
-        std::vector<RenderResource> _vertex_buffers;
-        RenderResource              _index_buffer;
-        RenderResource              _vertex_declaration;
     };
 
 
@@ -93,15 +89,23 @@ namespace te
         void init(MeshRes* res);
 
         bool isSkinned() const { return _skinned; }
+        std::vector<uint32>& getTriangles() { return _triangles; }
+        std::vector<Vertex_PNTB>& getVertices() { return _vertices; }
+        RenderResource& getVertexDeclaration() { return _vertex_declaration; }
+        RenderResource& getIndexBuffer() { return _index_buffer; }
+        std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
 
     protected:
         std::vector<Vertex_PNTB> _vertices;
-        std::vector<int>    _triangles;
+        std::vector<uint32>    _triangles;
 
         RefPtr<BoundingBox> _bounding;
 
         bool _skinned;
 
+        std::vector<RenderResource> _vertex_buffers;
+        RenderResource              _index_buffer;
+        RenderResource              _vertex_declaration;
     };
 }
 

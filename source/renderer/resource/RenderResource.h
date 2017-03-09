@@ -15,6 +15,7 @@ namespace te
             VERTEX_STREAM,
             VERTEX_DECLARATION,
             SHADER,
+            OTHER,
             NOT_INITIALIZED = 0xFFFFFFFF
         };
         typedef uint32 Type;
@@ -31,7 +32,7 @@ namespace te
 
     struct ResourceStreamItem
     {
-        RenderResource* res;
+        RenderResource::Type resType;
         void* stream;
     };
     typedef std::vector<ResourceStreamItem> ResourceStreamQueue;

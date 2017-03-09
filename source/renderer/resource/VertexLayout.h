@@ -14,9 +14,33 @@ namespace te
             Position,
             Overlay, // Position with Texture Coordinate
             Model,
-            Partical
+            Partical,
+            PNTB
         };
 
+        struct IndexStream
+        {
+            uint32 size; // size in bytes
+            void* raw_data;
+            RenderResource* res;
+        };
+
+        struct VertexStream
+        {
+            uint32 stride;
+            uint32 size; // size in bytes
+            void* raw_data;
+            RenderResource* res;
+        };
+
+        struct VertexDeclarationStream
+        {
+            vertex_layout::Type layout_type;
+            std::vector<RenderResource*> vertex_buffers; // notice: vertex_buffers might be duplicated here
+                                                         // because multiple attributes may share one vertex buffer
+            RenderResource*              index_buffer;
+            RenderResource*              res;
+        };
     }
 
     // this seems to be a common concept
@@ -32,7 +56,7 @@ namespace te
         uint32       offset; // offset in bytes, for example, after a size 2 of float, offset will be 2 * (32 / 8) = 8
         //uint32       stride; // stride in bytes, for example, if two attributes XYZ and RGBA are stored together,
                              // the stride will be 7 * (32 / 8) = 28
-                             // I decide to compute the stride when createing VAO
+                             // I decide to compute the stride when creating VAO
     };
 
     typedef std::vector<VertexLayoutAttrib> VertexLayout;
@@ -44,7 +68,7 @@ namespace te
         void init();
         const VertexLayout& getLayout(vertex_layout::Type vlType);
 
-        VertexDeclaration() : VertexDeclaration(VERTEX_DECLARATION) { init(); }
+        VertexDeclaration() : VertexDeclaration(OTHER) { init(); }
         VertexDeclaration(RenderResource::Type t) : RenderResource(t) { init(); }
     };
 }

@@ -73,6 +73,11 @@ namespace te
         virtual void dispatch(RenderContext* context_) = 0;
         virtual void dispatch(RenderResourceContext* context_) = 0;
 
+        VertexDeclaration* getVertexDeclarationDefinition();
+
+    protected:
+        VertexDeclaration _vertex_declaration;
+
     private:
         typedef std::vector<RenderContext*> RenderContexts;
         RenderContexts _render_contexts;

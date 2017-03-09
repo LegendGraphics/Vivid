@@ -103,14 +103,23 @@ namespace te
 
     private:
         void testRenderingPipeline(Node* node);
-        RenderWorld* wrapRenderWorld();
-        RenderCamera* wrapRenderCamera();
-        RenderQueueItem* wrapRenderQueueItem(Node* node);
-        PipelineResource* wrapPipelineResource();
 
     protected:
         RenderInterface*    _renderer;
 
+    };
+
+    class RenderResourceVisitor : public RenderingVisitor
+    {
+    public:
+        RenderResourceVisitor();
+        RenderResourceVisitor(const TraversalMode& tm, RenderInterface* renderer);
+        RenderResourceVisitor(const RenderResourceVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        virtual ~RenderResourceVisitor();
+
+        OBJECT_META_FUNCTION(RenderResourceVisitor);
+
+        virtual void apply(Node* node);
     };
 
 

@@ -132,6 +132,8 @@ namespace te
     void Director::initResource()
     {
         // init resource
+        RenderResourceVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::get());
+        visitor.apply(_active_scene->getSceneRoot());
     }
 
 }

@@ -8,6 +8,7 @@ namespace te
     class RenderContext;
     class RenderDevice;
     class RenderCamera;
+    class RenderResource;
 
     class RenderMeshObject : public RenderObject
     {
@@ -19,10 +20,14 @@ namespace te
 
         void render(RenderContext* context, RenderCamera* camera, RenderDevice* device);
 
+        inline void setNumIndices(uint32 numIndices) { _numIndices = numIndices; };
+        inline void setShaderObject(RenderResource* res) { _shader_object = res; };
+        inline void setVertexDeclaration(RenderResource* res) { _vertex_declaration = res; };
+
     private:
-        uint32  _shader_object_handle;
+        RenderResource*  _shader_object;
         uint32  _numIndices; // temporary to put it here
-        uint32  _vaoHandle;
+        RenderResource*  _vertex_declaration;
         // TODO: consider move this to a GeometryObject? Shader belongs to Material, Material
         // belongs to Mesh, Geometry also belongs to Mesh
     };

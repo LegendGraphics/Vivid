@@ -34,6 +34,7 @@ namespace te
         // init render resource here
         _renderObjectManager = new class RenderObjectManager;
         _renderObjectManager->register_objects();
+        _vertexDeclaration = _renderDevice->getVertexDeclarationDefinition();
 
         return true;
     }
@@ -47,13 +48,25 @@ namespace te
     void RenderInterface::renderWorld(RenderMsg* message)
     {
         // message should contain some state object camera, viewport
-        const RenderWorldMsg& msg = message->rwm;
+        RenderWorldMsg& msg = message->rwm;
         RenderWorld::RenderParams params;
         params._device = _renderDevice;
         params._pipelineRes = msg.pipeline;
         params._camera = msg.camera;
         params._renderQueue = RenderQueue(msg.rQueue, msg.rQueue + msg.numQueue);
         msg.world->render(params);
+
+        // For now
+        // delete world, pipelineRes, camera here
+        // and RenderObject in RenderQueue
+        delete msg.pipeline;
+        delete msg.camera;
+        delete msg.world;
+        for (uint32 i = 0; i < msg.numQueue; ++i)
+        {
+            delete msg.rQueue[i].node;
+        }
+        delete[] msg.rQueue;
     }
 
     void RenderInterface::generateResource(RenderMsg* message)
@@ -63,5 +76,13 @@ namespace te
         params._device = _renderDevice;
         params._resourceQueue = ResourceStreamQueue(msg.rQueue, msg.rQueue + msg.numQueue);
         msg.generator->allocResource(params);
+
+        // no need to delete stream and render resource insde each item
+        delete msg.generator;
+        delete[] msg.rQueue;
+    }
+    VertexDeclaration * RenderInterface::getVertexDeclarationDefinition()
+    {
+        return _vertexDeclaration;
     }
 }

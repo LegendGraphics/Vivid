@@ -3,6 +3,9 @@
 
 #include "base\Globals.h"
 
+//#include "RenderWorld.h"
+//#include "Resource/RenderResourceGenerator.h"
+
 namespace te
 {
     //--------------- Typical Use Case of RenderInterface ---------------//
@@ -48,12 +51,23 @@ namespace te
         void renderWorld(RenderMsg* message);
         void generateResource(RenderMsg* message);
 
+        class VertexDeclaration* getVertexDeclarationDefinition();
+
+        // engine side should allocate RenderObject and RenderResource
+        // from RenderInterface, so that header files won't explode there.
+        // And Engine "new" Render things but Render delete them won't happen.
+        //template <class T>
+        //RenderObject* createRenderObject();
+        //template <class T>
+        //RenderResource* createRenderResource();
+
     protected:
         RenderInterface() = default; // not implemented
     private:
         static RenderInterface* _renderInterface;
         class GLRenderDevice* _renderDevice;
         class RenderObjectManager* _renderObjectManager;
+        class VertexDeclaration* _vertexDeclaration; // to get the predefined vertex declaration in this render
     };
 }
 

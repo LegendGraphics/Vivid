@@ -13,7 +13,7 @@ namespace te
     {
         RenderObject  *node;
         float      sortKey;
-        uint32  type;
+        //uint32  type; // use type in RenderObject
 
         RenderQueueItem() {}
         RenderQueueItem(float sortKey, RenderObject *node)

@@ -4,6 +4,8 @@ namespace te
 {
     void VertexDeclaration::init()
     {
+        // order of the vertex layout attribute
+        // corresponding to the location in shader!
         vertexLayoutMap[vertex_layout::Position] = {
             { "vertPos", 0, 3, 0 }
         };
@@ -26,6 +28,13 @@ namespace te
         vertexLayoutMap[vertex_layout::Partical] = {
             { "texCoords0", 0, 2, 0 },
             { "parIdx", 0, 1, 8 }
+        };
+
+        vertexLayoutMap[vertex_layout::PNTB] = {
+            { "vertPos", 0, 3, 0 },
+            { "normal", 0, 3, 12 },
+            { "tangent", 0, 3, 24 },
+            { "bitangent", 0, 3, 36 }
         };
     }
     const VertexLayout & VertexDeclaration::getLayout(vertex_layout::Type vlType)

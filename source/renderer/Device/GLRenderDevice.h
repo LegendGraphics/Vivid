@@ -90,6 +90,8 @@ namespace te
         void dispatch(RenderContext* context_) override;
         void dispatch(RenderResourceContext* context_) override;
 
+        void clear(float clearColor[4], bool clearDepth);
+
         // Buffers
         uint32 createVertexBuffer(uint32 size, uint32 stride, const void* data);
         uint32 createIndexBuffer(uint32 size, const void* data);
@@ -100,7 +102,6 @@ namespace te
             const uint32* offsets,
             const uint32* vertexHandles,
             uint32 indexHandle);
-        void createVertexDeclaration();
         void destroyBuffer(uint32 bufObj);
         void updateBufferData(uint32 bufObj, uint32 offset, uint32 size, void* data);
 
@@ -136,7 +137,6 @@ namespace te
         RDObjects<GLTexture> _textures;
         RDObjects<GLRenderTarget> _renderTargets;
         RDObjects<uint32> _vaos; // vertex array objects
-        VertexDeclaration _vertexDeclaration;
 
         uint32 _prevShaderHandle, _curShaderHandle;
         ShaderObject _defaultShader;

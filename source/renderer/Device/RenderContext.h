@@ -49,6 +49,17 @@ namespace te
             std::vector<ShaderVariable> variables;
         };
 
+        struct RenderTargetCmdStream
+        {
+            uint32 fboHandle;
+        };
+
+        struct ClearCmdStream
+        {
+            float clearColor[4];
+            bool  clearDepth;
+        };
+
         struct Command
         {
             uint64 sort_key;

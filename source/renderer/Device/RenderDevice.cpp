@@ -45,5 +45,10 @@ namespace te
     {
     }
 
+    VertexDeclaration * RenderDevice::getVertexDeclarationDefinition()
+    {
+        return &_vertex_declaration;
+    }
+
 
 }

@@ -1,8 +1,8 @@
 #include "RenderMeshObject.h"
 
+#include "renderer/device/RenderContext.h"
 #include "renderer/device/RenderDevice.h"
 #include "renderer/runtime/RenderCamera.h"
-#include "renderer/device/RenderContext.h"
 
 namespace te
 {
@@ -27,7 +27,7 @@ namespace te
 
         // set vertex buffer
         RenderContext::VertexCmdStream* vcs = new RenderContext::VertexCmdStream;
-        vcs->vaoHandle = _vaoHandle;
+        vcs->vaoHandle = _vertex_declaration->render_resource_handle;
         vcs->baseIndex = 0;
         vcs->baseVertex = 0;
         vcs->numIndices = _numIndices;
@@ -72,7 +72,7 @@ namespace te
         else
         {
             RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
-            scs->shaderHandle = _shader_object_handle;
+            scs->shaderHandle = _shader_object->render_resource_handle;
             // set data
             // set variable
             RenderContext::Command setShaderObject = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };

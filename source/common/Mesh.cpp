@@ -137,7 +137,15 @@ namespace te
     {
         _skinned = res->_skinned;
         _vertices = res->_vertices;
-        _triangles = res->_triangles;
+        _triangles = std::vector<uint32>(res->_triangles.begin(), res->_triangles.end());
+
+        // need consensus here
+        // vertex attribute array should obey it's vertex layout definition
+        // see renderer/resource/VertexLayout.cpp
+
+        _vertex_buffers.resize(1, RenderResource(RenderResource::VERTEX_STREAM));
+        _index_buffer.type = RenderResource::INDEX_STREAM;
+        _vertex_declaration.type = RenderResource::VERTEX_DECLARATION;
     }
 
 }

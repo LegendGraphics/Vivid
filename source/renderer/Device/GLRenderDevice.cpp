@@ -4,6 +4,7 @@
 #include "RenderContext.h"
 #include "renderer/Resource/RenderResourceContext.h"
 #include "renderer/runtime/RenderCamera.h"
+#include "renderer/Resource/VertexLayout.h"
 
 #include "math/Vector4.h"
 
@@ -42,6 +43,8 @@ namespace te
 
         bool bOK = true;
         bOK = bOK && createDefaultShader(getDefaultVSCode(), getDefaultFSCode(), _defaultShader);
+
+        _vertex_declaration.init();
 
         return bOK;
     }
@@ -115,6 +118,16 @@ namespace te
             {
                 draw();
             }
+            else if (RenderContext::CommandType::CLEAR == command.command_type)
+            {
+                RenderContext::ClearCmdStream* c_stream = static_cast<RenderContext::ClearCmdStream*>(command.head);
+                
+                delete c_stream;
+            }
+            else if (RenderContext::CommandType::SET_RENDER_TARGET == command.command_type)
+            {
+
+            }
         }
 
         context_->commands().clear();
@@ -127,8 +140,8 @@ namespace te
             if (RenderResourceContext::MessageType::ALLOC_INDEX_BUFFER == msg.type)
             {
                 // default type unsigned int
-                RenderResourceContext::IndexStream* i_stream
-                    = static_cast<RenderResourceContext::IndexStream*>(msg.head);
+                vertex_layout::IndexStream* i_stream
+                    = static_cast<vertex_layout::IndexStream*>(msg.head);
                 RenderResource* res = i_stream->res;
                 TE_ASSERT(RenderResource::INDEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 res->render_resource_handle = createIndexBuffer(i_stream->size, i_stream->raw_data);
@@ -137,8 +150,8 @@ namespace te
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER == msg.type)
             {
                 // default type float
-                RenderResourceContext::VertexStream* v_stream
-                    = static_cast<RenderResourceContext::VertexStream*>(msg.head);
+                vertex_layout::VertexStream* v_stream
+                    = static_cast<vertex_layout::VertexStream*>(msg.head);
                 RenderResource* res = v_stream->res;
                 TE_ASSERT(RenderResource::VERTEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 res->render_resource_handle = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
@@ -146,13 +159,13 @@ namespace te
             }
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION == msg.type)
             {
-                RenderResourceContext::VertexDeclarationStream* vd_stream
-                    = static_cast<RenderResourceContext::VertexDeclarationStream*>(msg.head);
+                vertex_layout::VertexDeclarationStream* vd_stream
+                    = static_cast<vertex_layout::VertexDeclarationStream*>(msg.head);
                 RenderResource* res = vd_stream->res;
                 TE_ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
 
                 // compute stride for each slot
-                const VertexLayout& vl = _vertexDeclaration.getLayout(vd_stream->layout_type);
+                const VertexLayout& vl = _vertex_declaration.getLayout(vd_stream->layout_type);
                 std::unordered_map<uint32, uint32> slotStrideMap;
                 std::unordered_map<uint32, uint32>::iterator iter;
                 for (const auto& i : vl)
@@ -174,7 +187,7 @@ namespace te
                 for (uint32 i = 0; i < vl.size(); ++i)
                 {
                     auto& attri = vl[i];
-                    locations.push_back(attri.vbSlot);
+                    locations.push_back(i);
                     sizes.push_back(attri.size);
                     offsets.push_back(attri.offset);
 
@@ -199,6 +212,11 @@ namespace te
         }
 
         context_->messages().clear();
+    }
+
+    void GLRenderDevice::clear(float clearColor[4], bool clearDepth)
+    {
+
     }
 
     uint32 GLRenderDevice::createVertexBuffer(uint32 size, uint32 stride, const void * data)
@@ -367,10 +385,10 @@ namespace te
 
     bool GLRenderDevice::configShaderVertexLayout(uint32 programObj, vertex_layout::Type vlType)
     {
-        const VertexLayout& vl = _vertexDeclaration.getLayout(vlType);
-        for (const VertexLayoutAttrib& attr : vl)
+        const VertexLayout& vl = _vertex_declaration.getLayout(vlType);
+        for (uint32 i = 0; i < vl.size(); ++i)
         {
-            glBindAttribLocation(programObj, attr.vbSlot, attr.semanticName.c_str());
+            glBindAttribLocation(programObj, i, vl[i].semanticName.c_str());
         }
         return true;
     }
