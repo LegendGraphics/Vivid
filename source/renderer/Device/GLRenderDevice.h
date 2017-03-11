@@ -90,7 +90,11 @@ namespace te
         void dispatch(RenderContext* context_) override;
         void dispatch(RenderResourceContext* context_) override;
 
-        void clear(float clearColor[4], bool clearDepth);
+        void clear(
+            bool clearColor,
+            float colorRGBA[4],
+            bool clearDepth,
+            float depth);
 
         // Buffers
         uint32 createVertexBuffer(uint32 size, uint32 stride, const void* data);
@@ -140,6 +144,7 @@ namespace te
 
         uint32 _prevShaderHandle, _curShaderHandle;
         ShaderObject _defaultShader;
+        GLRenderTarget _defaultRenderTarget;
 
         uint32                _curBaseIndex, _curBaseVertex, _curNumIndices;
         uint32                _curVAO, _newVAO;

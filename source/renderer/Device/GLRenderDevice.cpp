@@ -172,9 +172,9 @@ namespace te
                 {
                     iter = slotStrideMap.find(i.vbSlot);
                     if (iter != slotStrideMap.end())
-                        iter->second += i.size * 4;
+                        iter->second += i.size;
                     else
-                        slotStrideMap[i.vbSlot] = i.size * 4;
+                        slotStrideMap[i.vbSlot] = i.size;
                 }
                 TE_ASSERT(vl.size() == vd_stream->vertex_buffers.size(),
                     "Requested Num of Vertex Attribute Slots should have same Num of Vertex Buffers!");
@@ -199,7 +199,7 @@ namespace te
                     TE_ASSERT(stride_in_buffer == stride_in_slot, "Stride in Buffer should match Stride in Slot!");
                 }
                 uint32 indexHandle = vd_stream->index_buffer->render_resource_handle;
-                createVertexArray(
+                res->render_resource_handle = createVertexArray(
                     locations.size(),
                     &locations[0],
                     &sizes[0],
@@ -214,9 +214,25 @@ namespace te
         context_->messages().clear();
     }
 
-    void GLRenderDevice::clear(float clearColor[4], bool clearDepth)
+    void GLRenderDevice::clear(bool clearColor, float colorRGBA[4], bool clearDepth, float depth)
     {
+        uint32 oglClearMask = 0;
+        if (clearColor)
+        {
+            oglClearMask |= GL_DEPTH_BUFFER_BIT;
+            glClearColor(colorRGBA[0], colorRGBA[1], colorRGBA[2], colorRGBA[3]);
+        }
+        if (clearDepth)
+        {
+            oglClearMask |= GL_COLOR_BUFFER_BIT;
+            glClearDepth(depth);
+        }
 
+        if (oglClearMask)
+        {
+            commitStates();
+            glClear(oglClearMask);
+        }
     }
 
     uint32 GLRenderDevice::createVertexBuffer(uint32 size, uint32 stride, const void * data)
@@ -483,7 +499,7 @@ namespace te
 
         uint32 buffers[] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1,
             GL_COLOR_ATTACHMENT2, GL_COLOR_ATTACHMENT3 };
-        glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, renderTarget.glFbo);
+        glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.glFbo);
         glDrawBuffers(numColBufs, buffers);
 
         if (depth)
@@ -529,6 +545,7 @@ namespace te
         }
 
         glGenTextures(1, &tex.glObj);
+        glActiveTexture(GL_TEXTURE0 + 15); // assume the 16th texture unit isn't usually used
         glBindTexture(tex.glType, tex.glObj);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
