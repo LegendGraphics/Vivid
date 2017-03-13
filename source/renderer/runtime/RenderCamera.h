@@ -27,14 +27,16 @@ namespace te
         RenderCamera(CameraData::ProjectionType type, float near_range, float far_range,
             const Mat4x4& projection, const Mat4x4& view);
 
-        float& getViewMat();
-        float& getProjectionMat();
-        float& getViewProjctionMat();
+        float* getViewMat();
+        float* getProjectionMat();
+        float* getViewProjctionMat();
+        int* getViewPort();
 
     private:
         Mat4x4 _view;
         Mat4x4 _projection;
         Mat4x4 _view_projection;
+        int    _viewPort[4];
         CameraData _cameraData;
     };
 }

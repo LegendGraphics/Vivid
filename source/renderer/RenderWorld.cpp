@@ -53,6 +53,17 @@ namespace te
                     renderKernel(params, renderContext);
                     break;
                 case PipelineCommand::List::ClearTarget:
+                    RenderContext::ClearCmdStream* ccs = new RenderContext::ClearCmdStream;
+                    ccs->clearColor = pc.params[1].getBool() || pc.params[2].getBool()
+                        || pc.params[3].getBool() || pc.params[4].getBool();
+                    ccs->clearDepth = pc.params[0].getBool();
+                    ccs->colorRGBA[0] = pc.params[5].getFloat();
+                    ccs->colorRGBA[1] = pc.params[6].getFloat();
+                    ccs->colorRGBA[2] = pc.params[7].getFloat();
+                    ccs->colorRGBA[3] = pc.params[8].getFloat();
+                    ccs->depth = 1.f;
+                    RenderContext::Command clearTarget = { 0, (void*)ccs, RenderContext::CommandType::CLEAR };
+                    renderContext->commands().push_back(clearTarget);
                     break;
                 }
             }

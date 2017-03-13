@@ -139,6 +139,10 @@ namespace te
     RenderCamera* wrapRenderCamera()
     {
         RenderCamera* rc = new RenderCamera;
+        rc->getViewPort()[0] = 0;
+        rc->getViewPort()[1] = 0;
+        rc->getViewPort()[2] = 800;
+        rc->getViewPort()[3] = 600;
         return rc;
     }
 

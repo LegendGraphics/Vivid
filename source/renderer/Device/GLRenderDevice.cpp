@@ -85,7 +85,15 @@ namespace te
             }
             else if (RenderContext::CommandType::BIND_SHADER_OBJECT == command.command_type)
             {
+                // set camera
                 RenderCamera* curCamera = context_->_camera;
+                // set view port to
+                _vpX = curCamera->getViewPort()[0];
+                _vpY = curCamera->getViewPort()[1];
+                _vpWidth = curCamera->getViewPort()[2];
+                _vpHeight = curCamera->getViewPort()[3];
+
+                // set shader
                 RenderContext::ShaderCmdStream* c_stream = static_cast<RenderContext::ShaderCmdStream*>(command.head);
                 if (c_stream)
                 {
@@ -102,11 +110,11 @@ namespace te
 
                     // set view params
                     if (_defaultShader.uni_view_mat >= 0)
-                        setShaderConst(_defaultShader.uni_view_mat, shader_data::MATRIX4X4, &curCamera->getViewMat());
+                        setShaderConst(_defaultShader.uni_view_mat, shader_data::MATRIX4X4, curCamera->getViewMat());
                     if (_defaultShader.uni_proj_mat >= 0)
-                        setShaderConst(_defaultShader.uni_proj_mat, shader_data::MATRIX4X4, &curCamera->getProjectionMat());
+                        setShaderConst(_defaultShader.uni_proj_mat, shader_data::MATRIX4X4, curCamera->getProjectionMat());
                     if (_defaultShader.uni_view_proj_mat >= 0)
-                        setShaderConst(_defaultShader.uni_view_proj_mat, shader_data::MATRIX4X4, &curCamera->getViewProjctionMat());
+                        setShaderConst(_defaultShader.uni_view_proj_mat, shader_data::MATRIX4X4, curCamera->getViewProjctionMat());
 
                     // set default color
                     float color[4] = { 0.75f, 0.5, 0.25f, 1 };
@@ -121,7 +129,7 @@ namespace te
             else if (RenderContext::CommandType::CLEAR == command.command_type)
             {
                 RenderContext::ClearCmdStream* c_stream = static_cast<RenderContext::ClearCmdStream*>(command.head);
-                
+                clear(c_stream->clearColor, c_stream->colorRGBA, c_stream->clearDepth, c_stream->depth);
                 delete c_stream;
             }
             else if (RenderContext::CommandType::SET_RENDER_TARGET == command.command_type)
@@ -600,12 +608,14 @@ namespace te
 
     bool GLRenderDevice::commitStates()
     {
+        glViewport(_vpX, _vpY, _vpWidth, _vpHeight);
+
         _curVAO = _newVAO;
         _prevShaderHandle = _curShaderHandle;
 
         glBindVertexArray(_vaos.getRef(_curVAO));
 
-        return false;
+        return true;
     }
 
     bool GLRenderDevice::createDefaultShader(const char* vertexShader, const char* fragmentShader, ShaderObject& so)

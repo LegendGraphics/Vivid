@@ -148,6 +148,7 @@ namespace te
 
         uint32                _curBaseIndex, _curBaseVertex, _curNumIndices;
         uint32                _curVAO, _newVAO;
+        int                _vpX, _vpY, _vpWidth, _vpHeight;
         //uint32                _indexFormat;
 
 

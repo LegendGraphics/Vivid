@@ -56,8 +56,10 @@ namespace te
 
         struct ClearCmdStream
         {
-            float clearColor[4];
-            bool  clearDepth;
+            float colorRGBA[4];
+            float depth;
+            bool clearColor;
+            bool clearDepth;
         };
 
         struct Command
