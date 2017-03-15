@@ -89,16 +89,21 @@ namespace te
         *this = Quaternion(Vector3(x, y, z)).convertToMatrix();
     }
 
+    // remember we use right-hand system, so the z-axis of camera coordinate is outside of the screen,
+    // that is to say znear and zfar will be negative...but many API has explicitly changed it to positive
+    // and add a minus sign in the matrix construction. After that, it seems to be a left-hand system shown
+    // by the interface(e.g. Wikipedia)
+    // https://en.wikipedia.org/wiki/Orthographic_projection
     void Mat4x4::makeOrtho(float left, float right, float bottom, float top, float znear, float zfar)
     {
         float tx = - (right + left) / (right - left);
         float ty = - (top + bottom) / (top - bottom);
         float tz = - (zfar + znear) / (zfar - znear);
 
-        SET_ROW(0, 2.0/(right-left),               0.0,                0.0, 0.0)
-        SET_ROW(1,              0.0,  2.0/(top-bottom),                0.0, 0.0)
-        SET_ROW(2,              0.0,               0.0,  -2.0/(zfar-znear), 0.0)
-        SET_ROW(3,               tx,                ty,                 tz, 1.0)
+        SET_ROW(0, 2.0/(right-left),               0.0,                0.0,  tx)
+        SET_ROW(1,              0.0,  2.0/(top-bottom),                0.0,  ty)
+        SET_ROW(2,              0.0,               0.0,   2.0/(zfar-znear),  tz)
+        SET_ROW(3,              0.0,               0.0,                0.0, 1.0)
     }
 
     void Mat4x4::makePerspective(float fov, float aspect, float znear, float zfar)

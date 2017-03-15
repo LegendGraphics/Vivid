@@ -7,6 +7,7 @@
 // need to debug with model data
 namespace te
 {
+    // confirmed
     // https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix
     Matrix Quaternion::convertToMatrix() const 
     {
@@ -15,14 +16,15 @@ namespace te
         float wx = v.x * w,   wy = v.y * w,   wz = v.z * w;
 
         Matrix m;
-        m.set(1.f - 2.f * (yy + zz),       2.f * (xy + wz),       2.f * (xz - wy),     0,
-                    2.f * (xy - wz), 1.f - 2.f * (xx + zz),       2.f * (yz + wx),     0,
-                    2.f * (xz + wy),       2.f * (yz - wx), 1.f - 2.f * (xx + yy),     0,
+        m.set(1.f - 2.f * (yy + zz),       2.f * (xy - wz),       2.f * (xz + wy),     0,
+                    2.f * (xy + wz), 1.f - 2.f * (xx + zz),       2.f * (yz - wx),     0,
+                    2.f * (xz - wy),       2.f * (yz + wx), 1.f - 2.f * (xx + yy),     0,
                                 0.0,                   0.0,                   0.0,     1);
 
         return m;
     }
 
+    // unconfirmed
     // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Quaternion_to_Euler_Angles_Conversion
     Vector3 Quaternion::convertToEulerAngles() const
     {
@@ -43,6 +45,7 @@ namespace te
         return Vector3(roll, pitch, yaw);
     }
 
+    // unconfirmed
     // https://en.wikipedia.org/wiki/Rotation_matrix#Quaternion
     // http://www.euclideanspace.com/maths/geometry/rotations/conversions/matrixToQuaternion/
     Quaternion::Quaternion(const Matrix& m) 
@@ -81,6 +84,7 @@ namespace te
         }
     }
 
+    // confirmed
     // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Euler_Angles_to_Quaternion_Conversion
     // using degree not radians
     Quaternion::Quaternion(const Vector3& euler_angles)

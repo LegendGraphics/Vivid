@@ -6,6 +6,7 @@
 
 namespace te
 {
+    // In TinyEngine we use right-hand system and ZYX order for Euler Angles
     class Quaternion
     {
     public:
