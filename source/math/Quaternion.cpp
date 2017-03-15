@@ -1,5 +1,6 @@
 
 #include "math/Quaternion.h"
+#include "math/MathUtils.h"
 
 // the matrix forms may be not consistent, as for the difference between left-hand and right-hand rotation
 // the order of euler angles also matters
@@ -81,12 +82,14 @@ namespace te
     }
 
     // https://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles#Euler_Angles_to_Quaternion_Conversion
+    // using degree not radians
     Quaternion::Quaternion(const Vector3& euler_angles)
     {
-        float roll = euler_angles.x;
-        float pitch = euler_angles.y;
-        float yaw = euler_angles.z;
+        float roll = degree_to_radians(euler_angles.x);
+        float pitch = degree_to_radians(euler_angles.y);
+        float yaw = degree_to_radians(euler_angles.z);
 
+        // std using radians
         double t0 = std::cos(yaw * 0.5f);
         double t1 = std::sin(yaw * 0.5f);
         double t2 = std::cos(roll * 0.5f);

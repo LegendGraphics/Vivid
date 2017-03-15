@@ -7,6 +7,7 @@
 
 #include "math/Vector3.h"
 #include "math/Matrix.h"
+#include "math/Quaternion.h"
 
 #define cLog *(te::ConsoleLogger::getInstance())
 #define fLog *(te::FileLogger::getInstance())
@@ -23,6 +24,7 @@ namespace te
         virtual FileLogger& operator<<(const std::string& msg);
         virtual FileLogger& operator<<(const Vector3& v);
         virtual FileLogger& operator<<(const Matrix& m);
+        virtual FileLogger& operator<<(const Quaternion& q);
     private:
         FileLogger() = default;
     private:
@@ -39,6 +41,7 @@ namespace te
         virtual ConsoleLogger& operator<<(const std::string& msg);
         virtual ConsoleLogger& operator<<(const Vector3& v);
         virtual ConsoleLogger& operator<<(const Matrix& m);
+        virtual ConsoleLogger& operator<<(const Quaternion& q);
     private:
         ConsoleLogger();
     private:
