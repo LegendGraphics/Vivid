@@ -132,7 +132,18 @@ namespace te
     protected:
         void commitGeneralUniforms();
         void draw();
-        bool GLRenderDevice::commitStates();
+        bool commitStates(uint32 filter = 0xFFFFFFFF);
+
+        // TODO: temporalily put it here
+        enum RDIPendingMask
+        {
+          PM_VIEWPORT = 0x00000001,
+          PM_INDEXBUF = 0x00000002,
+          PM_VERTLAYOUT = 0x00000004,
+          PM_TEXTURES = 0x00000008,
+          PM_SCISSOR = 0x00000010,
+          PM_RENDERSTATES = 0x00000020
+        };
 
     protected:
         std::string   _shaderLog;
@@ -149,8 +160,8 @@ namespace te
         uint32                _curBaseIndex, _curBaseVertex, _curNumIndices;
         uint32                _curVAO, _newVAO;
         int                _vpX, _vpY, _vpWidth, _vpHeight;
-        //uint32                _indexFormat;
-
+        
+        uint32                _pending_mask;
 
     };
 }

@@ -250,9 +250,9 @@ namespace te
                 vds->vertex_buffers.push_back(&m->getVertexBuffers()[attr.vbSlot]);
             }
             msg.rrm.rQueue[2].stream = vds;
+            _renderer->generateResource(&msg);
         }
 
-        _renderer->generateResource(&msg);
     }
 
 }

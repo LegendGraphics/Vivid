@@ -45,6 +45,7 @@ namespace te
         bOK = bOK && createDefaultShader(getDefaultVSCode(), getDefaultFSCode(), _defaultShader);
 
         _vertex_declaration.init();
+        _pending_mask = 0;
 
         return bOK;
     }
@@ -81,6 +82,7 @@ namespace te
                 _curBaseIndex = c_stream->baseIndex;
                 _curBaseVertex = c_stream->baseVertex;
                 _curNumIndices = c_stream->numIndices;
+                _pending_mask |= PM_VERTLAYOUT;
                 delete c_stream;
             }
             else if (RenderContext::CommandType::BIND_SHADER_OBJECT == command.command_type)
@@ -92,6 +94,7 @@ namespace te
                 _vpY = curCamera->getViewPort()[1];
                 _vpWidth = curCamera->getViewPort()[2];
                 _vpHeight = curCamera->getViewPort()[3];
+                _pending_mask |= PM_VIEWPORT;
 
                 // set shader
                 RenderContext::ShaderCmdStream* c_stream = static_cast<RenderContext::ShaderCmdStream*>(command.head);
@@ -238,7 +241,7 @@ namespace te
 
         if (oglClearMask)
         {
-            commitStates();
+            commitStates(PM_VIEWPORT);
             glClear(oglClearMask);
         }
     }
@@ -606,16 +609,27 @@ namespace te
         }
     }
 
-    bool GLRenderDevice::commitStates()
+    bool GLRenderDevice::commitStates(uint32 filter)
     {
-        glViewport(_vpX, _vpY, _vpWidth, _vpHeight);
+      if (_pending_mask & filter)
+      {
+        uint32 mask = _pending_mask & filter;
 
-        _curVAO = _newVAO;
-        _prevShaderHandle = _curShaderHandle;
+        if (mask & PM_VIEWPORT)
+        {
+          glViewport(_vpX, _vpY, _vpWidth, _vpHeight);
+          _pending_mask &= ~PM_VIEWPORT;
+        }
 
-        glBindVertexArray(_vaos.getRef(_curVAO));
+        if (mask & PM_VERTLAYOUT)
+        {
+          _curVAO = _newVAO;
+          _prevShaderHandle = _curShaderHandle;
 
-        return true;
+          glBindVertexArray(_vaos.getRef(_curVAO));
+        }
+      }
+      return true;
     }
 
     bool GLRenderDevice::createDefaultShader(const char* vertexShader, const char* fragmentShader, ShaderObject& so)
