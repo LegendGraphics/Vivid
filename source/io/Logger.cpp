@@ -44,6 +44,11 @@ namespace te
         _fout << format("Vector --- x=%f, y=%f, z=%f\n", v.x, v.y, v.z);
         return *this;
     }
+    FileLogger& FileLogger::operator<<(const Vector4& v)
+    {
+        _fout << format("Vector --- x=%f, y=%f, z=%f, w=%f\n", v.x, v.y, v.z, v.w);
+        return *this;
+    }
     FileLogger& FileLogger::operator<<(const Matrix& m)
     {
         _fout << format("Matrix ---\n"
@@ -90,6 +95,11 @@ namespace te
     ConsoleLogger& ConsoleLogger::operator<<(const Vector3& v)
     {
         _cout << format("Vector --- x=%f, y=%f, z=%f\n", v.x, v.y, v.z);
+        return *this;
+    }
+    ConsoleLogger& ConsoleLogger::operator<<(const Vector4& v)
+    {
+        _cout << format("Vector --- x=%f, y=%f, z=%f, w=%f\n", v.x, v.y, v.z, v.w);
         return *this;
     }
     ConsoleLogger& ConsoleLogger::operator<<(const Matrix& m)

@@ -1,6 +1,7 @@
 
 #include "math/Matrix.h"
 #include "math/Quaternion.h"
+#include "math/MathUtils.h"
 
 namespace te
 {
@@ -106,29 +107,41 @@ namespace te
         SET_ROW(3,              0.0,               0.0,                0.0, 1.0)
     }
 
+    // fov(degree) in y-axis, aspect = width(x-axis)/height(y-axis), z-axis points outside of screen(znear and zfar < 0)
+    // see http://ogldev.atspace.co.uk/www/tutorial12/tutorial12.html for more info
+    // the matrix structure is different from the article since our z is negative
     void Mat4x4::makePerspective(float fov, float aspect, float znear, float zfar)
     {
-        float tan_fov = tan(fov*0.5);
-        float right  =  tan_fov * aspect * znear;
-        float left   = -right;
-        float top    =  tan_fov * znear;
-        float bottom =  -top;
-        makeFrustum(left, right, bottom, top, znear, zfar);
+        float tan_fov = std::tan(degree_to_radians(fov*0.5));
+        float zrange = znear - zfar;
+
+        SET_ROW(0, -1.0 / (aspect * tan_fov),            0.0,                       0.0,                         0.0)
+        SET_ROW(1,                       0.0, -1.0 / tan_fov,                       0.0,                         0.0)
+        SET_ROW(2,                       0.0,            0.0, (- zfar - znear) / zrange, 2.0 * znear * zfar / zrange)
+        SET_ROW(3,                       0.0,            0.0,                       1.0,                         0.0)
     }
 
-    void Mat4x4::makeFrustum(float left, float right, float bottom, float top, float znear, float zfar)
+    // right-hand of camera coordinate, x-y plane is the screen
+    //                  ^ y                     
+    //                  |                       
+    //                  |                       
+    //                  o----->  x              
+    //                 /                        
+    //                /                         
+    //               z                          
+    void Mat4x4::makeLookAt(const Vector3& eye, const Vector3& center, const Vector3& up)
     {
-        float A = (right + left) / (right - left);
-        float B = (top + bottom) / (top - bottom);
-        float C = -(zfar + znear) / (zfar - znear);
-        float D = -2.0 * zfar * znear / (zfar - znear);
-        float E = 2.0 * znear / (right - left);
-        float F = 2.0 * znear / (top - bottom);
+        Vector3 z_axis = eye - center;
+        z_axis.normalize();
+        Vector3 x_axis = Vector3::cross(up, z_axis);
+        x_axis.normalize();
+        Vector3 y_axis = Vector3::cross(z_axis, x_axis);
+        y_axis.normalize();
 
-        SET_ROW(0,   E, 0.0,  A, 0.0)
-        SET_ROW(1, 0.0,   F,  B, 0.0)
-        SET_ROW(2, 0.0, 0.0,  C,   D)
-        SET_ROW(3, 0.0, 0.0, -1,   0)
+        SET_ROW(0, x_axis.x, x_axis.y, x_axis.z, -Vector3::dot(x_axis, eye))
+        SET_ROW(1, y_axis.x, y_axis.y, y_axis.z, -Vector3::dot(y_axis, eye))
+        SET_ROW(2, z_axis.x, z_axis.y, z_axis.z, -Vector3::dot(z_axis, eye))
+        SET_ROW(3,      0.0,      0.0,      0.0,                          1)
     }
 
     float Mat4x4::computeDeterminant() const
@@ -232,6 +245,14 @@ namespace te
         mat.makePerspective(fov, aspect, znear, zfar);
         return mat;
     }
+
+    Mat4x4 Mat4x4::lookAt(const Vector3& eye, const Vector3& center, const Vector3& up)
+    {
+        Mat4x4 mat;
+        mat.makeLookAt(eye, center, up);
+        return mat;
+    }
+
 }
 
 

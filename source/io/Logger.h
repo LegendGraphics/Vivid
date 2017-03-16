@@ -23,6 +23,7 @@ namespace te
     public:
         virtual FileLogger& operator<<(const std::string& msg);
         virtual FileLogger& operator<<(const Vector3& v);
+        virtual FileLogger& operator<<(const Vector4& v);
         virtual FileLogger& operator<<(const Matrix& m);
         virtual FileLogger& operator<<(const Quaternion& q);
     private:
@@ -40,6 +41,7 @@ namespace te
     public:
         virtual ConsoleLogger& operator<<(const std::string& msg);
         virtual ConsoleLogger& operator<<(const Vector3& v);
+        virtual ConsoleLogger& operator<<(const Vector4& v);
         virtual ConsoleLogger& operator<<(const Matrix& m);
         virtual ConsoleLogger& operator<<(const Quaternion& q);
     private:

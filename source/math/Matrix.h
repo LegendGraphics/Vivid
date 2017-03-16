@@ -60,7 +60,7 @@ namespace te
         void makeRotate(float x, float y, float z);
         void makeOrtho(float left, float right, float bottom, float top, float znear, float zfar);
         void makePerspective(float fov, float aspect, float znear, float zfar);
-        void makeFrustum(float left, float right, float bottom, float top, float znear, float zfar);
+        void makeLookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
 
     private:
         float computeDeterminant() const;
@@ -78,7 +78,8 @@ namespace te
         static Mat4x4 rotate(float x, float y, float z);
         static Mat4x4 ortho(float left, float right, float bottom, float top, float znear, float zfar);
         static Mat4x4 perspective(float fov, float aspect, float znear, float zfar);
-        
+        static Mat4x4 lookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
+
     };
 
     inline const Vector4 operator*(const Mat4x4& m, const Vector4& v)
