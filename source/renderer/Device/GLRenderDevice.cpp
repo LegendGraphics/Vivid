@@ -468,7 +468,7 @@ namespace te
             glUniform4fv(loc, count, (float*)values);
             break;
         case shader_data::MATRIX4X4:
-            glUniformMatrix4fv(loc, count, false, (float*)values);
+            glUniformMatrix4fv(loc, count, true, (float*)values);
             break;
         }
     }

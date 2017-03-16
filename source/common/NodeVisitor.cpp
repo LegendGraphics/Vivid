@@ -16,7 +16,7 @@
 #include "common/MeshFilter.h"
 #include "common/Mesh.h"
 
-
+#include "io/Logger.h"
 namespace te
 {
     NodeVisitor::NodeVisitor()
@@ -138,7 +138,13 @@ namespace te
 
     RenderCamera* wrapRenderCamera()
     {
-        RenderCamera* rc = new RenderCamera;
+        Transform view = Transform::lookAt(Vector3(100, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 1));
+        Transform proj = Transform::ortho(-100, 100, -100, 100, -100, -1000);
+        //cLog << view.rawMatrix() * Vector4(-50, -50, -50, 1);
+        //cLog << proj.rawMatrix();
+        cLog << proj.rawMatrix() * (view.rawMatrix() * Vector4(-50, -50, -50, 1));
+        cLog << proj.rawMatrix() * view.rawMatrix() * Vector4(-50, -50, -50, 1);
+        RenderCamera* rc = new RenderCamera(CameraData::ORTHOGRAPHIC, -10, -1000, proj.rawMatrix(), view.rawMatrix());
         rc->getViewPort()[0] = 0;
         rc->getViewPort()[1] = 0;
         rc->getViewPort()[2] = 800;

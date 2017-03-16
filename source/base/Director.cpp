@@ -40,7 +40,7 @@ namespace te
     void Director::calculateDeltaTime()
     {
         _delta_time = _timer.getElapsedTime();
-        std::cout << _delta_time << std::endl;
+        //std::cout << _delta_time << std::endl;
         _delta_time = std::max(0.0f, _delta_time);
 
         _timer.reset();
@@ -52,7 +52,7 @@ namespace te
         {
             calculateDeltaTime();
             //TE_LOG("fps:%f", 1.0 / _delta_time);
-            std::cout << "fps:" << 1.0 / _delta_time << std::endl;
+            //std::cout << "fps:" << 1.0 / _delta_time << std::endl;
             spacingUpdate();
             cullingUpdate();
             renderingUpdate();

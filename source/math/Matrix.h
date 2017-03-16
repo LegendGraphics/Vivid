@@ -94,6 +94,7 @@ namespace te
     inline const Mat4x4 operator*(const Mat4x4& m1, const Mat4x4& m2)
     {
         Mat4x4 mat;
+        mat.makeZero();
         for (int i = 0; i < 4; ++ i)
             for (int j = 0; j < 4; ++ j)
                 for (int k = 0; k < 4; ++ k)
