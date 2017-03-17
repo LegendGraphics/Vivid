@@ -26,8 +26,7 @@ namespace te
         "in vec3 g_normal;\n"
         "out vec4 fragColor;\n"
         "void main() {\n"
-        "    //fragColor = clamp(max(dot(normalize(g_normal),normalize(vec3(1,1,1))),0.0), 0, 1) * color;\n"
-        "    fragColor = vec4((normalize(g_normal) + 1) / 2.0, 1);\n"
+        "    fragColor = clamp(max(dot(normalize(g_normal),normalize(vec3(0.3,0.5,1))),0.0), 0, 1) * color;\n"
         "}\n";
 
     GLRenderDevice::GLRenderDevice()
@@ -131,7 +130,7 @@ namespace te
                         setShaderConst(_defaultShader.uni_view_proj_mat, shader_data::MATRIX4X4, curCamera->getViewProjctionMat());
 
                     // set default color
-                    float color[4] = { 1.0f, 1.0, 1.0f, 1 };
+                    float color[4] = { 0.75f, 0.5, 0.25f, 1 };
                     setShaderConst(_defaultShader.custom_uniform_handles["color"], shader_data::VECTOR4, &color);
                 }
             }
@@ -307,7 +306,7 @@ namespace te
                 GL_FLOAT,
                 GL_FALSE,
                 4 * vBuf.stride,
-                (void*)(4 * offsets[i])); // need to fix here, last two parameter should be set properly
+                (void*)(offsets[i])); // offset in bytes which has been calculated in VertexLayout.cpp, no need to * 4
             glEnableVertexArrayAttrib(vao, locations[i]);
         }
 
