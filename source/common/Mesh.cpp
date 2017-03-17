@@ -139,6 +139,27 @@ namespace te
         _vertices = res->_vertices;
         _triangles = std::vector<uint32>(res->_triangles.begin(), res->_triangles.end());
 
+        {
+            for (size_t i = 0; i < _vertices.size(); ++i)
+            {
+                _testVertices.push_back(_vertices[i].position.x);
+                _testVertices.push_back(_vertices[i].position.y);
+                _testVertices.push_back(_vertices[i].position.z);
+
+                _testVertices.push_back(_vertices[i].normal.x);
+                _testVertices.push_back(_vertices[i].normal.y);
+                _testVertices.push_back(_vertices[i].normal.z);
+
+                _testVertices.push_back(_vertices[i].tangent.x);
+                _testVertices.push_back(_vertices[i].tangent.y);
+                _testVertices.push_back(_vertices[i].tangent.z);
+
+                _testVertices.push_back(_vertices[i].bitangent.x);
+                _testVertices.push_back(_vertices[i].bitangent.y);
+                _testVertices.push_back(_vertices[i].bitangent.z);
+            }
+        }
+
         // need consensus here
         // vertex attribute array should obey it's vertex layout definition
         // see renderer/resource/VertexLayout.cpp

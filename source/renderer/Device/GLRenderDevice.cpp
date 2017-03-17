@@ -14,15 +14,20 @@ namespace te
         "uniform mat4 viewProjMat;\n"
         "uniform mat4 worldMat;\n"
         "attribute vec3 vertPos;\n"
+        "attribute vec3 normal;\n"
+        "out vec3 g_normal;\n"
         "void main() {\n"
         "	gl_Position = viewProjMat * vec4( vertPos, 1.0 );\n"
+        "   g_normal = normal;\n"
         "}\n";
 
     static const char *defaultShaderFS =
         "uniform vec4 color;\n"
+        "in vec3 g_normal;\n"
         "out vec4 fragColor;\n"
         "void main() {\n"
-        "fragColor = color;\n"
+        "    //fragColor = clamp(max(dot(normalize(g_normal),normalize(vec3(1,1,1))),0.0), 0, 1) * color;\n"
+        "    fragColor = vec4((normalize(g_normal) + 1) / 2.0, 1);\n"
         "}\n";
 
     GLRenderDevice::GLRenderDevice()
@@ -81,12 +86,12 @@ namespace te
                 RenderContext::VertexCmdStream* c_stream = static_cast<RenderContext::VertexCmdStream*>(command.head);
                 // each shader has an array of a structure InputLayouts { bool valid; int8 attribIndices[16]; }
                 // it's related to how the vertex buffer is organized in OpenGL
-                //_newVAO = c_stream->vaoHandle;
-                _newVAO = _testVao;
+                _newVAO = c_stream->vaoHandle;
+                //_newVAO = _testVao;
                 _curBaseIndex = c_stream->baseIndex;
                 _curBaseVertex = c_stream->baseVertex;
-                //_curNumIndices = c_stream->numIndices;
-                _curNumIndices = 3;
+                _curNumIndices = c_stream->numIndices;
+                //_curNumIndices = 3;
                 _pending_mask |= PM_VERTLAYOUT;
                 delete c_stream;
             }
@@ -109,6 +114,7 @@ namespace te
                     // use setShaderConst()
                     // header of all uniform data is in ShaderCmdStream::data
                     // ShaderCmdStream::variables give information for how to read
+                    delete c_stream;
                 }
                 else
                 {
@@ -125,10 +131,9 @@ namespace te
                         setShaderConst(_defaultShader.uni_view_proj_mat, shader_data::MATRIX4X4, curCamera->getViewProjctionMat());
 
                     // set default color
-                    float color[4] = { 0.75f, 0.5, 0.25f, 1 };
+                    float color[4] = { 1.0f, 1.0, 1.0f, 1 };
                     setShaderConst(_defaultShader.custom_uniform_handles["color"], shader_data::VECTOR4, &color);
                 }
-                delete c_stream;
             }
             else if (RenderContext::CommandType::RENDER == command.command_type)
             {
@@ -612,7 +617,8 @@ namespace te
         if (commitStates())
         {
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-            glDisable(GL_CULL_FACE);
+            glEnable(GL_CULL_FACE);
+            glCullFace(GL_BACK);
             // base index is the start index of sub-component (3*numFace)
             // base vertex is the start vertex of sub-component (3*numVert)
             glDrawElementsBaseVertex(GL_TRIANGLES,
@@ -653,7 +659,7 @@ namespace te
             { 0.0,  0.0,  0.0 },
             { 0.0,  0.0,  0.0 },
             { 1.0,  0.0,  0.0 },
-            { 0.0,  1.0,  0.0 },
+            { 0.0,  0.5,  0.0 },
             { 0.0,  1.0,  0.0 },
             {-1.0,  0.0,  0.0 }
         };
@@ -669,7 +675,7 @@ namespace te
         uint32 nLoc = 1;
         uint32 locations[1] = { 0 };
         uint32 sizes[1] = { 3 };
-        uint32 offsets[1] = { 0 };
+        uint32 offsets[1] = { 3 };
         uint32 vertexHandles[1] = { _testVbo };
         uint32 indexHandle = _testIbo;
 
@@ -678,7 +684,7 @@ namespace te
 
     bool GLRenderDevice::createDefaultShader(const char* vertexShader, const char* fragmentShader, ShaderObject& so)
     {
-        uint32 shaderHandle = createShader(vertexShader, fragmentShader, vertex_layout::Position);
+        uint32 shaderHandle = createShader(vertexShader, fragmentShader, vertex_layout::PNTB);
         if (0 == shaderHandle) return false;
 
         so.shader_handle = shaderHandle;

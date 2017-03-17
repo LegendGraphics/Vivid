@@ -138,7 +138,7 @@ namespace te
 
     RenderCamera* wrapRenderCamera()
     {
-        Transform view = Transform::lookAt(Vector3(100, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 1));
+        Transform view = Transform::lookAt(Vector3(100, 100, 100), Vector3(0, 0, 0), Vector3(0, 0, 1));
         Transform proj = Transform::ortho(-100, 100, -100, 100, -100, -1000);
         //cLog << view.rawMatrix() * Vector4(-50, -50, -50, 1);
         //cLog << proj.rawMatrix();
@@ -237,7 +237,7 @@ namespace te
             msg.rrm.rQueue[1].resType = RenderResource::VERTEX_STREAM;
             vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
             vs->res = &m->getVertexBuffers()[0];
-            vs->size = 4 * 12 * m->getVertices().size(); // 12 float for each vertex(PNTB)
+            vs->size = 4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
             vs->stride = 12;
             vs->raw_data = &m->getVertices()[0]; // assume memory in std::vector<Vertex_PNTB> is tight packed
             msg.rrm.rQueue[1].stream = vs;

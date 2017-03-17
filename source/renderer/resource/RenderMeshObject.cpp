@@ -79,8 +79,8 @@ namespace te
             context->commands().push_back(setShaderObject);
         }
 
-        RenderContext::Command triggerRender = { 0, nullptr, RenderContext::CommandType::RENDER };
-        context->commands().push_back(triggerRender);
+        RenderContext::Command triggerDraw = { 0, nullptr, RenderContext::CommandType::RENDER };
+        context->commands().push_back(triggerDraw);
     }
 
 }

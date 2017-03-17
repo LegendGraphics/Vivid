@@ -90,7 +90,7 @@ namespace te
 
         bool isSkinned() const { return _skinned; }
         std::vector<uint32>& getTriangles() { return _triangles; }
-        std::vector<Vertex_PNTB>& getVertices() { return _vertices; }
+        std::vector<float>& getVertices() { return _testVertices; }
         RenderResource& getVertexDeclaration() { return _vertex_declaration; }
         RenderResource& getIndexBuffer() { return _index_buffer; }
         std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
@@ -98,6 +98,7 @@ namespace te
     protected:
         std::vector<Vertex_PNTB> _vertices;
         std::vector<uint32>    _triangles;
+        std::vector<float>     _testVertices;
 
         RefPtr<BoundingBox> _bounding;
 
