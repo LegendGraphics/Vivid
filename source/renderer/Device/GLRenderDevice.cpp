@@ -15,13 +15,14 @@ namespace te
         "uniform mat4 worldMat;\n"
         "attribute vec3 vertPos;\n"
         "void main() {\n"
-        "	gl_Position = viewProjMat * worldMat * vec4( vertPos, 1.0 );\n"
+        "	gl_Position = viewProjMat * vec4( vertPos, 1.0 );\n"
         "}\n";
 
     static const char *defaultShaderFS =
         "uniform vec4 color;\n"
+        "out vec4 fragColor;\n"
         "void main() {\n"
-        "	gl_FragColor = color;\n"
+        "fragColor = color;\n"
         "}\n";
 
     GLRenderDevice::GLRenderDevice()
@@ -43,6 +44,8 @@ namespace te
 
         bool bOK = true;
         bOK = bOK && createDefaultShader(getDefaultVSCode(), getDefaultFSCode(), _defaultShader);
+
+        testVao();
 
         _vertex_declaration.init();
         _pending_mask = 0;
@@ -78,10 +81,12 @@ namespace te
                 RenderContext::VertexCmdStream* c_stream = static_cast<RenderContext::VertexCmdStream*>(command.head);
                 // each shader has an array of a structure InputLayouts { bool valid; int8 attribIndices[16]; }
                 // it's related to how the vertex buffer is organized in OpenGL
-                _newVAO = c_stream->vaoHandle;
+                //_newVAO = c_stream->vaoHandle;
+                _newVAO = _testVao;
                 _curBaseIndex = c_stream->baseIndex;
                 _curBaseVertex = c_stream->baseVertex;
-                _curNumIndices = c_stream->numIndices;
+                //_curNumIndices = c_stream->numIndices;
+                _curNumIndices = 3;
                 _pending_mask |= PM_VERTLAYOUT;
                 delete c_stream;
             }
@@ -291,7 +296,14 @@ namespace te
         {
             GLBuffer& vBuf = _buffers.getRef(vertexHandles[i]);
             glBindBuffer(vBuf.type, vBuf.glObj);
-            glVertexAttribPointer(locations[i], sizes[i], GL_FLOAT, GL_FALSE, vBuf.stride, (void*)offsets[i]); // need to fix here, last two parameter should be set properly
+            glVertexAttribPointer(
+                locations[i],
+                sizes[i],
+                GL_FLOAT,
+                GL_FALSE,
+                4 * vBuf.stride,
+                (void*)(4 * offsets[i])); // need to fix here, last two parameter should be set properly
+            glEnableVertexArrayAttrib(vao, locations[i]);
         }
 
         GLBuffer& iBuf = _buffers.getRef(indexHandle);
@@ -599,6 +611,8 @@ namespace te
     {
         if (commitStates())
         {
+            glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            glDisable(GL_CULL_FACE);
             // base index is the start index of sub-component (3*numFace)
             // base vertex is the start vertex of sub-component (3*numVert)
             glDrawElementsBaseVertex(GL_TRIANGLES,
@@ -606,6 +620,7 @@ namespace te
                 GL_UNSIGNED_INT,
                 (void*)(sizeof(unsigned int)*_curBaseIndex),
                 _curBaseVertex);
+            //glDrawArrays(GL_TRIANGLES, 0, _curNumIndices);
         }
     }
 
@@ -630,6 +645,35 @@ namespace te
         }
       }
       return true;
+    }
+
+    void GLRenderDevice::testVao()
+    {
+        const float tris[6][3] = {
+            { 0.0,  0.0,  0.0 },
+            { 0.0,  0.0,  0.0 },
+            { 1.0,  0.0,  0.0 },
+            { 0.0,  1.0,  0.0 },
+            { 0.0,  1.0,  0.0 },
+            {-1.0,  0.0,  0.0 }
+        };
+
+        _testVbo = createVertexBuffer(18 * 4, 6, tris);
+
+        const uint32 idxs[1][3] = {
+            { 0, 1, 2}
+        };
+
+        _testIbo = createIndexBuffer(3 * 4, idxs);
+
+        uint32 nLoc = 1;
+        uint32 locations[1] = { 0 };
+        uint32 sizes[1] = { 3 };
+        uint32 offsets[1] = { 0 };
+        uint32 vertexHandles[1] = { _testVbo };
+        uint32 indexHandle = _testIbo;
+
+        _testVao = createVertexArray(nLoc, locations, sizes, offsets, vertexHandles, indexHandle);
     }
 
     bool GLRenderDevice::createDefaultShader(const char* vertexShader, const char* fragmentShader, ShaderObject& so)

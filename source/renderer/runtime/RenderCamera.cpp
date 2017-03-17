@@ -13,6 +13,7 @@ namespace te
 
         _projection = projection;
         _view = view;
+        //_view_projection = _projection * _view;
     }
 
     float* RenderCamera::getViewMat()

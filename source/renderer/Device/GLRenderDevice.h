@@ -134,6 +134,11 @@ namespace te
         void draw();
         bool commitStates(uint32 filter = 0xFFFFFFFF);
 
+        void testVao();
+        uint32 _testVao;
+        uint32 _testVbo;
+        uint32 _testIbo;
+
         // TODO: temporalily put it here
         enum RDIPendingMask
         {
