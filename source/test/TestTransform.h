@@ -32,8 +32,10 @@ int main()
     cLog << rotate_x;
 
     // test ortho
-    Matrix orth = Matrix::ortho(-50, 100, -100, 50, 5, -50);
+    Vector4 o(-50, -100, -50, 1);
+    Matrix orth = Matrix::ortho(-50, 100, -100, 50, -5, -50);
     cLog << orth;
+    cLog << orth * o;
 
     // test perspective
     Matrix pers = Matrix::perspective(60, 4.0 / 3, -10, -1000);

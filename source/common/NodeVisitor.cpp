@@ -138,12 +138,10 @@ namespace te
 
     RenderCamera* wrapRenderCamera()
     {
-        Transform view = Transform::lookAt(Vector3(100, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 1));
-        Transform proj = Transform::ortho(-100, 100, -100, 100, -100, -1000);
-        //cLog << view.rawMatrix() * Vector4(-50, -50, -50, 1);
-        //cLog << proj.rawMatrix();
-        cLog << proj.rawMatrix() * (view.rawMatrix() * Vector4(-50, -50, -50, 1));
-        cLog << proj.rawMatrix() * view.rawMatrix() * Vector4(-50, -50, -50, 1);
+        Transform view = Transform::lookAt(Vector3(200, 0, 0), Vector3(0, 0, 0), Vector3(0, 0, 1));
+        Transform proj = Transform::ortho(-100, 100, -100, 100, -10, -300);
+        cLog << "after view:" << view.rawMatrix() * Vector4(50, 50, 50, 1);
+        cLog << "after proj:" << proj.rawMatrix() * view.rawMatrix() * Vector4(50, 50, 50, 1);
         RenderCamera* rc = new RenderCamera(CameraData::ORTHOGRAPHIC, -10, -1000, proj.rawMatrix(), view.rawMatrix());
         rc->getViewPort()[0] = 0;
         rc->getViewPort()[1] = 0;
