@@ -10,7 +10,7 @@
 
 namespace te
 {
-    Director* Director::_director = nullptr;
+    /*Director* Director::_director = nullptr;
 
     Director* Director::getInstance()
     {
@@ -21,7 +21,7 @@ namespace te
         }
 
         return _director;
-    }
+    }*/
 
     bool Director::initialize()
     {

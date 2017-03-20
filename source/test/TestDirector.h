@@ -2,7 +2,7 @@
 #include "base/Director.h"
 #include "common/Scene.h"
 #include "common/MeshFilter.h"
-
+#include "base/Singleton.hpp"
 using namespace te;
 
 int main(int argc, char** argv)
@@ -15,8 +15,8 @@ int main(int argc, char** argv)
     Mesh* m = new Mesh;
     m->init(&mr);
     scene->getSceneRoot()->addComponent<MeshFilter>(m);
-    Director::getInstance()->setActiveScene(scene);
-    Director::getInstance()->start();
+    DirectorS::getInstance()->setActiveScene(scene);
+    DirectorS::getInstance()->start();
 
     return 0;
 }

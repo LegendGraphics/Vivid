@@ -24,7 +24,7 @@ namespace te
     class Director
     {
     public:
-        static Director* getInstance();
+        //static Director* getInstance();
 
         void setActiveScene(Scene* active_scene);
         Scene* getActiveScene() { return _active_scene; }
@@ -48,11 +48,11 @@ namespace te
         void initWindow();
         void initResource();
 
-    private:
-        Director() {};
+        /*private:
+            Director() {};*/
 
     private:
-        static Director* _director;
+        //static Director* _director;
 
         Scene* _active_scene;
 
