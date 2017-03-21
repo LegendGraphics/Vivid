@@ -23,7 +23,7 @@ namespace te
                float m30, float m31, float m32, float m33);
         Mat4x4(const Mat4x4& m);
         Mat4x4& operator=(const Mat4x4& m);
-        virtual ~Mat4x4();
+        ~Mat4x4();
 
         friend inline const Vector4 operator*(const Mat4x4& m, const Vector4& v);
         friend inline const Mat4x4 operator*(const Mat4x4& m1, const Mat4x4& m2);

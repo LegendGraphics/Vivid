@@ -24,73 +24,69 @@ namespace te
         Pipeline
     };
 
-    using ResourceHandle = int;
+    using ResourceHandle = unsigned long;
 
-    class Resource : public Object
+    class Resource /*: public Object*/
     {
     public:
-        Resource(ResourceType type);
-        Resource(const Resource& resource, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        Resource();
+      //  Resource(const Resource& resource, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Resource();
         
-        OBJECT_META_FUNCTION(Resource);
+      //  OBJECT_META_FUNCTION(Resource);
 
-        virtual void release();
         virtual bool load(const std::string& res);
-        void unload();
+        virtual void unload();
 
         ResourceType getType() const { return _type; }
-        bool isLoaded() const { return _loaded; }
         ResourceHandle getResourceHandle() const { return _handle; }
-
-    protected:
-        void setResourceHandle();
-
-    protected:
-        static ResourceHandle HANDLE_COUNT;
 
     protected:
         ResourceType    _type;
         ResourceHandle  _handle;
-        bool            _loaded;
     };
 
-    class ResourceManager : public Object
+    class ResourceManager /*: public Object*/
     {
     public:
         ResourceManager(ResourceType type);
-        ResourceManager(const ResourceManager& res_mgr, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+//        ResourceManager(const ResourceManager& res_mgr, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~ResourceManager();
 
-        OBJECT_META_FUNCTION(ResourceManager);
+//        OBJECT_META_FUNCTION(ResourceManager);
 
         ResourceType getType() const { return _type; }
 
-        void addResource(Resource* resource);
-        void removeResource(ResourceHandle handle);
-        bool hasResource(Resource* resource);
-        bool hasResource(ResourceHandle handle);
+        virtual bool create(const std::string& res) = 0;
+        
+        ResourceHandle getNextResHandle();
+
+        void add(Resource* resource);
+        void remove(ResourceHandle handle);
+        bool has(Resource* resource);
+        bool has(ResourceHandle handle);
         
     protected:
-        std::unordered_map<ResourceHandle, RefPtr<Resource>> _resources;
+        std::unordered_map<ResourceHandle, Resource*> _resources;
         ResourceType    _type;
+        ResourceHandle  _next_handle;
     };
 
-    class ResourceMap : public Object
+    class ResourceMap /*: public Object*/
     {
     public:
         ResourceMap();
-        ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        //ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~ResourceMap();
 
-        OBJECT_META_FUNCTION(ResourceMap);
+        //OBJECT_META_FUNCTION(ResourceMap);
         
         void registerResource(ResourceType type);
         void unregisterResource(ResourceType type);
         bool hasRegistered(ResourceType type);
 
     protected:
-        std::unordered_map<ResourceType, RefPtr<ResourceManager>>    _res_map;
+        std::unordered_map<ResourceType, ResourceManager*>    _res_map;
     };
 }
 

@@ -29,9 +29,20 @@ namespace te
 
     enum class VertexType
     {
+        VERTEX_P,
         VERTEX_PN,
         VERTEX_PNTB,
         VERTEX_PNTB_SKINNED
+    };
+
+    /*struct VertexAttributes
+    {
+
+    };*/
+
+    struct Vertex_P
+    {
+        Vector3 position;
     };
 
     struct Vertex_PN
@@ -61,7 +72,33 @@ namespace te
         JointWeights joint_weights;
     };
 
-    class MeshRes : public Resource
+    using Vertex_P_Array = std::vector<Vertex_P>;
+    using Vertex_PN_Array = std::vector<Vertex_PN>;
+    using Vertex_PNTB_Array = std::vector<Vertex_PNTB>;
+    using Vertex_PNTB_Skinned_Array = std::vector<Vertex_PNTB_Skinned>;
+
+    struct VertexArray
+    {
+        union Array
+        {
+            Vertex_P_Array              p_array;
+            Vertex_PN_Array             pn_array;
+            Vertex_PNTB_Array           pntb_array;
+            Vertex_PNTB_Skinned_Array   pntb_skinned_array;
+        };
+
+        VertexType  type;
+        Array       varray;
+
+        Vertex_P_Array& toVertex_P_Array() { return varray.p_array; }
+        Vertex_PN_Array& toVertex_PN_Array() { return varray.pn_array; }
+        Vertex_PNTB_Array& toVertex_PNTB_Array() { return varray.pntb_array; }
+        Vertex_PNTB_Skinned_Array& toVertex_PNTB_Skinned_Array() { return varray.pntb_skinned_array; }
+    };
+
+    using IndexArray = std::vector<uint32>;
+
+    /*class MeshRes : public Resource
     {
     public:
         MeshRes();
@@ -74,39 +111,57 @@ namespace te
         bool _skinned;
         std::vector<Vertex_PNTB> _vertices;
         std::vector<int>    _triangles;
-    };
+    };*/
 
-
-    class Mesh: public Object
+    //template <typename T>
+    class Mesh: public Resource
     {
+    /*public:
+        using VertexArray = std::vector<T>;
+        using IndexArray = std::vector<uint32>;
+        using RawArray = std::vector<float>;*/
+
     public:
-        Mesh() = default;
-        Mesh(const Mesh& mesh, const CopyOperator& copypo = CopyOperator::SHALLOW_COPY);
+        Mesh();
+   //     Mesh(const Mesh& mesh, const CopyOperator& copypo = CopyOperator::SHALLOW_COPY);
         virtual ~Mesh() = default;
 
-        OBJECT_META_FUNCTION(Mesh);
+   //     OBJECT_META_FUNCTION(Mesh);
 
-        void init(MeshRes* res);
+        friend class ResourceLoader;
+
+        bool load(const std::string & res);
+        void unload();
 
         bool isSkinned() const { return _skinned; }
-        std::vector<uint32>& getTriangles() { return _triangles; }
-        std::vector<float>& getVertices() { return _testVertices; }
-        RenderResource& getVertexDeclaration() { return _vertex_declaration; }
-        RenderResource& getIndexBuffer() { return _index_buffer; }
-        std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
+        VertexArray& getVertices() { return _vertices; }
+        IndexArray& getTriangles() { return _triangles; }
+        //std::vector<float>& getVertices() { return _testVertices; }
+        //RenderResource& getVertexDeclaration() { return _vertex_declaration; }
+        //RenderResource& getIndexBuffer() { return _index_buffer; }
+        //std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
 
     protected:
-        std::vector<Vertex_PNTB> _vertices;
-        std::vector<uint32>    _triangles;
-        std::vector<float>     _testVertices;
+        VertexArray             _vertices;
+        IndexArray              _triangles;
+        //std::vector<float>     _testVertices;
 
         RefPtr<BoundingBox> _bounding;
 
         bool _skinned;
 
-        std::vector<RenderResource> _vertex_buffers;
+        /*std::vector<RenderResource> _vertex_buffers;
         RenderResource              _index_buffer;
-        RenderResource              _vertex_declaration;
+        RenderResource              _vertex_declaration;*/
+    };
+
+    class MeshManager : public ResourceManager
+    {
+    public:
+        MeshManager();
+        ~MeshManager();
+
+        bool create(const std::string& res);
     };
 }
 

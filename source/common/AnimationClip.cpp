@@ -54,7 +54,7 @@ namespace te
                                    pose_values[12], pose_values[13], pose_values[14],pose_values[15]);
         }
 
-        setResourceHandle();
+//        setResourceHandle();
 
         return true;
     }
@@ -129,7 +129,7 @@ namespace te
             }
         }
 
-        setResourceHandle();
+//        setResourceHandle();
 
         return true;
     }

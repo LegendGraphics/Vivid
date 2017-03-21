@@ -12,7 +12,7 @@ namespace te
     {
     }*/
     PipelineResource::PipelineResource()
-        :Resource(ResourceType::Pipeline)
+       // :Resource(ResourceType::Pipeline)
     {
         initDefault();
     }

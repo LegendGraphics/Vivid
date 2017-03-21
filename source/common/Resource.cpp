@@ -2,80 +2,64 @@
 
 namespace te
 {
-    ResourceHandle Resource::HANDLE_COUNT = 0;
-
-    Resource::Resource(ResourceType type)
-        :_type(type),
-        _handle(0),
-        _loaded(false)
+    Resource::Resource()
     {}
 
-    Resource::Resource(const Resource& resource, const CopyOperator& copyop)
-    {}
+    /*Resource::Resource(const Resource& resource, const CopyOperator& copyop)
+    {}*/
 
     Resource::~Resource(){}
 
-    void Resource::release()
-    {}
-
     bool Resource::load(const std::string& res)
     {
-        // Resources can only be loaded once
-        if (_loaded) return false;
-
-        // if res does not exists, return false;
-
-        _loaded = true;
-
-        return true;
+        return false;
     }
 
     void Resource::unload()
     {
-        release();
-        _loaded = false;
-    }
-
-    void Resource::setResourceHandle()
-    {
-        if (_loaded) _handle = HANDLE_COUNT++;
     }
 
     ResourceManager::ResourceManager(ResourceType type)
-        :_type(type)
+        :_type(type),
+        _next_handle(0)
     {
 
     }
 
-    ResourceManager::ResourceManager(const ResourceManager& res_mgr, const CopyOperator& copyop)
-    {}
+   /* ResourceManager::ResourceManager(const ResourceManager& res_mgr, const CopyOperator& copyop)
+    {}*/
 
     ResourceManager::~ResourceManager()
     {}
 
-    void ResourceManager::addResource(Resource* resource)
+    ResourceHandle ResourceManager::getNextResHandle()
     {
-        if (resource->getType() == _type && !hasResource(resource))
+        return _next_handle++;
+    }
+
+    void ResourceManager::add(Resource* resource)
+    {
+        if (resource->getType() == _type && !has(resource))
         {
             _resources.insert({ resource->getResourceHandle(), resource });
         }
     }
 
-    void ResourceManager::removeResource(ResourceHandle handle)
+    void ResourceManager::remove(ResourceHandle handle)
     {
-        if (hasResource(handle))
+        if (has(handle))
         {
             _resources.erase(handle);
         }
     }
 
-    bool ResourceManager::hasResource(Resource* resource)
+    bool ResourceManager::has(Resource* resource)
     {
         ResourceHandle handle = resource->getResourceHandle();
-        return hasResource(handle);
+        return has(handle);
     }
 
-    bool ResourceManager::hasResource(ResourceHandle handle)
+    bool ResourceManager::has(ResourceHandle handle)
     {
         if (_resources.find(handle) != _resources.end()) return true;
         else return false;
@@ -84,16 +68,16 @@ namespace te
     ResourceMap::ResourceMap()
     {}
 
-    ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
-    {}
+    /*ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
+    {}*/
 
     ResourceMap::~ResourceMap()
     {}
 
     void ResourceMap::registerResource(ResourceType type)
     {
-        if (!hasRegistered(type))
-            _res_map.insert({type, new ResourceManager(type)});
+        /*if (!hasRegistered(type))
+            _res_map.insert({type, new ResourceManager(type)});*/
     }
 
     void ResourceMap::unregisterResource(ResourceType type)

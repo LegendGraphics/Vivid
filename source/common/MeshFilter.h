@@ -11,10 +11,10 @@ namespace te
     public:
         MeshFilter(Mesh* mesh);
         void setMesh(Mesh* mesh);
-        inline Mesh* getMesh() { return _mesh.get(); }
+        inline Mesh* getMesh() { return _mesh; }
 
     protected:
-        RefPtr<Mesh> _mesh;
+        Mesh* _mesh;
     };
 }
 

@@ -13,7 +13,7 @@ namespace te
         Vector3(const Vector3& v);
         Vector3(float x, float y, float z);
         Vector3& operator=(const Vector3& v);
-        virtual ~Vector3();
+        ~Vector3();
 
         inline const Vector3 operator+(const Vector3& v) const { return Vector3(x + v.x, y + v.y, z + v.z); }
         inline Vector3& operator+=(const Vector3& v) { this->x += v.x; this->y += v.y; this->z += v.z; return *this; }

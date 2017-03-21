@@ -1,5 +1,5 @@
 
-#include "test/TestDirector.h"
+//#include "test/TestDirector.h"
 
 //#include "test/TestLoadingMesh.h"
 
@@ -8,3 +8,5 @@
 //#include "test/TestCustomAllocator.h"
 
 //#include "test/TestTransform.h"
+
+#include "test/TestVertexStruct.h"
