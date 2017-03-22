@@ -16,29 +16,24 @@ namespace te
 
 // I have no idea about how to write different kinds of vertex with different attributes.
 // So now I use the Vertex_PNTB as example...
-    enum class VertexAttribute
+    enum VertexAttribute
     {
-        TE_VERTEX_POSITION =        1 << 0,
-        TE_VERTEX_NORMAL =          1 << 1,
-        TE_VERTEX_TANGENT =         1 << 2,
-        TE_VERTEX_BITANGENT =       1 << 3,
-        TE_VERTEX_SKINNED =         1 << 4,
-        TE_VERTEX_TEXCOORD0 =       1 << 5,
-        TE_VERTEX_TEXCOORD1 =       1 << 6,    
+        VERTEX_POSITION,
+        VERTEX_NORMAL,
+        VERTEX_TANGENT,
+        VERTEX_BITANGENT,
+        VERTEX_SKINNED,
+        VERTEX_TEXCOORD0,
+        VERTEX_TEXCOORD1
     };
 
-    enum class VertexType
+    enum VertexType
     {
         VERTEX_P,
         VERTEX_PN,
         VERTEX_PNTB,
         VERTEX_PNTB_SKINNED
     };
-
-    /*struct VertexAttributes
-    {
-
-    };*/
 
     struct Vertex_P
     {
@@ -72,6 +67,29 @@ namespace te
         JointWeights joint_weights;
     };
 
+    void* getAttributeAddress(const Vertex_P& v, VertexAttribute attribute)
+    {
+        assert(attribute == VertexAttribute::VERTEX_POSITION);
+        return (void*)&v.position;
+    }
+
+    void* getAttributeAddress(const Vertex_PN& v, VertexAttribute attribute)
+    {
+        assert(attribute <= VertexAttribute::VERTEX_NORMAL);
+        return (void*)(&v.position + attribute * sizeof(Vector3));
+    }
+
+    void* getAttributeAddress(const Vertex_PNTB& v, VertexAttribute attribute)
+    {
+        assert(attribute <= VertexAttribute::VERTEX_BITANGENT);
+        return (void*)(&v.position + attribute * sizeof(Vector3));
+    }
+
+    void* getAttributeAddress(const Vertex_PNTB_Skinned& v, VertexAttribute attribute)
+    {
+        return (void*)(&v.position + attribute * sizeof(Vector3));
+    }
+
     using Vertex_P_Array = std::vector<Vertex_P>;
     using Vertex_PN_Array = std::vector<Vertex_PN>;
     using Vertex_PNTB_Array = std::vector<Vertex_PNTB>;
@@ -79,6 +97,7 @@ namespace te
 
     struct VertexArray
     {
+    private:
         union Array
         {
             Vertex_P_Array              p_array;
@@ -87,13 +106,102 @@ namespace te
             Vertex_PNTB_Skinned_Array   pntb_skinned_array;
         };
 
-        VertexType  type;
+    private:
+        class ArrayType
+        {
+        public:
+            ArrayType() {}
+            virtual ~ArrayType() {}
+
+            /*virtual Vertex_P& atVertex_P(size_t index, Array& array) = 0;
+            virtual Vertex_PN& atVertex_PN(size_t index, Array& array) = 0;
+            virtual Vertex_PNTB& atVertex_PNTB(size_t index, Array& array) = 0;
+            virtual Vertex_PNTB_Skinned& atVertex_PNTB_Skinned(size_t index, Array& array) = 0;*/
+            virtual void resize(size_t size, Array& array) = 0;
+            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute) = 0;
+        };
+
+        class P_Array : public ArrayType
+        {
+        public:
+            P_Array() {}
+            virtual ~P_Array() {}
+
+            virtual void resize(size_t size, Array& array) { array.p_array.resize(size); }
+            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute)
+            {
+                void* addr = getAttributeAddress(array.p_array[index], attribute);
+                Vector3* old_v = (Vector3*)addr;
+                *old_v = v;
+            }
+        };
+
+        class PN_Array : public ArrayType
+        {
+        public:
+            PN_Array() {}
+            virtual ~PN_Array() {}
+
+            virtual void resize(size_t size, Array& array) { array.pn_array.resize(size); }
+            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute)
+            {
+                void* addr = getAttributeAddress(array.pn_array[index], attribute);
+                Vector3* old_v = (Vector3*)addr;
+                *old_v = v;
+            }
+        };
+
+        class PNTB_Array : public ArrayType
+        {
+        public:
+            PNTB_Array() {}
+            virtual ~PNTB_Array() {}
+
+            virtual void resize(size_t size, Array& array) { array.pntb_array.resize(size); }
+            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute)
+            {
+                void* addr = getAttributeAddress(array.pntb_array[index], attribute);
+                Vector3* old_v = (Vector3*)addr;
+                *old_v = v;
+            }
+        };
+
+        class PNTB_Skinned_Array : public ArrayType
+        {
+        public:
+            PNTB_Skinned_Array() {}
+            virtual ~PNTB_Skinned_Array() {}
+
+            virtual void resize(size_t size, Array& array) { array.pntb_skinned_array.resize(size); }
+            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute)
+            {
+                void* addr = getAttributeAddress(array.pntb_skinned_array[index], attribute);
+                Vector3* old_v = (Vector3*)addr;
+                *old_v = v;
+            }
+        };
+
+    public:
+        /*union Array
+        {
+            Vertex_P_Array              p_array;
+            Vertex_PN_Array             pn_array;
+            Vertex_PNTB_Array           pntb_array;
+            Vertex_PNTB_Skinned_Array   pntb_skinned_array;
+        };*/
+
+        ArrayType*   type;
         Array       varray;
 
-        Vertex_P_Array& toVertex_P_Array() { return varray.p_array; }
-        Vertex_PN_Array& toVertex_PN_Array() { return varray.pn_array; }
-        Vertex_PNTB_Array& toVertex_PNTB_Array() { return varray.pntb_array; }
-        Vertex_PNTB_Skinned_Array& toVertex_PNTB_Skinned_Array() { return varray.pntb_skinned_array; }
+        void assign(size_t index, const Vector3& v, VertexAttribute attribute)
+        {
+            type->assign(index, varray, v, attribute);
+        }
+
+        void resize(size_t size)
+        {
+            type->resize(size, varray);
+        }
     };
 
     using IndexArray = std::vector<uint32>;
