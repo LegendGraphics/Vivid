@@ -180,7 +180,15 @@ namespace te
             }
         }
 
-        void* buffer() { return _vertex_buffer; }
+        void* buffer() { 
+            Vertex_PNTB_Array* a = (Vertex_PNTB_Array*)_vertex_buffer;
+            return &(*a)[0].position.x;
+           // return aa;
+            /*float* aaa = (float*)aa;
+            return aaa;
+            for (int i = 0; i < 100; ++i) std::cout << aaa[i] << " ";
+            return _vertex_buffer; */
+        }
 
         size_t size() { return _size; }
 

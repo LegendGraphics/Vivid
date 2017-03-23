@@ -1,7 +1,7 @@
 #include "io/ResourceLoader.h"
 #include "io/FileUtils.h"
 #include "common/Mesh.h"
-
+#include "io/logger.h"
 namespace te
 {
     bool ResourceLoader::load(Mesh* mesh, const std::string& res)
@@ -57,6 +57,7 @@ namespace te
                         memcpy(&mesh->_vertices.position(j).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                         memcpy(&mesh->_vertices.position(j).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                         memcpy(&mesh->_vertices.position(j).z, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                        //cLog << mesh->_vertices.position(j);
                     }
                     break;
                 case 1:		// Normal

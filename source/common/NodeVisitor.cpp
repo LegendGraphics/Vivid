@@ -142,8 +142,8 @@ namespace te
         Transform proj = Transform::ortho(-100, 100, -100, 100, -100, -1000);
         //cLog << view.rawMatrix() * Vector4(-50, -50, -50, 1);
         //cLog << proj.rawMatrix();
-        cLog << proj.rawMatrix() * (view.rawMatrix() * Vector4(-50, -50, -50, 1));
-        cLog << proj.rawMatrix() * view.rawMatrix() * Vector4(-50, -50, -50, 1);
+        //cLog << proj.rawMatrix() * (view.rawMatrix() * Vector4(-50, -50, -50, 1));
+        //cLog << proj.rawMatrix() * view.rawMatrix() * Vector4(-50, -50, -50, 1);
         RenderCamera* rc = new RenderCamera(CameraData::ORTHOGRAPHIC, -10, -1000, proj.rawMatrix(), view.rawMatrix());
         rc->getViewPort()[0] = 0;
         rc->getViewPort()[1] = 0;
@@ -239,7 +239,9 @@ namespace te
             vs->res = &m->getVertexBuffers()[0];
             vs->size = 4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
             vs->stride = 12;
-            vs->raw_data = m->getVertices().buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed
+            vs->raw_data = (float*)m->getVertices().buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed
+            float* aa = (float*)m->getVertices().buffer();
+            for (int i = 0; i < 1000; ++i) std::cout << aa[i] << " ";
             msg.rrm.rQueue[1].stream = vs;
 
             // vertex declaration stream
