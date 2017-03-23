@@ -239,7 +239,7 @@ namespace te
             vs->res = &m->getVertexBuffers()[0];
             vs->size = 4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
             vs->stride = 12;
-            vs->raw_data = &m->getVertices()[0]; // assume memory in std::vector<Vertex_PNTB> is tight packed
+            vs->raw_data = m->getVertices().buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed
             msg.rrm.rQueue[1].stream = vs;
 
             // vertex declaration stream

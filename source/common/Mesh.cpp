@@ -128,9 +128,16 @@ namespace te
     //{
 
     //}
+
+    
     
     Mesh::Mesh()
-    {}
+    {
+        _vertex_buffers.resize(1, RenderResource(RenderResource::VERTEX_STREAM));
+        _index_buffer.type = RenderResource::INDEX_STREAM;
+        _vertex_declaration.type = RenderResource::VERTEX_DECLARATION;
+
+    }
 
     bool Mesh::load(const std::string & res)
     {

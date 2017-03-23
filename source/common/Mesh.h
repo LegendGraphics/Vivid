@@ -14,9 +14,9 @@
 namespace te
 {
 
-// I have no idea about how to write different kinds of vertex with different attributes.
-// So now I use the Vertex_PNTB as example...
-    enum VertexAttribute
+// I use a top-down method of using polymorphism + virtual function tricks to code the run-time status of the different vertex type.
+// Another way to do so is a bottom-up method by encapsulating VertexBuffer from memory structure to upper layer structure.
+    enum class VertexAttribute
     {
         VERTEX_POSITION,
         VERTEX_NORMAL,
@@ -27,7 +27,7 @@ namespace te
         VERTEX_TEXCOORD1
     };
 
-    enum VertexType
+    enum class VertexType
     {
         VERTEX_P,
         VERTEX_PN,
@@ -67,29 +67,6 @@ namespace te
         JointWeights joint_weights;
     };
 
-    void* getAttributeAddress(const Vertex_P& v, VertexAttribute attribute)
-    {
-        assert(attribute == VertexAttribute::VERTEX_POSITION);
-        return (void*)&v.position;
-    }
-
-    void* getAttributeAddress(const Vertex_PN& v, VertexAttribute attribute)
-    {
-        assert(attribute <= VertexAttribute::VERTEX_NORMAL);
-        return (void*)(&v.position + attribute * sizeof(Vector3));
-    }
-
-    void* getAttributeAddress(const Vertex_PNTB& v, VertexAttribute attribute)
-    {
-        assert(attribute <= VertexAttribute::VERTEX_BITANGENT);
-        return (void*)(&v.position + attribute * sizeof(Vector3));
-    }
-
-    void* getAttributeAddress(const Vertex_PNTB_Skinned& v, VertexAttribute attribute)
-    {
-        return (void*)(&v.position + attribute * sizeof(Vector3));
-    }
-
     using Vertex_P_Array = std::vector<Vertex_P>;
     using Vertex_PN_Array = std::vector<Vertex_PN>;
     using Vertex_PNTB_Array = std::vector<Vertex_PNTB>;
@@ -98,13 +75,16 @@ namespace te
     struct VertexArray
     {
     private:
-        union Array
-        {
-            Vertex_P_Array              p_array;
-            Vertex_PN_Array             pn_array;
-            Vertex_PNTB_Array           pntb_array;
-            Vertex_PNTB_Skinned_Array   pntb_skinned_array;
-        };
+        class ArrayType;
+        class P_Array;
+        class PN_Array;
+        class PNTB_Array;
+        class PNTB_Skinned_Array;
+
+
+        void*           _vertex_buffer;
+        ArrayType*      _type;
+        size_t          _size;
 
     private:
         class ArrayType
@@ -113,12 +93,11 @@ namespace te
             ArrayType() {}
             virtual ~ArrayType() {}
 
-            /*virtual Vertex_P& atVertex_P(size_t index, Array& array) = 0;
-            virtual Vertex_PN& atVertex_PN(size_t index, Array& array) = 0;
-            virtual Vertex_PNTB& atVertex_PNTB(size_t index, Array& array) = 0;
-            virtual Vertex_PNTB_Skinned& atVertex_PNTB_Skinned(size_t index, Array& array) = 0;*/
-            virtual void resize(size_t size, Array& array) = 0;
-            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute) = 0;
+            virtual void initialize(size_t size, void*& array) {}
+            virtual Vector3& position(size_t index, void*& array) { assert("No Position Attribute!" && false); return Vector3(); }
+            virtual Vector3& normal(size_t index, void*& array) { assert("No Normal Attribute!" && false); return Vector3(); }
+            virtual Vector3& tangent(size_t index, void*& array) { assert("No tangent Attribute!" && false); return Vector3(); }
+            virtual Vector3& bitangent(size_t index, void*& array) { assert("No bitangent Attribute!" && false); return Vector3(); }
         };
 
         class P_Array : public ArrayType
@@ -127,13 +106,8 @@ namespace te
             P_Array() {}
             virtual ~P_Array() {}
 
-            virtual void resize(size_t size, Array& array) { array.p_array.resize(size); }
-            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute)
-            {
-                void* addr = getAttributeAddress(array.p_array[index], attribute);
-                Vector3* old_v = (Vector3*)addr;
-                *old_v = v;
-            }
+            virtual void initialize(size_t size, void*& array) { array = new Vertex_P_Array(size); }
+            virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_P_Array*)(array)))[index].position; }
         };
 
         class PN_Array : public ArrayType
@@ -142,13 +116,9 @@ namespace te
             PN_Array() {}
             virtual ~PN_Array() {}
 
-            virtual void resize(size_t size, Array& array) { array.pn_array.resize(size); }
-            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute)
-            {
-                void* addr = getAttributeAddress(array.pn_array[index], attribute);
-                Vector3* old_v = (Vector3*)addr;
-                *old_v = v;
-            }
+            virtual void initialize(size_t size, void*& array) { array = new Vertex_PN_Array(size); }
+            virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_PN_Array*)(array)))[index].position; }
+            virtual Vector3& normal(size_t index, void*& array) { return (*((Vertex_PN_Array*)(array)))[index].normal; }
         };
 
         class PNTB_Array : public ArrayType
@@ -157,13 +127,11 @@ namespace te
             PNTB_Array() {}
             virtual ~PNTB_Array() {}
 
-            virtual void resize(size_t size, Array& array) { array.pntb_array.resize(size); }
-            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute)
-            {
-                void* addr = getAttributeAddress(array.pntb_array[index], attribute);
-                Vector3* old_v = (Vector3*)addr;
-                *old_v = v;
-            }
+            virtual void initialize(size_t size, void*& array) { array = new Vertex_PNTB_Array(size); }
+            virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_PNTB_Array*)(array)))[index].position; }
+            virtual Vector3& normal(size_t index, void*& array) { return (*((Vertex_PNTB_Array*)(array)))[index].normal; }
+            virtual Vector3& tangent(size_t index, void*& array) { return (*((Vertex_PNTB_Array*)(array)))[index].tangent; }
+            virtual Vector3& bitangent(size_t index, void*& array) { return (*((Vertex_PNTB_Array*)(array)))[index].bitangent; }
         };
 
         class PNTB_Skinned_Array : public ArrayType
@@ -172,35 +140,74 @@ namespace te
             PNTB_Skinned_Array() {}
             virtual ~PNTB_Skinned_Array() {}
 
-            virtual void resize(size_t size, Array& array) { array.pntb_skinned_array.resize(size); }
-            virtual void assign(size_t index, Array& array, const Vector3& v, VertexAttribute attribute)
-            {
-                void* addr = getAttributeAddress(array.pntb_skinned_array[index], attribute);
-                Vector3* old_v = (Vector3*)addr;
-                *old_v = v;
-            }
+            virtual void initialize(size_t size, void*& array) { array = new Vertex_PNTB_Skinned_Array(size); }
+            virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_PNTB_Skinned_Array*)(array)))[index].position; }
+            virtual Vector3& normal(size_t index, void*& array) { return (*((Vertex_PNTB_Skinned_Array*)(array)))[index].normal; }
+            virtual Vector3& tangent(size_t index, void*& array) { return (*((Vertex_PNTB_Skinned_Array*)(array)))[index].tangent; }
+            virtual Vector3& bitangent(size_t index, void*& array) { return (*((Vertex_PNTB_Skinned_Array*)(array)))[index].bitangent; }
         };
 
     public:
-        /*union Array
+        VertexArray()
+            :_type(new ArrayType)
         {
-            Vertex_P_Array              p_array;
-            Vertex_PN_Array             pn_array;
-            Vertex_PNTB_Array           pntb_array;
-            Vertex_PNTB_Skinned_Array   pntb_skinned_array;
-        };*/
-
-        ArrayType*   type;
-        Array       varray;
-
-        void assign(size_t index, const Vector3& v, VertexAttribute attribute)
+        }
+        ~VertexArray()
         {
-            type->assign(index, varray, v, attribute);
+            delete _type;
         }
 
-        void resize(size_t size)
+        void convert(VertexType type)
         {
-            type->resize(size, varray);
+            if (_type) delete _type;
+            switch (type)
+            {
+            case VertexType::VERTEX_P:
+                _type = new P_Array;
+                break;
+            case VertexType::VERTEX_PN:
+                _type = new PN_Array;
+                break;
+            case VertexType::VERTEX_PNTB:
+                _type = new PNTB_Array;
+                break;
+            case VertexType::VERTEX_PNTB_SKINNED:
+                _type = new PNTB_Skinned_Array;
+                break;
+            default:
+                _type = new ArrayType;
+                break;
+            }
+        }
+
+        void* buffer() { return _vertex_buffer; }
+
+        size_t size() { return _size; }
+
+        void initialize(size_t size)
+        {
+            _type->initialize(size, _vertex_buffer);
+            _size = size;
+        }
+
+        Vector3& position(size_t index)
+        {
+            return _type->position(index, _vertex_buffer);
+        }
+
+        Vector3& normal(size_t index)
+        {
+            return _type->normal(index, _vertex_buffer);
+        }
+
+        Vector3& tangent(size_t index)
+        {
+            return _type->tangent(index, _vertex_buffer);
+        }
+
+        Vector3& bitangent(size_t index)
+        {
+            return _type->bitangent(index, _vertex_buffer);
         }
     };
 
@@ -245,22 +252,22 @@ namespace te
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
         //std::vector<float>& getVertices() { return _testVertices; }
-        //RenderResource& getVertexDeclaration() { return _vertex_declaration; }
-        //RenderResource& getIndexBuffer() { return _index_buffer; }
-        //std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
+        RenderResource& getVertexDeclaration() { return _vertex_declaration; }
+        RenderResource& getIndexBuffer() { return _index_buffer; }
+        std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
 
     protected:
         VertexArray             _vertices;
         IndexArray              _triangles;
-        //std::vector<float>     _testVertices;
+        std::vector<float>     _testVertices;
 
         RefPtr<BoundingBox> _bounding;
 
         bool _skinned;
 
-        /*std::vector<RenderResource> _vertex_buffers;
+        std::vector<RenderResource> _vertex_buffers;
         RenderResource              _index_buffer;
-        RenderResource              _vertex_declaration;*/
+        RenderResource              _vertex_declaration;
     };
 
     class MeshManager : public ResourceManager

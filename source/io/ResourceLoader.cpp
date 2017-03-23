@@ -32,7 +32,8 @@ namespace te
             int vertex_num;
             memcpy(&vertex_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
 
-            mesh->_vertices.resize(vertex_num);
+            mesh->_vertices.convert(VertexType::VERTEX_PNTB);
+            mesh->_vertices.initialize(vertex_num);
 
             for (int i = 0; i < attribute_num; ++i)
             {
@@ -53,9 +54,9 @@ namespace te
                     }
                     for (int j = 0; j < vertex_num; ++j)
                     {
-                        memcpy(&mesh->_vertices[j].position.x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
-                        memcpy(&mesh->_vertices[j].position.y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
-                        memcpy(&mesh->_vertices[j].position.z, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                        memcpy(&mesh->_vertices.position(j).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                        memcpy(&mesh->_vertices.position(j).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                        memcpy(&mesh->_vertices.position(j).z, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                     }
                     break;
                 case 1:		// Normal
@@ -66,9 +67,9 @@ namespace te
                     }
                     for (int j = 0; j < vertex_num; ++j)
                     {
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices[j].normal.x = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices[j].normal.y = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices[j].normal.z = sh / 32767.0f;
+                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).x = sh / 32767.0f;
+                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).y = sh / 32767.0f;
+                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).z = sh / 32767.0f;
                     }
                     break;
                 case 2:		// Tangent
@@ -79,9 +80,9 @@ namespace te
                     }
                     for (int j = 0; j < vertex_num; ++j)
                     {
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices[j].tangent.x = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices[j].tangent.y = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices[j].tangent.z = sh / 32767.0f;
+                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).x = sh / 32767.0f;
+                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).y = sh / 32767.0f;
+                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).z = sh / 32767.0f;
                     }
                     break;
                 case 3:		// Bitangent
@@ -92,9 +93,9 @@ namespace te
                     }
                     for (int j = 0; j < vertex_num; ++j)
                     {
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices[j].bitangent.x = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices[j].bitangent.y = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices[j].bitangent.z = sh / 32767.0f;
+                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).x = sh / 32767.0f;
+                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).y = sh / 32767.0f;
+                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).z = sh / 32767.0f;
                     }
                     break;
                 default:
