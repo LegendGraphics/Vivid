@@ -293,7 +293,7 @@ namespace te
 
     bool PipelineResource::load(const std::string& res)
     {
-        if (!Resource::load(res)) return false;
+        //if (!Resource::load(res)) return false;
 
         char *data = nullptr;
         int size = 0;
