@@ -257,9 +257,9 @@ namespace te
         void unload();
 
         bool isSkinned() const { return _skinned; }
-        VertexArray& getVertices() { return _vertices; }
+        //VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
-        //std::vector<float>& getVertices() { return _testVertices; }
+        std::vector<float>& getVertices() { return _testVertices; }
         RenderResource& getVertexDeclaration() { return _vertex_declaration; }
         RenderResource& getIndexBuffer() { return _index_buffer; }
         std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
