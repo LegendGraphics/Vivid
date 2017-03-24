@@ -10,13 +10,9 @@ namespace te
 
     Resource::~Resource(){}
 
-    bool Resource::load(const std::string& res)
+    void Resource::buildDescriptor(const ResourceDescriptor& des)
     {
-        return false;
-    }
-
-    void Resource::unload()
-    {
+        _descriptor = des;
     }
 
     ResourceManager::ResourceManager(ResourceType type)
@@ -32,16 +28,23 @@ namespace te
     ResourceManager::~ResourceManager()
     {}
 
-    ResourceHandle ResourceManager::getNextResHandle()
+    ResourceHandle ResourceManager::getNextLocalResHandle()
     {
         return _next_handle++;
     }
 
+    ResourceHandle ResourceManager::generateGlobalResHandle()
+    {
+        return ResourceHandle(_type) + _next_handle;
+    }
+
     void ResourceManager::add(Resource* resource)
     {
-        if (resource->getType() == _type && !has(resource))
+        if (resource->getResourceType() == _type && !has(resource))
         {
-            _resources.insert({ resource->getResourceHandle(), resource });
+            ResourceHandle global_handle = generateGlobalResHandle();
+            resource->buildDescriptor(ResourceDescriptor(global_handle, _type));
+            _resources.insert({ global_handle, resource });
         }
     }
 
@@ -65,31 +68,31 @@ namespace te
         else return false;
     }
 
-    ResourceMap::ResourceMap()
-    {}
+   // ResourceMap::ResourceMap()
+   // {}
 
-    /*ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
-    {}*/
+   // /*ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
+   // {}*/
 
-    ResourceMap::~ResourceMap()
-    {}
+   // ResourceMap::~ResourceMap()
+   // {}
 
-    void ResourceMap::registerResource(ResourceType type)
-    {
-        /*if (!hasRegistered(type))
-            _res_map.insert({type, new ResourceManager(type)});*/
-    }
+   // void ResourceMap::registerResource(ResourceType type)
+   // {
+   //     /*if (!hasRegistered(type))
+   //         _res_map.insert({type, new ResourceManager(type)});*/
+   // }
 
-    void ResourceMap::unregisterResource(ResourceType type)
-    {
-        if (hasRegistered(type))
-            _res_map.erase(type);
-    }
+   // void ResourceMap::unregisterResource(ResourceType type)
+   // {
+   //     if (hasRegistered(type))
+   //         _res_map.erase(type);
+   // }
 
-    bool ResourceMap::hasRegistered(ResourceType type)
-    {
-        if (_res_map.find(type) == _res_map.end())
-            return false;
-        else return true;
-    }
+   // bool ResourceMap::hasRegistered(ResourceType type)
+   // {
+   //     if (_res_map.find(type) == _res_map.end())
+   //         return false;
+   //     else return true;
+   // }
 }

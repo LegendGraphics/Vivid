@@ -84,7 +84,7 @@ namespace te
 
         void*           _vertex_buffer;
         ArrayType*      _type;
-        size_t          _size;
+        size_t          _vertex_size;
 
     private:
         class ArrayType
@@ -95,6 +95,7 @@ namespace te
 
             virtual void initialize(size_t size, void*& array) {}
             virtual void* buffer(void*& array) { return nullptr; }
+            virtual size_t sizeInBytes(size_t size, void*& array) { return 0; }
             virtual Vector3& position(size_t index, void*& array) { assert("No Position Attribute!" && false); return Vector3(); }
             virtual Vector3& normal(size_t index, void*& array) { assert("No Normal Attribute!" && false); return Vector3(); }
             virtual Vector3& tangent(size_t index, void*& array) { assert("No tangent Attribute!" && false); return Vector3(); }
@@ -109,6 +110,7 @@ namespace te
 
             virtual void initialize(size_t size, void*& array) { array = new Vertex_P_Array(size); }
             virtual void* buffer(void*& array) { return &(*((Vertex_P_Array*)(array)))[0].position.x; }
+            virtual size_t sizeInBytes(size_t size, void*& array) { return sizeof(Vertex_P) * size; }
             virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_P_Array*)(array)))[index].position; }
         };
 
@@ -120,6 +122,7 @@ namespace te
 
             virtual void initialize(size_t size, void*& array) { array = new Vertex_PN_Array(size); }
             virtual void* buffer(void*& array) { return &(*((Vertex_PN_Array*)(array)))[0].position.x; }
+            virtual size_t sizeInBytes(size_t size, void*& array) { return sizeof(Vertex_PN) * size; }
             virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_PN_Array*)(array)))[index].position; }
             virtual Vector3& normal(size_t index, void*& array) { return (*((Vertex_PN_Array*)(array)))[index].normal; }
         };
@@ -132,6 +135,7 @@ namespace te
 
             virtual void initialize(size_t size, void*& array) { array = new Vertex_PNTB_Array(size); }
             virtual void* buffer(void*& array) { return &(*((Vertex_PNTB_Array*)(array)))[0].position.x; }
+            virtual size_t sizeInBytes(size_t size, void*& array) { return sizeof(Vertex_PNTB) * size; }
             virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_PNTB_Array*)(array)))[index].position; }
             virtual Vector3& normal(size_t index, void*& array) { return (*((Vertex_PNTB_Array*)(array)))[index].normal; }
             virtual Vector3& tangent(size_t index, void*& array) { return (*((Vertex_PNTB_Array*)(array)))[index].tangent; }
@@ -146,6 +150,7 @@ namespace te
 
             virtual void initialize(size_t size, void*& array) { array = new Vertex_PNTB_Skinned_Array(size); }
             virtual void* buffer(void*& array) { return &(*((Vertex_PNTB_Skinned_Array*)(array)))[0].position.x; }
+            virtual size_t sizeInBytes(size_t size, void*& array) { return sizeof(Vertex_PNTB_Skinned) * size; }
             virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_PNTB_Skinned_Array*)(array)))[index].position; }
             virtual Vector3& normal(size_t index, void*& array) { return (*((Vertex_PNTB_Skinned_Array*)(array)))[index].normal; }
             virtual Vector3& tangent(size_t index, void*& array) { return (*((Vertex_PNTB_Skinned_Array*)(array)))[index].tangent; }
@@ -185,17 +190,22 @@ namespace te
             }
         }
 
-        size_t size() { return _size; }
+        size_t size() { return _vertex_size; }
 
         void* buffer() 
         { 
             return _type->buffer(_vertex_buffer);
         }
 
+        size_t sizeInBytes()
+        {
+            return _type->sizeInBytes(_vertex_size, _vertex_buffer);
+        }
+
         void initialize(size_t size)
         {
             _type->initialize(size, _vertex_buffer);
-            _size = size;
+            _vertex_size = size;
         }
 
         Vector3& position(size_t index)
@@ -221,29 +231,9 @@ namespace te
 
     using IndexArray = std::vector<uint32>;
 
-    /*class MeshRes : public Resource
-    {
-    public:
-        MeshRes();
-        bool load(const std::string & res);
-        void release();
 
-        friend class Mesh;
-
-    protected:
-        bool _skinned;
-        std::vector<Vertex_PNTB> _vertices;
-        std::vector<int>    _triangles;
-    };*/
-
-    //template <typename T>
     class Mesh: public Resource
     {
-    /*public:
-        using VertexArray = std::vector<T>;
-        using IndexArray = std::vector<uint32>;
-        using RawArray = std::vector<float>;*/
-
     public:
         Mesh();
    //     Mesh(const Mesh& mesh, const CopyOperator& copypo = CopyOperator::SHALLOW_COPY);
@@ -259,7 +249,6 @@ namespace te
         bool isSkinned() const { return _skinned; }
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
-        //std::vector<float>& getVertices() { return _testVertices; }
         RenderResource& getVertexDeclaration() { return _vertex_declaration; }
         RenderResource& getIndexBuffer() { return _index_buffer; }
         std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
@@ -267,7 +256,6 @@ namespace te
     protected:
         VertexArray             _vertices;
         IndexArray              _triangles;
-        std::vector<float>     _testVertices;
 
         RefPtr<BoundingBox> _bounding;
 
@@ -278,14 +266,14 @@ namespace te
         RenderResource              _vertex_declaration;
     };
 
-    class MeshManager : public ResourceManager
+    /*class MeshManager : public ResourceManager
     {
     public:
         MeshManager();
         ~MeshManager();
 
         bool create(const std::string& res);
-    };
+    };*/
 }
 
 

@@ -237,7 +237,7 @@ namespace te
             msg.rrm.rQueue[1].resType = RenderResource::VERTEX_STREAM;
             vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
             vs->res = &m->getVertexBuffers()[0];
-            vs->size = 1152;//4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
+            vs->size = m->getVertices().sizeInBytes();//4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
             vs->stride = 12;
             //vs->raw_data = &m->getVertices()[0];
             vs->raw_data = m->getVertices().buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed

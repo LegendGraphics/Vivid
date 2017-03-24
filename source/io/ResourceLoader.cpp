@@ -115,27 +115,6 @@ namespace te
                 memcpy(&mesh->_triangles[i], data_ptr, sizeof(int)); data_ptr += sizeof(int);
             }
 
-            {
-                for (size_t i = 0; i < mesh->_vertices.size(); ++i)
-                {
-                    mesh->_testVertices.push_back(mesh->_vertices.position(i).x);
-                    mesh->_testVertices.push_back(mesh->_vertices.position(i).y);
-                    mesh->_testVertices.push_back(mesh->_vertices.position(i).z);
-
-                    mesh->_testVertices.push_back(mesh->_vertices.normal(i).x);
-                    mesh->_testVertices.push_back(mesh->_vertices.normal(i).y);
-                    mesh->_testVertices.push_back(mesh->_vertices.normal(i).z);
-
-                    mesh->_testVertices.push_back(mesh->_vertices.tangent(i).x);
-                    mesh->_testVertices.push_back(mesh->_vertices.tangent(i).y);
-                    mesh->_testVertices.push_back(mesh->_vertices.tangent(i).z);
-
-                    mesh->_testVertices.push_back(mesh->_vertices.bitangent(i).x);
-                    mesh->_testVertices.push_back(mesh->_vertices.bitangent(i).y);
-                    mesh->_testVertices.push_back(mesh->_vertices.bitangent(i).z);
-                }
-            }
-
             mesh->_vertex_buffers.resize(1, RenderResource(RenderResource::VERTEX_STREAM));
             mesh->_index_buffer.type = RenderResource::INDEX_STREAM;
             mesh->_vertex_declaration.type = RenderResource::VERTEX_DECLARATION;

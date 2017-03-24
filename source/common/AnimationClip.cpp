@@ -7,7 +7,7 @@ namespace te
 {
     bool SkeletonRes::load(const std::string& res)
     {
-        if (!Resource::load(res)) return false;
+        //if (!Resource::load(res)) return false;
 
         char *data_ptr = nullptr;
         int size = 0;
@@ -65,7 +65,7 @@ namespace te
     // now using horde3d animation format
     bool AnimClipRes::load(const std::string& res)
     {
-        if (!Resource::load(res)) return false;
+        //if (!Resource::load(res)) return false;
 
         char *data_ptr = nullptr;
         int size = 0;

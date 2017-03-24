@@ -23,6 +23,7 @@ namespace te
         };
     public:
         bool load(const std::string & res);
+        void unload(){}
         void release();
 
         friend class Skeleton;
@@ -54,6 +55,7 @@ namespace te
         };
     public:
         bool load(const std::string & res);
+        void unload(){}
         void release();
 
         void initAnimClip(AnimationClip* anim_clip);
