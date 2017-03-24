@@ -307,7 +307,7 @@ namespace te
                 GL_FALSE,
                 4 * vBuf.stride,
                 (void*)(offsets[i])); // offset in bytes which has been calculated in VertexLayout.cpp, no need to * 4
-            glEnableVertexArrayAttrib(vao, locations[i]);
+            glEnableVertexArrayAttrib(vao, locations[i]); // found a potential problem here, this function is only available since OpenGL 4.5
         }
 
         GLBuffer& iBuf = _buffers.getRef(indexHandle);
