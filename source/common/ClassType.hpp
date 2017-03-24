@@ -29,6 +29,12 @@ namespace te
     {
         return ClassTypeId<Component>::getTypeId<T>();
     }
+
+    template <class T>
+    int getResManagerTypeId()
+    {
+        return ClassTypeId<ResourceManager>::getTypeId<T>();
+    }
 }
 
 

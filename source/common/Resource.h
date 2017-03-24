@@ -6,6 +6,7 @@
 
 #include "common/Object.h"
 #include "base/RefPtr.hpp"
+#include "common/ClassType.hpp"
 
 namespace te
 {
@@ -118,23 +119,35 @@ namespace te
         ResourceType    _type;
         ResourceHandle  _next_handle;
     };
-//
-//    class ResourceMap /*: public Object*/
-//    {
-//    public:
-//        ResourceMap();
-//        //ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
-//        virtual ~ResourceMap();
-//
-//        //OBJECT_META_FUNCTION(ResourceMap);
-//        
-//        void registerResource(ResourceType type);
-//        void unregisterResource(ResourceType type);
-//        bool hasRegistered(ResourceType type);
-//
-//    protected:
-//        std::unordered_map<ResourceType, ResourceManager*>    _res_map;
-//    };
+
+    class ResourceMap /*: public Object*/
+    {
+    public:
+        ResourceMap();
+        //ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        virtual ~ResourceMap();
+
+        //OBJECT_META_FUNCTION(ResourceMap);
+        
+        /*void registerResource(ResourceType type);
+        void unregisterResource(ResourceType type);
+        bool hasRegistered(ResourceType type);*/
+        template <typename T>
+        T* getResManager();
+
+    protected:
+        ResourceManager*    getResManager(int manager_id);
+
+    protected:
+        std::vector<ResourceManager*>    _res_map;
+    };
+
+    template <typename T>
+    T* ResourceMap::getResManager()
+    {
+        static_assert(std::is_base_of<ResourceManager, T>(), "T is not a resource manager, cannot retrieve T");
+        return static_cast<T*>(getResManager(getResManagerTypeId<T>()));
+    }
 }
 
 #endif // COMMON_RESOURCE_H

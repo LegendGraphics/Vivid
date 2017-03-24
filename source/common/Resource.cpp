@@ -68,31 +68,36 @@ namespace te
         else return false;
     }
 
-   // ResourceMap::ResourceMap()
-   // {}
+    ResourceMap::ResourceMap()
+    {}
 
-   // /*ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
-   // {}*/
+    /*ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
+    {}*/
 
-   // ResourceMap::~ResourceMap()
-   // {}
+    ResourceMap::~ResourceMap()
+    {}
 
-   // void ResourceMap::registerResource(ResourceType type)
-   // {
-   //     /*if (!hasRegistered(type))
-   //         _res_map.insert({type, new ResourceManager(type)});*/
-   // }
+    //void ResourceMap::registerResource(ResourceType type)
+    //{
+    //    /*if (!hasRegistered(type))
+    //        _res_map.insert({type, new ResourceManager(type)});*/
+    //}
 
-   // void ResourceMap::unregisterResource(ResourceType type)
-   // {
-   //     if (hasRegistered(type))
-   //         _res_map.erase(type);
-   // }
+    //void ResourceMap::unregisterResource(ResourceType type)
+    //{
+    //    if (hasRegistered(type))
+    //        _res_map.erase(type);
+    //}
 
-   // bool ResourceMap::hasRegistered(ResourceType type)
-   // {
-   //     if (_res_map.find(type) == _res_map.end())
-   //         return false;
-   //     else return true;
-   // }
+    //bool ResourceMap::hasRegistered(ResourceType type)
+    //{
+    //    if (_res_map.find(type) == _res_map.end())
+    //        return false;
+    //    else return true;
+    //}
+
+    ResourceManager* ResourceMap::getResManager(int manager_id)
+    {
+        return _res_map[manager_id];
+    }
 }
