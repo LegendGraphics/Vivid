@@ -1,8 +1,6 @@
 #ifndef BASE_SINGLETON_H
 #define BASE_SINGLETON_H
 
-#include "base/Director.h"
-
 namespace te
 {
     template <typename T>
@@ -13,16 +11,22 @@ namespace te
         {
             if (!_singleton)
             {
-                _singleton = new T;
+                _singleton = new T();
             }
             return _singleton;
         }
-    private:
-        Singleton(void){}
+    protected:
+        Singleton(void)
+        {
+            _singleton = static_cast<T*>(this);
+        }
         ~Singleton()
         {
+            assert(_singleton);
             delete _singleton;
         }
+
+    private:
         Singleton(const Singleton<T> &) = delete;
         Singleton& operator=(const Singleton<T> &) = delete;
 
@@ -30,10 +34,6 @@ namespace te
         static T* _singleton;
     };
 
-    template <typename T>
-    T* Singleton<T>::_singleton = nullptr;
-
-    using DirectorS = Singleton<Director>;
 }
 
 #endif // BASE_SINGLETON_H

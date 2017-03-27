@@ -1,4 +1,5 @@
 #include "common/Resource.h"
+#include "common/Mesh.h"
 
 namespace te
 {
@@ -68,36 +69,39 @@ namespace te
         else return false;
     }
 
-    ResourceMap::ResourceMap()
+    ResourceMapper::ResourceMapper()
     {}
 
     /*ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
     {}*/
 
-    ResourceMap::~ResourceMap()
+    ResourceMapper::~ResourceMapper()
     {}
 
-    //void ResourceMap::registerResource(ResourceType type)
-    //{
-    //    /*if (!hasRegistered(type))
-    //        _res_map.insert({type, new ResourceManager(type)});*/
-    //}
-
-    //void ResourceMap::unregisterResource(ResourceType type)
-    //{
-    //    if (hasRegistered(type))
-    //        _res_map.erase(type);
-    //}
-
-    //bool ResourceMap::hasRegistered(ResourceType type)
-    //{
-    //    if (_res_map.find(type) == _res_map.end())
-    //        return false;
-    //    else return true;
-    //}
-
-    ResourceManager* ResourceMap::getResManager(int manager_id)
+    // initialize all resource managers
+    void ResourceMapper::initialize()
     {
-        return _res_map[manager_id];
+        add<MeshManager>();
+    }
+
+    ResourceManager* ResourceMapper::getResManager(int manager_id)
+    {
+        return _mgr_map[manager_id];
+    }
+
+    ResourceManager* ResourceMapper::addResManager(ResourceManager* mgr, int manager_id)
+    {
+        _mgr_map[manager_id] = mgr;
+        _mgr_types[manager_id] = true;
+        return mgr;
+    }
+    void ResourceMapper::removeResManager(int manager_id)
+    {
+        _mgr_map[manager_id] = nullptr;
+        _mgr_types[manager_id] = false;
+    }
+    bool ResourceMapper::hasResManager(int manager_id)
+    {
+        return _mgr_types[manager_id];
     }
 }

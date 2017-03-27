@@ -14,8 +14,8 @@ int main(int argc, char** argv)
     Mesh* m = new Mesh;
     ResourceLoader::load(m, "cube_emptyTags.mesh");
     scene->getSceneRoot()->addComponent<MeshFilter>(m);
-    DirectorS::getInstance()->setActiveScene(scene);
-    DirectorS::getInstance()->start();
+    Director::getInstance()->setActiveScene(scene);
+    Director::getInstance()->start();
 
     return 0;
 }

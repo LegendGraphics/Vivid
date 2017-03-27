@@ -266,14 +266,14 @@ namespace te
         RenderResource              _vertex_declaration;
     };
 
-    /*class MeshManager : public ResourceManager
+    class MeshManager : public ResourceManager
     {
     public:
         MeshManager();
         ~MeshManager();
 
         bool create(const std::string& res);
-    };*/
+    };
 }
 
 

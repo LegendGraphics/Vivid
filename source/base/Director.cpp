@@ -10,18 +10,7 @@
 
 namespace te
 {
-    /*Director* Director::_director = nullptr;
-
-    Director* Director::getInstance()
-    {
-        if (!_director)
-        {
-            _director = new Director();
-            _director->initialize();
-        }
-
-        return _director;
-    }*/
+    Director* Singleton<Director>::_singleton = nullptr;
 
     bool Director::initialize()
     {

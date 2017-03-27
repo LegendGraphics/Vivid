@@ -191,7 +191,7 @@ namespace te
     //}
 
 
-    /*MeshManager::MeshManager()
+    MeshManager::MeshManager()
         :ResourceManager(ResourceType::Mesh)
     {}
 
@@ -206,6 +206,6 @@ namespace te
             return true;
         }
         else return false;
-    }*/
+    }
 
 }
