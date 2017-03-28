@@ -103,11 +103,13 @@ namespace te
 
         using ResourceMap = std::unordered_map<ResourceHandle, Resource*>;
         using ExistingMap = std::unordered_map<std::string, ResourceHandle>;
+        using FreeList = std::vector<ResourceHandle>;
     protected:
         ResourceMap     _resources;
         ExistingMap     _id_maps;
         ResourceType    _type;
         ResourceHandle  _next_handle;
+        FreeList        _freeList;
     };
 
     class ResourceMapper : public Singleton<ResourceMapper> /*: public Object*/

@@ -31,7 +31,15 @@ namespace te
 
     ResourceHandle ResourceManager::getNextLocalResHandle()
     {
-        return ++_next_handle;
+        if (!_freeList.empty())
+        {
+
+            ResourceHandle handle = _freeList.back();
+            _freeList.pop_back();
+            return handle;
+        }
+        else
+            return ++_next_handle;
     }
 
     ResourceHandle ResourceManager::generateGlobalResHandle()
@@ -50,7 +58,7 @@ namespace te
     {
         if (resource->getResourceType() == _type && !has(resource))
         {
-            _resources.insert({ resource->getResourceHandle(), resource });
+            _resources[resource->getResourceHandle()] = resource;
             _id_maps.insert({ resource->getResourceId(), resource->getResourceHandle() });
         }
     }
@@ -61,6 +69,7 @@ namespace te
         {
             _id_maps.erase(_resources[handle]->getResourceId());
             _resources.erase(handle);
+            _freeList.push_back(handle - ResourceHandle(_type)); // freelist holds local handle
         }
     }
 
