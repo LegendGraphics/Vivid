@@ -2,15 +2,19 @@
 
 namespace te
 {
-    MeshFilter::MeshFilter(Mesh* mesh)
-        :_mesh(mesh)
-    {
+    MeshFilter::MeshFilter()
+        :_mes_handle(0)
+    {}
 
+    bool MeshFilter::load(const std::string& res)
+    {
+        _mes_handle = ResourceMapper::getInstance()->get<MeshManager>()->create(res);
+        return _mes_handle;
     }
 
-    void MeshFilter::setMesh(Mesh* mesh)
+    Mesh* MeshFilter::getMesh()
     {
-        _mesh = mesh;
+        return ResourceMapper::getInstance()->get<MeshManager>()->getMesh(_mes_handle);
     }
 }
 

@@ -9,12 +9,12 @@ namespace te
     class MeshFilter: public Component
     {
     public:
-        MeshFilter(Mesh* mesh);
-        void setMesh(Mesh* mesh);
-        inline Mesh* getMesh() { return _mesh; }
+        MeshFilter();
+        bool load(const std::string& res);
+        Mesh* getMesh();
 
     protected:
-        Mesh* _mesh;
+        ResourceHandle  _mes_handle;
     };
 }
 

@@ -11,7 +11,7 @@ namespace te
 
     Resource::~Resource(){}
 
-    void Resource::buildDescriptor(const ResourceDescriptor& des)
+    void Resource::descriptor(const ResourceDescriptor& des)
     {
         _descriptor = des;
     }
@@ -31,21 +31,27 @@ namespace te
 
     ResourceHandle ResourceManager::getNextLocalResHandle()
     {
-        return _next_handle++;
+        return ++_next_handle;
     }
 
     ResourceHandle ResourceManager::generateGlobalResHandle()
     {
-        return ResourceHandle(_type) + _next_handle;
+        ResourceHandle local_handle = getNextLocalResHandle();
+        return ResourceHandle(_type) + local_handle;
+    }
+
+    ResourceDescriptor ResourceManager::buildDescriptor(const std::string& id)
+    {
+        ResourceHandle global_handle = generateGlobalResHandle();
+        return ResourceDescriptor(global_handle, _type, id);
     }
 
     void ResourceManager::add(Resource* resource)
     {
         if (resource->getResourceType() == _type && !has(resource))
         {
-            ResourceHandle global_handle = generateGlobalResHandle();
-            resource->buildDescriptor(ResourceDescriptor(global_handle, _type));
-            _resources.insert({ global_handle, resource });
+            _resources.insert({ resource->getResourceHandle(), resource });
+            _id_maps.insert({ resource->getResourceId(), resource->getResourceHandle() });
         }
     }
 
@@ -53,6 +59,7 @@ namespace te
     {
         if (has(handle))
         {
+            _id_maps.erase(_resources[handle]->getResourceId());
             _resources.erase(handle);
         }
     }
@@ -69,14 +76,26 @@ namespace te
         else return false;
     }
 
+    bool ResourceManager::exist(const std::string& id)
+    {
+        auto search = _id_maps.find(id);
+        if (search != _id_maps.end()) return true;
+        else return false;
+    }
+
+
+    ResourceMapper* Singleton<ResourceMapper>::_singleton = nullptr;
+
     ResourceMapper::ResourceMapper()
-    {}
+    {
+        initialize();
+    }
 
     /*ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
     {}*/
 
-    ResourceMapper::~ResourceMapper()
-    {}
+    /*ResourceMapper::~ResourceMapper()
+    {}*/
 
     // initialize all resource managers
     void ResourceMapper::initialize()

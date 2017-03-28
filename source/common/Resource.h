@@ -4,10 +4,12 @@
 #include <unordered_map>
 #include <bitset>
 #include <array>
+#include <set>
 
 #include "common/Object.h"
 #include "base/RefPtr.hpp"
 #include "common/ClassType.hpp"
+#include "base/Singleton.hpp"
 
 namespace te
 {
@@ -36,14 +38,21 @@ namespace te
     struct ResourceDescriptor
     {
         ResourceDescriptor() {}
-        ResourceDescriptor(ResourceHandle handle, ResourceType type)
+        ResourceDescriptor(const ResourceDescriptor& des) 
+        {
+            *this = des;
+        }
+
+        ResourceDescriptor(ResourceHandle handle, ResourceType type, const std::string& id)
         {
             this->handle = handle;
             this->type = type;
+            this->id = id;
         }
 
         ResourceHandle  handle;
         ResourceType    type;
+        std::string     id;
     };
 
     class Resource /*: public Object*/
@@ -60,8 +69,8 @@ namespace te
 
         ResourceHandle  getResourceHandle() const { return _descriptor.handle; }
         ResourceType    getResourceType() const { return _descriptor.type; }
-
-        void buildDescriptor(const ResourceDescriptor& des);
+        std::string     getResourceId() const { return _descriptor.id; }
+        void descriptor(const ResourceDescriptor& des);
 
     protected:
         ResourceDescriptor      _descriptor;
@@ -75,7 +84,7 @@ namespace te
         virtual ~ResourceManager();
 
 //        OBJECT_META_FUNCTION(ResourceManager);
-        virtual bool create(const std::string& res) = 0;
+        virtual ResourceHandle create(const std::string& res) = 0; // using file path as unified id
 
         //ResourceType getType() const { return _type; }
 
@@ -85,24 +94,28 @@ namespace te
         void remove(ResourceHandle handle);
         bool has(Resource* resource);
         bool has(ResourceHandle handle);
+        bool exist(const std::string& id);
 
     protected:
         ResourceHandle getNextLocalResHandle();
         ResourceHandle generateGlobalResHandle();
-        
+        ResourceDescriptor buildDescriptor(const std::string& id);
+
         using ResourceMap = std::unordered_map<ResourceHandle, Resource*>;
+        using ExistingMap = std::unordered_map<std::string, ResourceHandle>;
     protected:
         ResourceMap     _resources;
+        ExistingMap     _id_maps;
         ResourceType    _type;
         ResourceHandle  _next_handle;
     };
 
-    class ResourceMapper /*: public Object*/
+    class ResourceMapper : public Singleton<ResourceMapper> /*: public Object*/
     {
     public:
         ResourceMapper();
-        //ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
-        virtual ~ResourceMapper();
+        ////ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        //virtual ~ResourceMapper();
 
         //OBJECT_META_FUNCTION(ResourceMap);
 

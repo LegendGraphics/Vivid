@@ -272,7 +272,9 @@ namespace te
         MeshManager();
         ~MeshManager();
 
-        bool create(const std::string& res);
+        ResourceHandle create(const std::string& res);
+
+        Mesh*   getMesh(ResourceHandle handle);
     };
 }
 

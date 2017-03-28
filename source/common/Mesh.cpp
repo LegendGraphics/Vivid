@@ -197,15 +197,25 @@ namespace te
 
     MeshManager::~MeshManager(){}
 
-    bool MeshManager::create(const std::string& res)
+    ResourceHandle MeshManager::create(const std::string& res)
     {
-        Mesh* mesh = new Mesh;
-        if (mesh->load(res)) 
+        if (exist(res)) return _id_maps[res];
+        else
         {
-            add(mesh);
-            return true;
+            Mesh* mesh = new Mesh;
+            if (mesh->load(res))
+            {
+                mesh->descriptor(buildDescriptor(res));
+                add(mesh);
+                return _id_maps[res];
+            }
+            else return 0;
         }
-        else return false;
     }
 
+    Mesh* MeshManager::getMesh(ResourceHandle handle)
+    {
+        if (has(handle)) return dynamic_cast<Mesh*>(_resources[handle]);
+        else return nullptr;
+    }
 }
