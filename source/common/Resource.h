@@ -1,49 +1,79 @@
 #ifndef COMMON_RESOURCE_H
 #define COMMON_RESOURCE_H
 
-#include <vector>
 #include <unordered_map>
+#include <bitset>
+#include <array>
+#include <set>
 
 #include "common/Object.h"
 #include "base/RefPtr.hpp"
+#include "common/ClassType.hpp"
+#include "base/Singleton.hpp"
 
 namespace te
 {
-    enum class ResourceType
+    const int MAX_AMOUNT_OF_RES_MANANGER = 12;
+}
+
+namespace te
+{
+    enum class ResourceType : unsigned long
     {
-        Undefined,
-        SceneGraph,
-        Mesh,
-        Skeleton,
-        Animation,
-        Material,
-        Code,
-        Shader,
-        Texture,
-        ParticleEffect,
-        Pipeline
+        Undefined =         (0 << 8),
+        SceneGraph =        (1 << 8),
+        Mesh =              (2 << 8),
+        Skeleton =          (3 << 8),
+        Animation =         (4 << 8),
+        Material =          (5 << 8),
+        Code =              (6 << 8),
+        Shader =            (7 << 8),
+        Texture =           (8 << 8),
+        ParticleEffect =    (9 << 8),
+        Pipeline =         (10 << 8)
     };
 
     using ResourceHandle = unsigned long;
+
+    struct ResourceDescriptor
+    {
+        ResourceDescriptor() {}
+        ResourceDescriptor(const ResourceDescriptor& des) 
+        {
+            *this = des;
+        }
+
+        ResourceDescriptor(ResourceHandle handle, ResourceType type, const std::string& id)
+        {
+            this->handle = handle;
+            this->type = type;
+            this->id = id;
+        }
+
+        ResourceHandle  handle;
+        ResourceType    type;
+        std::string     id;
+    };
 
     class Resource /*: public Object*/
     {
     public:
         Resource();
-      //  Resource(const Resource& resource, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        //Resource(const Resource& resource, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Resource();
-        
-      //  OBJECT_META_FUNCTION(Resource);
 
-        virtual bool load(const std::string& res);
-        virtual void unload();
+        //OBJECT_META_FUNCTION(Resource);
 
-        ResourceType getType() const { return _type; }
-        ResourceHandle getResourceHandle() const { return _handle; }
+        virtual bool load(const std::string& res) = 0;
+        virtual void unload() = 0;
+
+        ResourceHandle  getResourceHandle() const { return _descriptor.handle; }
+        ResourceType    getResourceType() const { return _descriptor.type; }
+        std::string     getResourceId() const { return _descriptor.id; }
+        void descriptor(const ResourceDescriptor& des);
 
     protected:
-        ResourceType    _type;
-        ResourceHandle  _handle;
+        ResourceDescriptor      _descriptor;
     };
 
     class ResourceManager /*: public Object*/
@@ -54,40 +84,100 @@ namespace te
         virtual ~ResourceManager();
 
 //        OBJECT_META_FUNCTION(ResourceManager);
+        virtual ResourceHandle create(const std::string& res) = 0; // using file path as unified id
 
-        ResourceType getType() const { return _type; }
+        //ResourceType getType() const { return _type; }
 
-        virtual bool create(const std::string& res) = 0;
+//        virtual bool create(const std::string& res) = 0;
         
-        ResourceHandle getNextResHandle();
-
         void add(Resource* resource);
         void remove(ResourceHandle handle);
         bool has(Resource* resource);
         bool has(ResourceHandle handle);
-        
+        bool exist(const std::string& id);
+
     protected:
-        std::unordered_map<ResourceHandle, Resource*> _resources;
+        ResourceHandle getNextLocalResHandle();
+        ResourceHandle generateGlobalResHandle();
+        ResourceDescriptor buildDescriptor(const std::string& id);
+
+        using ResourceMap = std::unordered_map<ResourceHandle, Resource*>;
+        using ExistingMap = std::unordered_map<std::string, ResourceHandle>;
+        using FreeList = std::vector<ResourceHandle>;
+    protected:
+        ResourceMap     _resources;
+        ExistingMap     _id_maps;
         ResourceType    _type;
         ResourceHandle  _next_handle;
+        FreeList        _freeList;
     };
 
-    class ResourceMap /*: public Object*/
+    class ResourceMapper : public Singleton<ResourceMapper> /*: public Object*/
     {
     public:
-        ResourceMap();
-        //ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
-        virtual ~ResourceMap();
+        ResourceMapper();
+        ////ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        //virtual ~ResourceMapper();
 
         //OBJECT_META_FUNCTION(ResourceMap);
-        
-        void registerResource(ResourceType type);
-        void unregisterResource(ResourceType type);
-        bool hasRegistered(ResourceType type);
+
+        void initialize();
+
+        template <typename T, typename ... Args>
+        T* add(Args&& ... args);
+
+        template <typename T>
+        void remove();
+
+        template <typename T>
+        bool has();
+
+        template <typename T>
+        T* get();
 
     protected:
-        std::unordered_map<ResourceType, ResourceManager*>    _res_map;
+        ResourceManager*    getResManager(int manager_id);
+        ResourceManager*    addResManager(ResourceManager* mgr, int manager_id);
+        void                removeResManager(int manager_id);
+        bool                hasResManager(int manager_id);
+
+    protected:
+        using ResourceManagerMap = std::array<ResourceManager*, MAX_AMOUNT_OF_RES_MANANGER>;
+        using ManagerTypeList = std::bitset<MAX_AMOUNT_OF_RES_MANANGER>;
+
+        ResourceManagerMap      _mgr_map;
+        ManagerTypeList         _mgr_types;
     };
+
+    template <typename T>
+    T* ResourceMapper::get()
+    {
+        static_assert(std::is_base_of<ResourceManager, T>(), "T is not a resource manager, cannot retrieve T");
+        return static_cast<T*>(getResManager(getResManagerTypeId<T>()));
+    }
+
+    template <typename T, typename ... Args>
+    T* ResourceMapper::add(Args&& ... args)
+    {
+        static_assert(std::is_base_of<ResourceManager, T>(), "T is not a resource manager, cannot add T to resource mapper");
+        auto manager = new T{ std::forward<Args>(args)... };
+        addResManager(manager, getResManagerTypeId<T>());
+        return manager;
+    }
+
+    template <typename T>
+    void ResourceMapper::remove()
+    {
+        static_assert(std::is_base_of<ResourceManager, T>(), "T is not a resource manager, cannot remove T from resource mapper");
+        removeResManager(getResManagerTypeId<T>());
+    }
+
+    template <typename T>
+    bool ResourceMapper::has()
+    {
+        static_assert(std::is_base_of<ResourceManager, T>(), "T is not a resource manager, cannot determine if resource mapper has T");
+        return hasResManager(getResManagerTypeId<T>());
+    }
 }
 
 #endif // COMMON_RESOURCE_H

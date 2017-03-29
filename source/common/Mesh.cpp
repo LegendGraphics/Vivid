@@ -141,7 +141,7 @@ namespace te
 
     bool Mesh::load(const std::string & res)
     {
-        return false;
+        return ResourceLoader::load(this, res);
     }
 
     void Mesh::unload()
@@ -197,14 +197,25 @@ namespace te
 
     MeshManager::~MeshManager(){}
 
-    bool MeshManager::create(const std::string& res)
+    ResourceHandle MeshManager::create(const std::string& res)
     {
-        Mesh* mesh = new Mesh;
-        if (ResourceLoader::load(mesh, res)) {
-            add(mesh);
-            return true;
+        if (exist(res)) return _id_maps[res];
+        else
+        {
+            Mesh* mesh = new Mesh;
+            if (mesh->load(res))
+            {
+                mesh->descriptor(buildDescriptor(res));
+                add(mesh);
+                return _id_maps[res];
+            }
+            else return 0;
         }
-        else return false;
     }
 
+    Mesh* MeshManager::getMesh(ResourceHandle handle)
+    {
+        if (has(handle)) return dynamic_cast<Mesh*>(_resources[handle]);
+        else return nullptr;
+    }
 }

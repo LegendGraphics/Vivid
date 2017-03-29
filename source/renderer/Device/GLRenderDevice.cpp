@@ -11,10 +11,11 @@
 namespace te
 {
     static const char *defaultShaderVS =
+        "#version 430\n"
         "uniform mat4 viewProjMat;\n"
         "uniform mat4 worldMat;\n"
-        "attribute vec3 vertPos;\n"
-        "attribute vec3 normal;\n"
+        "in vec3 vertPos;\n"
+        "in vec3 normal;\n"
         "out vec3 g_normal;\n"
         "void main() {\n"
         "	gl_Position = viewProjMat * vec4( vertPos, 1.0 );\n"
@@ -22,6 +23,7 @@ namespace te
         "}\n";
 
     static const char *defaultShaderFS =
+        "#version 430\n"
         "uniform vec4 color;\n"
         "in vec3 g_normal;\n"
         "out vec4 fragColor;\n"
@@ -51,7 +53,6 @@ namespace te
 
         testVao();
 
-        _vertex_declaration.init();
         _pending_mask = 0;
 
         return bOK;

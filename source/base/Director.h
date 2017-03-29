@@ -2,6 +2,7 @@
 #define BASE_DIRECTOR_H
 
 #include "base/Timer.h"
+#include "base/Singleton.hpp"
 
 class GLFWwindow;
 
@@ -19,13 +20,12 @@ namespace te
     //   - rendering update
 
     class Scene;
+    class ResourceMapper;
     class RenderInterface;
 
-    class Director
+    class Director: public Singleton<Director>
     {
     public:
-        //static Director* getInstance();
-
         void setActiveScene(Scene* active_scene);
         Scene* getActiveScene() { return _active_scene; }
 
@@ -48,13 +48,9 @@ namespace te
         void initWindow();
         void initResource();
 
-        /*private:
-            Director() {};*/
-
     private:
-        //static Director* _director;
-
         Scene* _active_scene;
+        ResourceMapper* _res_mapper;
 
         /* delta time since last tick to main loop */
         float _delta_time;

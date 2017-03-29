@@ -1,4 +1,5 @@
 #include "common/Resource.h"
+#include "common/Mesh.h"
 
 namespace te
 {
@@ -10,13 +11,9 @@ namespace te
 
     Resource::~Resource(){}
 
-    bool Resource::load(const std::string& res)
+    void Resource::descriptor(const ResourceDescriptor& des)
     {
-        return false;
-    }
-
-    void Resource::unload()
-    {
+        _descriptor = des;
     }
 
     ResourceManager::ResourceManager(ResourceType type)
@@ -32,16 +29,37 @@ namespace te
     ResourceManager::~ResourceManager()
     {}
 
-    ResourceHandle ResourceManager::getNextResHandle()
+    ResourceHandle ResourceManager::getNextLocalResHandle()
     {
-        return _next_handle++;
+        if (!_freeList.empty())
+        {
+
+            ResourceHandle handle = _freeList.back();
+            _freeList.pop_back();
+            return handle;
+        }
+        else
+            return ++_next_handle;
+    }
+
+    ResourceHandle ResourceManager::generateGlobalResHandle()
+    {
+        ResourceHandle local_handle = getNextLocalResHandle();
+        return ResourceHandle(_type) + local_handle;
+    }
+
+    ResourceDescriptor ResourceManager::buildDescriptor(const std::string& id)
+    {
+        ResourceHandle global_handle = generateGlobalResHandle();
+        return ResourceDescriptor(global_handle, _type, id);
     }
 
     void ResourceManager::add(Resource* resource)
     {
-        if (resource->getType() == _type && !has(resource))
+        if (resource->getResourceType() == _type && !has(resource))
         {
-            _resources.insert({ resource->getResourceHandle(), resource });
+            _resources[resource->getResourceHandle()] = resource;
+            _id_maps.insert({ resource->getResourceId(), resource->getResourceHandle() });
         }
     }
 
@@ -49,7 +67,9 @@ namespace te
     {
         if (has(handle))
         {
+            _id_maps.erase(_resources[handle]->getResourceId());
             _resources.erase(handle);
+            _freeList.push_back(handle - ResourceHandle(_type)); // freelist holds local handle
         }
     }
 
@@ -65,31 +85,51 @@ namespace te
         else return false;
     }
 
-    ResourceMap::ResourceMap()
-    {}
+    bool ResourceManager::exist(const std::string& id)
+    {
+        auto search = _id_maps.find(id);
+        if (search != _id_maps.end()) return true;
+        else return false;
+    }
+
+
+    ResourceMapper* Singleton<ResourceMapper>::_singleton = nullptr;
+
+    ResourceMapper::ResourceMapper()
+    {
+        initialize();
+    }
 
     /*ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
     {}*/
 
-    ResourceMap::~ResourceMap()
-    {}
+    /*ResourceMapper::~ResourceMapper()
+    {}*/
 
-    void ResourceMap::registerResource(ResourceType type)
+    // initialize all resource managers
+    void ResourceMapper::initialize()
     {
-        /*if (!hasRegistered(type))
-            _res_map.insert({type, new ResourceManager(type)});*/
+        add<MeshManager>();
     }
 
-    void ResourceMap::unregisterResource(ResourceType type)
+    ResourceManager* ResourceMapper::getResManager(int manager_id)
     {
-        if (hasRegistered(type))
-            _res_map.erase(type);
+        return _mgr_map[manager_id];
     }
 
-    bool ResourceMap::hasRegistered(ResourceType type)
+    ResourceManager* ResourceMapper::addResManager(ResourceManager* mgr, int manager_id)
     {
-        if (_res_map.find(type) == _res_map.end())
-            return false;
-        else return true;
+        _mgr_map[manager_id] = mgr;
+        _mgr_types[manager_id] = true;
+        return mgr;
+    }
+    void ResourceMapper::removeResManager(int manager_id)
+    {
+        _mgr_map[manager_id] = nullptr;
+        _mgr_types[manager_id] = false;
+    }
+    bool ResourceMapper::hasResManager(int manager_id)
+    {
+        return _mgr_types[manager_id];
     }
 }

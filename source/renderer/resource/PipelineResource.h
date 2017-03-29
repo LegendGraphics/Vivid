@@ -135,6 +135,7 @@ namespace te
         void initDefault();
         void release();
         bool load(const std::string& res);
+        void unload() {}
         void resize(uint32 width, uint32 height);
 
         bool getRenderTargetData(const std::string &target, int bufIndex, int *width, int *height,
