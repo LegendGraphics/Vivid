@@ -44,5 +44,6 @@ namespace te
         RenderResourceContext* rrc = (params._device->newResourceContext());
         allocResourceInternal(params, rrc);
         params._device->dispatch(rrc);
+        params._device->releaseResourceContext(rrc);
     }
 }
