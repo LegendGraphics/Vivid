@@ -69,7 +69,7 @@ namespace te
         void init();
         const VertexLayout& getLayout(vertex_layout::Type vlType);
 
-        VertexDeclaration() : VertexDeclaration(OTHER) { init(); }
+        VertexDeclaration() : RenderResource(OTHER) { init(); }
         VertexDeclaration(RenderResource::Type t) : RenderResource(t) { init(); }
     };
 }

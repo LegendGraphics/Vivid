@@ -50,7 +50,7 @@ namespace te
     {
         if (resource->getResourceType() == _type && !has(resource))
         {
-            _resources.insert({ resource->getResourceHandle(), resource });
+            _resources[resource->getResourceHandle()] = resource;
             _id_maps.insert({ resource->getResourceId(), resource->getResourceHandle() });
         }
     }
