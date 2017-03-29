@@ -71,6 +71,7 @@ namespace te
 
         // send render job package to RenderDevice for real work
         params._device->dispatch(renderContext);
+        params._device->releaseContext(renderContext);
     }
 
     // helper function

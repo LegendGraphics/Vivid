@@ -33,6 +33,12 @@ namespace te
 
     void RenderDevice::releaseContext(RenderContext* context)
     {
+        auto it = std::find(_render_contexts.begin(), _render_contexts.end(), context);
+        if (it != _render_contexts.end())
+        {
+            delete (*it);
+        }
+        _render_contexts.erase(it);
     }
 
     RenderResourceContext * RenderDevice::newResourceContext()
@@ -43,6 +49,12 @@ namespace te
 
     void RenderDevice::releaseResourceContext(RenderResourceContext * context)
     {
+        auto it = std::find(_render_resource_contexts.begin(), _render_resource_contexts.end(), context);
+        if (it != _render_resource_contexts.end())
+        {
+            delete (*it);
+        }
+        _render_resource_contexts.erase(it);
     }
 
     VertexDeclaration * RenderDevice::getVertexDeclarationDefinition()
