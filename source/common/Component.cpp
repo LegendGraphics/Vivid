@@ -31,7 +31,7 @@ namespace te
         _enabled = enabled;
     }
 
-    void Component::setName(const std::string& name)
+    void Component::setName(const String& name)
     {
         _name = name;
     }

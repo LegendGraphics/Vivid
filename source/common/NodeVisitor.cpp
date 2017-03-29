@@ -1,5 +1,8 @@
 
 #include "common/NodeVisitor.h"
+
+#include <iostream>
+
 #include "common/Node.h"
 #include "common/Camera.h"
 #include "common/SpaceState.h"
@@ -42,7 +45,7 @@ namespace te
 
     void NodeVisitor::apply(Node* node)
     {
-        std::cout << node->getName() << std::endl;
+        //std::cout << node->getName() << std::endl;
         traverse(node);
     }
 

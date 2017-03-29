@@ -10,7 +10,7 @@ namespace te
     {
     public:
         MeshFilter();
-        bool load(const std::string& res);
+        bool load(const String& res);
         Mesh* getMesh();
 
     protected:

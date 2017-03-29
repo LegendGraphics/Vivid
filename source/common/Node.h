@@ -4,9 +4,9 @@
 #include <vector>
 #include <type_traits>
 
-#include "base/ref.h"
-#include "base/refptr.hpp"
-#include "common/object.h"
+#include "base/Ref.h"
+#include "base/Refptr.hpp"
+#include "common/Clone.h"
 #include "common/ClassType.hpp"
 
 #define ENABLE_LEAF_NODE                                    \
@@ -28,14 +28,14 @@ namespace te
 
     //typedef std::vector<Node*> NodePath;
 
-    class Node: public Object
+    class Node: public Ref, public Cloneable
     {
     public:
         Node();
         Node(const Node& node, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Node();
 
-        OBJECT_META_FUNCTION(Node);
+        ENABLE_CLONE(Node);
 
         void addChild(Node* child);
         void removeChild(Node* child);

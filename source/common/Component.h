@@ -5,38 +5,39 @@
 #include <array>
 #include <bitset>
 
-#include "base/ref.h"
-#include "base/refptr.hpp"
-#include "common/object.h"
+#include "base/Ref.h"
+#include "base/Refptr.hpp"
+#include "base/String.h"
+#include "common/Clone.h"
 
 
 namespace te
 {
-    class Component: public Object
+    class Node;
+
+    class Component: public Ref
     {
-        public:
-            Component();
-            Component(const Component& component, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
-            virtual ~Component();
+    public:
+        Component();
+        Component(const Component& component, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        virtual ~Component();
 
-            OBJECT_META_FUNCTION(Component);
+        virtual void init();
+        virtual void update();
 
-            virtual void init();
-            virtual void update();
+        inline bool isEnabled() const { return _enabled; }
+        void setEnabled(bool enabled);
 
-            inline bool isEnabled() const { return _enabled; }
-            void setEnabled(bool enabled);
+        inline const String& getName() const { return _name; }
+        void setName(const String& name);
 
-            inline const std::string& getName() const { return _name; }
-            void setName(const std::string& name);
+        inline Node* getOwner() const { return _owner; }
+        void setOwner(Node* owner);
 
-            inline Node* getOwner() const { return _owner; }
-            void setOwner(Node* owner);
-
-        protected:
-            std::string _name;
-            bool _enabled;
-            Node* _owner;
+    protected:
+        String _name;
+        bool _enabled;
+        Node* _owner;
     };
 
 }

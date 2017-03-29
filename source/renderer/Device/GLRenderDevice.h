@@ -20,7 +20,7 @@ namespace te
     // =====================================
     struct GLVertexLayoutAttrib
     {
-        std::string sematicName;
+        String sematicName;
         uint32      vbslot; // to get the VertexBufferSlot from GLRenderDevice::_vertBufSlots
                             // which is set dynamically by shader
     };
@@ -151,7 +151,7 @@ namespace te
         };
 
     protected:
-        std::string   _shaderLog;
+        String   _shaderLog;
         RDObjects<GLShader> _shaders;
         RDObjects<GLBuffer> _buffers;
         RDObjects<GLTexture> _textures;

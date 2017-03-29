@@ -38,7 +38,7 @@ namespace te
         _stages.clear();
     }
 
-    const std::string PipelineResource::parseStage(XMLNode &node, PipelineStage &stage)
+    const String PipelineResource::parseStage(XMLNode &node, PipelineStage &stage)
     {
         stage.id = node.getAttribute("id", "");
 
@@ -226,7 +226,7 @@ namespace te
     }
 
 
-    void PipelineResource::addRenderTarget(const std::string &id, bool depthBuf, uint32 numColBufs,
+    void PipelineResource::addRenderTarget(const String &id, bool depthBuf, uint32 numColBufs,
         /*TextureFormats::List format,*/ uint32 samples,
         uint32 width, uint32 height, float scale)
     {
@@ -245,7 +245,7 @@ namespace te
     }
 
 
-    RenderTarget* PipelineResource::findRenderTarget(const std::string &id)
+    RenderTarget* PipelineResource::findRenderTarget(const String &id)
     {
         if (id == "") return nullptr;
 
@@ -291,7 +291,7 @@ namespace te
     }
 
 
-    bool PipelineResource::load(const std::string& res)
+    bool PipelineResource::load(const String& res)
     {
         //if (!Resource::load(res)) return false;
 
@@ -317,7 +317,7 @@ namespace te
             while (!node2.isEmpty())
             {
                 if (!node2.getAttribute("id")) /*return raiseError("Missing RenderTarget attribute 'id'")*/;
-                std::string id = node2.getAttribute("id");
+                String id = node2.getAttribute("id");
 
                 if (!node2.getAttribute("depthBuf")) /*return raiseError("Missing RenderTarget attribute 'depthBuf'")*/;
                 bool depth = false;
@@ -361,7 +361,7 @@ namespace te
             while (!node2.isEmpty())
             {
                 _stages.push_back(PipelineStage());
-                std::string errorMsg = parseStage(node2, _stages.back());
+                String errorMsg = parseStage(node2, _stages.back());
                 if (errorMsg != "")
                     /*return raiseError("Error in stage '" + _stages.back().id + "': " + errorMsg)*/;
 
@@ -388,7 +388,7 @@ namespace te
         createRenderTargets();
     }
 
-    bool PipelineResource::getRenderTargetData(const std::string &target, int bufIndex, int *width, int *height,
+    bool PipelineResource::getRenderTargetData(const String &target, int bufIndex, int *width, int *height,
         int *compCount, void *dataBuffer, int bufferSize)
     {
         uint32 rbObj = 0;

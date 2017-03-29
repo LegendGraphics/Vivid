@@ -1,10 +1,10 @@
 #include "io/ResourceLoader.h"
 #include "io/FileUtils.h"
 #include "common/Mesh.h"
-#include "io/logger.h"
+
 namespace te
 {
-    bool ResourceLoader::load(Mesh* mesh, const std::string& res)
+    bool ResourceLoader::load(Mesh* mesh, const String& res)
     {
             char *data_ptr = nullptr;
             int size = 0;
@@ -42,7 +42,7 @@ namespace te
                 int stream_id, elem_size;
                 memcpy(&stream_id, data_ptr, sizeof(int)); data_ptr += sizeof(int);
                 memcpy(&elem_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-                std::string errormsg;
+                String errormsg;
 
                 switch (stream_id)
                 {
@@ -57,7 +57,6 @@ namespace te
                         memcpy(&mesh->_vertices.position(j).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                         memcpy(&mesh->_vertices.position(j).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                         memcpy(&mesh->_vertices.position(j).z, data_ptr, sizeof(float)); data_ptr += sizeof(float);
-                        //cLog << mesh->_vertices.position(j);
                     }
                     break;
                 case 1:		// Normal
@@ -122,7 +121,7 @@ namespace te
             return true;
     }
 
-    /*bool ResourceLoader::load(Pipeline* pipeline, const std::string& res)
+    /*bool ResourceLoader::load(Pipeline* pipeline, const String& res)
     {
         return false;
     }*/

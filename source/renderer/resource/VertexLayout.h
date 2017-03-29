@@ -1,7 +1,8 @@
 #ifndef RENDERER_VERTEXLAYOUT_H
 #define RENDERER_VERTEXLAYOUT_H
-
-#include "base/Globals.h"
+#include <unordered_map>
+#include "base/Types.h"
+#include "base/String.h"
 #include "RenderResource.h"
 
 namespace te
@@ -50,7 +51,7 @@ namespace te
     // stored in a chunk of memory
     struct VertexLayoutAttrib
     {
-        std::string  semanticName;
+        String  semanticName;
         uint32       vbSlot;
         uint32       size; // number of component
         uint32       offset; // offset in bytes, for example, after a size 2 of float, offset will be 2 * (32 / 8) = 8

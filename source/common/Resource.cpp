@@ -40,7 +40,7 @@ namespace te
         return ResourceHandle(_type) + local_handle;
     }
 
-    ResourceDescriptor ResourceManager::buildDescriptor(const std::string& id)
+    ResourceDescriptor ResourceManager::buildDescriptor(const String& id)
     {
         ResourceHandle global_handle = generateGlobalResHandle();
         return ResourceDescriptor(global_handle, _type, id);
@@ -76,7 +76,7 @@ namespace te
         else return false;
     }
 
-    bool ResourceManager::exist(const std::string& id)
+    bool ResourceManager::exist(const String& id)
     {
         auto search = _id_maps.find(id);
         if (search != _id_maps.end()) return true;

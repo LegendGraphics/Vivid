@@ -1,6 +1,8 @@
 #ifndef BASE_SINGLETON_H
 #define BASE_SINGLETON_H
 
+#include "base/Assert.h"
+
 namespace te
 {
     template <typename T>
@@ -22,7 +24,7 @@ namespace te
         }
         ~Singleton()
         {
-            assert(_singleton);
+            ASSERT(_singleton);
             delete _singleton;
         }
 

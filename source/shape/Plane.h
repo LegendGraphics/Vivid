@@ -1,22 +1,18 @@
 #ifndef COMMON_PLANE_H
 #define COMMON_PLANE_H
 
-#include "common/Object.h"
 #include "math/Vector3.h"
 
 namespace te
 {
-    class Plane : public Object
+    class Plane
     {
     public:
         Plane();
         Plane(const float a, const float b, const float c, const float d);
         Plane(const Vector3& normal, float distance);
-        Plane(const Plane& plane, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         Plane& operator=(const Plane& plane);
         virtual ~Plane();
-
-        OBJECT_META_FUNCTION(Plane);
 
         void setNormal(const Vector3& normal);
         inline Vector3 getNormal() const { return _normal; }

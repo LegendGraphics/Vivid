@@ -1,6 +1,7 @@
+#include "math/Vector2.h"
+
 #include <cmath>
 
-#include "math/Vector2.h"
 
 namespace te
 {

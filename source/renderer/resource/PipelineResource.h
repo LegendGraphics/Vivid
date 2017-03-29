@@ -41,7 +41,7 @@ namespace te
         void setInt(int i) { _basic.i = i; }
         void setBool(bool b) { _basic.b = b; }
         void setPtr(void *ptr) { _basic.ptr = ptr; }
-        void setString(const char *str) { _string = new std::string(str); }
+        void setString(const char *str) { _string = new String(str); }
         void setResource(Resource *resource) { _resource = resource; }
 
     protected:
@@ -54,7 +54,7 @@ namespace te
         };
 
         BasicType      _basic;
-        std::string    *_string;
+        String    *_string;
         Resource*      _resource;
     };
 
@@ -86,7 +86,7 @@ namespace te
 
     struct PipelineStage
     {
-        std::string     id;
+        String     id;
         bool            enabled;
         std::vector<PipelineCommand> commands;
     };
@@ -107,7 +107,7 @@ namespace te
 
     struct RenderTarget
     {
-        std::string           id;
+        String           id;
         uint32                numColBufs;
        // TextureFormats::List  format;
         uint32                width, height;
@@ -134,22 +134,22 @@ namespace te
 
         void initDefault();
         void release();
-        bool load(const std::string& res);
+        bool load(const String& res);
         void unload() {}
         void resize(uint32 width, uint32 height);
 
-        bool getRenderTargetData(const std::string &target, int bufIndex, int *width, int *height,
+        bool getRenderTargetData(const String &target, int bufIndex, int *width, int *height,
             int *compCount, void *dataBuffer, int bufferSize);
 
         PipelineStages& getStages() { return _stages; }
 
     private:
-        const std::string parseStage(XMLNode &node, PipelineStage &stage);
+        const String parseStage(XMLNode &node, PipelineStage &stage);
 
-        void addRenderTarget(const std::string &id, bool depthBuffer, uint32 numBuffers,
+        void addRenderTarget(const String &id, bool depthBuffer, uint32 numBuffers,
             /*TextureFormats::List format,*/ uint32 samples,
             uint32 width, uint32 height, float scale);
-        RenderTarget* findRenderTarget(const std::string &id);
+        RenderTarget* findRenderTarget(const String &id);
         bool createRenderTargets();
         void releaseRenderTargets();
 

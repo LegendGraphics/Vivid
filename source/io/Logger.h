@@ -3,8 +3,9 @@
 
 #include <ostream>
 #include <fstream>
-#include <string>
 
+#include "base/Singleton.hpp"
+#include "base/String.h"
 #include "math/Vector3.h"
 #include "math/Matrix.h"
 #include "math/Quaternion.h"
@@ -14,44 +15,31 @@
 
 namespace te
 {
-    std::string format(const char* format, ...);
-
-    class FileLogger
+    class FileLogger: public Singleton<FileLogger>
     {
     public:
-        static FileLogger* getInstance();
-    public:
-        virtual FileLogger& operator<<(const std::string& msg);
+        virtual FileLogger& operator<<(const String& msg);
         virtual FileLogger& operator<<(const Vector3& v);
         virtual FileLogger& operator<<(const Vector4& v);
         virtual FileLogger& operator<<(const Matrix& m);
         virtual FileLogger& operator<<(const Quaternion& q);
     private:
-        FileLogger() = default;
-    private:
-        static FileLogger* _logger;
-
         std::ofstream   _fout;
     };
 
-    class ConsoleLogger
+    class ConsoleLogger: public Singleton<ConsoleLogger>
     {
     public:
-        static ConsoleLogger* getInstance();
+        ConsoleLogger();
     public:
-        virtual ConsoleLogger& operator<<(const std::string& msg);
+        virtual ConsoleLogger& operator<<(const String& msg);
         virtual ConsoleLogger& operator<<(const Vector3& v);
         virtual ConsoleLogger& operator<<(const Vector4& v);
         virtual ConsoleLogger& operator<<(const Matrix& m);
         virtual ConsoleLogger& operator<<(const Quaternion& q);
     private:
-        ConsoleLogger();
-    private:
-        static ConsoleLogger* _logger;
-
         std::ostream   _cout;
     };
-
 }
 
 #endif // IO_LOGGER_H

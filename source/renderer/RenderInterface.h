@@ -1,7 +1,7 @@
 #ifndef RENDERER_RENDERINTERFACE_H
 #define RENDERER_RENDERINTERFACE_H
 
-#include "base\Globals.h"
+#include "base/Types.h"
 
 //#include "RenderWorld.h"
 //#include "Resource/RenderResourceGenerator.h"

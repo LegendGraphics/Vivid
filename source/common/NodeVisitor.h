@@ -3,7 +3,7 @@
 
 #include "base/Refptr.hpp"
 #include "base/Ref.h"
-#include "common/Object.h"
+#include "common/Clone.h"
 
 namespace te
 {
@@ -14,7 +14,7 @@ namespace te
     class RenderInterface;
 
     // consider two things: traversal mode and visitor type
-    class NodeVisitor: public Object
+    class NodeVisitor
     {
     public:
         enum class TraversalMode
@@ -38,8 +38,6 @@ namespace te
 
         virtual ~NodeVisitor();
 
-        OBJECT_META_FUNCTION(NodeVisitor);
-
         virtual void apply(Node* node);
 
         void traverse(Node* node);
@@ -58,8 +56,6 @@ namespace te
 
         virtual ~CullingVisitor();
 
-        OBJECT_META_FUNCTION(CullingVisitor);
-
         virtual void apply(Node* node);
 
     protected:
@@ -74,8 +70,6 @@ namespace te
         SpacingVisitor(const SpacingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
         virtual ~SpacingVisitor();
-
-        OBJECT_META_FUNCTION(SpacingVisitor);
 
         virtual void apply(Node* node);
 
@@ -97,8 +91,6 @@ namespace te
 
         virtual ~RenderingVisitor();
 
-        OBJECT_META_FUNCTION(RenderingVisitor);
-
         virtual void apply(Node* node);
 
     private:
@@ -116,8 +108,6 @@ namespace te
         RenderResourceVisitor(const TraversalMode& tm, RenderInterface* renderer);
         RenderResourceVisitor(const RenderResourceVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~RenderResourceVisitor();
-
-        OBJECT_META_FUNCTION(RenderResourceVisitor);
 
         virtual void apply(Node* node);
     };

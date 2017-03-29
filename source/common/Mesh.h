@@ -1,7 +1,7 @@
 #ifndef COMMON_MESH_H
 #define COMMON_MESH_H
 
-#include "common/Object.h"
+#include "common/Clone.h"
 #include "math/Vector4.h"
 #include "math/Vector3.h"
 #include "math/Vector2.h"
@@ -243,7 +243,7 @@ namespace te
 
         friend class ResourceLoader;
 
-        bool load(const std::string & res);
+        bool load(const String & res);
         void unload();
 
         bool isSkinned() const { return _skinned; }
@@ -257,7 +257,7 @@ namespace te
         VertexArray             _vertices;
         IndexArray              _triangles;
 
-        RefPtr<BoundingBox> _bounding;
+        BoundingBox*     _bounding;
 
         bool _skinned;
 
@@ -272,7 +272,7 @@ namespace te
         MeshManager();
         ~MeshManager();
 
-        ResourceHandle create(const std::string& res);
+        ResourceHandle create(const String& res);
 
         Mesh*   getMesh(ResourceHandle handle);
     };

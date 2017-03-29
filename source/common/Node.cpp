@@ -20,9 +20,9 @@ namespace te
     }
 
     Node::Node(const Node& node, const CopyOperator& copyop)
-        :_parent(node._parent),
+        /*:_parent(node._parent),
         _visible(node._visible),
-        _component_container(copyop(node._component_container))
+        _component_container(copyop(node._component_container))*/
     {
     }
 

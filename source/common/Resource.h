@@ -6,8 +6,9 @@
 #include <array>
 #include <set>
 
-#include "common/Object.h"
+#include "common/Clone.h"
 #include "base/RefPtr.hpp"
+#include "base/String.h"
 #include "common/ClassType.hpp"
 #include "base/Singleton.hpp"
 
@@ -43,7 +44,7 @@ namespace te
             *this = des;
         }
 
-        ResourceDescriptor(ResourceHandle handle, ResourceType type, const std::string& id)
+        ResourceDescriptor(ResourceHandle handle, ResourceType type, const String& id)
         {
             this->handle = handle;
             this->type = type;
@@ -52,7 +53,7 @@ namespace te
 
         ResourceHandle  handle;
         ResourceType    type;
-        std::string     id;
+        String     id;
     };
 
     class Resource /*: public Object*/
@@ -64,17 +65,19 @@ namespace te
 
         //OBJECT_META_FUNCTION(Resource);
 
-        virtual bool load(const std::string& res) = 0;
+        virtual bool load(const String& res) = 0;
         virtual void unload() = 0;
 
         ResourceHandle  getResourceHandle() const { return _descriptor.handle; }
         ResourceType    getResourceType() const { return _descriptor.type; }
-        std::string     getResourceId() const { return _descriptor.id; }
+        String     getResourceId() const { return _descriptor.id; }
         void descriptor(const ResourceDescriptor& des);
 
     protected:
         ResourceDescriptor      _descriptor;
     };
+
+    using ResourcePtr = RefPtr<Resource>;
 
     class ResourceManager /*: public Object*/
     {
@@ -84,25 +87,25 @@ namespace te
         virtual ~ResourceManager();
 
 //        OBJECT_META_FUNCTION(ResourceManager);
-        virtual ResourceHandle create(const std::string& res) = 0; // using file path as unified id
+        virtual ResourceHandle create(const String& res) = 0; // using file path as unified id
 
         //ResourceType getType() const { return _type; }
 
-//        virtual bool create(const std::string& res) = 0;
+//        virtual bool create(const String& res) = 0;
         
         void add(Resource* resource);
         void remove(ResourceHandle handle);
         bool has(Resource* resource);
         bool has(ResourceHandle handle);
-        bool exist(const std::string& id);
+        bool exist(const String& id);
 
     protected:
         ResourceHandle getNextLocalResHandle();
         ResourceHandle generateGlobalResHandle();
-        ResourceDescriptor buildDescriptor(const std::string& id);
+        ResourceDescriptor buildDescriptor(const String& id);
 
         using ResourceMap = std::unordered_map<ResourceHandle, Resource*>;
-        using ExistingMap = std::unordered_map<std::string, ResourceHandle>;
+        using ExistingMap = std::unordered_map<String, ResourceHandle>;
     protected:
         ResourceMap     _resources;
         ExistingMap     _id_maps;

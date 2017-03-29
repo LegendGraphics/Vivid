@@ -1,8 +1,11 @@
 #ifndef IO_FILE_UTILS_H
 #define IO_FILE_UTILS_H
 
-#include <string>
+#include "base/String.h"
 
-void streamFromBinaryFile(const std::string& filename, char*& data, int& size);
+namespace te
+{
+    void streamFromBinaryFile(const String& filename, char*& data, int& size);
+}
 
 #endif // IO_FILE_UTILS_H

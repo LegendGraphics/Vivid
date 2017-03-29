@@ -2,11 +2,10 @@
 #define COMMON_BOUNDING_SPHERE_H
 
 #include "math/Vector3.h"
-#include "common/Object.h"
 
 namespace te
 {
-    class BoundingSphere : public Object
+    class BoundingSphere
     {
     public:
         BoundingSphere(const Vector3& center, float radius);

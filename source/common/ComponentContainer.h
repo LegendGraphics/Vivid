@@ -6,7 +6,7 @@
 
 #include "base/ref.h"
 #include "base/refptr.hpp"
-#include "common/object.h"
+#include "common/Clone.h"
 
 namespace te
 {
@@ -19,7 +19,7 @@ namespace te
     class Component;
     class Node;
 
-    class ComponentContainer: public Object
+    class ComponentContainer
     {    
     private:
         typedef std::array<RefPtr<Component>, te::MAX_AMOUNT_OF_COMPONENTS> ComponentMap;
@@ -27,10 +27,8 @@ namespace te
 
     public:
         ComponentContainer(Node* owner);
-        ComponentContainer(const ComponentContainer& ccontainer, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        //ComponentContainer(const ComponentContainer& ccontainer, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         ~ComponentContainer();
-
-        OBJECT_META_FUNCTION(ComponentContainer);
 
         void add(Component* component, int component_id);
         void remove(int component_id);

@@ -6,7 +6,7 @@ namespace te
         :_mes_handle(0)
     {}
 
-    bool MeshFilter::load(const std::string& res)
+    bool MeshFilter::load(const String& res)
     {
         _mes_handle = ResourceMapper::getInstance()->get<MeshManager>()->create(res);
         return _mes_handle;

@@ -163,7 +163,7 @@ namespace te
                 vertex_layout::IndexStream* i_stream
                     = static_cast<vertex_layout::IndexStream*>(msg.head);
                 RenderResource* res = i_stream->res;
-                TE_ASSERT(RenderResource::INDEX_STREAM == res->type, "Render Resource Type doesn't match!");
+                //ASSERT(RenderResource::INDEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 res->render_resource_handle = createIndexBuffer(i_stream->size, i_stream->raw_data);
                 delete i_stream;
             }
@@ -173,7 +173,7 @@ namespace te
                 vertex_layout::VertexStream* v_stream
                     = static_cast<vertex_layout::VertexStream*>(msg.head);
                 RenderResource* res = v_stream->res;
-                TE_ASSERT(RenderResource::VERTEX_STREAM == res->type, "Render Resource Type doesn't match!");
+                //ASSERT(RenderResource::VERTEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 res->render_resource_handle = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
                 delete v_stream;
             }
@@ -182,7 +182,7 @@ namespace te
                 vertex_layout::VertexDeclarationStream* vd_stream
                     = static_cast<vertex_layout::VertexDeclarationStream*>(msg.head);
                 RenderResource* res = vd_stream->res;
-                TE_ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
+                //ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
 
                 // compute stride for each slot
                 const VertexLayout& vl = _vertex_declaration.getLayout(vd_stream->layout_type);
@@ -196,8 +196,8 @@ namespace te
                     else
                         slotStrideMap[i.vbSlot] = i.size;
                 }
-                TE_ASSERT(vl.size() == vd_stream->vertex_buffers.size(),
-                    "Requested Num of Vertex Attribute Slots should have same Num of Vertex Buffers!");
+                //ASSERT(vl.size() == vd_stream->vertex_buffers.size(),
+                //    "Requested Num of Vertex Attribute Slots should have same Num of Vertex Buffers!");
 
                 // prepare parameters for creating VAO
                 std::vector<uint32> locations;
@@ -216,7 +216,7 @@ namespace te
 
                     uint32 stride_in_buffer = _buffers.getRef(buffer->render_resource_handle).stride;
                     uint32 stride_in_slot = slotStrideMap[attri.vbSlot];
-                    TE_ASSERT(stride_in_buffer == stride_in_slot, "Stride in Buffer should match Stride in Slot!");
+                    //ASSERT(stride_in_buffer == stride_in_slot, "Stride in Buffer should match Stride in Slot!");
                 }
                 uint32 indexHandle = vd_stream->index_buffer->render_resource_handle;
                 res->render_resource_handle = createVertexArray(
@@ -330,7 +330,7 @@ namespace te
     void GLRenderDevice::updateBufferData(uint32 bufObj, uint32 offset, uint32 size, void * data)
     {
         const GLBuffer& buf = _buffers.getRef(bufObj);
-        TE_ASSERT(offset + size <= buf.size, "offset + size should be no larger than buf.size!");
+       // ASSERT(offset + size <= buf.size, "offset + size should be no larger than buf.size!");
 
         glBindBuffer(buf.type, buf.glObj);
         
@@ -516,7 +516,7 @@ namespace te
                 glBindFramebuffer(GL_FRAMEBUFFER, renderTarget.glFbo);
                 // create color texture
                 uint32 texObj = createTexture(width, height, 1, image_data::IMAGE2D, image_data::RGBA32F, false);
-                TE_ASSERT(texObj != 0, "Not a Valid Texture Object!");
+               // ASSERT(texObj != 0, "Not a Valid Texture Object!");
                 updateTextureData(texObj, 0, nullptr);
                 // attach the texture to fbo
                 GLTexture& tex = _textures.getRef(texObj);
@@ -543,7 +543,7 @@ namespace te
         // check if everything is OK
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, renderTarget.glFbo);
         GLenum e = glCheckFramebufferStatus(GL_DRAW_FRAMEBUFFER);
-        TE_ASSERT(e != GL_FRAMEBUFFER_COMPLETE, "There is a problem with the FBO");
+       // ASSERT(e != GL_FRAMEBUFFER_COMPLETE, "There is a problem with the FBO");
         glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 
         return _renderTargets.add(renderTarget);

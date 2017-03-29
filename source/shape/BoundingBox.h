@@ -2,11 +2,10 @@
 #define COMMON_BOUNDING_BOX_H
 
 #include "math/Vector3.h"
-#include "common/Object.h"
 
 namespace te
 {
-    class BoundingBox: public Object
+    class BoundingBox
     {
     public:
         BoundingBox(const Vector3& center, const Vector3& size);

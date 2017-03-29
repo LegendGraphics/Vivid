@@ -1,7 +1,5 @@
 
 #include "base/Ref.h"
-#include "base/InterfaceSourceMacros.h"
-
 
 namespace te
 {
@@ -11,9 +9,5 @@ namespace te
     }
 
     Ref::~Ref() {}
-
-    TE_IMPLEMENT_INTERFACE(Ref)
-    TE_INPLEMENT_START_QUERYINTERFACE(Ref)
-    TE_IMPLEMENT_END_QUERYINTERFACE()
 }
 

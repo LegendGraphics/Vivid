@@ -1,8 +1,8 @@
 #ifndef RENDERER_SHADEROBJECT_H
 #define RENDERER_SHADEROBJECT_H
-
-#include "base\Globals.h"
-
+#include <unordered_map>
+#include "base/Types.h"
+#include "base/String.h"
 #include "renderer/resource/RenderResource.h"
 
 namespace te
@@ -44,7 +44,7 @@ namespace te
         unsigned elements;
         unsigned offset;
         unsigned element_stride;
-        std::string semantic_name;
+        String semantic_name;
 
         ShaderVariable() :
             klass(shader_data::UNKNOWN_CLASS),
@@ -58,8 +58,8 @@ namespace te
     {
         uint32 shader_handle;
 
-        std::unordered_map<std::string, int> custom_uniform_handles; // TODO: reconsider if we need map here
-        std::unordered_map<std::string, int> custom_sampler_handles;
+        std::unordered_map<String, int> custom_uniform_handles; // TODO: reconsider if we need map here
+        std::unordered_map<String, int> custom_sampler_handles;
 
         int uni_view_mat, uni_proj_mat, uni_view_proj_mat, uni_view_proj_mat_inv;
     };

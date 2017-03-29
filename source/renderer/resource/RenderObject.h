@@ -1,7 +1,7 @@
 #ifndef RENDERER_RENDEROBJECT_H
 #define RENDERER_RENDEROBJECT_H
 
-#include "base/Globals.h"
+#include "base/Types.h"
 
 namespace te
 {

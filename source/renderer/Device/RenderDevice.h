@@ -1,8 +1,8 @@
 #ifndef RENDERER_RENDERDEVICE_H
 #define RENDERER_RENDERDEVICE_H
 
-#include "base\Globals.h"
-#include "base\Assert.h"
+#include "base/Types.h"
+#include "base/Assert.h"
 
 #include "renderer/resource/ShaderObject.h"
 #include "renderer/Resource/Texture.h"
@@ -35,7 +35,7 @@ namespace te
 
         void remove(uint32 handle)
         {
-            TE_ASSERT(handle > 0 && handle <= _objects.size(), "Invalid handle!");
+           // ASSERT(handle > 0 && handle <= _objects.size(), "Invalid handle!");
 
             _objects[handle - 1] = T(); // replace with defualt object
             _freeList.push_back(handle - 1);
@@ -43,7 +43,7 @@ namespace te
 
         T& getRef(uint32 handle)
         {
-            TE_ASSERT(handle > 0 && handle <= _objects.size(), "Invalid handle!");
+           // ASSERT(handle > 0 && handle <= _objects.size(), "Invalid handle!");
 
             return _objects[handle - 1];
         }

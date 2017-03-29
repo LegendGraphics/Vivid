@@ -1,7 +1,6 @@
 #ifndef COMMON_FRUSTUM_H
 #define COMMON_FRUSTUM_H
 
-#include "common/Object.h"
 #include "shape/Plane.h"
 #include "shape/BoundingBox.h"
 #include "math/Matrix.h"

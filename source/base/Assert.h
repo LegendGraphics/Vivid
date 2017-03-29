@@ -1,18 +1,13 @@
-#ifndef BASE_ASSERT_MACROS_H
-#define BASE_ASSERT_MACROS_H
+#ifndef BASE_ASSERT_H
+#define BASE_ASSERT_H
 
-#include <assert.h>
 #include <iostream>
+#include <cassert>
 
-#define TE_ERROR(msg) \
-    std::cerr << msg << std::endl
+#define mASSERT(expr, msg) assert((expr) ? true : std::cout << msg << std::endl && false)
+#define mSTATIC_ASSERT(expr, msg) static_assert((expr) ? true : std::cout << msg << std::endl && false)
 
-#define TE_LOG(msg, ...) ( \
-    printf((msg), ##__VA_ARGS__), \
-    std::cout << std::endl \
-    )
+#define ASSERT          assert
+#define STATIC_ASSERT   static_assert
 
-#define TE_ASSERT(expr, msg) \
-    assert((expr) ? true : TE_ERROR(msg) && false)
-
-#endif // BASE_ASSERT_MACROS_H
+#endif // BASE_ASSERT_H

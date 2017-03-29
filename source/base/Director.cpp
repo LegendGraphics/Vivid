@@ -6,6 +6,8 @@
 
 #include "common/NodeVisitor.h"
 #include "common/Scene.h"
+#include "base/Assert.h"
+#include "io/Logger.h"
 #include "renderer/RenderInterface.h"
 
 namespace te
@@ -45,7 +47,6 @@ namespace te
             spacingUpdate();
             cullingUpdate();
             renderingUpdate();
-            for (int i = 0; i < 1000000; ++i) int a = 1;
 
             // waiting events
             glfwSwapBuffers(_window);
@@ -90,12 +91,12 @@ namespace te
         int width = 800;
         int height = 600;
 
-        TE_ASSERT(width != 0 || height != 0, "Please set right window's size!");
+       // ASSERT(width != 0 || height != 0, "Please set right window's size!");
 
         // init window
         if (!glfwInit())
         {
-            TE_ERROR("Unable to initialize GLFW ... exiting");
+            cLog << ("Unable to initialize GLFW ... exiting");
             exit(EXIT_FAILURE);
         }
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
@@ -103,7 +104,7 @@ namespace te
         _window = glfwCreateWindow(width, height, "TinyEngine", NULL, NULL);
         if (!_window)
         {
-            TE_ERROR("Unable to initialize window ... exiting");
+            cLog << ("Unable to initialize window ... exiting");
             glfwTerminate();
             exit(EXIT_FAILURE);
         }
@@ -112,7 +113,7 @@ namespace te
         // init shader functions
         if (glewInit())
         {
-            TE_ERROR("Unable to initialize GLEW ... exiting");
+            cLog << ("Unable to initialize GLEW ... exiting");
             exit(EXIT_FAILURE);
         }
 

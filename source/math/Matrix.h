@@ -1,14 +1,15 @@
 #ifndef MATH_MAT4X4_H
 #define MATH_MAT4X4_H
 
-#include "base/Assert.h"
 #include "math/Vector4.h"
+#include "base/Assert.h"
 
 #define SET_ROW(row, v1, v2, v3, v4 )    \
                     _m[(row)][0] = (v1); \
                     _m[(row)][1] = (v2); \
                     _m[(row)][2] = (v3); \
                     _m[(row)][3] = (v4);
+
 
 namespace te
 {
@@ -31,15 +32,15 @@ namespace te
 
         inline float& operator()(int i, int j)
         {
-            TE_ASSERT(i < 4, "row must be less than four");
-            TE_ASSERT(j < 4, "column must be less than four");
+            mASSERT(i < 4, "row must be less than four");
+            mASSERT(j < 4, "column must be less than four");
             return _m[i][j];
         }
 
         inline const float& operator()(int i, int j) const
         {
-            TE_ASSERT(i < 4, "row must be less than four");
-            TE_ASSERT(j < 4, "column must be less than four");
+            //ASSERT(i < 4, "row must be less than four");
+            //ASSERT(j < 4, "column must be less than four");
             return _m[i][j];
         }
 

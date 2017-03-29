@@ -9,10 +9,10 @@ ComponentContainer::ComponentContainer(Node* owner)
 {
 }
 
-ComponentContainer::ComponentContainer(const ComponentContainer& ccontainer, const CopyOperator& copyop)
-    : _owner(ccontainer._owner)
-{
-}
+//ComponentContainer::ComponentContainer(const ComponentContainer& ccontainer, const CopyOperator& copyop)
+//    : _owner(ccontainer._owner)
+//{
+//}
 
 
 ComponentContainer::~ComponentContainer()
@@ -21,15 +21,15 @@ ComponentContainer::~ComponentContainer()
 
 Component* ComponentContainer::get(int component_id)
 {
-    TE_ASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
-    TE_ASSERT(_component_types[component_id] == true, "No such component exists!");
+    mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
+    mASSERT(_component_types[component_id] == true, "No such component exists!");
     return _component_map[component_id].get();
 }
 
 void ComponentContainer::add(Component *component, int component_id)
 {
-    TE_ASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
-    TE_ASSERT(_component_types[component_id] == false, "Component already exists!");
+    mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
+    mASSERT(_component_types[component_id] == false, "Component already exists!");
 
     _component_map[component_id] = component;
     _component_types[component_id] = true;
@@ -37,8 +37,8 @@ void ComponentContainer::add(Component *component, int component_id)
 
 void ComponentContainer::remove(int component_id)
 {
-    TE_ASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
-    TE_ASSERT(_component_types[component_id] == true, "No such component exists!");
+    mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
+    mASSERT(_component_types[component_id] == true, "No such component exists!");
 
     _component_map[component_id] = nullptr;
     _component_types[component_id] = false;
@@ -52,7 +52,7 @@ void ComponentContainer::removeAll()
 
 bool ComponentContainer::has(int component_id)
 {
-    TE_ASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
+    mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
 
     return _component_types[component_id];
 }

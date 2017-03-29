@@ -1,7 +1,7 @@
 #ifndef RENDERER_RENDERCONTEXT_H
 #define RENDERER_RENDERCONTEXT_H
 
-#include "base\Globals.h"
+#include "base/Types.h"
 
 #include "renderer/resource/ShaderObject.h"
 

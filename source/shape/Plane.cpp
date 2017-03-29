@@ -15,10 +15,6 @@ namespace te
         _distance(distance)
     {}
 
-    Plane::Plane(const Plane& plane, const CopyOperator& copyop)
-    {
-    }
-
     Plane& Plane::operator=(const Plane& plane)
     {
         _normal = plane._normal;

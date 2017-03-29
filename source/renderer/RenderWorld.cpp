@@ -1,6 +1,6 @@
 #include "RenderWorld.h"
 
-#include "common/Object.h"
+#include "common/Clone.h"
 #include "renderer/Device/RenderContext.h"
 #include "renderer/Device/RenderDevice.h"
 #include "renderer/resource/RenderMeshObject.h"

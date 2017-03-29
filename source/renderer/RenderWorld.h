@@ -1,7 +1,7 @@
 #ifndef RENDERER_RENDERWORLD_H
 #define RENDERER_RENDERWORLD_H
-
-#include "base/Globals.h"
+#include <vector>
+#include "base/Types.h"
 #include "renderer/resource/RenderObject.h"
 
 namespace te
