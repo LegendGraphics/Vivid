@@ -5,7 +5,7 @@ namespace te
 {
     const float MAX_FLOAT = 3.402823466e+38F;
 
-    const float PI = 3.14159265;
+    const float PI = 3.141592F;
 
     float degree_to_radians(float degree);
 }

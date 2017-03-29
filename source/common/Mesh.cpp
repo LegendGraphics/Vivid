@@ -30,20 +30,20 @@ namespace te
         if (exist(res)) return _id_maps[res];
         else
         {
-            Mesh* mesh = new Mesh;
+            MeshPtr mesh = new Mesh;
             if (mesh->load(res))
             {
                 mesh->descriptor(buildDescriptor(res));
-                add(mesh);
+                add(mesh.get());
                 return _id_maps[res];
             }
             else return 0;
         }
     }
 
-    Mesh* MeshManager::getMesh(ResourceHandle handle)
+    MeshPtr MeshManager::getMesh(ResourceHandle handle)
     {
-        if (has(handle)) return dynamic_cast<Mesh*>(_resources[handle]);
+        if (has(handle)) return dynamic_cast_ptr<Resource, Mesh>(_resources[handle]);
         else return nullptr;
     }
 }

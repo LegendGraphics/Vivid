@@ -93,6 +93,13 @@ namespace te
     {
         return _ptr != nullptr;
     }
+
+    template <typename Base, typename Inherit>
+    RefPtr<Inherit> dynamic_cast_ptr(RefPtr<Base> base_ptr)
+    {
+        return RefPtr<Inherit>(dynamic_cast<Inherit*>(base_ptr.get()));
+    }
+
 }
 
 

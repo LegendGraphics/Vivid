@@ -239,8 +239,6 @@ namespace te
    //     Mesh(const Mesh& mesh, const CopyOperator& copypo = CopyOperator::SHALLOW_COPY);
         virtual ~Mesh() = default;
 
-   //     OBJECT_META_FUNCTION(Mesh);
-
         friend class ResourceLoader;
 
         bool load(const String & res);
@@ -266,6 +264,8 @@ namespace te
         RenderResource              _vertex_declaration;
     };
 
+    using MeshPtr = RefPtr<Mesh>;
+
     class MeshManager : public ResourceManager
     {
     public:
@@ -274,7 +274,7 @@ namespace te
 
         ResourceHandle create(const String& res);
 
-        Mesh*   getMesh(ResourceHandle handle);
+        MeshPtr   getMesh(ResourceHandle handle);
     };
 }
 

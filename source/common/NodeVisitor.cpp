@@ -161,7 +161,7 @@ namespace te
         if (MeshFilter* mf = node->getComponent<MeshFilter>())
         {
             // generate RenderMeshObject
-            Mesh* m = mf->getMesh();
+            Mesh* m = mf->getMesh().get();
             RenderMeshObject* rmo = new RenderMeshObject;
             rmo->setNumIndices(m->getTriangles().size());
             rmo->setVertexDeclaration(&m->getVertexDeclaration());
@@ -224,7 +224,7 @@ namespace te
         if (MeshFilter* mf = node->getComponent<MeshFilter>())
         {
             // generate RenderMeshObject
-            Mesh* m = mf->getMesh();
+            Mesh* m = mf->getMesh().get();
             msg.rrm.numQueue = 3;
             msg.rrm.rQueue = new ResourceStreamItem[3];
 

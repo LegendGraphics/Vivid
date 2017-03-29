@@ -91,6 +91,11 @@ namespace te
         initialize();
     }
 
+    ResourceMapper::~ResourceMapper()
+    {
+
+    }
+
     /*ResourceMap::ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop)
     {}*/
 
@@ -101,6 +106,11 @@ namespace te
     void ResourceMapper::initialize()
     {
         add<MeshManager>();
+    }
+
+    void ResourceMapper::clear()
+    {
+        remove<MeshManager>();
     }
 
     ResourceManager* ResourceMapper::getResManager(int manager_id)
@@ -116,6 +126,7 @@ namespace te
     }
     void ResourceMapper::removeResManager(int manager_id)
     {
+        delete _mgr_map[manager_id];
         _mgr_map[manager_id] = nullptr;
         _mgr_types[manager_id] = false;
     }

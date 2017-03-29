@@ -8,13 +8,14 @@
 
 #include "common/Clone.h"
 #include "base/RefPtr.hpp"
+#include "base/Ref.h"
 #include "base/String.h"
 #include "common/ClassType.hpp"
 #include "base/Singleton.hpp"
 
 namespace te
 {
-    const int MAX_AMOUNT_OF_RES_MANANGER = 12;
+    const int MAX_AMOUNT_OF_RES_MANAGER = 12;
 }
 
 namespace te
@@ -53,25 +54,22 @@ namespace te
 
         ResourceHandle  handle;
         ResourceType    type;
-        String     id;
+        String          id;
     };
 
-    class Resource /*: public Object*/
+    class Resource: public Ref
     {
     public:
         Resource();
-        //Resource(const Resource& resource, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Resource();
-
-        //OBJECT_META_FUNCTION(Resource);
 
         virtual bool load(const String& res) = 0;
         virtual void unload() = 0;
 
         ResourceHandle  getResourceHandle() const { return _descriptor.handle; }
         ResourceType    getResourceType() const { return _descriptor.type; }
-        String     getResourceId() const { return _descriptor.id; }
-        void descriptor(const ResourceDescriptor& des);
+        String          getResourceId() const { return _descriptor.id; }
+        void            descriptor(const ResourceDescriptor& des);
 
     protected:
         ResourceDescriptor      _descriptor;
@@ -79,19 +77,13 @@ namespace te
 
     using ResourcePtr = RefPtr<Resource>;
 
-    class ResourceManager /*: public Object*/
+    class ResourceManager
     {
     public:
         ResourceManager(ResourceType type);
-//        ResourceManager(const ResourceManager& res_mgr, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~ResourceManager();
 
-//        OBJECT_META_FUNCTION(ResourceManager);
-        virtual ResourceHandle create(const String& res) = 0; // using file path as unified id
-
-        //ResourceType getType() const { return _type; }
-
-//        virtual bool create(const String& res) = 0;
+        virtual ResourceHandle create(const String& res) = 0; // using file path as unique id
         
         void add(Resource* resource);
         void remove(ResourceHandle handle);
@@ -104,7 +96,7 @@ namespace te
         ResourceHandle generateGlobalResHandle();
         ResourceDescriptor buildDescriptor(const String& id);
 
-        using ResourceMap = std::unordered_map<ResourceHandle, Resource*>;
+        using ResourceMap = std::unordered_map<ResourceHandle, ResourcePtr>;
         using ExistingMap = std::unordered_map<String, ResourceHandle>;
     protected:
         ResourceMap     _resources;
@@ -113,16 +105,15 @@ namespace te
         ResourceHandle  _next_handle;
     };
 
-    class ResourceMapper : public Singleton<ResourceMapper> /*: public Object*/
+    class ResourceMapper : public Singleton<ResourceMapper>
     {
     public:
         ResourceMapper();
-        ////ResourceMap(const ResourceMap& res_map, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
-        //virtual ~ResourceMapper();
-
-        //OBJECT_META_FUNCTION(ResourceMap);
+        ~ResourceMapper();
 
         void initialize();
+
+        void clear();
 
         template <typename T, typename ... Args>
         T* add(Args&& ... args);
@@ -143,8 +134,8 @@ namespace te
         bool                hasResManager(int manager_id);
 
     protected:
-        using ResourceManagerMap = std::array<ResourceManager*, MAX_AMOUNT_OF_RES_MANANGER>;
-        using ManagerTypeList = std::bitset<MAX_AMOUNT_OF_RES_MANANGER>;
+        using ResourceManagerMap = std::array<ResourceManager*, MAX_AMOUNT_OF_RES_MANAGER>;
+        using ManagerTypeList = std::bitset<MAX_AMOUNT_OF_RES_MANAGER>;
 
         ResourceManagerMap      _mgr_map;
         ManagerTypeList         _mgr_types;

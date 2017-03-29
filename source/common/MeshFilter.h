@@ -11,7 +11,7 @@ namespace te
     public:
         MeshFilter();
         bool load(const String& res);
-        Mesh* getMesh();
+        MeshPtr getMesh();
 
     protected:
         ResourceHandle  _mes_handle;

@@ -9,10 +9,10 @@ namespace te
     bool MeshFilter::load(const String& res)
     {
         _mes_handle = ResourceMapper::getInstance()->get<MeshManager>()->create(res);
-        return _mes_handle;
+        return bool(_mes_handle);
     }
 
-    Mesh* MeshFilter::getMesh()
+    MeshPtr MeshFilter::getMesh()
     {
         return ResourceMapper::getInstance()->get<MeshManager>()->getMesh(_mes_handle);
     }
