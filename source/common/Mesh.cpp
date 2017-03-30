@@ -27,7 +27,7 @@ namespace te
 
     ResourceHandle MeshManager::create(const String& res)
     {
-        if (exist(res)) return _id_maps[res];
+        if (ResourceHandle handle = getResourceHandle(res)) return handle;
         else
         {
             MeshPtr mesh = new Mesh;
@@ -35,7 +35,7 @@ namespace te
             {
                 mesh->descriptor(buildDescriptor(res));
                 add(mesh.get());
-                return _id_maps[res];
+                return getResourceHandle(res);
             }
             else return 0;
         }
@@ -43,7 +43,7 @@ namespace te
 
     MeshPtr MeshManager::getMesh(ResourceHandle handle)
     {
-        if (has(handle)) return dynamic_cast_ptr<Resource, Mesh>(_resources[handle]);
+        if (has(handle)) return dynamic_cast_ptr<Resource, Mesh>(getResourcePtr(handle));
         else return nullptr;
     }
 }

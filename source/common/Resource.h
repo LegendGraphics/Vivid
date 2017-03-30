@@ -86,24 +86,26 @@ namespace te
         virtual ResourceHandle create(const String& res) = 0; // using file path as unique id
         
         void add(Resource* resource);
-        void remove(ResourceHandle handle);
+        void remove(ResourceHandle global_handle);
         bool has(Resource* resource);
-        bool has(ResourceHandle handle);
+        bool has(ResourceHandle global_handle);
         bool exist(const String& id);
+        ResourceHandle getResourceHandle(const String& id);
+        ResourcePtr    getResourcePtr(ResourceHandle global_handle);
 
     protected:
         ResourceHandle getNextLocalResHandle();
         ResourceHandle generateGlobalResHandle();
         ResourceDescriptor buildDescriptor(const String& id);
 
-        using ResourceMap = std::unordered_map<ResourceHandle, ResourcePtr>;
+        //using ResourceMap = std::unordered_map<ResourceHandle, ResourcePtr>;
+        using ResourceMap = std::vector<ResourcePtr>;
         using ExistingMap = std::unordered_map<String, ResourceHandle>;
         using FreeList = std::vector<ResourceHandle>;
-    protected:
+    private:
         ResourceMap     _resources;
         ExistingMap     _id_maps;
         ResourceType    _type;
-        ResourceHandle  _next_handle;
         FreeList        _free_list;
     };
 
