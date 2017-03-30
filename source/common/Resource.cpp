@@ -17,8 +17,7 @@ namespace te
     }
 
     ResourceManager::ResourceManager(ResourceType type)
-        :_type(type),
-        _next_handle(0)
+        :_type(type)
     {
 
     }
@@ -33,14 +32,14 @@ namespace te
     {
         if (!_free_list.empty())
         {
-
             ResourceHandle handle = _free_list.back();
             _free_list.pop_back();
             return handle;
         }
         else
         {
-            return ++_next_handle;
+            _resources.push_back(ResourcePtr(nullptr));
+            return _resources.size(); // handle starts from 1
         }
     }
 
@@ -60,30 +59,31 @@ namespace te
     {
         if (resource->getResourceType() == _type && !has(resource))
         {
-            _resources[resource->getResourceHandle()] = resource;
+            _resources[resource->getResourceHandle() - ResourceHandle(_type) - 1] = ResourcePtr(resource);
             _id_maps.insert({ resource->getResourceId(), resource->getResourceHandle() });
         }
     }
 
-    void ResourceManager::remove(ResourceHandle handle)
+    void ResourceManager::remove(ResourceHandle global_handle)
     {
-        if (has(handle))
+        if (has(global_handle))
         {
-            _id_maps.erase(_resources[handle]->getResourceId());
-            _resources.erase(handle);
-            _free_list.push_back(handle - ResourceHandle(_type)); // freelist holds local handle
+            ResourceHandle local_handle = global_handle - ResourceHandle(_type);
+            _id_maps.erase(_resources[local_handle - 1]->getResourceId());
+            _resources[local_handle - 1] = ResourcePtr(nullptr);
+            _free_list.push_back(local_handle); // freelist holds local handle
         }
     }
 
     bool ResourceManager::has(Resource* resource)
     {
-        ResourceHandle handle = resource->getResourceHandle();
-        return has(handle);
+        return has(resource->getResourceHandle());
     }
 
-    bool ResourceManager::has(ResourceHandle handle)
+    bool ResourceManager::has(ResourceHandle global_handle)
     {
-        if (_resources.find(handle) != _resources.end()) return true;
+        ResourceHandle local_handle = global_handle - ResourceHandle(_type);
+        if (local_handle > 0 && local_handle <= _resources.size() && _resources[local_handle - 1]) return true;
         else return false;
     }
 
@@ -92,6 +92,20 @@ namespace te
         auto search = _id_maps.find(id);
         if (search != _id_maps.end()) return true;
         else return false;
+    }
+
+    ResourceHandle ResourceManager::getResourceHandle(const String& id)
+    {
+        if (exist(id)) return _id_maps[id];
+        else return 0;
+    }
+
+    ResourcePtr ResourceManager::getResourcePtr(ResourceHandle global_handle)
+    {
+        ResourceHandle local_handle = global_handle - ResourceHandle(_type);
+        if (local_handle > 0 && local_handle <= _resources.size() && _resources[local_handle - 1])
+            return _resources[local_handle - 1];
+        else return ResourcePtr(nullptr);
     }
 
 
