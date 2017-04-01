@@ -1,7 +1,7 @@
 #ifndef BASE_EVENT_DISPATCHER_H
 #define BASE_EVENT_DISPATCHER_H
 
-#include <map>
+#include <unordered_map>
 #include <vector>
 
 #include "base/EventListener.h"
@@ -15,7 +15,7 @@ namespace te
     {
     private:
         typedef std::vector<EventListenerBase*> EventListenerList;
-        typedef std::map<int, EventListenerList> EventListenerMap;
+        typedef std::unordered_map<EventKey, EventListenerList> EventListenerMap;
 
     public:
         EventDispatcher();
@@ -35,7 +35,7 @@ namespace te
     template <class T>
     void EventDispatcher::addEventListener(EventListener<T>* event_listener)
     {
-        int key = event_listener->getKey();
+        EventKey key = event_listener->getKey();
         if (_listener_map.find(key) == _listener_map.end())
         {
             EventListenerList eventlistener_list;

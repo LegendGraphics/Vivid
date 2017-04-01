@@ -1,7 +1,6 @@
 #ifndef BASE_EVENT_LISTENER_H
 #define BASE_EVENT_LISTENER_H
 
-#include <string>
 #include "base/Event.h"
 
 namespace te
@@ -23,10 +22,10 @@ namespace te
     public:
         typedef void(T::*EventCallback)(Event*);
     public:
-        EventListener(int key, T* instance, EventCallback callback) :_instance(instance), _callback(callback) {};
-        virtual ~EventListener();
+        EventListener(EventKey key, T* instance, EventCallback callback) :_instance(instance), _callback(callback) {};
+        virtual ~EventListener() {};
 
-        int getKey() const { return _key; }
+        EventKey getKey() const { return _key; }
 
         void call(Event* event)
         {
@@ -34,9 +33,9 @@ namespace te
         }
 
     protected:
-        int _key;
-        T*  _instance;
-        EventCallback _callback;
+        EventKey        _key;
+        T*              _instance;
+        EventCallback   _callback;
     };
 }
 
