@@ -22,18 +22,23 @@ namespace te
     public:
         typedef void(T::*EventCallback)(Event*);
     public:
-        EventListener(EventKey key, T* instance, EventCallback callback) :_instance(instance), _callback(callback) {};
+        EventListener(ListenType listen_type, T* instance, EventCallback callback) : _listen_type(listen_type) , _instance(instance), _callback(callback) {};
         virtual ~EventListener() {};
 
-        EventKey getKey() const { return _key; }
+        ListenType getListenType() const { return _listen_type; }
 
         void call(Event* event)
         {
             (_instance->*_callback)(event);
         }
 
+        void setListenerId(size_t listener_id)
+        {
+            _instance->_listener_id = listener_id;
+        }
+
     protected:
-        EventKey        _key;
+        ListenType      _listen_type;
         T*              _instance;
         EventCallback   _callback;
     };
