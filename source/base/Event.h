@@ -5,6 +5,8 @@ namespace te
 {
     using EventKey = unsigned int;
 
+    enum class ListenType: EventKey;
+
     class Event
     {
     public:
@@ -20,10 +22,10 @@ namespace te
         Event(EventType type);
         virtual ~Event();
 
-        EventKey getKey() const { return mapToKey(); }
+        ListenType getListenType() const { return mapToListenType(); }
         EventType type() { return _type; }
     protected:
-        virtual EventKey mapToKey() const;
+        virtual ListenType mapToListenType() const = 0;
     protected:
         EventType   _type;
     };
@@ -56,12 +58,19 @@ namespace te
         float getY() { return _y; }
 
     protected:
-        EventKey mapToKey() const override;
+        ListenType mapToListenType() const override;
     protected:
         MouseEventType  _mouse_type;
         MouseButton     _mouse_button;
         float _x;
         float _y;
+    };
+
+    enum class ListenType : EventKey
+    {
+        MOUSE_LEFT = EventKey(Event::EventType::MOUSE) + EventKey(MouseEvent::MouseButton::BUTTON_LEFT),
+        MOUSE_RIGHT = EventKey(Event::EventType::MOUSE) + EventKey(MouseEvent::MouseButton::BUTTON_RIGHT),
+        MOUSE_MIDDLE = EventKey(Event::EventType::MOUSE) + EventKey(MouseEvent::MouseButton::BUTTON_MIDDLE),
     };
 
 }

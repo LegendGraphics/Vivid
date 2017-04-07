@@ -3,10 +3,9 @@
 
 #include "common/Node.h"
 #include "common/NodeVisitor.h"
-
 #include "common/Component.h"
 #include "common/ComponentContainer.h"
-
+#include "base/EventDispatcher.h"
 
 namespace te
 {
@@ -95,4 +94,16 @@ namespace te
         if (parent_path->empty()) return Matrix::identity();
         else return te::computeLocalToWorld(parent_path);
     }*/
+
+    void Node::bindEvent(ListenType listen_type, EventCallback& event_callback)
+    {
+        EventDispatcher::getInstance()->addEventListener(new EventListener<Node>(
+            listen_type, this, event_callback));
+    }
+
+    void Node::unbindEvent(ListenType listen_type)
+    {
+        EventDispatcher::getInstance()->removeEventListener(listen_type, _listener_id);
+    }
+
 }

@@ -14,11 +14,6 @@ namespace te
     {
     }
 
-    EventKey Event::mapToKey() const
-    {
-        return EventKey(_type);
-    }
-
     Event::~Event() {}
 
     MouseEvent::MouseEvent(MouseEventType mouse_type, MouseButton mouse_button, float x, float y)
@@ -31,9 +26,9 @@ namespace te
 
     MouseEvent::~MouseEvent() {}
 
-    EventKey MouseEvent::mapToKey() const
+    ListenType MouseEvent::mapToListenType() const
     {
-        return EventKey(_type) + EventKey(_mouse_type) + EventKey(_mouse_button);
+        return ListenType(EventKey(_type) + EventKey(_mouse_button));
     }
 }
 

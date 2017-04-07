@@ -6,6 +6,8 @@
 
 #include "base/Ref.h"
 #include "base/Refptr.hpp"
+#include "base/Event.h"
+#include "base/EventListener.h"
 #include "common/Clone.h"
 #include "common/ClassType.hpp"
 
@@ -30,6 +32,9 @@ namespace te
 
     class Node: public Ref, public Cloneable
     {
+    public:
+        typedef void(Node::*EventCallback)(Event*);
+        friend class EventListener<Node>;
     public:
         Node();
         Node(const Node& node, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
@@ -56,6 +61,9 @@ namespace te
 
        // Matrix getWorldMatrix();
 
+        void bindEvent(ListenType listen_type, EventCallback& event_callback);
+        void unbindEvent(ListenType listen_type);
+
         template <typename C, typename ... Args>
         C* addComponent(Args&& ... args);
 
@@ -79,6 +87,8 @@ namespace te
         Node* _parent;
 
         bool _visible;
+
+        size_t _listener_id;
 
         ComponentContainer* _component_container;
     };

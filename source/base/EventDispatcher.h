@@ -5,60 +5,64 @@
 #include <vector>
 
 #include "base/EventListener.h"
+#include "base/Singleton.hpp"
 
 namespace te
 {
     class Event;
     class EventListenerBase;
 
-    class EventDispatcher
+    class EventDispatcher: public Singleton<EventDispatcher>
     {
+    public:
+        friend class Node;
     private:
         typedef std::vector<EventListenerBase*> EventListenerList;
-        typedef std::unordered_map<EventKey, EventListenerList> EventListenerMap;
+        typedef std::vector<size_t> EventListenerFreeList;
+        typedef std::unordered_map<ListenType, EventListenerList> EventListenerMap;
+        typedef std::unordered_map<ListenType, EventListenerFreeList> EventListenerFreeMap;
 
     public:
-        EventDispatcher();
-        ~EventDispatcher();
-
         template <class T>
         void addEventListener(EventListener<T>* event_listener);
 
-        //void removeEventListener(EventListener* event_listener);
+        void removeEventListener(ListenType listen_type, size_t listener_id);
 
         void dispatch(Event* event);
 
     private:
-        EventListenerMap _listener_map;
+        EventListenerMap        _listener_map;
+        EventListenerFreeMap    _free_map;
     };
 
     template <class T>
     void EventDispatcher::addEventListener(EventListener<T>* event_listener)
     {
-        EventKey key = event_listener->getKey();
-        if (_listener_map.find(key) == _listener_map.end())
+        ListenType listen_type = event_listener->getListenType();
+        if (_free_map.find(listen_type) == _free_map.end())
         {
-            EventListenerList eventlistener_list;
-            eventlistener_list.push_back(event_listener);
-            _listener_map.insert(std::make_pair(key, eventlistener_list));
+            if (_listener_map.find(listen_type) == _listener_map.end())
+            {
+                EventListenerList eventlistener_list;
+                eventlistener_list.push_back(event_listener);
+                _listener_map.insert(std::make_pair(listen_type, eventlistener_list));
+            }
+            else
+                _listener_map[listen_type].push_back(event_listener);
+            event_listener->setListenerId(_listener_map[listen_type].size() - 1);
         }
         else
-            _listener_map[key].push_back(event_listener);
+        {
+            if (_free_map[listen_type].empty()) _listener_map[listen_type].push_back(event_listener);
+            else
+            {
+                size_t free_pos = _free_map[listen_type][0];
+                _listener_map[listen_type][free_pos] = event_listener;
+                _free_map.erase(_free_map.begin());
+                event_listener->setListenerId(free_pos);
+            }
+        }
     }
-
-    //void EventDispatcher::removeEventListener(EventListener* event_listener)
-    //{
-    //    int key = event_listener->getKey();
-    //    EventListenerMap::iterator map_itr = _listener_map.find(key);
-    //    if (map_itr == _listener_map.end())
-    //        TE_LOG("No such event listener exists!");
-    //    else 
-    //    {
-    //        EventListenerList& eventlistener_list = _listener_map[key];
-    //        EventListenerList::iterator list_itr = std::find(eventlistener_list.begin(), eventlistener_list.end(), event_listener);
-    //        _listener_map[key].erase(list_itr);
-    //    }
-    //}
 
 }
 
