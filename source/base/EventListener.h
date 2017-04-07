@@ -11,7 +11,7 @@ namespace te
         virtual ~EventListenerBase() {};
         void exec(Event* event) { call(event); }
 
-    private:
+    protected:
         virtual void call(Event*) = 0;
     };
 
@@ -27,14 +27,15 @@ namespace te
 
         ListenType getListenType() const { return _listen_type; }
 
-        void call(Event* event)
-        {
-            (_instance->*_callback)(event);
-        }
-
         void setListenerId(size_t listener_id)
         {
             _instance->_listener_id = listener_id;
+        }
+        
+    protected:
+        void call(Event* event)
+        {
+            (_instance->*_callback)(event);
         }
 
     protected:
