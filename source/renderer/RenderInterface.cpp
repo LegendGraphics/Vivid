@@ -10,16 +10,7 @@
 
 namespace te
 {
-    RenderInterface* RenderInterface::_renderInterface = nullptr;
-    RenderInterface* RenderInterface::get()
-    {
-        if (!_renderInterface)
-        {
-            _renderInterface = new RenderInterface();
-        }
-
-        return _renderInterface;
-    }
+    RenderInterface* Singleton<RenderInterface>::_singleton = nullptr;
 
     bool RenderInterface::init()
     {
@@ -29,12 +20,7 @@ namespace te
 #else
         _renderDevice = nullptr;
 #endif // USE_GL
-        if (!_renderDevice->open()) return false;
-        
-        // init render resource here
-        _renderObjectManager = new class RenderObjectManager;
-        _renderObjectManager->register_objects();
-        _vertexDeclaration = _renderDevice->getVertexDeclarationDefinition();
+        if (!_renderDevice || !_renderDevice->open()) return false;
 
         return true;
     }
@@ -42,7 +28,6 @@ namespace te
     void RenderInterface::release()
     {
         delete _renderDevice; _renderDevice = nullptr;
-        delete _renderObjectManager; _renderObjectManager = nullptr;
     }
 
     void RenderInterface::renderWorld(RenderMsg* message)
@@ -83,6 +68,6 @@ namespace te
     }
     VertexDeclaration * RenderInterface::getVertexDeclarationDefinition()
     {
-        return _vertexDeclaration;
+        return _renderDevice->getVertexDeclarationDefinition();
     }
 }

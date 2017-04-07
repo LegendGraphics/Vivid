@@ -12,6 +12,8 @@ namespace te
 {
     class RenderContext;
     class RenderResourceContext;
+    class VertexDeclaration;
+    class RenderObjectManager;
 
     // render device objects
     template<class T> class RDObjects
@@ -37,7 +39,7 @@ namespace te
         {
            // ASSERT(handle > 0 && handle <= _objects.size(), "Invalid handle!");
 
-            _objects[handle - 1] = T(); // replace with defualt object
+            _objects[handle - 1] = T(); // replace with default object
             _freeList.push_back(handle - 1);
         }
 
@@ -73,10 +75,11 @@ namespace te
         virtual void dispatch(RenderContext* context_) = 0;
         virtual void dispatch(RenderResourceContext* context_) = 0;
 
-        VertexDeclaration* getVertexDeclarationDefinition();
+        VertexDeclaration* getVertexDeclarationDefinition(); // initialize vertex declaration for this device
 
     protected:
-        VertexDeclaration _vertex_declaration;
+        VertexDeclaration* _vertex_declaration;
+        RenderObjectManager* _render_object_manager;
 
     private:
         typedef std::vector<RenderContext*> RenderContexts;

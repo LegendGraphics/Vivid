@@ -186,7 +186,7 @@ namespace te
                 //ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
 
                 // compute stride for each slot
-                const VertexLayout& vl = _vertex_declaration.getLayout(vd_stream->layout_type);
+                const VertexLayout& vl = _vertex_declaration->getLayout(vd_stream->layout_type);
                 std::unordered_map<uint32, uint32> slotStrideMap;
                 std::unordered_map<uint32, uint32>::iterator iter;
                 for (const auto& i : vl)
@@ -430,7 +430,7 @@ namespace te
 
     bool GLRenderDevice::configShaderVertexLayout(uint32 programObj, vertex_layout::Type vlType)
     {
-        const VertexLayout& vl = _vertex_declaration.getLayout(vlType);
+        const VertexLayout& vl = _vertex_declaration->getLayout(vlType);
         for (uint32 i = 0; i < vl.size(); ++i)
         {
             glBindAttribLocation(programObj, i, vl[i].semanticName.c_str());

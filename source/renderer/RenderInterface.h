@@ -2,6 +2,7 @@
 #define RENDERER_RENDERINTERFACE_H
 
 #include "base/Types.h"
+#include "base/Singleton.hpp"
 
 //#include "RenderWorld.h"
 //#include "Resource/RenderResourceGenerator.h"
@@ -40,11 +41,9 @@ namespace te
         RenderResourceMsg rrm;
     };
 
-    class RenderInterface
+    class RenderInterface : public Singleton<RenderInterface>
     {
     public:
-        static RenderInterface* get();
-
         bool init();
         void release();
 
@@ -61,13 +60,8 @@ namespace te
         //template <class T>
         //RenderResource* createRenderResource();
 
-    protected:
-        RenderInterface() = default; // not implemented
     private:
-        static RenderInterface* _renderInterface;
-        class GLRenderDevice* _renderDevice;
-        class RenderObjectManager* _renderObjectManager;
-        class VertexDeclaration* _vertexDeclaration; // to get the predefined vertex declaration in this render
+        class RenderDevice* _renderDevice;
     };
 }
 
