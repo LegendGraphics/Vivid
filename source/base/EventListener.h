@@ -1,6 +1,8 @@
 #ifndef BASE_EVENT_LISTENER_H
 #define BASE_EVENT_LISTENER_H
 
+#include <functional>
+#include <unordered_map>
 #include "base/Event.h"
 
 namespace te
@@ -8,38 +10,53 @@ namespace te
     class EventListenerBase
     {
     public:
-        virtual ~EventListenerBase() {};
-        void exec(Event* event) { call(event); }
+        EventListenerBase(ListenType listen_type);
+        ListenType getListenType() const { return _listen_type; }
+        void setListenerId(size_t listener_id);
+        size_t getListenerId() const { return _listener_id; }
 
+        void exec(Event* event) { call(event); }
     protected:
         virtual void call(Event*) = 0;
+    protected:
+        ListenType      _listen_type;
+        size_t          _listener_id;
     };
 
-
-    template <class T>
-    class EventListener : public EventListenerBase
+    class EventFunctionalListener : public EventListenerBase
     {
     public:
-        typedef void(T::*EventCallback)(Event*);
+        typedef std::function<void(Event*)> EventCallback;
     public:
-        EventListener(ListenType listen_type, T* instance, EventCallback callback) : _listen_type(listen_type) , _instance(instance), _callback(callback) {};
-        virtual ~EventListener() {};
+        EventFunctionalListener(ListenType listen_type, EventCallback callback);
+        virtual ~EventFunctionalListener();
 
-        ListenType getListenType() const { return _listen_type; }
+    protected:
+        void call(Event* event);
 
-        void setListenerId(size_t listener_id)
-        {
-            _instance->_listener_id = listener_id;
-        }
+    protected:
+        EventCallback   _callback;
+    };
+
+    template <class T>
+    class EventClassListener : public EventListenerBase
+    {
+    public:
+        typedef std::function<void(T&, Event*)> EventCallback;
+    public:
+        EventClassListener(ListenType listen_type, T* instance, EventCallback callback) 
+            : EventListenerBase(listen_type) , _instance(instance), _callback(callback) {};
+        virtual ~EventClassListener() {};
         
     protected:
         void call(Event* event)
         {
-            (_instance->*_callback)(event);
+            _callback(*_instance, event);
         }
 
     protected:
         ListenType      _listen_type;
+        size_t          _listener_id;
         T*              _instance;
         EventCallback   _callback;
     };
