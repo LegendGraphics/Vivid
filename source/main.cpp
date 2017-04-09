@@ -1,5 +1,5 @@
 
-//include "test/TestDirector.h"
+#include "test/TestDirector.h"
 
 //#include "test/TestLoadingMesh.h"
 
@@ -13,4 +13,4 @@
 
 //#include "test/RandomCodeNight.h"
 
-#include "test/TestEvents.h"
+//#include "test/TestEvents.h"

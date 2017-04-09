@@ -2,9 +2,16 @@
 #include "common/Camera.h"
 
 #include "common/SpaceState.h"
+#include "base/EventDispatcher.h"
+#include "base/Director.h"
 
 namespace te
 {
+    const Vector3 WorldCoordinate::WORLD_UP(0, 1, 0);
+    const Vector3 WorldCoordinate::WORLD_RIGHT(1, 0, 0);
+    const Vector3 WorldCoordinate::WORLD_FORWARD(0, 0, -1);
+
+
     Camera::Camera()
     {
         initComponents();
@@ -31,6 +38,49 @@ namespace te
         return true;
     }
 
+    FocusCamera::FocusCamera()
+    {
+        connect(ListenType::MOUSE_LEFT, this, &FocusCamera::onMouseLeft);
+        connect(ListenType::MOUSE_MIDDLE, this, &FocusCamera::onMouseMiddle);
+    }
+
+    void FocusCamera::setFocusMousePos(const Vector2& pos)
+    {
+        _focus_mouse_pos = pos;
+    }
+
+    void FocusCamera::onMouseLeft(Event* event)
+    {
+        MouseEvent* mouse_event = dynamic_cast<MouseEvent*>(event);
+        if (mouse_event->mouseEventType() == MouseEvent::MouseEventType::MOUSE_DOWN)
+        {
+            _focus_mouse_pos = Vector2(mouse_event->getX(), mouse_event->getY());
+        }
+    }
+
+    void FocusCamera::onMouseMiddle(Event* event)
+    {
+
+    }
+
+    void FocusCamera::update()
+    {
+        Vector2 cur_pos = Director::getInstance()->getCurMousePos();
+
+        CameraState* state = getComponent<CameraState>();
+        
+        float x_diff = cur_pos.x - _focus_mouse_pos.x;
+        float y_diff = cur_pos.y - _focus_mouse_pos.y;
+
+        Transform x_diff_rotation = Transform::rotateY(x_diff);
+        Transform y_diff_rotation = Transform::rotateX(y_diff);
+        //Vector3 new_look 
+
+        CameraState::CameraViewParas view_paras = state->getViewParas();
+        //(view_paras.center - view_paras.position)
+
+    }
+
     CameraState::CameraState(){}
 
     CameraState::~CameraState(){}
@@ -42,7 +92,6 @@ namespace te
 
     void CameraState::update()
     {
-
     }
 
     void CameraState::setCameraMode(CameraMode mode)
@@ -50,17 +99,30 @@ namespace te
         _mode = mode;
     }
 
+    void CameraState::setViewTransform(const CameraViewParas& view_paras)
+    {
+        _view_paras = view_paras;
+    }
+    void CameraState::setPersProjectTransform(const CameraPersParas& pers_paras)
+    {
+        _pers_paras = pers_paras;
+    }
+    void CameraState::setOrthoProjectTransform(const CameraOrthoParas& ortho_paras)
+    {
+        _ortho_paras = ortho_paras;
+    }
+
     Transform CameraState::getViewTransform() const
     {
-        return Transform::lookAt(_camera_ref.position, _camera_ref.center, _camera_ref.up);
+        return Transform::lookAt(_view_paras.position, _view_paras.center, _view_paras.up);
     }
 
     Transform CameraState::getProjectTransform() const
     {
         if (_mode == CameraMode::PERSPECTIVE)
         {
-            return Transform::perspective(_pes_paras.fov, _pes_paras.aspect, 
-                _pes_paras.znear, _pes_paras.zfar);
+            return Transform::perspective(_pers_paras.fov, _pers_paras.aspect,
+                _pers_paras.znear, _pers_paras.zfar);
         } 
         else
         {

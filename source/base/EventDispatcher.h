@@ -53,10 +53,10 @@ namespace te
         }
         else
         {
-            // allocate the first null position to the listener
-            size_t free_pos = _free_map[listen_type][0];
+            // allocate the last null position to the listener
+            size_t free_pos = _free_map[listen_type][_free_map[listen_type].size()-1];
             _listener_map[listen_type][free_pos] = event_listener;
-            _free_map[listen_type].erase(_free_map[listen_type].begin());
+            _free_map[listen_type].erase(_free_map[listen_type].end());
             event_listener->setListenerId(free_pos);
         }
     }

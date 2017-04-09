@@ -22,7 +22,7 @@ namespace te
         itr != eventlistener_list.end(); ++itr)
         {
             if (*itr) (*itr)->exec(event);
-            else break; // if the listener encountered is null, the ones after it are also null.
+            else continue;
         }
     }
 

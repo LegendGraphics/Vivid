@@ -141,7 +141,7 @@ namespace te
 
     RenderCamera* wrapRenderCamera()
     {
-        Transform view = Transform::lookAt(Vector3(200, 200, 200), Vector3(0, 0, 0), Vector3(0, 0, 1));
+        Transform view = Transform::lookAt(Vector3(200, 200, 200), Vector3(0, 0, 0), Vector3(0, 1, 0));
         Transform proj = Transform::ortho(-100, 100, -100, 100, -100, -1000);
         //cLog << view.rawMatrix() * Vector4(-50, -50, -50, 1);
         //cLog << proj.rawMatrix();

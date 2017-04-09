@@ -59,6 +59,9 @@ namespace te
         void makeTranslate(float x, float y, float z);
         void makeScale(float x, float y, float z);
         void makeRotate(float x, float y, float z);
+        void makeRotateX(float x);
+        void makeRotateY(float y);
+        void makeRotateZ(float z);
         void makeOrtho(float left, float right, float bottom, float top, float znear, float zfar);
         void makePerspective(float fov, float aspect, float znear, float zfar);
         void makeLookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
@@ -77,6 +80,9 @@ namespace te
         static Mat4x4 translate(float x, float y, float z);
         static Mat4x4 scale(float x, float y, float z);
         static Mat4x4 rotate(float x, float y, float z);
+        static Mat4x4 rotateX(float x);
+        static Mat4x4 rotateY(float y);
+        static Mat4x4 rotateZ(float z);
         static Mat4x4 ortho(float left, float right, float bottom, float top, float znear, float zfar);
         static Mat4x4 perspective(float fov, float aspect, float znear, float zfar);
         static Mat4x4 lookAt(const Vector3& eye, const Vector3& center, const Vector3& up);
