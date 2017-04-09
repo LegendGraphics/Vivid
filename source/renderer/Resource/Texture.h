@@ -5,6 +5,13 @@
 
 namespace te
 {
+
+    enum class IndexFormat : uint8
+    {
+        IDXFMT_16,
+        IDXFMT_32
+    };
+
     namespace image_data
     {
         enum Type {

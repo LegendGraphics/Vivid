@@ -19,28 +19,13 @@ namespace te
             PNTB
         };
 
-        struct IndexStream
-        {
-            uint32 size; // size in bytes
-            void* raw_data;
-            RenderResource* res;
-        };
-
-        struct VertexStream
-        {
-            uint32 stride;
-            uint32 size; // size in bytes
-            void* raw_data;
-            RenderResource* res;
-        };
-
         struct VertexDeclarationStream
         {
             vertex_layout::Type layout_type;
-            std::vector<RenderResource*> vertex_buffers; // notice: vertex_buffers might be duplicated here
+            std::vector<GPUHandle*> vertex_buffers; // notice: vertex_buffers might be duplicated here
                                                          // because multiple attributes may share one vertex buffer
-            RenderResource*              index_buffer;
-            RenderResource*              res;
+            GPUHandle*              index_buffer;
+            GPUHandle*              res;
         };
     }
 
@@ -59,7 +44,6 @@ namespace te
                              // the stride will be 7 * (32 / 8) = 28
                              // I decide to compute the stride when creating VAO
     };
-
     typedef std::vector<VertexLayoutAttrib> VertexLayout;
 
     struct VertexDeclaration : public RenderResource

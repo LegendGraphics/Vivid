@@ -32,7 +32,8 @@ namespace te
         Shader =            (7 << 8),
         Texture =           (8 << 8),
         ParticleEffect =    (9 << 8),
-        Pipeline =         (10 << 8)
+        Pipeline =         (10 << 8),
+        GPU =              (11 << 8)
     };
 
     using ResourceHandle = unsigned long;

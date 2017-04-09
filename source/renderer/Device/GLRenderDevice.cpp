@@ -163,9 +163,9 @@ namespace te
                 // default type unsigned int
                 vertex_layout::IndexStream* i_stream
                     = static_cast<vertex_layout::IndexStream*>(msg.head);
-                RenderResource* res = i_stream->res;
+                GPUHandle* res = i_stream->res;
                 //ASSERT(RenderResource::INDEX_STREAM == res->type, "Render Resource Type doesn't match!");
-                res->render_resource_handle = createIndexBuffer(i_stream->size, i_stream->raw_data);
+                (*res) = createIndexBuffer(i_stream->size, i_stream->raw_data);
                 delete i_stream;
             }
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER == msg.type)
@@ -173,16 +173,16 @@ namespace te
                 // default type float
                 vertex_layout::VertexStream* v_stream
                     = static_cast<vertex_layout::VertexStream*>(msg.head);
-                RenderResource* res = v_stream->res;
+                GPUHandle* res = v_stream->res;
                 //ASSERT(RenderResource::VERTEX_STREAM == res->type, "Render Resource Type doesn't match!");
-                res->render_resource_handle = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
+                (*res) = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
                 delete v_stream;
             }
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION == msg.type)
             {
                 vertex_layout::VertexDeclarationStream* vd_stream
                     = static_cast<vertex_layout::VertexDeclarationStream*>(msg.head);
-                RenderResource* res = vd_stream->res;
+                GPUHandle* res = vd_stream->res;
                 //ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
 
                 // compute stride for each slot
@@ -212,15 +212,15 @@ namespace te
                     sizes.push_back(attri.size);
                     offsets.push_back(attri.offset);
 
-                    auto buffer = vd_stream->vertex_buffers[i];
-                    vertexHandles.push_back(buffer->render_resource_handle);
+                    uint32 buffer_handle = *(vd_stream->vertex_buffers[i]);
+                    vertexHandles.push_back(buffer_handle);
 
-                    uint32 stride_in_buffer = _buffers.getRef(buffer->render_resource_handle).stride;
+                    uint32 stride_in_buffer = _buffers.getRef(buffer_handle).stride;
                     uint32 stride_in_slot = slotStrideMap[attri.vbSlot];
                     //ASSERT(stride_in_buffer == stride_in_slot, "Stride in Buffer should match Stride in Slot!");
                 }
-                uint32 indexHandle = vd_stream->index_buffer->render_resource_handle;
-                res->render_resource_handle = createVertexArray(
+                uint32 indexHandle = (*vd_stream->index_buffer);
+                (*res) = createVertexArray(
                     locations.size(),
                     &locations[0],
                     &sizes[0],

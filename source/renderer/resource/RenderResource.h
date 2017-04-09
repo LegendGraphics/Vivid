@@ -5,6 +5,16 @@
 
 namespace te
 {
+    enum class GPUResourceType
+    {
+        INDEX_STREAM,
+        VERTEX_STREAM,
+        VERTEX_DECLARATION,
+        NUM_TYPE
+    };
+
+    typedef uint32 GPUHandle;
+
     struct RenderResource
     {
         enum 
@@ -32,16 +42,10 @@ namespace te
 
     struct ResourceStreamItem
     {
-        RenderResource::Type resType;
+        GPUResourceType res_type;
         void* stream;
     };
     typedef std::vector<ResourceStreamItem> ResourceStreamQueue;
-
-    enum class IndexFormat : uint8
-    {
-        IDXFMT_16,
-        IDXFMT_32
-    };
 }
 
 #endif

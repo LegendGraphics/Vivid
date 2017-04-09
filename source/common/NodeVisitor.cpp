@@ -229,28 +229,13 @@ namespace te
             msg.rrm.rQueue = new ResourceStreamItem[3];
 
             // index stream
-            msg.rrm.rQueue[0].resType = RenderResource::INDEX_STREAM;
-            vertex_layout::IndexStream* is = new vertex_layout::IndexStream;
-            is->res = &m->getIndexBuffer();
-            is->size = 4 * m->getTriangles().size();
-            is->raw_data = &m->getTriangles()[0];
-            msg.rrm.rQueue[0].stream = is;
+            m->getIndexBuffer().fillStreamItem(msg.rrm.rQueue[0], m);
 
             // vertex stream
-            msg.rrm.rQueue[1].resType = RenderResource::VERTEX_STREAM;
-            vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
-            vs->res = &m->getVertexBuffers()[0];
-            vs->size = m->getVertices().sizeInBytes();//4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
-            vs->stride = 12;
-            //vs->raw_data = &m->getVertices()[0];
-            vs->raw_data = m->getVertices().buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed
-            //float* aa = &m->getVertices()[0];
-            float* aa = (float*)m->getVertices().buffer();
-            for (int i = 0; i < 24*3*4; ++i) std::cout << *(aa+i) << " ";
-            msg.rrm.rQueue[1].stream = vs;
+            m->getVertexBuffer().fillStreamItem(msg.rrm.rQueue[1], m);
 
             // vertex declaration stream
-            msg.rrm.rQueue[2].resType = RenderResource::VERTEX_DECLARATION;
+            msg.rrm.rQueue[2].res_type = GPUResourceType::VERTEX_DECLARATION;
             vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
             vds->res = &m->getVertexDeclaration();
             vds->index_buffer = &m->getIndexBuffer();

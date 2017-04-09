@@ -9,7 +9,7 @@
 #include "base/RefPtr.hpp"
 #include "common/Resource.h"
 
-#include "renderer/Resource/RenderResource.h"
+#include "renderer/Resource/Buffer.h"
 
 namespace te
 {
@@ -248,8 +248,8 @@ namespace te
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
         RenderResource& getVertexDeclaration() { return _vertex_declaration; }
-        RenderResource& getIndexBuffer() { return _index_buffer; }
-        std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
+        Buffer& getIndexBuffer() { return _index_buffer; }
+        Buffer& getVertexBuffer() { return _vertex_buffer; }
 
     protected:
         VertexArray             _vertices;
@@ -259,8 +259,8 @@ namespace te
 
         bool _skinned;
 
-        std::vector<RenderResource> _vertex_buffers;
-        RenderResource              _index_buffer;
+        Buffer                      _vertex_buffer;
+        Buffer                      _index_buffer;
         RenderResource              _vertex_declaration;
     };
 
