@@ -66,7 +66,7 @@ namespace te
         delete msg.generator;
         delete[] msg.rQueue;
     }
-    VertexDeclaration * RenderInterface::getVertexDeclarationDefinition()
+    VertexLayoutPredefinition * RenderInterface::getVertexDeclarationDefinition()
     {
         return _renderDevice->getVertexDeclarationDefinition();
     }

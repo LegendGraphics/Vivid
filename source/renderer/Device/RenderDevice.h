@@ -12,7 +12,7 @@ namespace te
 {
     class RenderContext;
     class RenderResourceContext;
-    class VertexDeclaration;
+    class VertexLayoutPredefinition;
     class RenderObjectManager;
 
     // render device objects
@@ -75,10 +75,10 @@ namespace te
         virtual void dispatch(RenderContext* context_) = 0;
         virtual void dispatch(RenderResourceContext* context_) = 0;
 
-        VertexDeclaration* getVertexDeclarationDefinition(); // initialize vertex declaration for this device
+        VertexLayoutPredefinition* getVertexDeclarationDefinition(); // initialize vertex declaration for this device
 
     protected:
-        VertexDeclaration* _vertex_declaration;
+        VertexLayoutPredefinition* _vertex_declaration;
         RenderObjectManager* _render_object_manager;
 
     private:

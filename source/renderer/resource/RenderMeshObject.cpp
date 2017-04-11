@@ -3,6 +3,7 @@
 #include "renderer/device/RenderContext.h"
 #include "renderer/device/RenderDevice.h"
 #include "renderer/runtime/RenderCamera.h"
+#include "renderer/resource/VertexDeclaration.h"
 
 namespace te
 {
@@ -27,7 +28,7 @@ namespace te
 
         // set vertex buffer
         RenderContext::VertexCmdStream* vcs = new RenderContext::VertexCmdStream;
-        vcs->vaoHandle = _vertex_declaration->render_resource_handle;
+        vcs->vaoHandle = _vertex_declaration->getGPUResourceHandle();
         vcs->baseIndex = 0;
         vcs->baseVertex = 0;
         vcs->numIndices = _numIndices;

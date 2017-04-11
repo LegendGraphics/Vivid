@@ -3,14 +3,6 @@
 #include "common/Mesh.h"
 #include "renderer/resource/VertexLayout.h"
 
-te::Buffer::Buffer()
-{
-}
-
-te::Buffer::~Buffer()
-{
-}
-
 bool te::Buffer::load(const String & res)
 {
     return false;
@@ -20,8 +12,11 @@ void te::Buffer::unload()
 {
 }
 
-void te::Buffer::fillStreamItem(ResourceStreamItem & item, Mesh* mesh)
+void te::Buffer::fillStreamItem(ResourceStreamItem & item, Resource* res)
 {
+    Mesh* mesh = dynamic_cast<Mesh*>(res);
+    if (!mesh) return;
+
     if (GPUResourceType::INDEX_STREAM == _gpu_resource_type)
     {
         item.res_type = GPUResourceType::INDEX_STREAM;

@@ -1,43 +1,41 @@
 #ifndef RENDERER_BUFFER_H
 #define RENDERER_BUFFER_H
 
-#include "common/Resource.h"
-
 #include "renderer/resource/RenderResource.h"
 
 namespace te
 {
     class Mesh;
 
-    struct IndexStream
+    namespace vertex_layout
     {
-        uint32 size; // size in bytes
-        void* raw_data;
-        GPUHandle* res;
-    };
+        struct IndexStream
+        {
+            uint32 size; // size in bytes
+            void* raw_data;
+            GPUResourceHandle* res;
+        };
 
-    struct VertexStream
-    {
-        uint32 stride;
-        uint32 size; // size in bytes
-        void* raw_data;
-        GPUHandle* res;
-    };
+        struct VertexStream
+        {
+            uint32 stride;
+            uint32 size; // size in bytes
+            void* raw_data;
+            GPUResourceHandle* res;
+        };
+    }
 
-    class Buffer : public Resource
+    class Buffer : public GPUResource
     {
     public:
-        Buffer();
+        Buffer() {};
+        Buffer(GPUResourceType t) : GPUResource(t) {};
         virtual ~Buffer() = default;
 
         bool load(const String& res);
         void unload();
 
-        void fillStreamItem(ResourceStreamItem& item, Mesh* mesh);
-
-    protected:
-        GPUResourceType    _gpu_resource_type;
-        GPUHandle          _gpu_resource_handle;
+        void fillStreamItem(ResourceStreamItem& item, Resource* res);
     };
 }
 

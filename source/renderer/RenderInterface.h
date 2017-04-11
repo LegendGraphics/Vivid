@@ -50,7 +50,7 @@ namespace te
         void renderWorld(RenderMsg* message);
         void generateResource(RenderMsg* message);
 
-        class VertexDeclaration* getVertexDeclarationDefinition();
+        class VertexLayoutPredefinition* getVertexDeclarationDefinition();
 
         // engine side should allocate RenderObject and RenderResource
         // from RenderInterface, so that header files won't explode there.

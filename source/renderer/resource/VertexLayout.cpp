@@ -2,7 +2,7 @@
 
 namespace te
 {
-    void VertexDeclaration::init()
+    void VertexLayoutPredefinition::init()
     {
         // order of the vertex layout attribute
         // corresponding to the location in shader!
@@ -37,7 +37,7 @@ namespace te
             { "bitangent", 0, 3, 36 }
         };
     }
-    const VertexLayout & VertexDeclaration::getLayout(vertex_layout::Type vlType)
+    const VertexLayout & VertexLayoutPredefinition::getLayout(vertex_layout::Type vlType)
     {
         return vertexLayoutMap[vlType];
     }

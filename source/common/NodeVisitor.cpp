@@ -235,19 +235,8 @@ namespace te
             m->getVertexBuffer().fillStreamItem(msg.rrm.rQueue[1], m);
 
             // vertex declaration stream
-            msg.rrm.rQueue[2].res_type = GPUResourceType::VERTEX_DECLARATION;
-            vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
-            vds->res = &m->getVertexDeclaration();
-            vds->index_buffer = &m->getIndexBuffer();
-            vds->layout_type = vertex_layout::PNTB;
-            const VertexLayout& vl =
-                _renderer->getVertexDeclarationDefinition()->getLayout(vds->layout_type);
-            vds->vertex_buffers.clear();
-            for (const VertexLayoutAttrib& attr : vl)
-            {
-                vds->vertex_buffers.push_back(&m->getVertexBuffers()[attr.vbSlot]);
-            }
-            msg.rrm.rQueue[2].stream = vds;
+            m->getVertexDeclaration().fillStreamItem(msg.rrm.rQueue[2], m);
+
             _renderer->generateResource(&msg);
         }
 

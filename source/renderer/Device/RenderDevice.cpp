@@ -8,7 +8,7 @@ namespace te
 {
     RenderDevice::RenderDevice()
     {
-        _vertex_declaration = new VertexDeclaration();
+        _vertex_declaration = new VertexLayoutPredefinition();
         _render_object_manager = new RenderObjectManager();
     }
 
@@ -62,7 +62,7 @@ namespace te
         _render_resource_contexts.erase(it);
     }
 
-    VertexDeclaration * RenderDevice::getVertexDeclarationDefinition()
+    VertexLayoutPredefinition * RenderDevice::getVertexDeclarationDefinition()
     {
         return _vertex_declaration;
     }

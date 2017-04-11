@@ -10,6 +10,7 @@
 #include "common/Resource.h"
 
 #include "renderer/Resource/Buffer.h"
+#include "renderer/Resource/VertexDeclaration.h"
 
 namespace te
 {
@@ -247,7 +248,7 @@ namespace te
         bool isSkinned() const { return _skinned; }
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
-        RenderResource& getVertexDeclaration() { return _vertex_declaration; }
+        VertexDeclaration& getVertexDeclaration() { return _vertex_declaration; }
         Buffer& getIndexBuffer() { return _index_buffer; }
         Buffer& getVertexBuffer() { return _vertex_buffer; }
 
@@ -261,7 +262,7 @@ namespace te
 
         Buffer                      _vertex_buffer;
         Buffer                      _index_buffer;
-        RenderResource              _vertex_declaration;
+        VertexDeclaration              _vertex_declaration;
     };
 
     using MeshPtr = RefPtr<Mesh>;

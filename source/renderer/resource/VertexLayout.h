@@ -22,10 +22,10 @@ namespace te
         struct VertexDeclarationStream
         {
             vertex_layout::Type layout_type;
-            std::vector<GPUHandle*> vertex_buffers; // notice: vertex_buffers might be duplicated here
+            std::vector<GPUResourceHandle*> vertex_buffers; // notice: vertex_buffers might be duplicated here
                                                          // because multiple attributes may share one vertex buffer
-            GPUHandle*              index_buffer;
-            GPUHandle*              res;
+            GPUResourceHandle*              index_buffer;
+            GPUResourceHandle*              res;
         };
     }
 
@@ -46,15 +46,15 @@ namespace te
     };
     typedef std::vector<VertexLayoutAttrib> VertexLayout;
 
-    struct VertexDeclaration : public RenderResource
+    struct VertexLayoutPredefinition : public RenderResource
     {
         std::unordered_map<vertex_layout::Type, VertexLayout> vertexLayoutMap;
 
         void init();
         const VertexLayout& getLayout(vertex_layout::Type vlType);
 
-        VertexDeclaration() : RenderResource(OTHER) { init(); }
-        VertexDeclaration(RenderResource::Type t) : RenderResource(t) { init(); }
+        VertexLayoutPredefinition() : RenderResource(OTHER) { init(); }
+        VertexLayoutPredefinition(RenderResource::Type t) : RenderResource(t) { init(); }
     };
 }
 

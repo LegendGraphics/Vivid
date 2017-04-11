@@ -1,19 +1,22 @@
 #ifndef RENDERER_RENDERRESOURCE_H
 #define RENDERER_RENDERRESOURCE_H
+
+#include "common/Resource.h"
+
 #include <vector>
 #include "base/Types.h"
 
 namespace te
 {
-    enum class GPUResourceType
+    enum GPUResourceType
     {
         INDEX_STREAM,
         VERTEX_STREAM,
         VERTEX_DECLARATION,
-        NUM_TYPE
+        NOT_INITIALIZED = 0xFFFFFFFF
     };
 
-    typedef uint32 GPUHandle;
+    typedef uint32 GPUResourceHandle;
 
     struct RenderResource
     {
@@ -46,6 +49,23 @@ namespace te
         void* stream;
     };
     typedef std::vector<ResourceStreamItem> ResourceStreamQueue;
+
+    class GPUResource : public Resource
+    {
+    public:
+        GPUResource() : _gpu_resource_type(GPUResourceType::NOT_INITIALIZED), _gpu_resource_handle(GPUResourceType::NOT_INITIALIZED) {};
+        GPUResource(GPUResourceType t) : _gpu_resource_type(t), _gpu_resource_handle(GPUResourceType::NOT_INITIALIZED) {};
+        GPUResource(GPUResourceType t, GPUResourceHandle h) : _gpu_resource_type(t), _gpu_resource_handle(h) {};
+        virtual ~GPUResource() = default;
+
+        virtual void fillStreamItem(ResourceStreamItem& item, Resource* res) = 0;
+        void setGPUResourceType(GPUResourceType t) { _gpu_resource_type = t; };
+        GPUResourceHandle& getGPUResourceHandle() { return _gpu_resource_handle; };
+
+    protected:
+        GPUResourceType     _gpu_resource_type;
+        GPUResourceHandle   _gpu_resource_handle;
+    };
 }
 
 #endif

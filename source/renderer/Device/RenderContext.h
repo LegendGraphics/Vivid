@@ -4,6 +4,7 @@
 #include "base/Types.h"
 
 #include "renderer/resource/ShaderObject.h"
+#include "renderer/resource/Texture.h"
 
 namespace te
 {
