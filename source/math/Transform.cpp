@@ -56,6 +56,24 @@ namespace te
         return Transform(mat);
     }
 
+    Transform Transform::rotateX(float x)
+    {
+        Matrix mat = Matrix::rotateX(x);
+        return Transform(mat);
+    }
+
+    Transform Transform::rotateY(float y)
+    {
+        Matrix mat = Matrix::rotateY(y);
+        return Transform(mat);
+    }
+
+    Transform Transform::rotateZ(float z)
+    {
+        Matrix mat = Matrix::rotateZ(z);
+        return Transform(mat);
+    }
+
     Transform Transform::perspective(float fov, float aspect, float znear, float zfar)
     {
         Matrix mat = Matrix::perspective(fov, aspect, znear, zfar);

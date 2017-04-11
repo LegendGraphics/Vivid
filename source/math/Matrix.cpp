@@ -84,11 +84,37 @@ namespace te
         SET_ROW(3, 0, 0, 0, 1)
     }
 
+    void Mat4x4::makeRotateX(float x)
+    {
+        float rx = degree_to_radians(x);
+        SET_ROW(0, 1,       0,        0, 0)
+        SET_ROW(1, 0, cos(rx), -sin(rx), 0)
+        SET_ROW(2, 0, sin(rx),  cos(rx), 0)
+        SET_ROW(3, 0,       0,        0, 1)
+    }
+    void Mat4x4::makeRotateY(float y)
+    {
+        float ry = degree_to_radians(y);
+        SET_ROW(0,  cos(ry), 0, sin(ry), 0)
+        SET_ROW(1,        0, 1,       0, 0)
+        SET_ROW(2, -sin(ry), 0, cos(ry), 0)
+        SET_ROW(3,        0, 0,       0, 1)
+    }
+    void Mat4x4::makeRotateZ(float z)
+    {
+        float rz = degree_to_radians(z);
+        SET_ROW(0, cos(rz), -sin(rz), 0, 0)
+        SET_ROW(1, sin(rz),  cos(rz), 0, 0)
+        SET_ROW(2,       0,        0, 1, 0)
+        SET_ROW(3,       0,        0, 0, 1)
+    }
+
     // we use quaternion to build rotation
     void Mat4x4::makeRotate(float x, float y, float z)
     {
         *this = Quaternion(Vector3(x, y, z)).convertToMatrix();
     }
+
 
     // remember we use right-hand system, so the z-axis of camera coordinate is outside of the screen,
     // that is to say znear and zfar will be negative...but many API has explicitly changed it to positive
@@ -229,6 +255,27 @@ namespace te
     {
         Mat4x4 mat;
         mat.makeRotate(x, y, z);
+        return mat;
+    }
+
+    Mat4x4 Mat4x4::rotateX(float x)
+    {
+        Mat4x4 mat;
+        mat.makeRotateX(x);
+        return mat;
+    }
+
+    Mat4x4 Mat4x4::rotateY(float y)
+    {
+        Mat4x4 mat;
+        mat.makeRotateY(y);
+        return mat;
+    }
+
+    Mat4x4 Mat4x4::rotateZ(float z)
+    {
+        Mat4x4 mat;
+        mat.makeRotateZ(z);
         return mat;
     }
 

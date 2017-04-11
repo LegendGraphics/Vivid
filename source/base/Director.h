@@ -3,6 +3,7 @@
 
 #include "base/Timer.h"
 #include "base/Singleton.hpp"
+#include "math/Vector2.h"
 
 class GLFWwindow;
 
@@ -32,6 +33,9 @@ namespace te
         float getDeltaTime() const { return _delta_time; }
 
         void start();
+
+        static void onEvent(GLFWwindow* window, int button, int action, int mods);
+        Vector2 getCurMousePos();
 
     private:
         bool initialize();
