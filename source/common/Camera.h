@@ -44,8 +44,6 @@ namespace te
         void setFocusMousePos(const Vector2& pos);
         Vector2 getFocusMousePos() const { return _focus_mouse_pos; }
 
-        void update();
-
     private:
         Vector2 _focus_mouse_pos;
     };
@@ -125,9 +123,9 @@ namespace te
         void setPersProjectTransform(const CameraPersParas& pers_paras);
         void setOrthoProjectTransform(const CameraOrthoParas& ortho_paras);
 
-        const CameraViewParas& getViewParas() const { return _view_paras; }
-        const CameraPersParas& getPersParas() const { return _pers_paras; }
-        const CameraOrthoParas& getOrthoParas() const { return _ortho_paras; }
+        CameraViewParas& getViewParas() { return _view_paras; }
+        CameraPersParas& getPersParas() { return _pers_paras; }
+        CameraOrthoParas& getOrthoParas() { return _ortho_paras; }
 
         Transform getViewTransform() const;
         Transform getProjectTransform() const;

@@ -15,6 +15,7 @@ namespace te
         Transform& operator=(const Transform& t);
 
         inline const Vector4 operator*(const Vector4& v) const { return Vector4(_m * v); }
+        inline const Vector3 operator*(const Vector3& v) const { return Vector4to3(_m * Vector3to4(v)); }
         inline const Transform operator*(const Transform& t) const { return Transform(_m * t._m); }
 
         void makeTranslate(float x = 0.0f, float y = 0.0f, float z = 0.0f);

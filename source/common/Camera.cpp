@@ -63,24 +63,6 @@ namespace te
 
     }
 
-    void FocusCamera::update()
-    {
-        Vector2 cur_pos = Director::getInstance()->getCurMousePos();
-
-        CameraState* state = getComponent<CameraState>();
-        
-        float x_diff = cur_pos.x - _focus_mouse_pos.x;
-        float y_diff = cur_pos.y - _focus_mouse_pos.y;
-
-        Transform x_diff_rotation = Transform::rotateY(x_diff);
-        Transform y_diff_rotation = Transform::rotateX(y_diff);
-        //Vector3 new_look 
-
-        CameraState::CameraViewParas view_paras = state->getViewParas();
-        //(view_paras.center - view_paras.position)
-
-    }
-
     CameraState::CameraState(){}
 
     CameraState::~CameraState(){}
