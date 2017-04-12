@@ -29,13 +29,14 @@ namespace te
     {
     public:
         Buffer() {};
-        Buffer(GPUResourceType t) : GPUResource(t) {};
-        virtual ~Buffer() = default;
+        Buffer(gpu_resource::Type t) : GPUResource(t) {};
+        virtual ~Buffer();
 
         bool load(const String& res);
         void unload();
 
-        void fillStreamItem(ResourceStreamItem& item, Resource* res);
+        void cacheStreamItem(Resource* res);
+        void fillStreamItem(ResourceStreamItem& item);
     };
 }
 

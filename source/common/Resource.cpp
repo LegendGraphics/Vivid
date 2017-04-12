@@ -1,5 +1,6 @@
 #include "common/Resource.h"
 #include "common/Mesh.h"
+#include "renderer/resource/RenderResourceManager.h"
 
 namespace te
 {
@@ -131,6 +132,7 @@ namespace te
     void ResourceMapper::initialize()
     {
         add<MeshManager>();
+        add<RenderResourceManager>();
     }
 
     void ResourceMapper::clear()

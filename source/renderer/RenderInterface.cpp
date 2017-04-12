@@ -1,12 +1,10 @@
 #include "RenderInterface.h"
 #include "RenderWorld.h"
-#include "resource//RenderResourceGenerator.h"
+#include "resource/RenderResourceGenerator.h"
 
 #ifdef USE_GL
-#include "renderer/Device/GLRenderDevice.h"
+#include "renderer/device/GLRenderDevice.h"
 #endif
-
-#include "renderer/Runtime/RenderObjectManager.h"
 
 namespace te
 {

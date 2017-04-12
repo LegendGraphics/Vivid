@@ -14,19 +14,19 @@ namespace te
         // iterate each object
         for (auto rqItem : rQueue)
         {
-            if (GPUResourceType::VERTEX_STREAM == rqItem.res_type)
+            if (gpu_resource::VERTEX_STREAM == rqItem.res_type)
             {
                 RenderResourceContext::Message allc_vs = {
                     RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER, (void*)rqItem.stream };
                 rrc->messages().push_back(allc_vs);
             }
-            else if (GPUResourceType::INDEX_STREAM == rqItem.res_type)
+            else if (gpu_resource::INDEX_STREAM == rqItem.res_type)
             {
                 RenderResourceContext::Message allc_is = {
                     RenderResourceContext::MessageType::ALLOC_INDEX_BUFFER, (void*)rqItem.stream };
                 rrc->messages().push_back(allc_is);
             }
-            else if (GPUResourceType::VERTEX_DECLARATION == rqItem.res_type)
+            else if (gpu_resource::VERTEX_DECLARATION == rqItem.res_type)
             {
                 RenderResourceContext::Message allc_vd = {
                     RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION, (void*)rqItem.stream };

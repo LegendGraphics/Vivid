@@ -248,21 +248,24 @@ namespace te
         bool isSkinned() const { return _skinned; }
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
-        VertexDeclaration& getVertexDeclaration() { return _vertex_declaration; }
-        Buffer& getIndexBuffer() { return _index_buffer; }
-        Buffer& getVertexBuffer() { return _vertex_buffer; }
+        void setVertexDeclaration(ResourceHandle res_handle) { _vertex_declaration = res_handle; };
+        void setIndexBuffer(ResourceHandle res_handle) { _index_buffer = res_handle; };
+        void setVertexBuffer(ResourceHandle res_handle) { _vertex_buffer = res_handle; };
+        ResourceHandle getVertexDeclaration() { return _vertex_declaration; }
+        ResourceHandle getIndexBuffer() { return _index_buffer; }
+        ResourceHandle getVertexBuffer() { return _vertex_buffer; }
 
     protected:
-        VertexArray             _vertices;
-        IndexArray              _triangles;
+        VertexArray         _vertices;
+        IndexArray          _triangles;
 
-        BoundingBox*     _bounding;
+        BoundingBox*        _bounding;
 
         bool _skinned;
 
-        Buffer                      _vertex_buffer;
-        Buffer                      _index_buffer;
-        VertexDeclaration              _vertex_declaration;
+        ResourceHandle      _vertex_buffer;
+        ResourceHandle      _index_buffer;
+        ResourceHandle      _vertex_declaration;
     };
 
     using MeshPtr = RefPtr<Mesh>;
@@ -276,6 +279,7 @@ namespace te
         ResourceHandle create(const String& res);
 
         MeshPtr   getMesh(ResourceHandle handle);
+        MeshPtr   getMesh(const String& res);
     };
 }
 

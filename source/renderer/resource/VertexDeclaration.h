@@ -29,12 +29,15 @@ namespace te
     {
     public:
         VertexDeclaration();
-        virtual ~VertexDeclaration() = default;
+        VertexDeclaration(gpu_resource::Type t);
+        VertexDeclaration(gpu_resource::Type t, vertex_layout::Type vl_t);
+        virtual ~VertexDeclaration();
 
         bool load(const String& res);
         void unload();
 
-        void fillStreamItem(ResourceStreamItem& item, Resource* res);
+        void fillStreamItem(ResourceStreamItem& item);
+        void cacheStreamItem(Resource* res);
         void setVertexLayoutType(vertex_layout::Type t) { _vertex_layout_type = t; };
 
     protected:

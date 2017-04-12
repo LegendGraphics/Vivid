@@ -4,8 +4,14 @@
 #include "base/Types.h"
 #include "base/Singleton.hpp"
 
-//#include "RenderWorld.h"
-//#include "Resource/RenderResourceGenerator.h"
+// These header files will be moved in the future
+#include "renderer/RenderWorld.h"
+#include "renderer/resource/RenderResourceGenerator.h"
+#include "renderer/runtime/RenderCamera.h"
+#include "renderer/resource/RenderMeshObject.h"
+#include "renderer/resource/PipelineResource.h"
+#include "renderer/resource/RenderResource.h"
+#include "renderer/resource/RenderResourceManager.h"
 
 namespace te
 {
