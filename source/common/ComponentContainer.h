@@ -38,7 +38,7 @@ namespace te
 
         bool isEmpty() const { return _component_map.empty(); } 
 
-        virtual void update();
+        void updateAll();
 
     private:
         ComponentMap _component_map;

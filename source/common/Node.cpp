@@ -85,6 +85,11 @@ namespace te
         return _component_container->has(component_id);
     }
 
+    void Node::updateComponents()
+    {
+        _component_container->updateAll();
+    }
+
     /*Matrix Node::getWorldMatrix()
     {
         ParentPathVisitor ppv;

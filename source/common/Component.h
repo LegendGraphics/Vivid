@@ -15,15 +15,22 @@ namespace te
 {
     class Node;
 
-    class Component: public Ref
+    class Component: public Ref, public Cloneable
     {
     public:
+        enum class MetaType
+        {
+            DATA,
+            BEHAVIOR
+        };
+
+    public:
         Component();
+        Component(MetaType type);
         Component(const Component& component, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Component();
 
-        virtual void init();
-        virtual void update();
+        ENABLE_CLONE(Component);
 
         inline bool isEnabled() const { return _enabled; }
         void setEnabled(bool enabled);
@@ -34,10 +41,31 @@ namespace te
         inline Node* getOwner() const { return _owner; }
         void setOwner(Node* owner);
 
+        inline MetaType getMetaType() const { return _type; }
+        template <typename C>
+        C* getComponent();
+
     protected:
-        String _name;
-        bool _enabled;
-        Node* _owner;
+        String      _name;
+        bool        _enabled;
+        Node*       _owner;
+        MetaType    _type;
+    };
+
+    template <typename C>
+    C* Component::getComponent()
+    {
+        if (_owner) return _owner->getComponent<C>();
+        else return nullptr;
+    }
+
+    class Behavior : public Component
+    {
+    public:
+        Behavior();
+        virtual ~Behavior();
+        virtual void init();
+        virtual void update();
     };
 
 }

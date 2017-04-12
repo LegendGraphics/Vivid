@@ -14,16 +14,10 @@ namespace te
 
     Camera::Camera()
     {
-        initComponents();
+        addComponent<CameraState>();
     }
 
     Camera::~Camera(){}
-
-    void Camera::initComponents()
-    {
-        addComponent<CameraState>();
-        addComponent<SpaceState>();
-    }
 
     bool Camera::cull(Node* node)
     {
@@ -38,43 +32,10 @@ namespace te
         return true;
     }
 
-    FocusCamera::FocusCamera()
-    {
-        connect(ListenType::MOUSE_LEFT, this, &FocusCamera::onMouseLeft);
-        connect(ListenType::MOUSE_MIDDLE, this, &FocusCamera::onMouseMiddle);
-    }
-
-    void FocusCamera::setFocusMousePos(const Vector2& pos)
-    {
-        _focus_mouse_pos = pos;
-    }
-
-    void FocusCamera::onMouseLeft(Event* event)
-    {
-        MouseEvent* mouse_event = dynamic_cast<MouseEvent*>(event);
-        if (mouse_event->mouseEventType() == MouseEvent::MouseEventType::MOUSE_DOWN)
-        {
-            _focus_mouse_pos = Vector2(mouse_event->getX(), mouse_event->getY());
-        }
-    }
-
-    void FocusCamera::onMouseMiddle(Event* event)
-    {
-
-    }
-
     CameraState::CameraState(){}
 
     CameraState::~CameraState(){}
 
-    void CameraState::init()
-    {
-
-    }
-
-    void CameraState::update()
-    {
-    }
 
     void CameraState::setCameraMode(CameraMode mode)
     {
@@ -119,5 +80,63 @@ namespace te
         Transform proj = getProjectTransform();
         _frustum.buildFrustum(view.rawMatrix(), proj.rawMatrix());
         return _frustum;
+    }
+
+
+    FocusCamera::FocusCamera()
+        :_focused(false)
+    {
+        connect(ListenType::MOUSE_LEFT, this, &FocusCamera::onMouseLeft);
+        connect(ListenType::MOUSE_MIDDLE, this, &FocusCamera::onMouseMiddle);
+
+        addComponent<FocusCameraBehavior>();
+    }
+
+    void FocusCamera::setFocusMousePos(const Vector2& pos)
+    {
+        _focus_mouse_pos = pos;
+    }
+
+    void FocusCamera::onMouseLeft(Event* event)
+    {
+        MouseEvent* mouse_event = dynamic_cast<MouseEvent*>(event);
+        if (mouse_event->mouseEventType() == MouseEvent::MouseEventType::MOUSE_DOWN)
+        {
+            _focus_mouse_pos = Vector2(mouse_event->getX(), mouse_event->getY());
+            _focused = true;
+        }
+        else if (mouse_event->mouseEventType() == MouseEvent::MouseEventType::MOUSE_UP)
+        {
+            _focused = false;
+        }
+    }
+
+    void FocusCamera::onMouseMiddle(Event* event)
+    {
+
+    }
+
+    void FocusCameraBehavior::update()
+    {
+        FocusCamera* focus_camera = dynamic_cast<FocusCamera*>(_owner);
+        if (focus_camera->isFocused())
+        {
+            Vector2 cur_pos = Director::getInstance()->getCurMousePos();
+            Vector2 last_pos = focus_camera->getFocusMousePos();
+            CameraState* state = focus_camera->getComponent<CameraState>();
+
+            float x_diff = (cur_pos.x - last_pos.x) * 0.005;
+            float y_diff = (cur_pos.y - last_pos.y) * 0.005;
+
+            Transform x_diff_rotation = Transform::rotateY(x_diff);
+            Transform y_diff_rotation = Transform::rotateX(y_diff);
+
+            CameraState::CameraViewParas& view_paras = state->getViewParas();
+            Vector3 delta_dist = (view_paras.center - view_paras.position);
+            Vector3 dir = delta_dist.normalized();
+            float dist = delta_dist.length();
+            Vector3 new_pos = x_diff_rotation * y_diff_rotation * dir * dist;
+            view_paras.position = new_pos;
+        }
     }
 }

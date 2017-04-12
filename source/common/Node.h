@@ -70,6 +70,8 @@ namespace te
         template <typename C>
         bool hasComponent();
 
+        void updateComponents();
+
     private:
         void addComponent(Component* component, int component_id);
         void removeComponent(int component_id);

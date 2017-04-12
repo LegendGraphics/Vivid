@@ -6,6 +6,7 @@
 
 #include "common/NodeVisitor.h"
 #include "common/Scene.h"
+#include "common/Camera.h"
 #include "base/Assert.h"
 #include "base/EventDispatcher.h"
 #include "io/Logger.h"
@@ -47,6 +48,7 @@ namespace te
             //std::cout << "fps:" << 1.0 / _delta_time << std::endl;
             spacingUpdate();
             cullingUpdate();
+            _active_scene->getActiveCamera()->updateComponents();
             renderingUpdate();
 
             // waiting events
@@ -72,13 +74,21 @@ namespace te
     void Director::renderingUpdate()
     {
         // rendering scene
-        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::get());
+        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::get(), _active_scene);
         visitor.apply(_active_scene->getSceneRoot());
     }
 
     void Director::start()
     {
         _timer.setEnabled(true);
+
+        FocusCamera* focus_camera = new FocusCamera;
+        focus_camera->getComponent<CameraState>()->setCameraMode(CameraState::CameraMode::ORTHOGONAL);
+        focus_camera->getComponent<CameraState>()->setViewTransform(CameraState::CameraViewParas(
+            Vector3(200, 200, 200), Vector3(0, 0, 0), Vector3(0, 1, 0)));
+        focus_camera->getComponent<CameraState>()->setOrthoProjectTransform(CameraState::CameraOrthoParas(
+            -100, 100, -100, 100, -100, -1000));
+        _active_scene->setActiveCamera(focus_camera);
 
         initWindow();
         RenderInterface::get()->init();
@@ -126,7 +136,7 @@ namespace te
     void Director::initResource()
     {
         // init resource
-        RenderResourceVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::get());
+        RenderResourceVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::get(), _active_scene);
         visitor.apply(_active_scene->getSceneRoot());
     }
 

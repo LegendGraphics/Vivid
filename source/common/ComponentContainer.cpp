@@ -2,69 +2,76 @@
 #include "common/Component.h"
 #include "base/Assert.h"
 
-using namespace te;
-
-ComponentContainer::ComponentContainer(Node* owner)
-    : _owner(owner)
+namespace te
 {
-}
-
-//ComponentContainer::ComponentContainer(const ComponentContainer& ccontainer, const CopyOperator& copyop)
-//    : _owner(ccontainer._owner)
-//{
-//}
-
-
-ComponentContainer::~ComponentContainer()
-{
-}
-
-Component* ComponentContainer::get(int component_id)
-{
-    mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
-    mASSERT(_component_types[component_id] == true, "No such component exists!");
-    return _component_map[component_id].get();
-}
-
-void ComponentContainer::add(Component *component, int component_id)
-{
-    mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
-    mASSERT(_component_types[component_id] == false, "Component already exists!");
-
-    _component_map[component_id] = component;
-    _component_types[component_id] = true;
-}
-
-void ComponentContainer::remove(int component_id)
-{
-    mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
-    mASSERT(_component_types[component_id] == true, "No such component exists!");
-
-    _component_map[component_id] = nullptr;
-    _component_types[component_id] = false;
-}
-
-void ComponentContainer::removeAll()
-{
-    _component_map.fill(nullptr);
-    _component_types.reset();
-}
-
-bool ComponentContainer::has(int component_id)
-{
-    mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
-
-    return _component_types[component_id];
-}
-
-void ComponentContainer::update()
-{
-    if (!_component_map.empty())
+    ComponentContainer::ComponentContainer(Node* owner)
+        : _owner(owner)
     {
-        for (auto& iter : _component_map)
+    }
+
+    //ComponentContainer::ComponentContainer(const ComponentContainer& ccontainer, const CopyOperator& copyop)
+    //    : _owner(ccontainer._owner)
+    //{
+    //}
+
+
+    ComponentContainer::~ComponentContainer()
+    {
+    }
+
+    Component* ComponentContainer::get(int component_id)
+    {
+        mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
+        mASSERT(_component_types[component_id] == true, "No such component exists!");
+        return _component_map[component_id].get();
+    }
+
+    void ComponentContainer::add(Component *component, int component_id)
+    {
+        mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
+        mASSERT(_component_types[component_id] == false, "Component already exists!");
+
+        _component_map[component_id] = component;
+        _component_types[component_id] = true;
+    }
+
+    void ComponentContainer::remove(int component_id)
+    {
+        mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
+        mASSERT(_component_types[component_id] == true, "No such component exists!");
+
+        _component_map[component_id] = nullptr;
+        _component_types[component_id] = false;
+    }
+
+    void ComponentContainer::removeAll()
+    {
+        _component_map.fill(nullptr);
+        _component_types.reset();
+    }
+
+    bool ComponentContainer::has(int component_id)
+    {
+        mASSERT(component_id < te::MAX_AMOUNT_OF_COMPONENTS, "Component id exceeds the max amount of components!");
+
+        return _component_types[component_id];
+    }
+
+    void ComponentContainer::updateAll()
+    {
+        if (!_component_map.empty())
         {
-            iter->update();
+            for (auto& iter : _component_map)
+            {
+                if ((iter.get() != nullptr) && iter->getMetaType() == Component::MetaType::BEHAVIOR)
+                {
+                    auto& behavior = dynamic_cast_ptr<Component, Behavior>(iter);
+                    behavior->update();
+                }
+            }
         }
     }
 }
+
+
 

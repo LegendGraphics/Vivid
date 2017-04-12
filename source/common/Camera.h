@@ -30,22 +30,7 @@ namespace te
 
 
     private:
-        void initComponents();
         bool frustumCullingImpl(Node* node);
-    };
-
-    class FocusCamera : public Camera
-    {
-    public:
-        FocusCamera();
-        void onMouseLeft(Event* event);
-        void onMouseMiddle(Event* event);
-
-        void setFocusMousePos(const Vector2& pos);
-        Vector2 getFocusMousePos() const { return _focus_mouse_pos; }
-
-    private:
-        Vector2 _focus_mouse_pos;
     };
 
     class CameraState : public Component
@@ -115,9 +100,6 @@ namespace te
         CameraState();
         virtual ~CameraState();
 
-        virtual void init();
-        virtual void update();
-
         void setCameraMode(CameraMode mode);
         void setViewTransform(const CameraViewParas& view_paras);
         void setPersProjectTransform(const CameraPersParas& pers_paras);
@@ -138,6 +120,29 @@ namespace te
         Frustum             _frustum;
 
         CameraMode          _mode;
+    };
+
+    class FocusCamera : public Camera
+    {
+    public:
+        FocusCamera();
+        void onMouseLeft(Event* event);
+        void onMouseMiddle(Event* event);
+
+        bool isFocused() const { return _focused; }
+
+        void setFocusMousePos(const Vector2& pos);
+        Vector2 getFocusMousePos() const { return _focus_mouse_pos; }
+
+    private:
+        Vector2 _focus_mouse_pos;
+        bool    _focused;
+    };
+
+    class FocusCameraBehavior : public Behavior
+    {
+    public:
+        void update();
     };
 }
 
