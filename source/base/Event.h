@@ -23,7 +23,7 @@ namespace te
         virtual ~Event();
 
         ListenType getListenType() const { return mapToListenType(); }
-        EventType type() { return _type; }
+        EventType eventType() const { return _type; }
     protected:
         virtual ListenType mapToListenType() const = 0;
     protected:
@@ -56,6 +56,8 @@ namespace te
 
         float getX() { return _x; }
         float getY() { return _y; }
+
+        MouseEventType mouseEventType() const { return _mouse_type; }
 
     protected:
         ListenType mapToListenType() const override;

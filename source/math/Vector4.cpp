@@ -87,7 +87,7 @@ namespace te
 
     Vector4 Vector3to4(const Vector3& vec3)
     {
-        return Vector4(vec3.x, vec3.y, vec3.z, 0);
+        return Vector4(vec3.x, vec3.y, vec3.z, 1);
     }
 }
 

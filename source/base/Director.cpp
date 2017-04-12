@@ -7,6 +7,7 @@
 #include "common/NodeVisitor.h"
 #include "common/Scene.h"
 #include "base/Assert.h"
+#include "base/EventDispatcher.h"
 #include "io/Logger.h"
 #include "renderer/RenderInterface.h"
 
@@ -110,6 +111,9 @@ namespace te
         }
         glfwMakeContextCurrent(_window);
 
+        glfwSetMouseButtonCallback(_window, Director::onEvent);
+
+
         // init shader functions
         if (glewInit())
         {
@@ -124,6 +128,48 @@ namespace te
         // init resource
         RenderResourceVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::getInstance());
         visitor.apply(_active_scene->getSceneRoot());
+    }
+
+
+    // temporarily put GUI staff in Director class
+    void Director::onEvent(GLFWwindow* window, int button, int action, int mods)
+    {
+        if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
+        {
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
+            MouseEvent event(MouseEvent::MouseEventType::MOUSE_DOWN, MouseEvent::MouseButton::BUTTON_LEFT, (xpos), float(ypos));
+            EventDispatcher::getInstance()->dispatch(&event);
+        }
+        else if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_RELEASE)
+        {
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
+            MouseEvent event(MouseEvent::MouseEventType::MOUSE_UP, MouseEvent::MouseButton::BUTTON_LEFT, (xpos), float(ypos));
+            EventDispatcher::getInstance()->dispatch(&event);
+        }
+        else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
+        {
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
+            MouseEvent event(MouseEvent::MouseEventType::MOUSE_DOWN, MouseEvent::MouseButton::BUTTON_RIGHT, (xpos), float(ypos));
+            EventDispatcher::getInstance()->dispatch(&event);
+        }
+        else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_RELEASE)
+        {
+            double xpos, ypos;
+            glfwGetCursorPos(window, &xpos, &ypos);
+            MouseEvent event(MouseEvent::MouseEventType::MOUSE_UP, MouseEvent::MouseButton::BUTTON_RIGHT, (xpos), float(ypos));
+            EventDispatcher::getInstance()->dispatch(&event);
+
+        }
+    }
+
+    Vector2 Director::getCurMousePos()
+    {
+        double xpos, ypos;
+        glfwGetCursorPos(_window, &xpos, &ypos);
+        return Vector2(xpos, ypos);
     }
 
 }

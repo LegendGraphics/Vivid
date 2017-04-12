@@ -56,6 +56,8 @@ namespace te
 
         SceneTree* getSceneRoot() const { return _scene_root; }
         Camera* getActiveCamera() const { return _camera; }
+        
+        void setActiveCamera(Camera* camera);
 
     protected:
         SceneTree*  _scene_root;

@@ -142,18 +142,26 @@
 #include "common/Scene.h"
 #include "common/Camera.h"
 #include "common/SpaceState.h"
+#include "base/EventDispatcher.h"
 
 namespace te
 {
     Scene::Scene()
         :_scene_root(new SceneTree),
         _camera(new Camera)
-    {}
+    {
+    }
 
     Scene::~Scene(){}
 
     Scene::Scene(const Scene& scene, const CopyOperator& copyop)
     {}
+
+    void Scene::setActiveCamera(Camera* camera)
+    {
+        _camera = camera;
+    }
+
 
     SceneTree::SceneTree()
     {
