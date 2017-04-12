@@ -3,31 +3,11 @@
 #include <unordered_map>
 #include "base/Types.h"
 #include "base/String.h"
-#include "RenderResource.h"
+#include "renderer/resource/VertexDeclaration.h"
 
 namespace te
 {
     // Vertex Layout should be loaded from file like pipeline resource
-
-    namespace vertex_layout
-    {
-        enum Type {
-            Position,
-            Overlay, // Position with Texture Coordinate
-            Model,
-            Partical,
-            PNTB
-        };
-
-        struct VertexDeclarationStream
-        {
-            vertex_layout::Type layout_type;
-            std::vector<GPUResourceHandle*> vertex_buffers; // notice: vertex_buffers might be duplicated here
-                                                         // because multiple attributes may share one vertex buffer
-            GPUResourceHandle*              index_buffer;
-            GPUResourceHandle*              res;
-        };
-    }
 
     // this seems to be a common concept
     // in all platforms, put it here for now

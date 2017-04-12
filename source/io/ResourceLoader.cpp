@@ -117,6 +117,7 @@ namespace te
             mesh->_vertex_buffer.setGPUResourceType(GPUResourceType::VERTEX_STREAM);
             mesh->_index_buffer.setGPUResourceType(GPUResourceType::INDEX_STREAM);
             mesh->_vertex_declaration.setGPUResourceType(GPUResourceType::VERTEX_DECLARATION);
+            mesh->_vertex_declaration.setVertexLayoutType(vertex_layout::PNTB);
 
             return true;
     }

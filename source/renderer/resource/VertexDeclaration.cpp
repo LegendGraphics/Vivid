@@ -25,7 +25,7 @@ void te::VertexDeclaration::fillStreamItem(ResourceStreamItem & item, Resource *
     vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
     vds->res = &_gpu_resource_handle;
     vds->index_buffer = &mesh->getIndexBuffer().getGPUResourceHandle();
-    vds->layout_type = vertex_layout::PNTB;
+    vds->layout_type = _vertex_layout_type;
     vds->vertex_buffers.push_back(&mesh->getVertexBuffer().getGPUResourceHandle());
     item.stream = vds;
 }
