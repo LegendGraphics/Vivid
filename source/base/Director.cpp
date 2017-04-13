@@ -19,7 +19,7 @@ namespace te
     bool Director::initialize()
     {
         // init engine modules
-        RenderInterface::get();
+        RenderInterface();
 
         return true;
     }
@@ -91,7 +91,7 @@ namespace te
         _active_scene->setActiveCamera(focus_camera);
 
         initWindow();
-        RenderInterface::get()->init();
+        RenderInterface::getInstance()->init();
         initResource();
 
         mainLoop();
@@ -136,6 +136,7 @@ namespace te
     void Director::initResource()
     {
         // init resource
+
         RenderResourceVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::get(), _active_scene);
         visitor.apply(_active_scene->getSceneRoot());
     }

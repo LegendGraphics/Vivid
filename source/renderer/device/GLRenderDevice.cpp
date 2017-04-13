@@ -5,6 +5,8 @@
 #include "renderer/Resource/RenderResourceContext.h"
 #include "renderer/runtime/RenderCamera.h"
 #include "renderer/Resource/VertexLayout.h"
+#include "renderer/Resource/Buffer.h"
+#include "renderer/Resource/VertexDeclaration.h"
 
 #include "math/Vector4.h"
 
@@ -163,30 +165,36 @@ namespace te
                 // default type unsigned int
                 vertex_layout::IndexStream* i_stream
                     = static_cast<vertex_layout::IndexStream*>(msg.head);
-                RenderResource* res = i_stream->res;
+                GPUResourceHandle* res = i_stream->res;
                 //ASSERT(RenderResource::INDEX_STREAM == res->type, "Render Resource Type doesn't match!");
-                res->render_resource_handle = createIndexBuffer(i_stream->size, i_stream->raw_data);
-                delete i_stream;
+                (*res) = createIndexBuffer(i_stream->size, i_stream->raw_data);
             }
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER == msg.type)
             {
                 // default type float
                 vertex_layout::VertexStream* v_stream
                     = static_cast<vertex_layout::VertexStream*>(msg.head);
-                RenderResource* res = v_stream->res;
+                GPUResourceHandle* res = v_stream->res;
                 //ASSERT(RenderResource::VERTEX_STREAM == res->type, "Render Resource Type doesn't match!");
-                res->render_resource_handle = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
-                delete v_stream;
+                (*res) = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
             }
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION == msg.type)
             {
                 vertex_layout::VertexDeclarationStream* vd_stream
                     = static_cast<vertex_layout::VertexDeclarationStream*>(msg.head);
-                RenderResource* res = vd_stream->res;
+                GPUResourceHandle* res = vd_stream->res;
                 //ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
 
-                // compute stride for each slot
-                const VertexLayout& vl = _vertex_declaration.getLayout(vd_stream->layout_type);
+                const VertexLayout& vl = _vertex_declaration->getLayout(vd_stream->layout_type);
+                // rearrange the vertex buffers here
+                std::vector<GPUResourceHandle*> rearrangedVertexBuffers;
+                for (const VertexLayoutAttrib& attr : vl)
+                {
+                    rearrangedVertexBuffers.push_back(vd_stream->vertex_buffers[attr.vbSlot]);
+                }
+                vd_stream->vertex_buffers.swap(rearrangedVertexBuffers);
+
+                // compute stride for each slot          
                 std::unordered_map<uint32, uint32> slotStrideMap;
                 std::unordered_map<uint32, uint32>::iterator iter;
                 for (const auto& i : vl)
@@ -212,23 +220,21 @@ namespace te
                     sizes.push_back(attri.size);
                     offsets.push_back(attri.offset);
 
-                    auto buffer = vd_stream->vertex_buffers[i];
-                    vertexHandles.push_back(buffer->render_resource_handle);
+                    uint32 buffer_handle = *(vd_stream->vertex_buffers[i]);
+                    vertexHandles.push_back(buffer_handle);
 
-                    uint32 stride_in_buffer = _buffers.getRef(buffer->render_resource_handle).stride;
+                    uint32 stride_in_buffer = _buffers.getRef(buffer_handle).stride / 4; // unit of stride in buffer is in bytes
                     uint32 stride_in_slot = slotStrideMap[attri.vbSlot];
                     //ASSERT(stride_in_buffer == stride_in_slot, "Stride in Buffer should match Stride in Slot!");
                 }
-                uint32 indexHandle = vd_stream->index_buffer->render_resource_handle;
-                res->render_resource_handle = createVertexArray(
+                uint32 indexHandle = (*vd_stream->index_buffer);
+                (*res) = createVertexArray(
                     locations.size(),
                     &locations[0],
                     &sizes[0],
                     &offsets[0],
                     &vertexHandles[0],
                     indexHandle);
-                
-                delete vd_stream;
             }
         }
 
@@ -276,7 +282,7 @@ namespace te
 
         buf.type = GL_ELEMENT_ARRAY_BUFFER;
         buf.size = size;
-        buf.stride = 1; // if we use VAO, index buffer seems not important
+        buf.stride = 1 * 4; // if we use VAO, index buffer seems not important, it's stride in bytes
         glGenBuffers(1, &buf.glObj);
         glBindBuffer(buf.type, buf.glObj);
         glBufferData(buf.type, size, data, GL_DYNAMIC_DRAW);
@@ -306,7 +312,7 @@ namespace te
                 sizes[i],
                 GL_FLOAT,
                 GL_FALSE,
-                4 * vBuf.stride,
+                vBuf.stride,
                 (void*)(offsets[i])); // offset in bytes which has been calculated in VertexLayout.cpp, no need to * 4
             //glEnableVertexArrayAttrib(vao, locations[i]); // found a potential problem here, this function is only available since OpenGL 4.5
             glEnableVertexAttribArray(locations[i]);
@@ -430,7 +436,7 @@ namespace te
 
     bool GLRenderDevice::configShaderVertexLayout(uint32 programObj, vertex_layout::Type vlType)
     {
-        const VertexLayout& vl = _vertex_declaration.getLayout(vlType);
+        const VertexLayout& vl = _vertex_declaration->getLayout(vlType);
         for (uint32 i = 0; i < vl.size(); ++i)
         {
             glBindAttribLocation(programObj, i, vl[i].semanticName.c_str());

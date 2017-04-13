@@ -8,8 +8,9 @@
 #include "shape/BoundingBox.h"
 #include "base/RefPtr.hpp"
 #include "common/Resource.h"
+#include "base/Types.h"
 
-#include "renderer/Resource/RenderResource.h"
+#include "renderer/resource/VertexLayoutType.h"
 
 namespace te
 {
@@ -25,14 +26,6 @@ namespace te
         VERTEX_SKINNED,
         VERTEX_TEXCOORD0,
         VERTEX_TEXCOORD1
-    };
-
-    enum class VertexType
-    {
-        VERTEX_P,
-        VERTEX_PN,
-        VERTEX_PNTB,
-        VERTEX_PNTB_SKINNED
     };
 
     struct Vertex_P
@@ -167,21 +160,21 @@ namespace te
             delete _type;
         }
 
-        void convert(VertexType type)
+        void convert(vertex_layout::Type type)
         {
             if (_type) delete _type;
             switch (type)
             {
-            case VertexType::VERTEX_P:
+            case vertex_layout::Position:
                 _type = new P_Array;
                 break;
-            case VertexType::VERTEX_PN:
+            case vertex_layout::PN:
                 _type = new PN_Array;
                 break;
-            case VertexType::VERTEX_PNTB:
+            case vertex_layout::PNTB:
                 _type = new PNTB_Array;
                 break;
-            case VertexType::VERTEX_PNTB_SKINNED:
+            case vertex_layout::PNTB_SKINNED:
                 _type = new PNTB_Skinned_Array;
                 break;
             default:
@@ -247,21 +240,24 @@ namespace te
         bool isSkinned() const { return _skinned; }
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
-        RenderResource& getVertexDeclaration() { return _vertex_declaration; }
-        RenderResource& getIndexBuffer() { return _index_buffer; }
-        std::vector<RenderResource>& getVertexBuffers() { return _vertex_buffers; }
+        void setVertexDeclaration(ResourceHandle res_handle) { _vertex_declaration = res_handle; };
+        void setIndexBuffer(ResourceHandle res_handle) { _index_buffer = res_handle; };
+        void setVertexBuffer(ResourceHandle res_handle) { _vertex_buffer = res_handle; };
+        ResourceHandle getVertexDeclaration() { return _vertex_declaration; }
+        ResourceHandle getIndexBuffer() { return _index_buffer; }
+        ResourceHandle getVertexBuffer() { return _vertex_buffer; }
 
     protected:
-        VertexArray             _vertices;
-        IndexArray              _triangles;
+        VertexArray         _vertices;
+        IndexArray          _triangles;
 
-        BoundingBox*     _bounding;
+        BoundingBox*        _bounding;
 
         bool _skinned;
 
-        std::vector<RenderResource> _vertex_buffers;
-        RenderResource              _index_buffer;
-        RenderResource              _vertex_declaration;
+        ResourceHandle      _vertex_buffer;
+        ResourceHandle      _index_buffer;
+        ResourceHandle      _vertex_declaration;
     };
 
     using MeshPtr = RefPtr<Mesh>;
@@ -275,6 +271,7 @@ namespace te
         ResourceHandle create(const String& res);
 
         MeshPtr   getMesh(ResourceHandle handle);
+        MeshPtr   getMesh(const String& res);
     };
 }
 

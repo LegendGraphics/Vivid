@@ -9,14 +9,6 @@
 #include "common/Scene.h"
 #include "renderer/RenderInterface.h"
 
-// These header files will be moved in the future
-#include "renderer/RenderWorld.h"
-#include "renderer/Resource/RenderResourceGenerator.h"
-#include "renderer/Runtime/RenderCamera.h"
-#include "renderer/Resource/RenderMeshObject.h"
-#include "renderer/Resource/PipelineResource.h"
-#include "renderer/Resource/VertexLayout.h"
-
 #include "common/MeshFilter.h"
 #include "common/Mesh.h"
 
@@ -168,7 +160,11 @@ namespace te
             Mesh* m = mf->getMesh().get();
             RenderMeshObject* rmo = new RenderMeshObject;
             rmo->setNumIndices(m->getTriangles().size());
-            rmo->setVertexDeclaration(&m->getVertexDeclaration());
+            rmo->setVertexDeclaration(
+                ResourceMapper::getInstance()
+                ->get<RenderResourceManager>()
+                ->getGPUResource(m->getVertexDeclaration()).get());
+            
 
             // Put it into RenderQueueItem
             rqi->node = rmo;
@@ -222,52 +218,32 @@ namespace te
 
     void RenderResourceVisitor::apply(Node * node)
     {
-        RenderMsg msg;
-        msg.rrm.generator = new RenderResourceGenerator;
-        msg.rrm.numQueue = 0;
         if (MeshFilter* mf = node->getComponent<MeshFilter>())
         {
-            // generate RenderMeshObject
             Mesh* m = mf->getMesh().get();
-            msg.rrm.numQueue = 3;
-            msg.rrm.rQueue = new ResourceStreamItem[3];
+            String m_res_id = m->getResourceId();
+            RenderResourceManager* rr_manager =
+                ResourceMapper::getInstance()->get<RenderResourceManager>();
 
             // index stream
-            msg.rrm.rQueue[0].resType = RenderResource::INDEX_STREAM;
-            vertex_layout::IndexStream* is = new vertex_layout::IndexStream;
-            is->res = &m->getIndexBuffer();
-            is->size = 4 * m->getTriangles().size();
-            is->raw_data = &m->getTriangles()[0];
-            msg.rrm.rQueue[0].stream = is;
+            String i_buffer_id = gpu_resource::appendTypeStr(gpu_resource::INDEX_STREAM, m_res_id);
+            ResourceHandle i_buffer = rr_manager->create(i_buffer_id);
+            m->setIndexBuffer(i_buffer);
 
             // vertex stream
-            msg.rrm.rQueue[1].resType = RenderResource::VERTEX_STREAM;
-            vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
-            vs->res = &m->getVertexBuffers()[0];
-            vs->size = m->getVertices().sizeInBytes();//4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
-            vs->stride = 12;
-            //vs->raw_data = &m->getVertices()[0];
-            vs->raw_data = m->getVertices().buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed
-            //float* aa = &m->getVertices()[0];
-            float* aa = (float*)m->getVertices().buffer();
-            for (int i = 0; i < 24*3*4; ++i) std::cout << *(aa+i) << " ";
-            msg.rrm.rQueue[1].stream = vs;
+            String v_buffer_id = gpu_resource::appendTypeStr(gpu_resource::VERTEX_STREAM, m_res_id);
+            ResourceHandle v_buffer = rr_manager->create(v_buffer_id);
+            m->setVertexBuffer(v_buffer);
 
             // vertex declaration stream
-            msg.rrm.rQueue[2].resType = RenderResource::VERTEX_DECLARATION;
-            vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
-            vds->res = &m->getVertexDeclaration();
-            vds->index_buffer = &m->getIndexBuffer();
-            vds->layout_type = vertex_layout::PNTB;
-            const VertexLayout& vl =
-                _renderer->getVertexDeclarationDefinition()->getLayout(vds->layout_type);
-            vds->vertex_buffers.clear();
-            for (const VertexLayoutAttrib& attr : vl)
-            {
-                vds->vertex_buffers.push_back(&m->getVertexBuffers()[attr.vbSlot]);
-            }
-            msg.rrm.rQueue[2].stream = vds;
-            _renderer->generateResource(&msg);
+            String vao_id = gpu_resource::appendTypeStr(gpu_resource::VERTEX_DECLARATION,
+                vertex_layout::getTypeStr(vertex_layout::PNTB) + ";"
+                + i_buffer_id + ";"
+                + v_buffer_id + ";");
+            ResourceHandle vao = rr_manager->create(vao_id);
+            m->setVertexDeclaration(vao);
+
+            rr_manager->immediateCreate();
         }
 
     }
