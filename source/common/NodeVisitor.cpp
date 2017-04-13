@@ -6,6 +6,7 @@
 #include "common/Node.h"
 #include "common/Camera.h"
 #include "common/SpaceState.h"
+#include "common/Scene.h"
 #include "renderer/RenderInterface.h"
 
 #include "common/MeshFilter.h"
@@ -92,8 +93,7 @@ namespace te
 
     void SpacingVisitor::apply(Node* node)
     {
-        // Now simply update space status for every node
-        if (node->hasComponent<SpaceState>()) node->getComponent<SpaceState>()->update();
+        node->updateComponents();
         traverse(node);
     }
 
@@ -102,9 +102,10 @@ namespace te
         
     }
 
-    RenderingVisitor::RenderingVisitor(const TraversalMode& tm, RenderInterface* renderer)
+    RenderingVisitor::RenderingVisitor(const TraversalMode& tm, RenderInterface* renderer, Scene* scene)
         :NodeVisitor(tm, VisitorType::RENDERING_UPDATE),
-        _renderer(renderer)
+        _renderer(renderer),
+        _scene(scene)
     {}
 
     RenderingVisitor::RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop)
@@ -120,7 +121,7 @@ namespace te
     {
         // Now simply rendering every node
 
-        testRenderingPipeline(node); // for test
+        testRenderingPipeline(node, _scene->getActiveCamera()); // for test
 
         traverse(node);
     }
@@ -131,15 +132,18 @@ namespace te
         return rw;
     }
 
-    RenderCamera* wrapRenderCamera()
+    RenderCamera* wrapRenderCamera(Camera* camera)
     {
-        Transform view = Transform::lookAt(Vector3(200, 200, 200), Vector3(0, 0, 0), Vector3(0, 1, 0));
-        Transform proj = Transform::ortho(-100, 100, -100, 100, -100, -1000);
+        Transform view = camera->getComponent<CameraState>()->getViewTransform();
+        Transform proj = camera->getComponent<CameraState>()->getProjectTransform();
+        //Transform view = Transform::lookAt(Vector3(200, 200, 200), Vector3(0, 0, 0), Vector3(0, 1, 0));
+        //Transform proj = Transform::ortho(-100, 100, -100, 100, -100, -1000);
         //cLog << view.rawMatrix() * Vector4(-50, -50, -50, 1);
         //cLog << proj.rawMatrix();
         //cLog << proj.rawMatrix() * (view.rawMatrix() * Vector4(-50, -50, -50, 1));
         //cLog << proj.rawMatrix() * view.rawMatrix() * Vector4(-50, -50, -50, 1);
-        RenderCamera* rc = new RenderCamera(CameraData::ORTHOGRAPHIC, -10, -1000, proj.rawMatrix(), view.rawMatrix());
+        RenderCamera* rc = new RenderCamera(CameraData::ORTHOGRAPHIC, -10, -1000, 
+            proj.rawMatrix(), view.rawMatrix());
         rc->getViewPort()[0] = 0;
         rc->getViewPort()[1] = 0;
         rc->getViewPort()[2] = 800;
@@ -182,10 +186,10 @@ namespace te
         return pr;
     }
 
-    void RenderingVisitor::testRenderingPipeline(Node* node)
+    void RenderingVisitor::testRenderingPipeline(Node* node, Camera* camera)
     {
         RenderMsg msg;
-        msg.rwm.camera = wrapRenderCamera();
+        msg.rwm.camera = wrapRenderCamera(camera);
         msg.rwm.world = wrapRenderWorld();
         msg.rwm.rQueue = wrapRenderQueueItem(node, msg.rwm.numQueue);
         msg.rwm.pipeline = wrapPipelineResource();
@@ -197,8 +201,8 @@ namespace te
     {
     }
 
-    RenderResourceVisitor::RenderResourceVisitor(const TraversalMode & tm, RenderInterface * renderer)
-        : RenderingVisitor(tm, renderer)
+    RenderResourceVisitor::RenderResourceVisitor(const TraversalMode & tm, RenderInterface * renderer, Scene* scene)
+        : RenderingVisitor(tm, renderer, scene)
     {
     }
 

@@ -86,7 +86,7 @@ namespace te
     {
     public:
         RenderingVisitor();
-        RenderingVisitor(const TraversalMode& tm, RenderInterface* renderer);
+        RenderingVisitor(const TraversalMode& tm, RenderInterface* renderer, Scene* scene);
         RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
         virtual ~RenderingVisitor();
@@ -94,10 +94,11 @@ namespace te
         virtual void apply(Node* node);
 
     private:
-        void testRenderingPipeline(Node* node);
+        void testRenderingPipeline(Node* node, Camera* camera);
 
     protected:
         RenderInterface*    _renderer;
+        Scene*              _scene;
 
     };
 
@@ -105,7 +106,7 @@ namespace te
     {
     public:
         RenderResourceVisitor();
-        RenderResourceVisitor(const TraversalMode& tm, RenderInterface* renderer);
+        RenderResourceVisitor(const TraversalMode& tm, RenderInterface* renderer, Scene* scene);
         RenderResourceVisitor(const RenderResourceVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~RenderResourceVisitor();
 

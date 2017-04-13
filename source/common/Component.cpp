@@ -4,27 +4,27 @@ namespace te
 {
     Component::Component()
         :_enabled(true),
-        _owner(nullptr)
+        _owner(nullptr),
+        _type(MetaType::DATA)
     {
 
     }
 
+    Component::Component(MetaType type)
+        :_enabled(true),
+        _owner(nullptr),
+        _type(type)
+    {}
+
     Component::Component(const Component& component, const CopyOperator& copyop)
         :_enabled(component._enabled),
-        _owner(nullptr)
+        _owner(nullptr),
+        _type(MetaType::DATA)
     {
     }
 
     Component::~Component() {}
 
-    void Component::init()
-    {
-    }
-
-    void Component::update()
-    {
-
-    }
 
     void Component::setEnabled(bool enabled)
     {
@@ -40,6 +40,19 @@ namespace te
     {
         _owner = owner;
     }
+
+    Behavior::Behavior()
+        :Component(MetaType::BEHAVIOR)
+    {}
+
+    Behavior::~Behavior()
+    {}
+
+    void Behavior::init()
+    {}
+
+    void Behavior::update()
+    {}
 }
 
 
