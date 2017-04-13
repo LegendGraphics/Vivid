@@ -46,4 +46,7 @@ namespace te
         params._device->dispatch(rrc);
         params._device->releaseResourceContext(rrc);
     }
+    void RenderResourceGenerator::deallocResource(RenderResourceParams & params)
+    {
+    }
 }

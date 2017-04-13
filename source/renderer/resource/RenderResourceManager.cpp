@@ -1,6 +1,8 @@
 #include "RenderResourceManager.h"
 
-#include "common/Mesh.h"
+#include "renderer/RenderInterface.h"
+#include "renderer/resource/Buffer.h"
+#include "renderer/resource/VertexDeclaration.h"
 
 namespace te
 {
@@ -20,42 +22,52 @@ namespace te
         // for now, we parse the string to decide its type
         // Index, Vertex, VAO, etc
         String resource_type_id = res.substr(0, res.find_first_of(":"));
-        String res_id = res.substr(res.find_first_of(":") + 1);
+        String helper_str = res.substr(res.find_first_of(":") + 1);
         GPUResource* gpu_res = nullptr;
-        Resource* helper_res = nullptr;
-        if (gpu_resource::getTypeId(gpu_resource::INDEX_STREAM) == resource_type_id)
+        if (gpu_resource::getTypeStr(gpu_resource::INDEX_STREAM) == resource_type_id)
         {
             gpu_res = new Buffer(gpu_resource::INDEX_STREAM);
-            helper_res = ResourceMapper::getInstance()
-                ->get<MeshManager>()
-                ->getMesh(res_id).get();
         }
-        else if (gpu_resource::getTypeId(gpu_resource::VERTEX_STREAM) == resource_type_id)
+        else if (gpu_resource::getTypeStr(gpu_resource::VERTEX_STREAM) == resource_type_id)
         {
             gpu_res = new Buffer(gpu_resource::VERTEX_STREAM);
-            helper_res = ResourceMapper::getInstance()
-                ->get<MeshManager>()
-                ->getMesh(res_id).get();
         }
-        else if (gpu_resource::getTypeId(gpu_resource::VERTEX_DECLARATION) == resource_type_id)
+        else if (gpu_resource::getTypeStr(gpu_resource::VERTEX_DECLARATION) == resource_type_id)
         {
-            gpu_res = new VertexDeclaration(gpu_resource::VERTEX_DECLARATION, vertex_layout::PNTB);
-            helper_res = ResourceMapper::getInstance()
-                ->get<MeshManager>()
-                ->getMesh(res_id).get();
+            String vl_type = helper_str.substr(0, helper_str.find_first_of(";"));
+            gpu_res = new VertexDeclaration(gpu_resource::VERTEX_DECLARATION, vertex_layout::getType(vl_type));
         }
 
         if (!gpu_res) return 0;
 
-        gpu_res->cacheStreamItem(helper_res);
+        gpu_res->load(res);
         gpu_res->descriptor(buildDescriptor(res));
         add(gpu_res);
-        return getResourceHandle(res);
+        _res_wait_list.push_back(getResourceHandle(res));
+        return _res_wait_list.back();
     }
 
     GPUResourcePtr RenderResourceManager::getGPUResource(ResourceHandle handle)
     {
         if (has(handle)) return dynamic_cast_ptr<Resource, GPUResource>(getResourcePtr(handle));
         else return nullptr;
+    }
+
+    void RenderResourceManager::immediateCreate()
+    {
+        if (_res_wait_list.empty()) return;
+
+        RenderMsg msg;
+        msg.rrm.generator = new RenderResourceGenerator;
+        msg.rrm.numQueue = _res_wait_list.size();
+        msg.rrm.rQueue = new ResourceStreamItem[msg.rrm.numQueue];
+
+        for (uint32 i = 0; i < msg.rrm.numQueue; ++i)
+        {
+            getGPUResource(_res_wait_list[i])->fillStreamItem(msg.rrm.rQueue[i]);
+        }
+
+        RenderInterface::getInstance()->generateResource(&msg);
+        _res_wait_list.clear();
     }
 }

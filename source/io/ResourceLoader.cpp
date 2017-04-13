@@ -32,7 +32,7 @@ namespace te
             int vertex_num;
             memcpy(&vertex_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
 
-            mesh->_vertices.convert(VertexType::VERTEX_PNTB);
+            mesh->_vertices.convert(vertex_layout::PNTB);
             mesh->_vertices.initialize(vertex_num);
 
             for (int i = 0; i < attribute_num; ++i)

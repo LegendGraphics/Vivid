@@ -2,6 +2,7 @@
 #define RENDERER_RENDERRESOURCE_H
 
 #include "common/Resource.h"
+#include "renderer/resource/VertexLayoutType.h"
 
 #include <vector>
 #include "base/Types.h"
@@ -20,8 +21,8 @@ namespace te
             NOT_INITIALIZED = 0xFFFFFFFF
         };
 
-        String getTypeId(Type t);
-        String appendTypeId(Type t, const String& res_id);
+        String getTypeStr(Type t);
+        String appendTypeStr(Type t, const String& res_id);
     }
 
     struct ResourceStreamItem
@@ -34,14 +35,16 @@ namespace te
     class GPUResource : public Resource
     {
     public:
+        typedef std::vector<Resource*> Resources;
         GPUResource();
         GPUResource(gpu_resource::Type t);
         GPUResource(gpu_resource::Type t, GPUResourceHandle h);
         virtual ~GPUResource() = default;
 
-        virtual void fillStreamItem(ResourceStreamItem& item) = 0;
-        virtual void cacheStreamItem(Resource* res) = 0;
+        virtual void fillStreamItem(ResourceStreamItem& item);
+        virtual void cacheStreamItem(const Resources& res) = 0;
         void setGPUResourceType(gpu_resource::Type t) { _gpu_resource_type = t; };
+        gpu_resource::Type getGPUResourceType() { return _gpu_resource_type; };
         GPUResourceHandle& getGPUResourceHandle() { return _gpu_resource_handle; };
 
     protected:

@@ -13,6 +13,11 @@ namespace te
 
         ResourceHandle create(const String& res);
         GPUResourcePtr getGPUResource(ResourceHandle handle);
+
+        void immediateCreate();
+
+    protected:
+        std::vector<ResourceHandle> _res_wait_list; // resources wait to be created in GPU, orders matter!
     };
 }
 

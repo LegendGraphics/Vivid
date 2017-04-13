@@ -15,6 +15,7 @@ namespace te
             ResourceStreamQueue _resourceQueue;
         };
         void allocResource(RenderResourceParams& params);
+        void deallocResource(RenderResourceParams& params);
     };
 }
 

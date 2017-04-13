@@ -3,13 +3,34 @@
 #include "common/Mesh.h"
 #include "renderer/resource/VertexLayout.h"
 
+te::Buffer::Buffer()
+{
+}
+
+te::Buffer::Buffer(gpu_resource::Type t)
+    : GPUResource(t)
+{
+}
+
 te::Buffer::~Buffer()
 {
+    unload();
 }
 
 bool te::Buffer::load(const String & res)
 {
-    return false;
+    // res here is the helper resource
+    // for buffer, res should be a mesh
+    String helper_res_id = res.substr(res.find_first_of(":") + 1);
+    Resources helper_res;
+    MeshPtr helper_m_res = ResourceMapper::getInstance()->get<MeshManager>()->getMesh(helper_res_id);
+    if (!helper_m_res) return false;
+
+    helper_res.push_back(helper_m_res.get());
+
+    cacheStreamItem(helper_res);
+
+    return true;
 }
 
 void te::Buffer::unload()
@@ -23,9 +44,11 @@ void te::Buffer::unload()
     }
 }
 
-void te::Buffer::cacheStreamItem(Resource * res)
+void te::Buffer::cacheStreamItem(const Resources& res)
 {
-    Mesh* mesh = dynamic_cast<Mesh*>(res);
+    if (res.empty() || res.size() != 1) return;
+
+    Mesh* mesh = dynamic_cast<Mesh*>(res[0]);
     if (!mesh) return;
 
     if (gpu_resource::INDEX_STREAM == _gpu_resource_type)
@@ -43,7 +66,7 @@ void te::Buffer::cacheStreamItem(Resource * res)
         vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
         vs->res = &_gpu_resource_handle;
         vs->size = mesh->getVertices().sizeInBytes();//4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
-        vs->stride = 12; // TODO: this should come from the array
+        vs->stride = mesh->getVertices().sizeInBytes() / mesh->getVertices().size();
         vs->raw_data = mesh->getVertices().buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed
                                                      //float* aa = &m->getVertices()[0];
 
@@ -52,10 +75,4 @@ void te::Buffer::cacheStreamItem(Resource * res)
 
         _resource_stream = (void*)vs;
     }
-}
-
-void te::Buffer::fillStreamItem(ResourceStreamItem & item)
-{
-    item.res_type = _gpu_resource_type;
-    item.stream = _resource_stream;
 }

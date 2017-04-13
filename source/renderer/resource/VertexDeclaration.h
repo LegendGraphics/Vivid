@@ -2,19 +2,12 @@
 #define RENDERER_VERTEXDECLARATION_H
 
 #include "renderer/resource/RenderResource.h"
+#include "renderer/resource/VertexLayoutType.h"
 
 namespace te
 {
     namespace vertex_layout
     {
-        enum Type {
-            Position,
-            Overlay, // Position with Texture Coordinate
-            Model,
-            Partical,
-            PNTB
-        };
-
         struct VertexDeclarationStream
         {
             vertex_layout::Type layout_type;
@@ -36,8 +29,7 @@ namespace te
         bool load(const String& res);
         void unload();
 
-        void fillStreamItem(ResourceStreamItem& item);
-        void cacheStreamItem(Resource* res);
+        void cacheStreamItem(const Resources& res);
         void setVertexLayoutType(vertex_layout::Type t) { _vertex_layout_type = t; };
 
     protected:

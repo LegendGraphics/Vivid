@@ -1,8 +1,8 @@
 #include "VertexDeclaration.h"
 
-#include "common/Mesh.h"
 #include "renderer/resource/VertexLayout.h"
 #include "renderer/resource/RenderResourceManager.h"
+#include "renderer/resource/Buffer.h"
 
 te::VertexDeclaration::VertexDeclaration()
 {
@@ -21,28 +21,41 @@ te::VertexDeclaration::VertexDeclaration(gpu_resource::Type t, vertex_layout::Ty
 
 te::VertexDeclaration::~VertexDeclaration()
 {
-    if (_resource_stream) delete static_cast<vertex_layout::VertexDeclarationStream*>(_resource_stream);
+    unload();
 }
 
 bool te::VertexDeclaration::load(const String & res)
 {
-    return false;
+    // res here is the helper resource
+    // for vao, res should be a index buffer and several vertex buffers
+    RenderResourceManager* res_manager = ResourceMapper::getInstance()->get<RenderResourceManager>();
+    String helper_res_id = res.substr(res.find_first_of(":") + 1);
+    Resources helper_res;
+    while (!helper_res_id.empty())
+    {
+        String cur_res_id = helper_res_id.substr(0, helper_res_id.find_first_of(";"));
+        helper_res_id = helper_res_id.substr(helper_res_id.find_first_of(";") + 1);
+        ResourcePtr cur_res = res_manager->getResourcePtr(res_manager->getResourceHandle(cur_res_id));
+        if (!cur_res) continue;
+
+        helper_res.push_back(cur_res.get());
+    }
+
+    if (helper_res.empty()) return false;
+
+    cacheStreamItem(helper_res);
+
+    return true;
 }
 
 void te::VertexDeclaration::unload()
 {
+    if (_resource_stream) delete static_cast<vertex_layout::VertexDeclarationStream*>(_resource_stream);
 }
 
-void te::VertexDeclaration::fillStreamItem(ResourceStreamItem & item)
+void te::VertexDeclaration::cacheStreamItem(const Resources& res)
 {
-    item.res_type = _gpu_resource_type;
-    item.stream = _resource_stream;
-}
-
-void te::VertexDeclaration::cacheStreamItem(Resource * res)
-{
-    Mesh* mesh = dynamic_cast<Mesh*>(res);
-    if (!mesh) return;
+    if (res.empty() || res.size() < 2) return; // res should be >= 2, one index buffer and at least one vertex buffer
 
     if (gpu_resource::VERTEX_DECLARATION != _gpu_resource_type) return;
 
@@ -50,9 +63,16 @@ void te::VertexDeclaration::cacheStreamItem(Resource * res)
     RenderResourceManager* res_manager = ResourceMapper::getInstance()->get<RenderResourceManager>();
     vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
     vds->res = &_gpu_resource_handle;
-    vds->index_buffer = &(res_manager->getGPUResource(mesh->getIndexBuffer())->getGPUResourceHandle());
     vds->layout_type = _vertex_layout_type; // TODO: layout type come from mesh
-    vds->vertex_buffers.push_back(
-        &(res_manager->getGPUResource(mesh->getVertexBuffer())->getGPUResourceHandle()));
+    for (Resource* cur_res : res)
+    {
+        GPUResource* gpu_res = dynamic_cast<GPUResource*>(cur_res);
+        if (!gpu_res) continue;
+
+        if (gpu_resource::INDEX_STREAM == gpu_res->getGPUResourceType())
+            vds->index_buffer = &(gpu_res->getGPUResourceHandle());
+        if (gpu_resource::VERTEX_STREAM == gpu_res->getGPUResourceType())
+            vds->vertex_buffers.push_back(&(gpu_res->getGPUResourceHandle()));
+    }
     _resource_stream = vds;
 }

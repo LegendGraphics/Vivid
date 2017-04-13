@@ -2,6 +2,25 @@
 
 namespace te
 {
+    namespace vertex_layout
+    {
+        String getTypeStr(Type t)
+        {
+            switch (t)
+            {
+            case PNTB: return "PNTB";
+            default: return "";
+            }
+        }
+
+        Type getType(const String& str)
+        {
+            if ("PNTB" == str)
+                return PNTB;
+            else return Position;
+        }
+    }
+
     void VertexLayoutPredefinition::init()
     {
         // order of the vertex layout attribute

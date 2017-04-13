@@ -214,49 +214,32 @@ namespace te
 
     void RenderResourceVisitor::apply(Node * node)
     {
-        RenderMsg msg;
-        msg.rrm.generator = new RenderResourceGenerator;
-        msg.rrm.numQueue = 0;
         if (MeshFilter* mf = node->getComponent<MeshFilter>())
         {
-            // generate RenderMeshObject
             Mesh* m = mf->getMesh().get();
-            msg.rrm.numQueue = 3;
-            msg.rrm.rQueue = new ResourceStreamItem[3];
-
             String m_res_id = m->getResourceId();
+            RenderResourceManager* rr_manager =
+                ResourceMapper::getInstance()->get<RenderResourceManager>();
 
             // index stream
-            ResourceHandle i_buffer = ResourceMapper::getInstance()
-                ->get<RenderResourceManager>()
-                ->create(gpu_resource::appendTypeId(gpu_resource::INDEX_STREAM, m_res_id));
-            ResourceMapper::getInstance()
-                ->get<RenderResourceManager>()
-                ->getGPUResource(i_buffer)
-                ->fillStreamItem(msg.rrm.rQueue[0]);
+            String i_buffer_id = gpu_resource::appendTypeStr(gpu_resource::INDEX_STREAM, m_res_id);
+            ResourceHandle i_buffer = rr_manager->create(i_buffer_id);
             m->setIndexBuffer(i_buffer);
 
             // vertex stream
-            ResourceHandle v_buffer = ResourceMapper::getInstance()
-                ->get<RenderResourceManager>()
-                ->create(gpu_resource::appendTypeId(gpu_resource::VERTEX_STREAM, m_res_id));
-            ResourceMapper::getInstance()
-                ->get<RenderResourceManager>()
-                ->getGPUResource(v_buffer)
-                ->fillStreamItem(msg.rrm.rQueue[1]);
+            String v_buffer_id = gpu_resource::appendTypeStr(gpu_resource::VERTEX_STREAM, m_res_id);
+            ResourceHandle v_buffer = rr_manager->create(v_buffer_id);
             m->setVertexBuffer(v_buffer);
 
             // vertex declaration stream
-            ResourceHandle vao = ResourceMapper::getInstance()
-                ->get<RenderResourceManager>()
-                ->create(gpu_resource::appendTypeId(gpu_resource::VERTEX_DECLARATION, m_res_id));
-            ResourceMapper::getInstance()
-                ->get<RenderResourceManager>()
-                ->getGPUResource(vao)
-                ->fillStreamItem(msg.rrm.rQueue[2]);
+            String vao_id = gpu_resource::appendTypeStr(gpu_resource::VERTEX_DECLARATION,
+                vertex_layout::getTypeStr(vertex_layout::PNTB) + ";"
+                + i_buffer_id + ";"
+                + v_buffer_id + ";");
+            ResourceHandle vao = rr_manager->create(vao_id);
             m->setVertexDeclaration(vao);
 
-            _renderer->generateResource(&msg);
+            rr_manager->immediateCreate();
         }
 
     }

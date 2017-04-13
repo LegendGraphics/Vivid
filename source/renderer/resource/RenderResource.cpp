@@ -2,7 +2,7 @@
 
 namespace te
 {
-    String gpu_resource::getTypeId(Type t)
+    String gpu_resource::getTypeStr(Type t)
     {
         switch (t)
         {
@@ -12,9 +12,9 @@ namespace te
         default: return "";
         }
     }
-    String gpu_resource::appendTypeId(Type t, const String & res_id)
+    String gpu_resource::appendTypeStr(Type t, const String & res_id)
     {
-        return getTypeId(t) + ":" + res_id;
+        return getTypeStr(t) + ":" + res_id;
     }
 
     GPUResource::GPUResource()
@@ -39,5 +39,11 @@ namespace te
         _resource_stream(nullptr)
     {
 
+    }
+
+    void GPUResource::fillStreamItem(ResourceStreamItem & item)
+    {
+        item.res_type = _gpu_resource_type;
+        item.stream = _resource_stream;
     }
 }

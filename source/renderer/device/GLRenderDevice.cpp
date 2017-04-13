@@ -223,7 +223,7 @@ namespace te
                     uint32 buffer_handle = *(vd_stream->vertex_buffers[i]);
                     vertexHandles.push_back(buffer_handle);
 
-                    uint32 stride_in_buffer = _buffers.getRef(buffer_handle).stride;
+                    uint32 stride_in_buffer = _buffers.getRef(buffer_handle).stride / 4; // unit of stride in buffer is in bytes
                     uint32 stride_in_slot = slotStrideMap[attri.vbSlot];
                     //ASSERT(stride_in_buffer == stride_in_slot, "Stride in Buffer should match Stride in Slot!");
                 }
@@ -282,7 +282,7 @@ namespace te
 
         buf.type = GL_ELEMENT_ARRAY_BUFFER;
         buf.size = size;
-        buf.stride = 1; // if we use VAO, index buffer seems not important
+        buf.stride = 1 * 4; // if we use VAO, index buffer seems not important, it's stride in bytes
         glGenBuffers(1, &buf.glObj);
         glBindBuffer(buf.type, buf.glObj);
         glBufferData(buf.type, size, data, GL_DYNAMIC_DRAW);
@@ -312,7 +312,7 @@ namespace te
                 sizes[i],
                 GL_FLOAT,
                 GL_FALSE,
-                4 * vBuf.stride,
+                vBuf.stride,
                 (void*)(offsets[i])); // offset in bytes which has been calculated in VertexLayout.cpp, no need to * 4
             //glEnableVertexArrayAttrib(vao, locations[i]); // found a potential problem here, this function is only available since OpenGL 4.5
             glEnableVertexAttribArray(locations[i]);

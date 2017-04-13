@@ -8,9 +8,9 @@
 #include "shape/BoundingBox.h"
 #include "base/RefPtr.hpp"
 #include "common/Resource.h"
+#include "base/Types.h"
 
-#include "renderer/Resource/Buffer.h"
-#include "renderer/Resource/VertexDeclaration.h"
+#include "renderer/resource/VertexLayoutType.h"
 
 namespace te
 {
@@ -26,14 +26,6 @@ namespace te
         VERTEX_SKINNED,
         VERTEX_TEXCOORD0,
         VERTEX_TEXCOORD1
-    };
-
-    enum class VertexType
-    {
-        VERTEX_P,
-        VERTEX_PN,
-        VERTEX_PNTB,
-        VERTEX_PNTB_SKINNED
     };
 
     struct Vertex_P
@@ -168,21 +160,21 @@ namespace te
             delete _type;
         }
 
-        void convert(VertexType type)
+        void convert(vertex_layout::Type type)
         {
             if (_type) delete _type;
             switch (type)
             {
-            case VertexType::VERTEX_P:
+            case vertex_layout::Position:
                 _type = new P_Array;
                 break;
-            case VertexType::VERTEX_PN:
+            case vertex_layout::PN:
                 _type = new PN_Array;
                 break;
-            case VertexType::VERTEX_PNTB:
+            case vertex_layout::PNTB:
                 _type = new PNTB_Array;
                 break;
-            case VertexType::VERTEX_PNTB_SKINNED:
+            case vertex_layout::PNTB_SKINNED:
                 _type = new PNTB_Skinned_Array;
                 break;
             default:
