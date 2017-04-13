@@ -13,13 +13,11 @@ namespace te
     {
         RenderObject  *node;
         float      sortKey;
-        //uint32  type; // use type in RenderObject
 
         RenderQueueItem() {}
         RenderQueueItem(float sortKey, RenderObject *node)
             : node(node), sortKey(sortKey) {}
     };
-
     typedef std::vector< RenderQueueItem > RenderQueue;
 
     // RenderWorld is the entrance of all "render" aspect things of the game world
@@ -39,15 +37,6 @@ namespace te
             RenderQueue _renderQueue;
         };
         void render(RenderParams& params);
-
-    protected:
-        void createPrimitives(RenderDevice* device);
-
-    private:
-//        ShaderObject _defaultColorShader;
-
-        //uint32  _vbCube, _ibCube, _vbSphere, _ibSphere;
-        //uint32  _vbCone, _ibCone, _vbFSPoly;
     };
 }
 

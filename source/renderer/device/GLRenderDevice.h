@@ -5,50 +5,15 @@
 
 namespace te
 {
-    const uint32 MaxNumVertexLayouts = 16;
-
+    // =====================================
+    // attribute related definition start
+    // =====================================
     struct GLBuffer
     {
         uint32 type;
         uint32 glObj;
         uint32 size; // total size in byte
         uint32 stride; // number of component for each element
-    };
-
-    // =====================================
-    // attribute related definition start
-    // =====================================
-    struct GLVertexLayoutAttrib
-    {
-        String sematicName;
-        uint32      vbslot; // to get the VertexBufferSlot from GLRenderDevice::_vertBufSlots
-                            // which is set dynamically by shader
-    };
-
-    struct GLVertexLayout
-    {
-        uint32              numAttribs;
-        GLVertexLayoutAttrib  attribs[16]; // TODO: need to investigate here
-        // there is a corresponding structure in Shader
-        // one layout may have at most 16 attributes (attributes is a key world in GLSL)
-        // for different purpose, there might be different layouts
-        // for example, light, overlay(ui, font, etc), model, etc
-    };
-
-    struct GLVertBufSlot
-    {
-        uint32 vbObj; // it is the vertex buffer object handle in engine side
-                      // which is used to get the opengl buffer object from GLRenderDevice::_buffers
-        uint32 offset;
-        uint32 stride;
-    };
-
-    struct GLShaderInputLayout
-    {
-        bool valid;
-        int8 attribBindPointer[16]; // the corresponding binding point for glVertexAttribPointer
-                                    // it's set from glGetAttribLocation
-                                    // it seems that OpenGL supports 16 attributes for a shader at most
     };
 
     struct GLTexture
@@ -65,16 +30,15 @@ namespace te
         uint32 glFbo;
     };
 
+    struct GLShader
+    {
+        uint32 oglProgramObj;
+    };
+
     // ==================================
     // attribute related definition end
     // - not sure if these are general paradigm, may be moved to base class???
     // ==================================
-
-    struct GLShader
-    {
-        uint32 oglProgramObj;
-        GLShaderInputLayout inputLayouts[MaxNumVertexLayouts];
-    };
 
     class GLRenderDevice : public RenderDevice
     {

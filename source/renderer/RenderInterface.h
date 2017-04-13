@@ -2,9 +2,16 @@
 #define RENDERER_RENDERINTERFACE_H
 
 #include "base/Types.h"
+#include "base/Singleton.hpp"
 
-//#include "RenderWorld.h"
-//#include "Resource/RenderResourceGenerator.h"
+// These header files will be moved in the future
+#include "renderer/RenderWorld.h"
+#include "renderer/resource/RenderResourceGenerator.h"
+#include "renderer/runtime/RenderCamera.h"
+#include "renderer/resource/RenderMeshObject.h"
+#include "renderer/resource/PipelineResource.h"
+#include "renderer/resource/RenderResource.h"
+#include "renderer/resource/RenderResourceManager.h"
 
 namespace te
 {
@@ -40,18 +47,16 @@ namespace te
         RenderResourceMsg rrm;
     };
 
-    class RenderInterface
+    class RenderInterface : public Singleton<RenderInterface>
     {
     public:
-        static RenderInterface* get();
-
         bool init();
         void release();
 
         void renderWorld(RenderMsg* message);
         void generateResource(RenderMsg* message);
 
-        class VertexDeclaration* getVertexDeclarationDefinition();
+        class VertexLayoutPredefinition* getVertexDeclarationDefinition();
 
         // engine side should allocate RenderObject and RenderResource
         // from RenderInterface, so that header files won't explode there.
@@ -61,13 +66,8 @@ namespace te
         //template <class T>
         //RenderResource* createRenderResource();
 
-    protected:
-        RenderInterface() = default; // not implemented
     private:
-        static RenderInterface* _renderInterface;
-        class GLRenderDevice* _renderDevice;
-        class RenderObjectManager* _renderObjectManager;
-        class VertexDeclaration* _vertexDeclaration; // to get the predefined vertex declaration in this render
+        class RenderDevice* _renderDevice;
     };
 }
 

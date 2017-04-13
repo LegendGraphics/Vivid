@@ -1,17 +1,22 @@
 #include "RenderDevice.h"
 
 #include "RenderContext.h"
-#include "../resource/RenderResourceContext.h"
+#include "renderer/resource/RenderResourceContext.h"
+#include "renderer/Runtime/RenderObjectManager.h"
 
 namespace te
 {
     RenderDevice::RenderDevice()
     {
-
+        _vertex_declaration = new VertexLayoutPredefinition();
+        _render_object_manager = new RenderObjectManager();
     }
 
     RenderDevice::~RenderDevice()
     {
+        delete _vertex_declaration;
+        delete _render_object_manager;
+
         for (RenderContext* i : _render_contexts)
         {
             delete i;
@@ -57,9 +62,9 @@ namespace te
         _render_resource_contexts.erase(it);
     }
 
-    VertexDeclaration * RenderDevice::getVertexDeclarationDefinition()
+    VertexLayoutPredefinition * RenderDevice::getVertexDeclarationDefinition()
     {
-        return &_vertex_declaration;
+        return _vertex_declaration;
     }
 
 

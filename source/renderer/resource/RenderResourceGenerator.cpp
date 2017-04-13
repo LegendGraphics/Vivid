@@ -14,19 +14,19 @@ namespace te
         // iterate each object
         for (auto rqItem : rQueue)
         {
-            if (RenderResource::VERTEX_STREAM == rqItem.resType)
+            if (gpu_resource::VERTEX_STREAM == rqItem.res_type)
             {
                 RenderResourceContext::Message allc_vs = {
                     RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER, (void*)rqItem.stream };
                 rrc->messages().push_back(allc_vs);
             }
-            else if (RenderResource::INDEX_STREAM == rqItem.resType)
+            else if (gpu_resource::INDEX_STREAM == rqItem.res_type)
             {
                 RenderResourceContext::Message allc_is = {
                     RenderResourceContext::MessageType::ALLOC_INDEX_BUFFER, (void*)rqItem.stream };
                 rrc->messages().push_back(allc_is);
             }
-            else if (RenderResource::VERTEX_DECLARATION == rqItem.resType)
+            else if (gpu_resource::VERTEX_DECLARATION == rqItem.res_type)
             {
                 RenderResourceContext::Message allc_vd = {
                     RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION, (void*)rqItem.stream };
@@ -45,5 +45,8 @@ namespace te
         allocResourceInternal(params, rrc);
         params._device->dispatch(rrc);
         params._device->releaseResourceContext(rrc);
+    }
+    void RenderResourceGenerator::deallocResource(RenderResourceParams & params)
+    {
     }
 }

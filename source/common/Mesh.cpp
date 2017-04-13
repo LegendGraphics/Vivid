@@ -46,4 +46,9 @@ namespace te
         if (has(handle)) return dynamic_cast_ptr<Resource, Mesh>(getResourcePtr(handle));
         else return nullptr;
     }
+
+    MeshPtr MeshManager::getMesh(const String& res)
+    {
+        return getMesh(getResourceHandle(res));
+    }
 }
