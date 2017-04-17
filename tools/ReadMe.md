@@ -1,0 +1,1 @@
+Only support one mesh in a dae file temporarily. 

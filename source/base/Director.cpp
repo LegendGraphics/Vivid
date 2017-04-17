@@ -74,7 +74,7 @@ namespace te
     void Director::renderingUpdate()
     {
         // rendering scene
-        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::get(), _active_scene);
+        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::getInstance(), _active_scene);
         visitor.apply(_active_scene->getSceneRoot());
     }
 
@@ -137,7 +137,7 @@ namespace te
     {
         // init resource
 
-        RenderResourceVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::get(), _active_scene);
+        RenderResourceVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::getInstance(), _active_scene);
         visitor.apply(_active_scene->getSceneRoot());
     }
 

@@ -112,6 +112,8 @@ private:
 
 private:
     ColladaDocument              &_daeDoc;
+
+    unsigned int                 _vertex_type;
     
     std::vector< Vertex >        _vertices;
     std::vector< unsigned int >  _indices;

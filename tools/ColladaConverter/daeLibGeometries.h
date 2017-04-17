@@ -293,7 +293,7 @@ struct DaeTriGroup
     }
 };
 
-
+// Suppose there's only one geometry in the file temporarily
 struct DaeGeometry
 {
     std::string                 id;
@@ -301,6 +301,7 @@ struct DaeGeometry
     std::vector< DaeSource >    sources;
     std::vector< DaeVSource >   vsources;
     std::vector< DaeTriGroup >  triGroups;
+    unsigned int                vertexType; // 0 == Position, 1 == PN
 
 
     DaeSource *findSource( const std::string &id )
@@ -397,7 +398,18 @@ struct DaeGeometry
                     if( triGroup.vSource == 0x0 )
                     {
                         log( "Warning: Mesh '" + id + "' has no vertex coordinates and is ignored" );
+                        assert(false && "no vertex?!!");
                         triGroups.pop_back();
+                    }
+
+                    if (triGroup.normSource == 0x0)
+                    {
+                        log("Warning: Mesh '" + id + "' has no normal coordinates and is ignored");
+                        vertexType = 0;
+                    }
+                    else
+                    {
+                        vertexType = 1;
                     }
                 }
                 else triGroups.pop_back();
@@ -435,6 +447,15 @@ public:
     ~DaeLibGeometries()
     {
         for( unsigned int i = 0; i < geometries.size(); ++i ) delete geometries[i];
+    }
+
+    unsigned int getVertexType() const
+    {
+        for (unsigned int i = 0; i < geometries.size(); ++i)
+        {
+            return geometries[0]->vertexType; // Only one geometry
+        }
+        return -1;
     }
     
 

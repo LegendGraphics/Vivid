@@ -22,7 +22,8 @@ namespace te
             if (version != 1)
                 return false; //("Unsupported version of mesh resource");
 
-            memcpy(&mesh->_skinned, data_ptr, sizeof(bool)); data_ptr += sizeof(bool);
+            int vertex_type;
+            memcpy(&vertex_type, data_ptr, sizeof(int)); data_ptr += sizeof(int);
 
             // Load mesh data
             // vertex stream
@@ -32,7 +33,7 @@ namespace te
             int vertex_num;
             memcpy(&vertex_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
 
-            mesh->_vertices.convert(vertex_layout::PNTB);
+            mesh->_vertices.convert(vertex_layout::Type(vertex_type));
             mesh->_vertices.initialize(vertex_num);
 
             for (int i = 0; i < attribute_num; ++i)
