@@ -1,6 +1,7 @@
 #include "io/ResourceLoader.h"
 #include "io/FileUtils.h"
 #include "common/Mesh.h"
+#include "common/Node.h"
 
 namespace te
 {
@@ -122,4 +123,46 @@ namespace te
     {
         return false;
     }*/
+
+    bool ResourceLoader::load(Node* node, const String& res)
+    {
+        char *data = nullptr;
+        int size = 0;
+
+        streamFromBinaryFile(res, data, size);
+
+        XMLDoc doc;
+        doc.parseBuffer(data, size);
+        if (doc.hasError())
+            /*return raiseError("XML parsing error")*/;
+
+        XMLNode rootNode = doc.getRootNode();
+        if (strcmp(rootNode.getName(), "Node") != 0)
+            /*return raiseError("Not a node resource file")*/;
+
+        XMLNode node1 = rootNode.getFirstChild("Components");
+
+        XMLNode space_node = node1.getFirstChild("SpaceStatus");
+        XMLNode position_node = space_node.getFirstChild("Position");
+        float px = (float)atof(position_node.getAttribute("x", "0"));
+        float py = (float)atof(position_node.getAttribute("y", "0"));
+        float pz = (float)atof(position_node.getAttribute("z", "0"));
+
+        XMLNode scale_node = space_node.getFirstChild("Scale");
+        float sx = (float)atof(scale_node.getAttribute("x", "0"));
+        float sy = (float)atof(scale_node.getAttribute("y", "0"));
+        float sz = (float)atof(scale_node.getAttribute("z", "0"));
+
+        XMLNode rotation_node = space_node.getFirstChild("Rotation");
+        float rx = (float)atof(rotation_node.getAttribute("x", "0"));
+        float ry = (float)atof(rotation_node.getAttribute("y", "0"));
+        float rz = (float)atof(rotation_node.getAttribute("z", "0"));
+
+        XMLNode mesh_node = node1.getFirstChild("Mesh");
+        String repo_path = mesh_node.getAttribute("RepoPath");
+        String file_name = mesh_node.getAttribute("FileName");
+
+
+        return true;
+    }
 }
