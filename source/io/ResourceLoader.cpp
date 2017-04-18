@@ -1,7 +1,12 @@
 #include "io/ResourceLoader.h"
+
+#include "utXML.h"
+
 #include "io/FileUtils.h"
 #include "common/Mesh.h"
 #include "common/Node.h"
+#include "common/SpaceState.h"
+#include "common/MeshFilter.h"
 
 namespace te
 {
@@ -39,7 +44,6 @@ namespace te
 
             for (int i = 0; i < attribute_num; ++i)
             {
-                unsigned char uc;
                 short sh;
                 int stream_id, elem_size;
                 memcpy(&stream_id, data_ptr, sizeof(int)); data_ptr += sizeof(int);
@@ -124,7 +128,7 @@ namespace te
         return false;
     }*/
 
-    bool ResourceLoader::load(Node* node, const String& res)
+    bool ResourceLoader::load(MetaNode* meta_node, const String& res)
     {
         char *data = nullptr;
         int size = 0;
@@ -133,34 +137,53 @@ namespace te
 
         XMLDoc doc;
         doc.parseBuffer(data, size);
-        if (doc.hasError())
-            /*return raiseError("XML parsing error")*/;
+        if (doc.hasError()) return false;
+            /*return raiseError("XML parsing error")*/
 
-        XMLNode rootNode = doc.getRootNode();
-        if (strcmp(rootNode.getName(), "Node") != 0)
-            /*return raiseError("Not a node resource file")*/;
+        XMLNode root_node = doc.getRootNode();
+        if (strcmp(root_node.getName(), "Node") != 0) return false;
+            /*return raiseError("Not a node resource file")*/
 
-        XMLNode node1 = rootNode.getFirstChild("Components");
+        XMLNode com_node = root_node.getFirstChild("Components");
+        if (strcmp(root_node.getName(), "Components") != 0) return false;
 
-        XMLNode space_node = node1.getFirstChild("SpaceStatus");
-        XMLNode position_node = space_node.getFirstChild("Position");
-        float px = (float)atof(position_node.getAttribute("x", "0"));
-        float py = (float)atof(position_node.getAttribute("y", "0"));
-        float pz = (float)atof(position_node.getAttribute("z", "0"));
+        XMLNode node1 = com_node.getFirstChild();
+        while (!node1.isEmpty())
+        {
+            if (strcmp(node1.getName(), "SpaceStatus"))
+            {
+                XMLNode position_node = node1.getFirstChild("Position");
+                float px = (float)atof(position_node.getAttribute("x", "0"));
+                float py = (float)atof(position_node.getAttribute("y", "0"));
+                float pz = (float)atof(position_node.getAttribute("z", "0"));
 
-        XMLNode scale_node = space_node.getFirstChild("Scale");
-        float sx = (float)atof(scale_node.getAttribute("x", "0"));
-        float sy = (float)atof(scale_node.getAttribute("y", "0"));
-        float sz = (float)atof(scale_node.getAttribute("z", "0"));
+                XMLNode scale_node = node1.getFirstChild("Scale");
+                float sx = (float)atof(scale_node.getAttribute("x", "0"));
+                float sy = (float)atof(scale_node.getAttribute("y", "0"));
+                float sz = (float)atof(scale_node.getAttribute("z", "0"));
 
-        XMLNode rotation_node = space_node.getFirstChild("Rotation");
-        float rx = (float)atof(rotation_node.getAttribute("x", "0"));
-        float ry = (float)atof(rotation_node.getAttribute("y", "0"));
-        float rz = (float)atof(rotation_node.getAttribute("z", "0"));
+                XMLNode rotation_node = node1.getFirstChild("Rotation");
+                float rx = (float)atof(rotation_node.getAttribute("x", "0"));
+                float ry = (float)atof(rotation_node.getAttribute("y", "0"));
+                float rz = (float)atof(rotation_node.getAttribute("z", "0"));
 
-        XMLNode mesh_node = node1.getFirstChild("Mesh");
-        String repo_path = mesh_node.getAttribute("RepoPath");
-        String file_name = mesh_node.getAttribute("FileName");
+                SpaceState space_status(Vector3(px, py, pz), Vector3(sx, sy, sz), Vector3(rx, ry, rz));
+                meta_node->components.push_back(space_status);
+            }
+            else if (strcmp(node1.getName(), "MeshFilter"))
+            {
+                XMLNode path_node = node1.getFirstChild("RepoPath");
+                String repo_path = path_node.getAttribute("path");
+
+                XMLNode file_node = node1.getFirstChild("FileName");
+                String file_name = file_node.getAttribute("name");
+
+                MeshFilter mesh_filter(repo_path + file_name);
+                meta_node->components.push_back(mesh_filter);
+            }
+
+            node1 = node1.getNextSibling();
+        }
 
 
         return true;

@@ -10,6 +10,7 @@ namespace te
     {
     public:
         MeshFilter();
+        MeshFilter(const String& res);
         bool load(const String& res);
         MeshPtr getMesh();
 

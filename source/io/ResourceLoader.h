@@ -6,14 +6,14 @@
 namespace te
 {
     class Mesh;
-    class Node;
+    class MetaNode;
     //class Pipeline;
     class ResourceLoader
     {
     public:
         static bool load(Mesh* mesh, const String& res);
         //static bool load(Pipeline* pipeline, const String& res);
-        static bool load(Node* node, const String& res);
+        static bool load(MetaNode* meta_node, const String& res);
     };
 }
 

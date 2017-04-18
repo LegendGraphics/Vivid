@@ -40,6 +40,14 @@ namespace te
         translate(x, y, z);
     }
 
+    SpaceState::SpaceState(const Vector3& position, const Vector3& scale, const Vector3& rotation)
+    {
+        this->translate(position);
+        this->scale(scale);
+        this->rotate(rotation);
+    }
+
+
     SpaceState::~SpaceState(){}
 
     void SpaceState::init()

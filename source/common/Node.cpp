@@ -6,9 +6,22 @@
 #include "common/Component.h"
 #include "common/ComponentContainer.h"
 #include "base/EventDispatcher.h"
+#include "io/ResourceLoader.h"
 
 namespace te
 {
+
+    Node* Node::create(const String& res)
+    {
+        Node* node;
+        MetaNode meta_node;
+        meta_node.load(res);
+        for (auto& component : meta_node.components)
+        {
+            // node add components
+        }
+        return node;
+    }
 
     Node::Node()
         :_parent(nullptr),
@@ -99,5 +112,48 @@ namespace te
         if (parent_path->empty()) return Matrix::identity();
         else return te::computeLocalToWorld(parent_path);
     }*/
+
+    bool MetaNode::load(const String& res)
+    {
+        return ResourceLoader::load(this, res);
+    }
+
+    void MetaNode::unload()
+    {
+
+    }
+
+    MetaNodeManager::MetaNodeManager()
+        :ResourceManager(ResourceType::Mesh)
+    {}
+
+    MetaNodeManager::~MetaNodeManager() {}
+
+    ResourceHandle MetaNodeManager::create(const String& res)
+    {
+        if (ResourceHandle handle = getResourceHandle(res)) return handle;
+        else
+        {
+            MetaNodePtr meta_node = new MetaNode;
+            if (meta_node->load(res))
+            {
+                meta_node->descriptor(buildDescriptor(res));
+                add(meta_node.get());
+                return getResourceHandle(res);
+            }
+            else return 0;
+        }
+    }
+
+    MetaNodePtr MetaNodeManager::getMetaNode(ResourceHandle handle)
+    {
+        if (has(handle)) return dynamic_cast_ptr<Resource, MetaNode>(getResourcePtr(handle));
+        else return nullptr;
+    }
+
+    MetaNodePtr MetaNodeManager::getMetaNode(const String& res)
+    {
+        return getMetaNode(getResourceHandle(res));
+    }
 
 }
