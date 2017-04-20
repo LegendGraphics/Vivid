@@ -20,6 +20,7 @@ namespace te
 
     public:
         SpaceState();
+        SpaceState(const Vector3& position, const Vector3& scale, const Vector3& rotation);
         SpaceState(const Vector3& position);
         SpaceState(float x, float y, float z);
         virtual ~SpaceState();

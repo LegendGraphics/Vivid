@@ -10,6 +10,8 @@
 #include "base/EventListener.h"
 #include "common/Clone.h"
 #include "common/ClassType.hpp"
+#include "common/Resource.h"
+#include "common/Component.h"
 
 #define ENABLE_LEAF_NODE                                    \
 void addChild(Node* child) = delete;                        \
@@ -32,6 +34,8 @@ namespace te
 
     class Node: public Ref, public Cloneable
     {
+    public:
+        static Node* create(const String& res);
     public:
         Node();
         Node(const Node& node, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
@@ -69,6 +73,12 @@ namespace te
 
         template <typename C>
         bool hasComponent();
+
+        // need to check type, slower than template methods
+        void addComponent(Component* component);
+        void removeComponent(ComponentType type);
+        Component* getComponent(ComponentType type);
+        bool hasComponent(ComponentType type);
 
         void updateComponents();
 
@@ -117,6 +127,33 @@ namespace te
         return hasComponent(getComponentTypeId<C>());
     }
 
+
+    class MetaNode : public Resource
+    {
+    private:
+        typedef std::vector<Component*>  MetaComponents;
+    public:
+        MetaComponents  components;
+
+        friend class ResourceLoader;
+
+        virtual bool load(const String& res);
+        virtual void unload();
+    };
+
+    using MetaNodePtr = RefPtr<MetaNode>;
+
+    class MetaNodeManager : public ResourceManager
+    {
+    public:
+        MetaNodeManager();
+        ~MetaNodeManager();
+
+        ResourceHandle create(const String& res);
+
+        MetaNodePtr   getMetaNode(ResourceHandle handle);
+        MetaNodePtr   getMetaNode(const String& res);
+    };
 }
 
 #endif // COMMON_NODE_H

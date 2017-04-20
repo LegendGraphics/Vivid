@@ -1,6 +1,12 @@
 #include "io/ResourceLoader.h"
+
+#include "utXML.h"
+
 #include "io/FileUtils.h"
 #include "common/Mesh.h"
+#include "common/Node.h"
+#include "common/SpaceState.h"
+#include "common/MeshFilter.h"
 
 namespace te
 {
@@ -22,7 +28,8 @@ namespace te
             if (version != 1)
                 return false; //("Unsupported version of mesh resource");
 
-            memcpy(&mesh->_skinned, data_ptr, sizeof(bool)); data_ptr += sizeof(bool);
+            int vertex_type;
+            memcpy(&vertex_type, data_ptr, sizeof(int)); data_ptr += sizeof(int);
 
             // Load mesh data
             // vertex stream
@@ -32,12 +39,11 @@ namespace te
             int vertex_num;
             memcpy(&vertex_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
 
-            mesh->_vertices.convert(vertex_layout::PNTB);
+            mesh->_vertices.convert(vertex_layout::Type(vertex_type));
             mesh->_vertices.initialize(vertex_num);
 
             for (int i = 0; i < attribute_num; ++i)
             {
-                unsigned char uc;
                 short sh;
                 int stream_id, elem_size;
                 memcpy(&stream_id, data_ptr, sizeof(int)); data_ptr += sizeof(int);
@@ -121,4 +127,65 @@ namespace te
     {
         return false;
     }*/
+
+    bool ResourceLoader::load(MetaNode* meta_node, const String& res)
+    {
+        char *data = nullptr;
+        int size = 0;
+
+        streamFromBinaryFile(res, data, size);
+
+        XMLDoc doc;
+        doc.parseBuffer(data, size);
+        if (doc.hasError()) return false;
+            /*return raiseError("XML parsing error")*/
+
+        XMLNode root_node = doc.getRootNode();
+        if (strcmp(root_node.getName(), "Node") != 0) return false;
+            /*return raiseError("Not a node resource file")*/
+
+        XMLNode com_node = root_node.getFirstChild("Components");
+        if (strcmp(com_node.getName(), "Components") != 0) return false;
+
+        XMLNode node1 = com_node.getFirstChild();
+        while (!node1.isEmpty())
+        {
+            if (strcmp(node1.getName(), "SpaceStatus") == 0)
+            {
+                XMLNode position_node = node1.getFirstChild("Position");
+                float px = (float)atof(position_node.getAttribute("x", "0"));
+                float py = (float)atof(position_node.getAttribute("y", "0"));
+                float pz = (float)atof(position_node.getAttribute("z", "0"));
+
+                XMLNode scale_node = node1.getFirstChild("Scale");
+                float sx = (float)atof(scale_node.getAttribute("x", "0"));
+                float sy = (float)atof(scale_node.getAttribute("y", "0"));
+                float sz = (float)atof(scale_node.getAttribute("z", "0"));
+
+                XMLNode rotation_node = node1.getFirstChild("Rotation");
+                float rx = (float)atof(rotation_node.getAttribute("x", "0"));
+                float ry = (float)atof(rotation_node.getAttribute("y", "0"));
+                float rz = (float)atof(rotation_node.getAttribute("z", "0"));
+
+                SpaceState* space_status = new SpaceState(Vector3(px, py, pz), Vector3(sx, sy, sz), Vector3(rx, ry, rz));
+                meta_node->components.push_back(space_status);
+            }
+            else if (strcmp(node1.getName(), "MeshFilter") == 0)
+            {
+                XMLNode path_node = node1.getFirstChild("RepoPath");
+                String repo_path = path_node.getAttribute("path");
+
+                XMLNode file_node = node1.getFirstChild("FileName");
+                String file_name = file_node.getAttribute("name");
+
+                MeshFilter* mesh_filter = new MeshFilter(repo_path + file_name);
+                meta_node->components.push_back(mesh_filter);
+            }
+
+            node1 = node1.getNextSibling();
+        }
+
+
+        return true;
+    }
 }

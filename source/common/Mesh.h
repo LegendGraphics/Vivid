@@ -47,6 +47,7 @@ namespace te
         Vector3 bitangent;
     };
 
+    // no animation temporarily
     struct Vertex_PNTB_Skinned
     {
         using JointIndices = int[4];
@@ -237,7 +238,6 @@ namespace te
         bool load(const String & res);
         void unload();
 
-        bool isSkinned() const { return _skinned; }
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
         void setVertexDeclaration(ResourceHandle res_handle) { _vertex_declaration = res_handle; };
@@ -252,8 +252,6 @@ namespace te
         IndexArray          _triangles;
 
         BoundingBox*        _bounding;
-
-        bool _skinned;
 
         ResourceHandle      _vertex_buffer;
         ResourceHandle      _index_buffer;

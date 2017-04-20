@@ -14,7 +14,9 @@ namespace te
         _world_scale(1, 1, 1),
         _world_euler_angles(0, 0, 0),
         _dirty(true)
-    {}
+    {
+        _type = ComponentType::SPACE_STATUS;
+    }
 
     SpaceState::SpaceState(const Vector3& position)
         :_local_pos(0, 0, 0),
@@ -25,6 +27,7 @@ namespace te
         _world_euler_angles(0, 0, 0),
         _dirty(true)
     {
+        _type = ComponentType::SPACE_STATUS;
         translate(position);
     }
 
@@ -37,8 +40,18 @@ namespace te
         _world_euler_angles(0, 0, 0),
         _dirty(true)
     {
+        _type = ComponentType::SPACE_STATUS;
         translate(x, y, z);
     }
+
+    SpaceState::SpaceState(const Vector3& position, const Vector3& scale, const Vector3& rotation)
+    {
+        _type = ComponentType::SPACE_STATUS;
+        this->translate(position);
+        this->scale(scale);
+        this->rotate(rotation);
+    }
+
 
     SpaceState::~SpaceState(){}
 

@@ -7,12 +7,12 @@ namespace te
     {
         enum Type {
             Position,
+            PN,
+            PNTB,
+            PNTB_SKINNED,
             Overlay, // Position with Texture Coordinate
             Model,
             Partical,
-            PN,
-            PNTB,
-            PNTB_SKINNED
         };
 
         String getTypeStr(Type t);

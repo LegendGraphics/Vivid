@@ -479,12 +479,24 @@ bool Converter::writeMesh( const string &assetPath, const string &assetName )
     fwrite( "TEM", 3, 1, f );
     fwrite( &version, sizeof( int ), 1, f ); 
     
-    bool no_joint = true;
-    fwrite(&no_joint, sizeof(bool), 1, f);
+    unsigned int vertex_type = _daeDoc.libGeometries.getVertexType();
+    unsigned int count = -1;
+    fwrite(&vertex_type, sizeof(int), 1, f);
 
-    unsigned int count = 4;
+    // vertex type with different number of attributes
+    switch (vertex_type) // 0 == position, 1 == position and normal
+    {
+    case 0:
+        count = 1;
+        break;
+    case 1:
+        count = 2;
+        break;
+    default:
+        break;
+    }
+
     // Write vertex stream data
-    if(no_joint) count = 4; else count = 6;	// Number of streams
     fwrite( &count, sizeof( int ), 1, f );
     int vert_count = (unsigned int)_vertices.size();
     fwrite( &vert_count, sizeof( int ), 1, f );

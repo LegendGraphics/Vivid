@@ -23,7 +23,7 @@ namespace te
     enum class ResourceType : unsigned long
     {
         Undefined =         (0 << 8),
-        SceneGraph =        (1 << 8),
+        Node =              (1 << 8),
         Mesh =              (2 << 8),
         Skeleton =          (3 << 8),
         Animation =         (4 << 8),

@@ -5,7 +5,8 @@ namespace te
     Component::Component()
         :_enabled(true),
         _owner(nullptr),
-        _type(MetaType::DATA)
+        _meta_type(MetaType::DATA),
+        _type(ComponentType::UNDEFINED)
     {
 
     }
@@ -13,13 +14,15 @@ namespace te
     Component::Component(MetaType type)
         :_enabled(true),
         _owner(nullptr),
-        _type(type)
+        _meta_type(type),
+        _type(ComponentType::UNDEFINED)
     {}
 
     Component::Component(const Component& component, const CopyOperator& copyop)
         :_enabled(component._enabled),
         _owner(nullptr),
-        _type(MetaType::DATA)
+        _meta_type(MetaType::DATA),
+        _type(ComponentType::UNDEFINED)
     {
     }
 
