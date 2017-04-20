@@ -46,6 +46,7 @@ namespace te
 
     SpaceState::SpaceState(const Vector3& position, const Vector3& scale, const Vector3& rotation)
     {
+        _type = ComponentType::SPACE_STATUS;
         this->translate(position);
         this->scale(scale);
         this->rotate(rotation);

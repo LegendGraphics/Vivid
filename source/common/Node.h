@@ -131,7 +131,7 @@ namespace te
     class MetaNode : public Resource
     {
     private:
-        typedef std::vector<Component>  MetaComponents;
+        typedef std::vector<Component*>  MetaComponents;
     public:
         MetaComponents  components;
 

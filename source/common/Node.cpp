@@ -20,7 +20,7 @@ namespace te
         MetaNodePtr meta_node = ResourceMapper::getInstance()->get<MetaNodeManager>()->getMetaNode(handle);
         for (auto& component : meta_node->components)
         {
-            node->addComponent(&component);
+            node->addComponent(component);
         }
         return node;
     }

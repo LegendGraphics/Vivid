@@ -162,6 +162,11 @@ namespace te
         _camera = camera;
     }
 
+    void Scene::setSceneRoot(Node* tree)
+    {
+        _scene_root = tree;
+    }
+
 
     SceneTree::SceneTree()
     {

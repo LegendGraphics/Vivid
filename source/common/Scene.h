@@ -54,13 +54,14 @@ namespace te
 
         // init from SceneRes?
 
-        SceneTree* getSceneRoot() const { return _scene_root; }
+        Node* getSceneRoot() const { return _scene_root; }
         Camera* getActiveCamera() const { return _camera; }
         
+        void setSceneRoot(Node* tree);
         void setActiveCamera(Camera* camera);
 
     protected:
-        SceneTree*  _scene_root;
+        Node*       _scene_root;
         Camera*     _camera;
     };
 

@@ -145,12 +145,12 @@ namespace te
             /*return raiseError("Not a node resource file")*/
 
         XMLNode com_node = root_node.getFirstChild("Components");
-        if (strcmp(root_node.getName(), "Components") != 0) return false;
+        if (strcmp(com_node.getName(), "Components") != 0) return false;
 
         XMLNode node1 = com_node.getFirstChild();
         while (!node1.isEmpty())
         {
-            if (strcmp(node1.getName(), "SpaceStatus"))
+            if (strcmp(node1.getName(), "SpaceStatus") == 0)
             {
                 XMLNode position_node = node1.getFirstChild("Position");
                 float px = (float)atof(position_node.getAttribute("x", "0"));
@@ -167,10 +167,10 @@ namespace te
                 float ry = (float)atof(rotation_node.getAttribute("y", "0"));
                 float rz = (float)atof(rotation_node.getAttribute("z", "0"));
 
-                SpaceState space_status(Vector3(px, py, pz), Vector3(sx, sy, sz), Vector3(rx, ry, rz));
+                SpaceState* space_status = new SpaceState(Vector3(px, py, pz), Vector3(sx, sy, sz), Vector3(rx, ry, rz));
                 meta_node->components.push_back(space_status);
             }
-            else if (strcmp(node1.getName(), "MeshFilter"))
+            else if (strcmp(node1.getName(), "MeshFilter") == 0)
             {
                 XMLNode path_node = node1.getFirstChild("RepoPath");
                 String repo_path = path_node.getAttribute("path");
@@ -178,7 +178,7 @@ namespace te
                 XMLNode file_node = node1.getFirstChild("FileName");
                 String file_name = file_node.getAttribute("name");
 
-                MeshFilter mesh_filter(repo_path + file_name);
+                MeshFilter* mesh_filter = new MeshFilter(repo_path + file_name);
                 meta_node->components.push_back(mesh_filter);
             }
 
