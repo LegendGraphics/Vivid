@@ -11,6 +11,7 @@
 #include "common/Clone.h"
 #include "common/ClassType.hpp"
 #include "common/Resource.h"
+#include "common/Component.h"
 
 #define ENABLE_LEAF_NODE                                    \
 void addChild(Node* child) = delete;                        \
@@ -72,6 +73,12 @@ namespace te
 
         template <typename C>
         bool hasComponent();
+
+        // need to check type, slower than template methods
+        void addComponent(Component* component);
+        void removeComponent(ComponentType type);
+        Component* getComponent(ComponentType type);
+        bool hasComponent(ComponentType type);
 
         void updateComponents();
 

@@ -5,6 +5,8 @@
 #include "common/NodeVisitor.h"
 #include "common/Component.h"
 #include "common/ComponentContainer.h"
+#include "common/SpaceState.h"
+#include "common/MeshFilter.h"
 #include "base/EventDispatcher.h"
 #include "io/ResourceLoader.h"
 
@@ -13,12 +15,12 @@ namespace te
 
     Node* Node::create(const String& res)
     {
-        Node* node;
-        MetaNode meta_node;
-        meta_node.load(res);
-        for (auto& component : meta_node.components)
+        Node* node = new Node;
+        ResourceHandle handle = ResourceMapper::getInstance()->get<MetaNodeManager>()->create(res);
+        MetaNodePtr meta_node = ResourceMapper::getInstance()->get<MetaNodeManager>()->getMetaNode(handle);
+        for (auto& component : meta_node->components)
         {
-            // node add components
+            node->addComponent(&component);
         }
         return node;
     }
@@ -112,6 +114,41 @@ namespace te
         if (parent_path->empty()) return Matrix::identity();
         else return te::computeLocalToWorld(parent_path);
     }*/
+
+    void Node::addComponent(Component* component)
+    {
+        ComponentType type = component->getType();
+        if (type == ComponentType::SPACE_STATUS)
+            addComponent(component, getComponentTypeId<SpaceState>());
+        else if (type == ComponentType::MESH_FILTER)
+            addComponent(component, getComponentTypeId<MeshFilter>());
+    }
+
+    void Node::removeComponent(ComponentType type)
+    {
+        if (type == ComponentType::SPACE_STATUS)
+            removeComponent(getComponentTypeId<SpaceState>());
+        else if (type == ComponentType::MESH_FILTER)
+            removeComponent(getComponentTypeId<MeshFilter>());
+    }
+
+    Component* Node::getComponent(ComponentType type)
+    {
+        if (type == ComponentType::SPACE_STATUS)
+            return getComponent(getComponentTypeId<SpaceState>());
+        else if (type == ComponentType::MESH_FILTER)
+            return getComponent(getComponentTypeId<MeshFilter>());
+        else return nullptr;
+    }
+
+    bool Node::hasComponent(ComponentType type)
+    {
+        if (type == ComponentType::SPACE_STATUS)
+            return hasComponent(getComponentTypeId<SpaceState>());
+        else if (type == ComponentType::MESH_FILTER)
+            return hasComponent(getComponentTypeId<MeshFilter>());
+        else return false;
+    }
 
     bool MetaNode::load(const String& res)
     {

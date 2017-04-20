@@ -15,6 +15,13 @@ namespace te
 {
     class Node;
 
+    enum class ComponentType
+    {
+        UNDEFINED,
+        SPACE_STATUS,
+        MESH_FILTER
+    };
+
     class Component: public Ref, public Cloneable
     {
     public:
@@ -41,15 +48,19 @@ namespace te
         inline Node* getOwner() const { return _owner; }
         void setOwner(Node* owner);
 
-        inline MetaType getMetaType() const { return _type; }
+        inline MetaType getMetaType() const { return _meta_type; }
+
+        inline ComponentType getType() const { return _type; }
+
         template <typename C>
         C* getComponent();
 
     protected:
-        String      _name;
-        bool        _enabled;
-        Node*       _owner;
-        MetaType    _type;
+        String              _name;
+        bool                _enabled;
+        Node*               _owner;
+        MetaType            _meta_type;
+        ComponentType       _type;
     };
 
     template <typename C>
