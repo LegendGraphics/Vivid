@@ -160,7 +160,7 @@ namespace te
                 ResourceMapper::getInstance()
                 ->get<RenderResourceManager>()
                 ->getGPUResource(m->getVertexDeclaration()).get());
-            
+            rmo->setModelMat(Mat4x4::identity());
 
             // Put it into RenderQueueItem
             rqi->node = rmo;

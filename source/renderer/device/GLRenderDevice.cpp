@@ -20,7 +20,7 @@ namespace te
         "in vec3 normal;\n"
         "out vec3 g_normal;\n"
         "void main() {\n"
-        "	gl_Position = viewProjMat * vec4( vertPos, 1.0 );\n"
+        "	gl_Position = viewProjMat * worldMat * vec4( vertPos, 1.0 );\n"
         "   g_normal = normal;\n"
         "}\n";
 
@@ -110,7 +110,7 @@ namespace te
 
                 // set shader
                 RenderContext::ShaderCmdStream* c_stream = static_cast<RenderContext::ShaderCmdStream*>(command.head);
-                if (c_stream)
+                if (c_stream->shaderHandle != 0xFFFFFFFF)
                 {
                     // TODO
                     // use setShaderConst()
@@ -132,9 +132,18 @@ namespace te
                     if (_defaultShader.uni_view_proj_mat >= 0)
                         setShaderConst(_defaultShader.uni_view_proj_mat, shader_data::MATRIX4X4, curCamera->getViewProjctionMat());
 
+                    char* data_ptr = static_cast<char*>(c_stream->data);
+                    for (auto i : c_stream->variables)
+                    {
+                        setShaderConst(_defaultShader.custom_uniform_handles[i.semantic_name], shader_data::Class(i.klass), data_ptr + i.offset);
+                    }
+                    delete[] data_ptr;
+
                     // set default color
                     float color[4] = { 0.75f, 0.5, 0.25f, 1 };
                     setShaderConst(_defaultShader.custom_uniform_handles["color"], shader_data::VECTOR4, &color);
+
+                    delete c_stream;
                 }
             }
             else if (RenderContext::CommandType::RENDER == command.command_type)
@@ -698,6 +707,7 @@ namespace te
         bindShader(shaderHandle);
 
         so.custom_uniform_handles["color"] = getShaderConstLoc(shaderHandle, "color");
+        so.custom_uniform_handles["worldMat"] = getShaderConstLoc(shaderHandle, "worldMat");
 
         so.uni_view_mat = getShaderConstLoc(shaderHandle, "viewMat");
         so.uni_proj_mat = getShaderConstLoc(shaderHandle, "projMat");

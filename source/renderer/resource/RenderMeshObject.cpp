@@ -67,7 +67,21 @@ namespace te
         bool useDebug = true;
         if (useDebug)
         {
-            RenderContext::Command setShaderObject = { 0, nullptr, RenderContext::CommandType::BIND_SHADER_OBJECT };
+            RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
+            scs->shaderHandle = 0xFFFFFFFF; // use it to indicate the default shader in device
+
+            ShaderVariable model_mat_var;
+            model_mat_var.klass = shader_data::MATRIX4X4;
+            model_mat_var.elements = 1;
+            model_mat_var.offset = 0;
+            model_mat_var.element_stride = 0;
+            model_mat_var.semantic_name = "worldMat";
+            scs->variables.push_back(model_mat_var);
+
+            scs->data = new char[4 * 4 * 4]; // for a float 4*4 matrix
+            memcpy(scs->data, &_model_mat(0, 0), 4 * 4 * 4);
+
+            RenderContext::Command setShaderObject = { 0,  (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
             context->commands().push_back(setShaderObject);
         }
         else
