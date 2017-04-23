@@ -6,6 +6,9 @@ virtual CLASS* clone(const CopyOperator& copyop) const { return new CLASS(*this,
 
 namespace te
 {
+    class Node;
+    class NodeTree;
+
     class CopyOperator
     {
     public:
@@ -21,8 +24,8 @@ namespace te
 
         inline bool operator==(const Options& flag) const { return _flag == flag; }
 
-        //virtual Object* operator()(const Object* object) const;
-        //virtual Node* operator()(const Node* node) const;
+        virtual Node* operator()(const Node* node) const;
+        virtual NodeTree* operator()(const NodeTree* node_tree) const;
         //virtual ComponentContainer* operator()(const ComponentContainer* ccontainer) const;
 
     private:
@@ -31,7 +34,7 @@ namespace te
 
     struct Cloneable
     {
-        virtual Cloneable*  clone(const CopyOperator& copyop) const = 0;
+        virtual Cloneable*  clone(const CopyOperator& copyop) { return nullptr; }
     };
 
 }

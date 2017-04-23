@@ -24,9 +24,9 @@ namespace te
         TimePoint getCurrentTime();
 
     private:
-        bool _enabled;
-        TimePoint _start;
-        float _elapsed;
+        bool        _enabled;
+        TimePoint   _start;
+        float       _elapsed;
     };
 }
 

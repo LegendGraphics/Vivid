@@ -35,7 +35,6 @@ namespace te
     class SceneTree : public Node
     {
     public:
-        DISABLE_NODE_PARENT
         SceneTree();
         virtual ~SceneTree();
 
@@ -54,15 +53,15 @@ namespace te
 
         // init from SceneRes?
 
-        Node* getSceneRoot() const { return _scene_root; }
+        NodeTree* getSceneRoot() const { return _scene_root; }
         Camera* getActiveCamera() const { return _camera; }
         
-        void setSceneRoot(Node* tree);
+        void setSceneRoot(NodeTree* tree);
         void setActiveCamera(Camera* camera);
 
     protected:
-        Node*       _scene_root;
-        Camera*     _camera;
+        NodeTree*       _scene_root;
+        Camera*         _camera;
     };
 
 }

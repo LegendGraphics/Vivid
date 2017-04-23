@@ -38,9 +38,9 @@ namespace te
 
         virtual ~NodeVisitor();
 
-        virtual void apply(Node* node);
+        virtual void apply(NodeTree* node_tree);
 
-        void traverse(Node* node);
+        void traverse(NodeTree* node_tree);
 
     protected:
         TraversalMode   _traversal_mode;
@@ -56,7 +56,7 @@ namespace te
 
         virtual ~CullingVisitor();
 
-        virtual void apply(Node* node);
+        virtual void apply(NodeTree* node_tree);
 
     protected:
         Camera*     _camera;
@@ -71,7 +71,7 @@ namespace te
 
         virtual ~SpacingVisitor();
 
-        virtual void apply(Node* node);
+        virtual void apply(NodeTree* node_tree);
 
     protected:
         Scene*      _scene;
@@ -91,7 +91,7 @@ namespace te
 
         virtual ~RenderingVisitor();
 
-        virtual void apply(Node* node);
+        virtual void apply(NodeTree* node_tree);
 
     private:
         void testRenderingPipeline(Node* node, Camera* camera);
@@ -110,7 +110,7 @@ namespace te
         RenderResourceVisitor(const RenderResourceVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~RenderResourceVisitor();
 
-        virtual void apply(Node* node);
+        virtual void apply(NodeTree* node_tree);
     };
 
 

@@ -13,15 +13,15 @@
 #include "common/Resource.h"
 #include "common/Component.h"
 
-#define ENABLE_LEAF_NODE                                    \
-void addChild(Node* child) = delete;                        \
-void removeChild(Node* child) = delete;                     \
-inline std::vector<RefPtr<Node>>& getChildren() = delete;   \
-inline Node* getChild(int index) = delete;
-
-#define DISABLE_NODE_PARENT                                 \
-void setParent(Node* parent) = delete;                      \
-inline Node* getParent() = delete;
+//#define ENABLE_LEAF_NODE                                    \
+//void addChild(Node* child) = delete;                        \
+//void removeChild(Node* child) = delete;                     \
+//inline std::vector<RefPtr<Node>>& getChildren() = delete;   \
+//inline Node* getChild(int index) = delete;
+//
+//#define DISABLE_NODE_PARENT                                 \
+//void setParent(Node* parent) = delete;                      \
+//inline Node* getParent() = delete;
 
 namespace te
 {
@@ -29,6 +29,12 @@ namespace te
     class NodeVisitor;
     class ComponentContainer;
     class Component;
+
+    class Node;
+    class NodeTree;
+    using NodePtr = RefPtr<Node>;
+    using NodeTreePtr = RefPtr<NodeTree>;
+    using NodeTreeList = std::vector<NodeTreePtr>;
 
     //typedef std::vector<Node*> NodePath;
 
@@ -41,9 +47,10 @@ namespace te
         Node(const Node& node, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Node();
 
+        friend class CopyOperator;
         ENABLE_CLONE(Node);
 
-        void addChild(Node* child);
+        /*void addChild(Node* child);
         void removeChild(Node* child);
         inline std::vector<RefPtr<Node>>& getChildren() { return _children; }
         inline Node* getChild(int index) { return _children[index].get(); }
@@ -51,14 +58,15 @@ namespace te
         void setParent(Node* parent);
         inline Node* getParent() { return _parent; }
 
-        inline bool hasParent() { return _parent != nullptr; }
+        inline bool hasParent() { return _parent != nullptr; }*/
 
         void setVisible(bool visible);
         inline bool getVisible() { return _visible; }
 
-        virtual void accept(NodeVisitor* node_visitor);
+        /*virtual void accept(NodeVisitor* node_visitor);
         void ascend(NodeVisitor* node_visitor);
-        void descend(NodeVisitor* node_visitor);
+        void descend(NodeVisitor* node_visitor);*/
+        //virtual void accept(NodeVisitor* node_visitor);
 
        // Matrix getWorldMatrix();
 
@@ -89,13 +97,11 @@ namespace te
         bool hasComponent(int component_id);
 
     protected:
-        std::vector<RefPtr<Node>> _children;
-        Node* _parent;
-
         bool _visible;
-
         ComponentContainer* _component_container;
     };
+
+
 
     template <typename C, typename ... Args>
     C* Node::addComponent(Args&& ... args)
@@ -126,6 +132,40 @@ namespace te
         static_assert(std::is_base_of<Component, C>(), "C is not a component, cannot determine if node has C");
         return hasComponent(getComponentTypeId<C>());
     }
+
+
+    class NodeTree : public Ref, public Cloneable
+    {
+    public:
+        NodeTree();
+        NodeTree(Node* node);
+        NodeTree(const NodeTree& node_tree, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        virtual ~NodeTree();
+
+        friend class CopyOperator;
+        ENABLE_CLONE(NodeTree);
+
+        NodePtr node() const { return _node; }
+        void attachNode(Node* node);
+        void unattachNode();
+
+        void addChildTree(NodeTree* child);
+        void removeChildTree(NodeTree* child);
+        inline NodeTreeList& getChildrenTree() { return _children; }
+        inline NodeTree* getChildTree(int index) { return _children[index].get(); }
+
+        void setParentTree(NodeTree* parent);
+        inline NodeTree* getParentTree() { return _parent; }
+        inline bool hasParentTree() { return _parent != nullptr; }
+
+        virtual void accept(NodeVisitor* node_visitor);
+        void ascend(NodeVisitor* node_visitor);
+        void descend(NodeVisitor* node_visitor);
+    protected:
+        NodePtr             _node;
+        NodeTreeList        _children;
+        NodeTree*           _parent; // cycle reference problem, so using raw pointer
+    };
 
 
     class MetaNode : public Resource

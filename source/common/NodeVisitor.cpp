@@ -36,16 +36,16 @@ namespace te
     NodeVisitor::~NodeVisitor()
     {}
 
-    void NodeVisitor::apply(Node* node)
+    void NodeVisitor::apply(NodeTree* node_tree)
     {
-        //std::cout << node->getName() << std::endl;
-        traverse(node);
+        // do nothing
+        traverse(node_tree);
     }
 
-    void NodeVisitor::traverse(Node* node)
+    void NodeVisitor::traverse(NodeTree* node_tree)
     {
-        if (_traversal_mode == TraversalMode::TRAVERSE_PARENTS) node->ascend(this);
-        else if (_traversal_mode == TraversalMode::TRAVERSE_CHILDREN) node->descend(this);
+        if (_traversal_mode == TraversalMode::TRAVERSE_PARENTS) node_tree->ascend(this);
+        else if (_traversal_mode == TraversalMode::TRAVERSE_CHILDREN) node_tree->descend(this);
 
     }
 
@@ -67,11 +67,12 @@ namespace te
     CullingVisitor::~CullingVisitor()
     {}
 
-    void CullingVisitor::apply(Node* node)
+    void CullingVisitor::apply(NodeTree* node_tree)
     {
         // Now simply frustum culling for every node
+        Node* node = node_tree->node().get();
         node->setVisible(!_camera->cull(node));
-        traverse(node);
+        traverse(node_tree);
     }
 
     SpacingVisitor::SpacingVisitor()
@@ -91,10 +92,11 @@ namespace te
     SpacingVisitor::~SpacingVisitor()
     {}
 
-    void SpacingVisitor::apply(Node* node)
+    void SpacingVisitor::apply(NodeTree* node_tree)
     {
+        Node* node = node_tree->node().get();
         node->updateComponents();
-        traverse(node);
+        traverse(node_tree);
     }
 
     RenderingVisitor::RenderingVisitor()
@@ -117,13 +119,13 @@ namespace te
     RenderingVisitor::~RenderingVisitor()
     {}
 
-    void RenderingVisitor::apply(Node* node)
+    void RenderingVisitor::apply(NodeTree* node_tree)
     {
         // Now simply rendering every node
-
+        Node* node = node_tree->node().get();
         testRenderingPipeline(node, _scene->getActiveCamera()); // for test
 
-        traverse(node);
+        traverse(node_tree);
     }
 
     RenderWorld* wrapRenderWorld()
@@ -164,7 +166,8 @@ namespace te
                 ResourceMapper::getInstance()
                 ->get<RenderResourceManager>()
                 ->getGPUResource(m->getVertexDeclaration()).get());
-            rmo->setModelMat(Mat4x4::identity());
+            Vector3 pos = node->getComponent<SpaceState>()->getLocalPosition();
+            rmo->setModelMat(Transform::translate(pos.x, pos.y, pos.z).rawMatrix());
 
             // Put it into RenderQueueItem
             rqi->node = rmo;
@@ -216,8 +219,9 @@ namespace te
     }
 
 
-    void RenderResourceVisitor::apply(Node * node)
+    void RenderResourceVisitor::apply(NodeTree * node_tree)
     {
+        Node* node = node_tree->node().get();
         if (MeshFilter* mf = node->getComponent<MeshFilter>())
         {
             Mesh* m = mf->getMesh().get();

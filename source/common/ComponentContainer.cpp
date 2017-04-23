@@ -63,7 +63,7 @@ namespace te
         {
             for (auto& iter : _component_map)
             {
-                if ((iter.get() != nullptr) && iter->getMetaType() == Component::MetaType::BEHAVIOR)
+                if (iter && (iter.get() != nullptr) && iter->getMetaType() == Component::MetaType::BEHAVIOR)
                 {
                     auto& behavior = dynamic_cast_ptr<Component, Behavior>(iter);
                     behavior->update();

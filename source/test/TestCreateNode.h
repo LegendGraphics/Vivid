@@ -21,7 +21,10 @@ int main(int argc, char** argv)
     scene2->getSceneRoot()->getComponent<MeshFilter>()->load("cube_emptyTags.mesh");*/
 
     Node* node = Node::create("cube.node.xml");
-    scene->setSceneRoot(node);
+    Node* node1 = Node::create("cube1.node.xml");
+
+    NodeTree* node_tree = new NodeTree(node);
+    scene->setSceneRoot(node_tree);
 
     Director::getInstance()->setActiveScene(scene);
     Director::getInstance()->start();

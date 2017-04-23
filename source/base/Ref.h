@@ -24,12 +24,12 @@ namespace te
     public:
         inline void retain()
         {
-            mASSERT(_reference_count >= 0, "reference count should not be less than zero");
+            mASSERT(_reference_count >= 0, "Reference count should not be less than zero");
             _reference_count++;
         };
         inline void release()
         {
-            mASSERT(_reference_count > 0, "reference count should be greater than zero");
+            mASSERT(_reference_count > 0, "Reference count should be greater than zero");
             _reference_count--;
         };
 

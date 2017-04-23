@@ -3,6 +3,7 @@
 #include "base/EventDispatcher.h"
 #include "base/Event.h"
 #include "base/EventListener.h"
+#include "io/Logger.h"
 
 namespace te
 {
@@ -14,7 +15,7 @@ namespace te
         EventListenerMap::iterator itr = _listener_map.find(listen_type);
         if (itr == _listener_map.end())
         {
-            //TE_LOG("No related event listener exists!");
+            cLog << StringUtils::format("ListenType %d: Event has not related event listener!", listen_type);
             return;
         }
         EventListenerList& eventlistener_list = _listener_map[listen_type];
@@ -22,7 +23,7 @@ namespace te
         itr != eventlistener_list.end(); ++itr)
         {
             if (*itr) (*itr)->exec(event);
-            else continue;
+            else continue;  // Null because of removing...may have performance issue
         }
     }
 
@@ -55,7 +56,7 @@ namespace te
     {
         if (_listener_map.find(listen_type) != _listener_map.end() && _listener_map[listen_type].size() > listener_id)
         {
-            _listener_map[listen_type][listener_id] = nullptr; // delete listener, smart pointer needed
+            delete _listener_map[listen_type][listener_id];
             if (_free_map.find(listen_type) == _free_map.end())
             {
                 EventListenerFreeList free_list;
@@ -67,7 +68,7 @@ namespace te
         }
         else
         {
-            //log
+            cLog << StringUtils::format("ListenType %d or ListenId %d doesn't exists!", listen_type, listener_id);
         }
     }
 

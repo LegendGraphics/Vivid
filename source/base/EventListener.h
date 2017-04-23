@@ -55,8 +55,6 @@ namespace te
         }
 
     protected:
-        ListenType      _listen_type;
-        size_t          _listener_id;
         T*              _instance;
         EventCallback   _callback;
     };

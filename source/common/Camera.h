@@ -22,13 +22,10 @@ namespace te
     class Camera : public Node
     {
     public:
-        ENABLE_LEAF_NODE
         Camera();
         virtual ~Camera();
 
         bool cull(Node* node);
-
-
     private:
         bool frustumCullingImpl(Node* node);
     };

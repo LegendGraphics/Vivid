@@ -67,14 +67,14 @@ namespace te
 
     void SpaceState::accumulateTransform()
     {
-        Node* parent = _owner->getParent();
-        SpaceState* pt = parent->getComponent<SpaceState>();
-        //world.SpaceState = pt.world.SpaceState * local.SpaceState
-        _world_pos = Vector4to3(pt->getTranslateTransform(SpaceStateRef::RELATIVE_TO_WORLD) *
-            Vector3to4(_local_pos));
-        _world_scale = Vector4to3(pt->getScaleTransform(SpaceStateRef::RELATIVE_TO_WORLD) *
-            Vector3to4(_local_scale));
-        _world_rot = pt->getWorldRotation() * _local_rot;
+        //Node* parent = _owner->getParent();
+        //SpaceState* pt = parent->getComponent<SpaceState>();
+        ////world.SpaceState = pt.world.SpaceState * local.SpaceState
+        //_world_pos = Vector4to3(pt->getTranslateTransform(SpaceStateRef::RELATIVE_TO_WORLD) *
+        //    Vector3to4(_local_pos));
+        //_world_scale = Vector4to3(pt->getScaleTransform(SpaceStateRef::RELATIVE_TO_WORLD) *
+        //    Vector3to4(_local_scale));
+        //_world_rot = pt->getWorldRotation() * _local_rot;
     }
 
     void SpaceState::translate(const Vector3& translation)

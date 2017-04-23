@@ -14,7 +14,8 @@ namespace te
         {
             UNDEFINED   = 0 << 8, 
             MOUSE       = 1 << 8,
-            KEYBOARD    = 2 << 8
+            KEYBOARD    = 2 << 8,
+            TOUCH       = 3 << 8
         };
 
     public:

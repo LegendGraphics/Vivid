@@ -20,6 +20,20 @@ namespace te
         va_end(args);
     }
 
+    char* StringUtils::convertToChar(const String& str)
+    {
+        size_t len = str.length();
+        char* cstr = new char[len+1];
+        str.copy(cstr, len);
+        cstr[len] = '\0';
+        return cstr;
+    }
+
+    String StringUtils::convertToString(const char* cstr)
+    {
+        return String(cstr);
+    }
+
 }
 
 

@@ -12,6 +12,8 @@ namespace te
     {
     public:
         static String format(const char* format, ...);
+        static char* convertToChar(const String& str);
+        static String convertToString(const char* cstr);
     };
 
 }

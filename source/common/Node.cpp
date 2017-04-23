@@ -26,57 +26,25 @@ namespace te
     }
 
     Node::Node()
-        :_parent(nullptr),
-        _visible(true),
+        :_visible(true),
         _component_container(new ComponentContainer(this))
     {
 
     }
 
     Node::Node(const Node& node, const CopyOperator& copyop)
-        /*:_parent(node._parent),
-        _visible(node._visible),
-        _component_container(copyop(node._component_container))*/
     {
+        copyop(this);
     }
 
-    Node::~Node(){}
-
-    void Node::setParent(Node* parent)
+    Node::~Node()
     {
-        _parent = parent;
-    }
-
-    void Node::addChild(Node* child)
-    {
-        //child->setParent(this);
-        _children.insert(_children.end(), child);
-    }
-
-    void Node::removeChild(Node* child)
-    {
-        //_children.erase(std::remove(_children.begin(), _children.end(), child));
+        delete _component_container;
     }
 
     void Node::setVisible(bool visible)
     {
         _visible = visible;
-    }
-
-    void Node::accept(NodeVisitor* node_visitor)
-    {
-        node_visitor->apply(this);
-    }
-
-    void Node::ascend(NodeVisitor* node_visitor)
-    {
-        if (_parent) _parent->accept(node_visitor);
-    }
-
-    void Node::descend(NodeVisitor* node_visitor)
-    {
-        for (auto& itr = _children.begin(); itr != _children.end(); itr ++)
-            (*itr)->accept(node_visitor);
     }
 
     void Node::addComponent(Component* component, int component_id)
@@ -149,6 +117,70 @@ namespace te
             return hasComponent(getComponentTypeId<MeshFilter>());
         else return false;
     }
+
+
+    NodeTree::NodeTree()
+        :_node(nullptr),
+        _parent(nullptr)
+    {}
+
+    NodeTree::NodeTree(Node* node)
+        :_node(node),
+        _parent(nullptr)
+    {}
+
+    NodeTree::NodeTree(const NodeTree& node_tree, const CopyOperator& copyop)
+    {
+        copyop(this);
+    }
+
+    NodeTree::~NodeTree()
+    {}
+
+    void NodeTree::attachNode(Node* node)
+    {
+        _node = node;
+    }
+
+    void NodeTree::unattachNode()
+    {
+        _node = nullptr;
+    }
+
+    void NodeTree::setParentTree(NodeTree* parent)
+    {
+        _parent = parent;
+    }
+
+    void NodeTree::addChildTree(NodeTree* child)
+    {
+        child->setParentTree(this);
+        _children.push_back(child);
+    }
+
+    void NodeTree::removeChildTree(NodeTree* child)
+    {
+        child->setParentTree(nullptr);
+        //_children.erase(std::remove(_children.begin(), _children.end(), child));
+    }
+
+    void NodeTree::accept(NodeVisitor* node_visitor)
+    {
+        node_visitor->apply(this);
+    }
+
+    void NodeTree::ascend(NodeVisitor* node_visitor)
+    {
+        if (_parent) _parent->accept(node_visitor);
+    }
+
+    void NodeTree::descend(NodeVisitor* node_visitor)
+    {
+        for (auto& itr = _children.begin(); itr != _children.end(); itr++)
+            (*itr)->accept(node_visitor);
+    }
+
+
 
     bool MetaNode::load(const String& res)
     {

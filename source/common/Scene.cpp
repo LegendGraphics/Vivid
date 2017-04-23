@@ -147,7 +147,7 @@
 namespace te
 {
     Scene::Scene()
-        :_scene_root(new SceneTree),
+        :_scene_root(new NodeTree),
         _camera(new Camera)
     {
     }
@@ -162,7 +162,7 @@ namespace te
         _camera = camera;
     }
 
-    void Scene::setSceneRoot(Node* tree)
+    void Scene::setSceneRoot(NodeTree* tree)
     {
         _scene_root = tree;
     }
