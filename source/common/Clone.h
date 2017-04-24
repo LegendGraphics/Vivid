@@ -8,6 +8,8 @@ namespace te
 {
     class Node;
     class NodeTree;
+    class Component;
+    class ComponentContainer;
 
     class CopyOperator
     {
@@ -26,7 +28,8 @@ namespace te
 
         virtual Node* operator()(const Node* node) const;
         virtual NodeTree* operator()(const NodeTree* node_tree) const;
-        //virtual ComponentContainer* operator()(const ComponentContainer* ccontainer) const;
+        virtual Component* operator()(const Component* component) const;
+        virtual ComponentContainer* operator()(const ComponentContainer* ccontainer) const;
 
     private:
         Options _flag;

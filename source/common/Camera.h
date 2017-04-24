@@ -1,6 +1,7 @@
 #ifndef COMMON_CAMERA_H
 #define COMMON_CAMERA_H
 
+#include "base/Event.h"
 #include "common/Node.h"
 #include "common/Component.h"
 #include "math/Vector3.h"

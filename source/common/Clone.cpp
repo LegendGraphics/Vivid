@@ -1,6 +1,7 @@
 #include "common/Clone.h"
 #include "common/Node.h"
-
+#include "common/Component.h"
+#include "common/ComponentContainer.h"
 
 namespace te
 {
@@ -30,6 +31,36 @@ namespace te
         {
             NodeTree* copied = new NodeTree;
             // copy the whole tree
+            return copied;
+        }
+    }
+
+    Component* CopyOperator::operator()(const Component* component) const
+    {
+        if (_flag == SHALLOW_COPY)
+        {
+            Component* copied = const_cast<Component*>(component);
+            return copied;
+        }
+        else
+        {
+            Component* copied = new Component;
+            // copy the all components
+            return copied;
+        }
+    }
+
+    ComponentContainer* CopyOperator::operator()(const ComponentContainer* ccontainer) const
+    {
+        if (_flag == SHALLOW_COPY)
+        {
+            ComponentContainer* copied = const_cast<ComponentContainer*>(ccontainer);
+            return copied;
+        }
+        else
+        {
+            ComponentContainer* copied = new ComponentContainer;
+            // copy the all components
             return copied;
         }
     }

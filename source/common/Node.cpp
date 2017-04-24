@@ -3,11 +3,8 @@
 
 #include "common/Node.h"
 #include "common/NodeVisitor.h"
-#include "common/Component.h"
-#include "common/ComponentContainer.h"
 #include "common/SpaceState.h"
 #include "common/MeshFilter.h"
-#include "base/EventDispatcher.h"
 #include "io/ResourceLoader.h"
 
 namespace te
@@ -27,19 +24,18 @@ namespace te
 
     Node::Node()
         :_visible(true),
-        _component_container(new ComponentContainer(this))
+        _component_container(this)
     {
 
     }
 
     Node::Node(const Node& node, const CopyOperator& copyop)
     {
-        copyop(this);
+        copyop(&node);
     }
 
     Node::~Node()
     {
-        delete _component_container;
     }
 
     void Node::setVisible(bool visible)
@@ -49,39 +45,29 @@ namespace te
 
     void Node::addComponent(Component* component, int component_id)
     {
-        _component_container->add(component, component_id);
+        _component_container.add(component, component_id);
         component->setOwner(this);
     }
 
     void Node::removeComponent(int component_id)
     {
-        _component_container->remove(component_id);
+        _component_container.remove(component_id);
     }
 
     Component* Node::getComponent(int component_id)
     {
-        return _component_container->get(component_id);
+        return _component_container.get(component_id);
     }
 
     bool Node::hasComponent(int component_id)
     {
-        return _component_container->has(component_id);
+        return _component_container.has(component_id);
     }
 
     void Node::updateComponents()
     {
-        _component_container->updateAll();
+        _component_container.updateAll();
     }
-
-    /*Matrix Node::getWorldMatrix()
-    {
-        ParentPathVisitor ppv;
-        this->accept(ppv);
-        
-        NodePath* parent_path = ppv.getParentPath();
-        if (parent_path->empty()) return Matrix::identity();
-        else return te::computeLocalToWorld(parent_path);
-    }*/
 
     void Node::addComponent(Component* component)
     {
@@ -131,7 +117,7 @@ namespace te
 
     NodeTree::NodeTree(const NodeTree& node_tree, const CopyOperator& copyop)
     {
-        copyop(this);
+        copyop(&node_tree);
     }
 
     NodeTree::~NodeTree()

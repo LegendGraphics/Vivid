@@ -5,8 +5,6 @@
 #include <array>
 #include <bitset>
 
-#include "base/Ref.h"
-#include "base/Refptr.hpp"
 #include "base/String.h"
 #include "common/Clone.h"
 
@@ -22,7 +20,7 @@ namespace te
         MESH_FILTER
     };
 
-    class Component: public Ref, public Cloneable
+    class Component: public Cloneable
     {
     public:
         enum class MetaType

@@ -6,29 +6,17 @@
 
 #include "base/Ref.h"
 #include "base/Refptr.hpp"
-#include "base/Event.h"
-#include "base/EventListener.h"
 #include "common/Clone.h"
 #include "common/ClassType.hpp"
 #include "common/Resource.h"
 #include "common/Component.h"
+#include "common/ComponentContainer.h"
 
-//#define ENABLE_LEAF_NODE                                    \
-//void addChild(Node* child) = delete;                        \
-//void removeChild(Node* child) = delete;                     \
-//inline std::vector<RefPtr<Node>>& getChildren() = delete;   \
-//inline Node* getChild(int index) = delete;
-//
-//#define DISABLE_NODE_PARENT                                 \
-//void setParent(Node* parent) = delete;                      \
-//inline Node* getParent() = delete;
 
 namespace te
 {
 
     class NodeVisitor;
-    class ComponentContainer;
-    class Component;
 
     class Node;
     class NodeTree;
@@ -36,7 +24,6 @@ namespace te
     using NodeTreePtr = RefPtr<NodeTree>;
     using NodeTreeList = std::vector<NodeTreePtr>;
 
-    //typedef std::vector<Node*> NodePath;
 
     class Node: public Ref, public Cloneable
     {
@@ -50,25 +37,8 @@ namespace te
         friend class CopyOperator;
         ENABLE_CLONE(Node);
 
-        /*void addChild(Node* child);
-        void removeChild(Node* child);
-        inline std::vector<RefPtr<Node>>& getChildren() { return _children; }
-        inline Node* getChild(int index) { return _children[index].get(); }
-
-        void setParent(Node* parent);
-        inline Node* getParent() { return _parent; }
-
-        inline bool hasParent() { return _parent != nullptr; }*/
-
         void setVisible(bool visible);
         inline bool getVisible() { return _visible; }
-
-        /*virtual void accept(NodeVisitor* node_visitor);
-        void ascend(NodeVisitor* node_visitor);
-        void descend(NodeVisitor* node_visitor);*/
-        //virtual void accept(NodeVisitor* node_visitor);
-
-       // Matrix getWorldMatrix();
 
         template <typename C, typename ... Args>
         C* addComponent(Args&& ... args);
@@ -98,7 +68,7 @@ namespace te
 
     protected:
         bool _visible;
-        ComponentContainer* _component_container;
+        ComponentContainer _component_container;
     };
 
 
