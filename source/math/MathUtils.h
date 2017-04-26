@@ -3,11 +3,16 @@
 
 namespace te
 {
-    const float MAX_FLOAT = 3.402823466e+38F;
+    class MathUtils
+    {
+    public:
+        static const float MAX_FLOAT;
 
-    const float PI = 3.141592F;
+        static const float PI;
 
-    float degree_to_radians(float degree);
+        static float degreeToRadians(float degree);
+    };
+    
 }
 
 #endif // MATH_MATH_UTILS_H

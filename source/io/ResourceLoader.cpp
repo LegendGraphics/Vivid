@@ -15,7 +15,7 @@ namespace te
             char *data_ptr = nullptr;
             int size = 0;
 
-            streamFromBinaryFile(res, data_ptr, size);
+            FileUtils::streamFromBinaryFile(res, data_ptr, size);
 
             // Check header and version
             char id[3];
@@ -133,7 +133,7 @@ namespace te
         char *data = nullptr;
         int size = 0;
 
-        streamFromBinaryFile(res, data, size);
+        FileUtils::streamFromBinaryFile(res, data, size);
 
         XMLDoc doc;
         doc.parseBuffer(data, size);

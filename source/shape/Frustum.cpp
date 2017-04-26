@@ -96,8 +96,8 @@ namespace te
 
     void Frustum::calcAABB(Vector3& min, Vector3& max) const
     {
-        min.x = te::MAX_FLOAT; min.y = te::MAX_FLOAT; min.z = te::MAX_FLOAT;
-        max.x = -te::MAX_FLOAT; max.y = -te::MAX_FLOAT; max.z = -te::MAX_FLOAT;
+        min.x = MathUtils::MAX_FLOAT; min.y = MathUtils::MAX_FLOAT; min.z = MathUtils::MAX_FLOAT;
+        max.x = -MathUtils::MAX_FLOAT; max.y = -MathUtils::MAX_FLOAT; max.z = -MathUtils::MAX_FLOAT;
 
         for (int i = 0; i < 8; ++i)
         {

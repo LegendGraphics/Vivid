@@ -39,8 +39,8 @@ namespace te
 
         inline const float& operator()(int i, int j) const
         {
-            //ASSERT(i < 4, "row must be less than four");
-            //ASSERT(j < 4, "column must be less than four");
+            mASSERT(i < 4, "row must be less than four");
+            mASSERT(j < 4, "column must be less than four");
             return _m[i][j];
         }
 

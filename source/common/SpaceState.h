@@ -25,9 +25,6 @@ namespace te
         SpaceState(float x, float y, float z);
         virtual ~SpaceState();
 
-        virtual void init();
-        virtual void update();
-
         void translate(const Vector3& translation);
         void translate(float x, float y, float z);
 

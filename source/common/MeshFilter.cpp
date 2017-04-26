@@ -3,14 +3,14 @@
 namespace te
 {
     MeshFilter::MeshFilter()
-        :_mes_handle(0)
+        :Component(ComponentType::MESH_FILTER),
+        _mes_handle(0)
     {
-        _type = ComponentType::MESH_FILTER;
     }
 
     MeshFilter::MeshFilter(const String& res)
+        :Component(ComponentType::MESH_FILTER)
     {
-        _type = ComponentType::MESH_FILTER;
         load(res);
     }
 

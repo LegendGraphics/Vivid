@@ -28,30 +28,23 @@
 #ifndef COMMON_SCENE_H
 #define COMMON_SCENE_H
 
-#include "common/Node.h"
+#include "base/Ref.h"
+#include "common/Clone.h"
 
 namespace te
 {
-    class SceneTree : public Node
-    {
-    public:
-        SceneTree();
-        virtual ~SceneTree();
-
-    private:
-        void initComponents();
-    };
-
+    class NodeTree;
     class Camera;
 
-    class Scene: public Ref
+    // Scene can be constructed from resource, just like the node
+    class Scene: public Ref, public Cloneable
     {
     public:
         Scene();
         Scene(const Scene& scene, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Scene();
 
-        // init from SceneRes?
+        ENABLE_CLONE(Scene);
 
         NodeTree* getSceneRoot() const { return _scene_root; }
         Camera* getActiveCamera() const { return _camera; }

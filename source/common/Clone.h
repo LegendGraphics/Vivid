@@ -10,6 +10,7 @@ namespace te
     class NodeTree;
     class Component;
     class ComponentContainer;
+    class Scene;
 
     class CopyOperator
     {
@@ -30,6 +31,7 @@ namespace te
         virtual NodeTree* operator()(const NodeTree* node_tree) const;
         virtual Component* operator()(const Component* component) const;
         virtual ComponentContainer* operator()(const ComponentContainer* ccontainer) const;
+        virtual Scene* operator()(const Scene* scene) const;
 
     private:
         Options _flag;

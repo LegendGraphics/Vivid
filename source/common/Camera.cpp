@@ -32,7 +32,9 @@ namespace te
         return true;
     }
 
-    CameraState::CameraState(){}
+    CameraState::CameraState()
+        :Component(ComponentType::CAMERA_STATUS)
+    {}
 
     CameraState::~CameraState(){}
 

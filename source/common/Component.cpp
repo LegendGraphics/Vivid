@@ -11,19 +11,16 @@ namespace te
 
     }
 
-    Component::Component(MetaType type)
+    Component::Component(ComponentType type)
         :_enabled(true),
         _owner(nullptr),
-        _meta_type(type),
-        _type(ComponentType::UNDEFINED)
+        _meta_type(MetaType::DATA),
+        _type(type)
     {}
 
     Component::Component(const Component& component, const CopyOperator& copyop)
-        :_enabled(component._enabled),
-        _owner(nullptr),
-        _meta_type(MetaType::DATA),
-        _type(ComponentType::UNDEFINED)
     {
+        copyop(&component);
     }
 
     Component::~Component() {}
@@ -45,8 +42,10 @@ namespace te
     }
 
     Behavior::Behavior()
-        :Component(MetaType::BEHAVIOR)
-    {}
+    {
+        _meta_type = Component::MetaType::BEHAVIOR;
+        _type = ComponentType::LOGIC_BEHAVIOR;
+    }
 
     Behavior::~Behavior()
     {}

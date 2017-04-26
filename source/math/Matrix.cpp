@@ -86,7 +86,7 @@ namespace te
 
     void Mat4x4::makeRotateX(float x)
     {
-        float rx = degree_to_radians(x);
+        float rx = MathUtils::degreeToRadians(x);
         SET_ROW(0, 1,       0,        0, 0)
         SET_ROW(1, 0, cos(rx), -sin(rx), 0)
         SET_ROW(2, 0, sin(rx),  cos(rx), 0)
@@ -94,7 +94,7 @@ namespace te
     }
     void Mat4x4::makeRotateY(float y)
     {
-        float ry = degree_to_radians(y);
+        float ry = MathUtils::degreeToRadians(y);
         SET_ROW(0,  cos(ry), 0, sin(ry), 0)
         SET_ROW(1,        0, 1,       0, 0)
         SET_ROW(2, -sin(ry), 0, cos(ry), 0)
@@ -102,7 +102,7 @@ namespace te
     }
     void Mat4x4::makeRotateZ(float z)
     {
-        float rz = degree_to_radians(z);
+        float rz = MathUtils::degreeToRadians(z);
         SET_ROW(0, cos(rz), -sin(rz), 0, 0)
         SET_ROW(1, sin(rz),  cos(rz), 0, 0)
         SET_ROW(2,       0,        0, 1, 0)
@@ -138,7 +138,7 @@ namespace te
     // the matrix structure is different from the article since our z is negative
     void Mat4x4::makePerspective(float fov, float aspect, float znear, float zfar)
     {
-        float tan_fov = std::tan(degree_to_radians(fov*0.5));
+        float tan_fov = std::tan(MathUtils::degreeToRadians(fov*0.5));
         float zrange = znear - zfar;
 
         SET_ROW(0, -1.0 / (aspect * tan_fov),            0.0,                       0.0,                         0.0)

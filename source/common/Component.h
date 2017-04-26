@@ -17,7 +17,9 @@ namespace te
     {
         UNDEFINED,
         SPACE_STATUS,
-        MESH_FILTER
+        MESH_FILTER,
+        CAMERA_STATUS,
+        LOGIC_BEHAVIOR
     };
 
     class Component: public Cloneable
@@ -31,7 +33,7 @@ namespace te
 
     public:
         Component();
-        Component(MetaType type);
+        Component(ComponentType type);
         Component(const Component& component, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Component();
 

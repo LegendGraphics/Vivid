@@ -298,7 +298,7 @@ namespace te
         char *data = nullptr;
         int size = 0;
 
-        streamFromBinaryFile(res, data, size);
+        FileUtils::streamFromBinaryFile(res, data, size);
 
         XMLDoc doc;
         doc.parseBuffer(data, size);

@@ -2,6 +2,7 @@
 #include "common/Node.h"
 #include "common/Component.h"
 #include "common/ComponentContainer.h"
+#include "common/Scene.h"
 
 namespace te
 {
@@ -65,6 +66,20 @@ namespace te
         }
     }
 
+    Scene* CopyOperator::operator()(const Scene* scene) const
+    {
+        if (_flag == SHALLOW_COPY)
+        {
+            Scene* copied = const_cast<Scene*>(scene);
+            return copied;
+        }
+        else
+        {
+            Scene* copied = new Scene;
+            // copy the all components
+            return copied;
+        }
+    }
 
 }
 

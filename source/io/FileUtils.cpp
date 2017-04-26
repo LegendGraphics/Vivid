@@ -3,7 +3,7 @@
 
 namespace te
 {
-    void streamFromBinaryFile(const String& filename, char*& data, int& size)
+    void FileUtils::streamFromBinaryFile(const String& filename, char*& data, int& size)
     {
         // Reading size of file
         FILE * file = fopen(filename.c_str(), "rb");

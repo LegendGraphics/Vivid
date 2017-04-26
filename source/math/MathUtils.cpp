@@ -2,7 +2,10 @@
 
 namespace te
 {
-    float degree_to_radians(float degree)
+    const float MathUtils::MAX_FLOAT = 3.402823466e+38F;
+    const float MathUtils::PI = 3.141592F;
+
+    float MathUtils::degreeToRadians(float degree)
     {
         return degree * PI / 180;
     }

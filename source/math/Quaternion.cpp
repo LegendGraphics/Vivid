@@ -89,9 +89,9 @@ namespace te
     // using degree not radians
     Quaternion::Quaternion(const Vector3& euler_angles)
     {
-        float roll = degree_to_radians(euler_angles.x);
-        float pitch = degree_to_radians(euler_angles.y);
-        float yaw = degree_to_radians(euler_angles.z);
+        float roll = MathUtils::degreeToRadians(euler_angles.x);
+        float pitch = MathUtils::degreeToRadians(euler_angles.y);
+        float yaw = MathUtils::degreeToRadians(euler_angles.z);
 
         // std using radians
         double t0 = std::cos(yaw * 0.5f);
