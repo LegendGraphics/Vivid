@@ -6,9 +6,6 @@
 
 namespace te
 {
-    class RenderCamera;
-    class PipelineResource;
-
     struct RenderQueueItem
     {
         RenderObject  *node;
@@ -32,8 +29,8 @@ namespace te
         struct RenderParams
         {
             class RenderDevice* _device;
-            PipelineResource* _pipelineRes;
-            RenderCamera* _camera;
+            class PipelineResource* _pipelineRes;
+            class RenderCamera* _camera;
             RenderQueue _renderQueue;
         };
         void render(RenderParams& params);
