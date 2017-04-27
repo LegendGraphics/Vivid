@@ -5,16 +5,10 @@
 
 namespace te
 {
-    class RenderObjectManager
+    namespace render_object
     {
-    public:
-        RenderObjectManager();
-
         void register_objects();
-    private:
-        RenderObject::Type alloc_type(const char *name) { return _type++; }
-        RenderObject::Type _type;
-    };
+    }
 }
 
 #endif

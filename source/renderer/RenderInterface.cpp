@@ -1,6 +1,7 @@
 #include "RenderInterface.h"
 #include "RenderWorld.h"
 #include "resource/RenderResourceGenerator.h"
+#include "runtime/RenderObjectManager.h"
 
 #ifdef USE_GL
 #include "renderer/device/GLRenderDevice.h"
@@ -12,6 +13,9 @@ namespace te
 
     bool RenderInterface::init()
     {
+        // register render objects here
+        render_object::register_objects();
+
         // init render device here
 #ifdef USE_GL
         _renderDevice = new GLRenderDevice;

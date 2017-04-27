@@ -13,7 +13,6 @@ namespace te
     class RenderContext;
     class RenderResourceContext;
     class VertexLayoutPredefinition;
-    class RenderObjectManager;
 
     // render device objects
     template<class T> class RDObjects
@@ -79,7 +78,6 @@ namespace te
 
     protected:
         VertexLayoutPredefinition* _vertex_declaration;
-        RenderObjectManager* _render_object_manager;
 
     private:
         typedef std::vector<RenderContext*> RenderContexts;
