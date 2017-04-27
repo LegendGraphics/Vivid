@@ -7,24 +7,7 @@ namespace te
 {
     class Mesh;
 
-    namespace vertex_layout
-    {
-        struct IndexStream
-        {
-            uint32 size; // size in bytes
-            void* raw_data;
-            GPUResourceHandle* res;
-        };
 
-        struct VertexStream
-        {
-            uint32 stride; // number of component for each element in a vertex array, in bytes
-                           // for example an array for position has element {XYZ} and its stride is 3
-            uint32 size; // size in bytes
-            void* raw_data;
-            GPUResourceHandle* res;
-        };
-    }
 
     class Buffer : public GPUResource
     {

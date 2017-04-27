@@ -98,4 +98,9 @@ namespace te
         context->commands().push_back(triggerDraw);
     }
 
+    void RenderMeshObject::generateGPUResource(RenderResourceContext * context)
+    {
+
+    }
+
 }

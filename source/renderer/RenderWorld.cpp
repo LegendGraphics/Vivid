@@ -74,7 +74,29 @@ namespace te
         params._device->releaseContext(renderContext);
     }
 
-    void RenderWorld::update()
+    void RenderWorld::update(StateStream& stream, RenderDevice* device)
     {
+        RenderResourceContext* rrc = device->newResourceContext();
+
+        for (StreamMsg* msg : stream)
+        {
+            StreamMsg::MsgType type = msg->getMsgType();
+            if (StreamMsg::CREATE == type)
+            {
+                Handle* handle = msg->getHandle();
+                RenderObject* ro = nullptr;
+                msg->process(ro, nullptr, rrc);
+                (*handle) = _objects.add(ro);
+            }
+            else if (StreamMsg::UPDATE == type)
+            {
+                Handle* handle = msg->getHandle();
+                RenderObject* ro = _objects.getPtr((*handle));
+                msg->process(ro, nullptr, rrc);
+            }
+        }
+
+        device->dispatch(rrc);
+        device->releaseResourceContext(rrc);
     }
 }

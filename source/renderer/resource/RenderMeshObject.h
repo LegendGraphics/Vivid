@@ -2,12 +2,14 @@
 #define RENDERER_RENDERMESHOBJECT_H
 
 #include "renderer/resource/RenderObject.h"
+#include "renderer/resource/RenderResource.h"
 
 #include "math/Matrix.h"
 
 namespace te
 {
     class RenderContext;
+    class RenderResourceContext;
     class RenderDevice;
     class RenderCamera;
     class RenderResource;
@@ -22,6 +24,7 @@ namespace te
         ~RenderMeshObject();
 
         void render(RenderContext* context, RenderCamera* camera, RenderDevice* device);
+        void generateGPUResource(RenderResourceContext* context);
 
         inline void setNumIndices(uint32 numIndices) { _numIndices = numIndices; };
         inline void setShaderObject(RenderResource* res) { _shader_object = res; };
@@ -29,6 +32,12 @@ namespace te
         inline void setModelMat(const Mat4x4& model_mat) { _model_mat = model_mat; };
 
     private:
+        GPUHandle* _index_buffer;
+        GPUHandle* _vertex_buffer;
+        GPUHandle* _vao;
+
+
+
         RenderResource*  _shader_object;
         uint32  _numIndices; // temporary to put it here
         GPUResource*  _vertex_declaration;

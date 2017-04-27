@@ -4,6 +4,7 @@
 #include "runtime/RenderObjectManager.h"
 
 #include "common/Mesh.h"
+#include "renderer/runtime/StateStream.h"
 
 #ifdef USE_GL
 #include "renderer/device/GLRenderDevice.h"
@@ -84,6 +85,7 @@ namespace te
 
     void RenderInterface::updateWorld()
     {
+        _worlds.getPtr(1)->update(_stream, _renderDevice);
     }
 
     VertexLayoutPredefinition * RenderInterface::getVertexDeclarationDefinition()
@@ -94,8 +96,14 @@ namespace te
     void RenderInterface::create(Mesh* mesh)
     {
         Handle* render_object = mesh->getRenderObjectHandle();
-        IndexArray i_array = mesh->getTriangles();
-        VertexArray v_array = mesh->getVertices();
+        IndexArray* i_array = &mesh->getTriangles();
+        VertexArray* v_array = &mesh->getVertices();
         vertex_layout::Type layout_type = mesh->getLayoutType();
+
+        RenderMeshObject* rmo = new RenderMeshObject;
+        MeshStreamMsg* msm = new MeshStreamMsg;
+        msm->setMsgType(StreamMsg::CREATE);
+        msm->setHandle(mesh->getRenderObjectHandle());
+        _stream.push_back(msm);
     }
 }

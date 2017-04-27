@@ -4,6 +4,8 @@
 #include "renderer/resource/HandleObjects.hpp"
 #include "renderer/resource/RenderObject.h"
 
+#include "renderer/runtime/StateStream.h"
+
 namespace te
 {
     struct RenderQueueItem
@@ -34,7 +36,7 @@ namespace te
             RenderQueue _renderQueue;
         };
         void render(RenderParams& params);
-        void update();
+        void update(StateStream& stream, RenderDevice* device);
 
     protected:
         HandleObjects<RenderObject> _objects;

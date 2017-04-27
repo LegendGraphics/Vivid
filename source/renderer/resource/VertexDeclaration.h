@@ -6,18 +6,6 @@
 
 namespace te
 {
-    namespace vertex_layout
-    {
-        struct VertexDeclarationStream
-        {
-            vertex_layout::Type layout_type;
-            std::vector<GPUResourceHandle*> vertex_buffers; // notice: vertex_buffers might be duplicated here
-                                                            // because multiple attributes may share one vertex buffer
-            GPUResourceHandle*              index_buffer;
-            GPUResourceHandle*              res;
-        };
-    }
-
     class VertexDeclaration : public GPUResource
     {
     public:

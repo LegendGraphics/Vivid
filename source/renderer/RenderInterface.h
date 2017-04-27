@@ -4,6 +4,7 @@
 #include "base/Types.h"
 #include "base/Singleton.hpp"
 #include "renderer/resource/HandleObjects.hpp"
+#include "renderer/runtime/StateStream.h"
 
 // These header files will be moved in the future
 #include "renderer/RenderWorld.h"
@@ -75,7 +76,7 @@ namespace te
 
         void create(Mesh* mesh);
 
-        std::vector<RenderMsg> _stream;
+        StateStream _stream;
 
     private:
         class RenderDevice* _renderDevice;
