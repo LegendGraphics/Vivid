@@ -1,7 +1,7 @@
 #ifndef RENDERER_RENDERWORLD_H
 #define RENDERER_RENDERWORLD_H
-#include <vector>
-#include "base/Types.h"
+
+#include "renderer/resource/HandleObjects.hpp"
 #include "renderer/resource/RenderObject.h"
 
 namespace te
@@ -34,6 +34,10 @@ namespace te
             RenderQueue _renderQueue;
         };
         void render(RenderParams& params);
+        void update();
+
+    protected:
+        HandleObjects<RenderObject> _objects;
     };
 }
 

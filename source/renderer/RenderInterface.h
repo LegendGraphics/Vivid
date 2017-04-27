@@ -3,6 +3,7 @@
 
 #include "base/Types.h"
 #include "base/Singleton.hpp"
+#include "renderer/resource/HandleObjects.hpp"
 
 // These header files will be moved in the future
 #include "renderer/RenderWorld.h"
@@ -25,6 +26,8 @@ namespace te
     // the run-time instance of RenderInterface.
     //
     //-------------------------------------------------------------------//
+
+    class Mesh;
 
     struct RenderWorldMsg
     {
@@ -53,8 +56,12 @@ namespace te
         bool init();
         void release();
 
+        void registerWorld();
+        void unregisterWorld();
+
         void renderWorld(RenderMsg* message);
         void generateResource(RenderMsg* message);
+        void updateWorld();
 
         class VertexLayoutPredefinition* getVertexDeclarationDefinition();
 
@@ -66,8 +73,15 @@ namespace te
         //template <class T>
         //RenderResource* createRenderResource();
 
+        void create(Mesh* mesh);
+
+        std::vector<RenderMsg> _stream;
+
     private:
         class RenderDevice* _renderDevice;
+
+        using Worlds = HandleObjects<RenderWorld>;
+        Worlds _worlds;
     };
 }
 

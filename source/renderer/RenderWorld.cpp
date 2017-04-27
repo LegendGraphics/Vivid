@@ -73,4 +73,8 @@ namespace te
         params._device->dispatch(renderContext);
         params._device->releaseContext(renderContext);
     }
+
+    void RenderWorld::update()
+    {
+    }
 }

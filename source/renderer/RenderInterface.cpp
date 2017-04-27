@@ -3,6 +3,8 @@
 #include "resource/RenderResourceGenerator.h"
 #include "runtime/RenderObjectManager.h"
 
+#include "common/Mesh.h"
+
 #ifdef USE_GL
 #include "renderer/device/GLRenderDevice.h"
 #endif
@@ -30,6 +32,17 @@ namespace te
     void RenderInterface::release()
     {
         delete _renderDevice; _renderDevice = nullptr;
+    }
+
+    void RenderInterface::registerWorld()
+    {
+        RenderWorld* render_world = new RenderWorld();
+        _worlds.add(render_world);
+    }
+
+    void RenderInterface::unregisterWorld()
+    {
+        _worlds.clear();
     }
 
     void RenderInterface::renderWorld(RenderMsg* message)
@@ -68,8 +81,21 @@ namespace te
         delete msg.generator;
         delete[] msg.rQueue;
     }
+
+    void RenderInterface::updateWorld()
+    {
+    }
+
     VertexLayoutPredefinition * RenderInterface::getVertexDeclarationDefinition()
     {
         return _renderDevice->getVertexDeclarationDefinition();
+    }
+
+    void RenderInterface::create(Mesh* mesh)
+    {
+        Handle* render_object = mesh->getRenderObjectHandle();
+        IndexArray i_array = mesh->getTriangles();
+        VertexArray v_array = mesh->getVertices();
+        vertex_layout::Type layout_type = mesh->getLayoutType();
     }
 }
