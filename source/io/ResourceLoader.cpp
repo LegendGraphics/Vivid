@@ -123,10 +123,10 @@ namespace te
             return true;
     }
 
-    /*bool ResourceLoader::load(Pipeline* pipeline, const String& res)
+    bool ResourceLoader::load(Pipeline* pipeline, const String& res)
     {
         return false;
-    }*/
+    }
 
     bool ResourceLoader::load(MetaNode* meta_node, const String& res)
     {
