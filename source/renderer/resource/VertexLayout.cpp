@@ -55,6 +55,11 @@ namespace te
             { "tangent", 0, 3, 24 },
             { "bitangent", 0, 3, 36 }
         };
+
+        vertexLayoutMap[vertex_layout::PN] = {
+            { "vertPos", 0, 3, 0 },
+            { "normal", 0, 3, 12 }
+        };
     }
     const VertexLayout & VertexLayoutPredefinition::getLayout(vertex_layout::Type vlType)
     {

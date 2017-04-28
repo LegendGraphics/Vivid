@@ -240,22 +240,27 @@ namespace te
 
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
+        vertex_layout::Type getLayoutType() { return _layout_type; }
         void setVertexDeclaration(ResourceHandle res_handle) { _vertex_declaration = res_handle; };
         void setIndexBuffer(ResourceHandle res_handle) { _index_buffer = res_handle; };
         void setVertexBuffer(ResourceHandle res_handle) { _vertex_buffer = res_handle; };
         ResourceHandle getVertexDeclaration() { return _vertex_declaration; }
         ResourceHandle getIndexBuffer() { return _index_buffer; }
         ResourceHandle getVertexBuffer() { return _vertex_buffer; }
+        Handle* getRenderObjectHandle() { return &_render_object; }
 
     protected:
         VertexArray         _vertices;
         IndexArray          _triangles;
+        vertex_layout::Type _layout_type;
 
         BoundingBox*        _bounding;
 
         ResourceHandle      _vertex_buffer;
         ResourceHandle      _index_buffer;
         ResourceHandle      _vertex_declaration;
+
+        Handle              _render_object;
     };
 
     using MeshPtr = RefPtr<Mesh>;

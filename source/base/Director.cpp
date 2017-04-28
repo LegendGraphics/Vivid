@@ -19,8 +19,8 @@ namespace te
     bool Director::initialize()
     {
         // init engine modules
-        RenderInterface();
-
+        RenderInterface::getInstance()->init();
+        RenderInterface::getInstance()->registerWorld();
         return true;
     }
 
@@ -73,9 +73,17 @@ namespace te
 
     void Director::renderingUpdate()
     {
-        // rendering scene
+        RenderInterface::getInstance()->setCamera(_active_scene->getActiveCamera()->getComponent<CameraState>());
+
+        // update world
+        RenderResourceVisitor visitor_update(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::getInstance(), _active_scene);
+        visitor_update.apply(_active_scene->getSceneRoot());
+        RenderInterface::getInstance()->updateWorld();
+
+        // render world
         RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::getInstance(), _active_scene);
         visitor.apply(_active_scene->getSceneRoot());
+        RenderInterface::getInstance()->renderWorld();
     }
 
     void Director::start()
@@ -91,8 +99,7 @@ namespace te
         _active_scene->setActiveCamera(focus_camera);
 
         initWindow();
-        RenderInterface::getInstance()->init();
-        initResource();
+        RenderInterface::getInstance()->openDevice();
 
         mainLoop();
     }
@@ -132,15 +139,6 @@ namespace te
         }
 
     }
-
-    void Director::initResource()
-    {
-        // init resource
-
-        RenderResourceVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::getInstance(), _active_scene);
-        visitor.apply(_active_scene->getSceneRoot());
-    }
-
 
     // temporarily put GUI staff in Director class
     void Director::onEvent(GLFWwindow* window, int button, int action, int mods)

@@ -2,6 +2,7 @@
 #define COMMON_CLASS_TYPE_HPP
 
 #include <cstddef>
+#include "base/Types.h"
 
 namespace te
 {
@@ -15,7 +16,7 @@ namespace te
         {
             static const int id = _next_type_id++;
             return id;
-        }
+        } ///< do not abuse this class, it will generate tons of functions.
 
     private:
         static int _next_type_id;
