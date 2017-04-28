@@ -130,6 +130,10 @@ namespace te
     const Var::VariantBool          Var::VariantBool::instance;
     const Var::VariantString        Var::VariantString::instance;
 
+    Var::Var()
+        :_type(nullptr)
+    {
+    }
 
     Var::Var(const Var& var)
     {

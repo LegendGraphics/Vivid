@@ -1,9 +1,8 @@
 #include "io/ResourceLoader.h"
-
-#include "utXML.h"
-
+#include "io/Logger.h"
 #include "io/FileUtils.h"
 #include "common/Mesh.h"
+#include "common/Pipeline.h"
 #include "common/Node.h"
 #include "common/SpaceState.h"
 #include "common/MeshFilter.h"
@@ -108,6 +107,7 @@ namespace te
                     data_ptr += elem_size * vertex_num;
                     continue;
                 }
+                cLog << errormsg;
             }
 
             // triangle stream
@@ -123,11 +123,6 @@ namespace te
             return true;
     }
 
-    bool ResourceLoader::load(Pipeline* pipeline, const String& res)
-    {
-        return false;
-    }
-
     bool ResourceLoader::load(MetaNode* meta_node, const String& res)
     {
         char *data = nullptr;
@@ -137,12 +132,18 @@ namespace te
 
         XMLDoc doc;
         doc.parseBuffer(data, size);
-        if (doc.hasError()) return false;
-            /*return raiseError("XML parsing error")*/
+        if (doc.hasError())
+        {
+            cLog << "XML parsing error";
+            return false;
+        }
 
         XMLNode root_node = doc.getRootNode();
-        if (strcmp(root_node.getName(), "Node") != 0) return false;
-            /*return raiseError("Not a node resource file")*/
+        if (strcmp(root_node.getName(), "Node") != 0)
+        {
+            cLog << "Not a node resource file";
+            return false;
+        }
 
         XMLNode com_node = root_node.getFirstChild("Components");
         if (strcmp(com_node.getName(), "Components") != 0) return false;
@@ -188,4 +189,201 @@ namespace te
 
         return true;
     }
+
+    bool ResourceLoader::load(Pipeline* pipeline, const String& res)
+    {
+            char *data = nullptr;
+            int size = 0;
+
+            FileUtils::streamFromBinaryFile(res, data, size);
+
+            XMLDoc doc;
+            doc.parseBuffer(data, size);
+            if (doc.hasError())
+            {
+                cLog << "XML parsing error";
+                return false;
+            }
+
+            XMLNode rootNode = doc.getRootNode();
+            if (strcmp(rootNode.getName(), "Pipeline") != 0)
+            {
+                cLog << "Not a pipeline resource file";
+                return false;
+            }
+
+            // Parse setup
+            XMLNode node1 = rootNode.getFirstChild("Setup");
+            if (!node1.isEmpty())
+            {
+                XMLNode node2 = node1.getFirstChild("RenderTarget");
+                while (!node2.isEmpty())
+                {
+                    // TODO: about render target
+                    node2 = node2.getNextSibling("RenderTarget");
+                }
+            }
+
+            // Parse commands
+            node1 = rootNode.getFirstChild("CommandQueue");
+            if (!node1.isEmpty())
+            {
+                pipeline->getStages().reserve(node1.countChildNodes("Stage"));
+
+                XMLNode node2 = node1.getFirstChild("Stage");
+                while (!node2.isEmpty())
+                {
+                    pipeline->getStages().push_back(PipelineStage());
+                    String errorMsg = ResourceLoader::parseStage(node2, &pipeline->getStages().back());
+                    if (errorMsg != "")
+                    {
+                        cLog << StringUtils::format("Error in stage %s: %s", pipeline->getStages().back().id, errorMsg);
+                        return false;
+                    }
+
+                    node2 = node2.getNextSibling("Stage");
+                }
+            }
+
+            return true;
+    }
+
+
+    const String ResourceLoader::parseStage(XMLNode& node, PipelineStage* cur_stage)
+    {
+        PipelineStage& stage = *cur_stage;
+        stage.id = node.getAttribute("id", "");
+
+        if (strcmp(node.getAttribute("enabled", "true"), "false") == 0 ||
+            strcmp(node.getAttribute("enabled", "1"), "0") == 0)
+            stage.enabled = false;
+        else
+            stage.enabled = true;
+
+        stage.commands.reserve(node.countChildNodes());
+
+        // Parse commands
+        XMLNode node1 = node.getFirstChild();
+        while (!node1.isEmpty())
+        {
+            if (strcmp(node1.getName(), "BindBuffer") == 0)
+            {
+                if (!node1.getAttribute("sampler") || !node1.getAttribute("sourceRT") || !node1.getAttribute("bufIndex"))
+                    return "Missing BindBuffer attribute";
+
+                PipelineCommand command(PipelineCommandType::BindBuffer);
+                command.paras.push_back(String(node1.getAttribute("sourceRT")));
+                command.paras.push_back(String(node1.getAttribute("sampler")));
+                command.paras.push_back(String(node1.getAttribute("bufIndex")));
+                stage.commands.push_back(command);
+            }
+            else if (strcmp(node1.getName(), "UnbindBuffers") == 0)
+            {
+                stage.commands.push_back(PipelineCommand(PipelineCommandType::UnbindBuffers));
+            }
+            else if (strcmp(node1.getName(), "ClearTarget") == 0)
+            {
+                PipelineCommand command(PipelineCommandType::ClearTarget);
+                command.paras.resize(9);
+                command.paras[0] = false;
+                command.paras[1] = false;
+                command.paras[2] = false;
+                command.paras[3] = false;
+                command.paras[4] = false;
+                command.paras[5] = String(node1.getAttribute("col_R", "0"));
+                command.paras[6] = String(node1.getAttribute("col_G", "0"));
+                command.paras[7] = String(node1.getAttribute("col_B", "0"));
+                command.paras[8] = String(node1.getAttribute("col_A", "0"));
+
+                if (strcmp(node1.getAttribute("depthBuf", "false"), "true") == 0 ||
+                    strcmp(node1.getAttribute("depthBuf", "0"), "1") == 0)
+                {
+                    command.paras[0] = true;
+                }
+                if (strcmp(node1.getAttribute("colBuf0", "false"), "true") == 0 ||
+                    strcmp(node1.getAttribute("colBuf0", "0"), "1") == 0)
+                {
+                    command.paras[1] = true;
+                }
+                if (strcmp(node1.getAttribute("colBuf1", "false"), "true") == 0 ||
+                    strcmp(node1.getAttribute("colBuf1", "0"), "1") == 0)
+                {
+                    command.paras[2] = true;
+                }
+                if (strcmp(node1.getAttribute("colBuf2", "false"), "true") == 0 ||
+                    strcmp(node1.getAttribute("colBuf2", "0"), "1") == 0)
+                {
+                    command.paras[3] = true;
+                }
+                if (strcmp(node1.getAttribute("colBuf3", "false"), "true") == 0 ||
+                    strcmp(node1.getAttribute("colBuf3", "0"), "1") == 0)
+                {
+                    command.paras[4] = true;
+                }
+
+                stage.commands.push_back(command);
+            }
+            else if (strcmp(node1.getName(), "DrawGeometry") == 0)
+            {
+                if (!node1.getAttribute("context")) return "Missing DrawGeometry attribute 'context'";
+
+                PipelineCommand command(PipelineCommandType::DrawGeometry);
+                command.paras.push_back(String(node1.getAttribute("context")));
+                command.paras.push_back(String(node1.getAttribute("class")));
+                command.paras.push_back(String(node1.getAttribute("order")));
+                stage.commands.push_back(command);
+            }
+            else if (strcmp(node1.getName(), "DrawOverlays") == 0)
+            {
+                if (!node1.getAttribute("context")) return "Missing DrawOverlays attribute 'context'";
+
+                PipelineCommand command(PipelineCommandType::DrawOverlays);
+                command.paras.push_back(String(node1.getAttribute("context")));
+                stage.commands.push_back(command);
+            }
+            else if (strcmp(node1.getName(), "DrawQuad") == 0)
+            {
+                if (!node1.getAttribute("material")) return "Missing DrawQuad attribute 'material'";
+                if (!node1.getAttribute("context")) return "Missing DrawQuad attribute 'context'";
+
+                PipelineCommand command(PipelineCommandType::DrawQuad);
+                command.paras.push_back(String(node1.getAttribute("material")));
+                command.paras.push_back(String(node1.getAttribute("context")));
+            }
+            else if (strcmp(node1.getName(), "DoForwardLightLoop") == 0)
+            {
+                PipelineCommand command(PipelineCommandType::DoForwardLightLoop);
+                command.paras.push_back(String(node1.getAttribute("class")));
+                command.paras.push_back(String(node1.getAttribute("context")));
+                command.paras.push_back(String(node1.getAttribute("order")));
+                command.paras.push_back(String(node1.getAttribute("noShadows")));
+                stage.commands.push_back(command);
+            }
+            else if (strcmp(node1.getName(), "DoDeferredLightLoop") == 0)
+            {
+                PipelineCommand command(PipelineCommandType::DoDeferredLightLoop);
+                command.paras.push_back(String(node1.getAttribute("context")));
+                stage.commands.push_back(command);
+            }
+            else if (strcmp(node1.getName(), "SetUniform") == 0)
+            {
+                if (!node1.getAttribute("material")) return "Missing SetUniform attribute 'material'";
+                if (!node1.getAttribute("uniform")) return "Missing SetUniform attribute 'uniform'";
+
+                PipelineCommand command(PipelineCommandType::SetUniform);
+                command.paras.push_back(String(node1.getAttribute("material")));
+                command.paras.push_back(String(node1.getAttribute("uniform")));
+                command.paras.push_back(String(node1.getAttribute("a", "0")));
+                command.paras.push_back(String(node1.getAttribute("b", "0")));
+                command.paras.push_back(String(node1.getAttribute("c", "0")));
+                command.paras.push_back(String(node1.getAttribute("d", "0")));
+                stage.commands.push_back(command);
+            }
+
+            node1 = node1.getNextSibling();
+        }
+
+        return "";
+    }
+
 }

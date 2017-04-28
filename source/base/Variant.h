@@ -37,6 +37,7 @@ namespace te
         };
         
     public:
+        Var();
         Var(const Var& var);
         Var(double d);
         Var(float f);
