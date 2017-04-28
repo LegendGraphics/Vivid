@@ -3,7 +3,8 @@
 #include <unordered_map>
 #include "base/Types.h"
 #include "base/String.h"
-#include "renderer/resource/VertexDeclaration.h"
+#include "renderer/resource/VertexLayoutType.h"
+#include "renderer/resource/RenderResource.h"
 
 namespace te
 {

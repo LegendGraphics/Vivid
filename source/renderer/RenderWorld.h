@@ -8,17 +8,6 @@
 
 namespace te
 {
-    struct RenderQueueItem
-    {
-        Handle     handle;
-        float      sortKey;
-
-        RenderQueueItem() {}
-        RenderQueueItem(float sortKey, Handle handle)
-            : handle(handle), sortKey(sortKey) {}
-    };
-    typedef std::vector< RenderQueueItem > RenderQueue;
-
     // RenderWorld is the entrance of all "render" aspect things of the game world
     class RenderWorld : public RenderObject
     {

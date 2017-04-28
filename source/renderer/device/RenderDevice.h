@@ -12,7 +12,7 @@ namespace te
 {
     class RenderContext;
     class RenderResourceContext;
-    class VertexLayoutPredefinition;
+    struct VertexLayoutPredefinition;
 
     // render device objects
     template<class T> class RDObjects

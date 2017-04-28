@@ -2,11 +2,10 @@
 
 #include "GLRenderDevice.h"
 #include "RenderContext.h"
-#include "renderer/Resource/RenderResourceContext.h"
+#include "renderer/resource/RenderResourceContext.h"
 #include "renderer/runtime/RenderCamera.h"
-#include "renderer/Resource/VertexLayout.h"
-#include "renderer/Resource/Buffer.h"
-#include "renderer/Resource/VertexDeclaration.h"
+#include "renderer/resource/VertexLayout.h"
+#include "renderer/resource/ResourceStream.h"
 
 #include "math/Vector4.h"
 

@@ -3,8 +3,8 @@
 #include "renderer/device/RenderContext.h"
 #include "renderer/device/RenderDevice.h"
 #include "renderer/runtime/RenderCamera.h"
-#include "renderer/resource/VertexDeclaration.h"
 #include "renderer/resource/RenderResourceContext.h"
+#include "renderer/resource/ResourceStream.h"
 
 namespace te
 {

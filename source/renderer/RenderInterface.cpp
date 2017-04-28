@@ -1,11 +1,13 @@
 #include "RenderInterface.h"
-#include "RenderWorld.h"
-#include "resource/RenderResourceGenerator.h"
-#include "runtime/RenderObjectManager.h"
 
 #include "common/Mesh.h"
 #include "common/Camera.h"
-#include "renderer/runtime/StateStream.h"
+
+#include "renderer/runtime/RenderObjectManager.h"
+#include "renderer/RenderWorld.h"
+#include "renderer/runtime/RenderCamera.h"
+#include "renderer/resource/RenderMeshObject.h"
+#include "renderer/resource/PipelineResource.h"
 
 #ifdef USE_GL
 #include "renderer/device/GLRenderDevice.h"
@@ -66,36 +68,6 @@ namespace te
         _worlds.clear();
     }
 
-    void RenderInterface::renderWorld(RenderMsg* message)
-    {
-        // message should contain some state object camera, viewport
-        RenderWorldMsg& msg = message->rwm;
-        RenderWorld::RenderParams params;
-        params._device = _renderDevice;
-        params._pipelineRes = msg.pipeline;
-        params._camera = msg.camera;
-
-        // For now
-        // delete world, pipelineRes, camera here
-        // and RenderObject in RenderQueue
-        delete msg.pipeline;
-        delete msg.camera;
-        delete[] msg.rQueue;
-    }
-
-    void RenderInterface::generateResource(RenderMsg* message)
-    {
-        const RenderResourceMsg& msg = message->rrm;
-        RenderResourceGenerator::RenderResourceParams params;
-        params._device = _renderDevice;
-        params._resourceQueue = ResourceStreamQueue(msg.rQueue, msg.rQueue + msg.numQueue);
-        msg.generator->allocResource(params);
-
-        // no need to delete stream and render resource insde each item
-        delete msg.generator;
-        delete[] msg.rQueue;
-    }
-
     void RenderInterface::renderWorld()
     {
         RenderWorld::RenderParams params;
@@ -118,11 +90,6 @@ namespace te
         Transform proj = camera_state->getProjectTransform();
         _camera->setMatrix(proj.rawMatrix(), view.rawMatrix());
         _camera->setRange(-10, -1000);
-    }
-
-    VertexLayoutPredefinition * RenderInterface::getVertexDeclarationDefinition()
-    {
-        return _renderDevice->getVertexDeclarationDefinition();
     }
 
     void RenderInterface::create(Mesh* mesh)
