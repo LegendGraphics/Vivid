@@ -10,12 +10,12 @@ namespace te
 {
     struct RenderQueueItem
     {
-        RenderObject  *node;
+        Handle     handle;
         float      sortKey;
 
         RenderQueueItem() {}
-        RenderQueueItem(float sortKey, RenderObject *node)
-            : node(node), sortKey(sortKey) {}
+        RenderQueueItem(float sortKey, Handle handle)
+            : handle(handle), sortKey(sortKey) {}
     };
     typedef std::vector< RenderQueueItem > RenderQueue;
 
@@ -33,10 +33,12 @@ namespace te
             class RenderDevice* _device;
             class PipelineResource* _pipelineRes;
             class RenderCamera* _camera;
-            RenderQueue _renderQueue;
         };
-        void render(RenderParams& params);
+        void render(StateStream& stream, RenderParams& params);
         void update(StateStream& stream, RenderDevice* device);
+
+    protected:
+        void renderKernel(StateStream& stream, RenderParams& params, RenderContext* rContext);
 
     protected:
         HandleObjects<RenderObject> _objects;

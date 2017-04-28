@@ -177,6 +177,8 @@ namespace te
                 GPUResourceHandle* res = i_stream->res;
                 //ASSERT(RenderResource::INDEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 (*res) = createIndexBuffer(i_stream->size, i_stream->raw_data);
+                
+                delete i_stream;
             }
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER == msg.type)
             {
@@ -186,6 +188,8 @@ namespace te
                 GPUResourceHandle* res = v_stream->res;
                 //ASSERT(RenderResource::VERTEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 (*res) = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
+
+                delete v_stream;
             }
             else if (RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION == msg.type)
             {
@@ -244,6 +248,8 @@ namespace te
                     &offsets[0],
                     &vertexHandles[0],
                     indexHandle);
+
+                delete vd_stream;
             }
         }
 

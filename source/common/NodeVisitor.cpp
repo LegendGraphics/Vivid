@@ -123,81 +123,22 @@ namespace te
     {
         // Now simply rendering every node
         Node* node = node_tree->node().get();
-        testRenderingPipeline(node, _scene->getActiveCamera()); // for test
 
-        traverse(node_tree);
-    }
-
-    RenderWorld* wrapRenderWorld()
-    {
-        RenderWorld* rw = new RenderWorld;
-        return rw;
-    }
-
-    RenderCamera* wrapRenderCamera(Camera* camera)
-    {
-        Transform view = camera->getComponent<CameraState>()->getViewTransform();
-        Transform proj = camera->getComponent<CameraState>()->getProjectTransform();
-        //Transform view = Transform::lookAt(Vector3(200, 200, 200), Vector3(0, 0, 0), Vector3(0, 1, 0));
-        //Transform proj = Transform::ortho(-100, 100, -100, 100, -100, -1000);
-        //cLog << view.rawMatrix() * Vector4(-50, -50, -50, 1);
-        //cLog << proj.rawMatrix();
-        //cLog << proj.rawMatrix() * (view.rawMatrix() * Vector4(-50, -50, -50, 1));
-        //cLog << proj.rawMatrix() * view.rawMatrix() * Vector4(-50, -50, -50, 1);
-        RenderCamera* rc = new RenderCamera(CameraData::ORTHOGRAPHIC, -10, -1000, 
-            proj.rawMatrix(), view.rawMatrix());
-        rc->getViewPort()[0] = 0;
-        rc->getViewPort()[1] = 0;
-        rc->getViewPort()[2] = 800;
-        rc->getViewPort()[3] = 600;
-        return rc;
-    }
-
-    RenderQueueItem* wrapRenderQueueItem(Node* node, uint32& num)
-    {
-        RenderQueueItem* rqi = new RenderQueueItem[1];
         if (MeshFilter* mf = node->getComponent<MeshFilter>())
         {
-            // generate RenderMeshObject
             Mesh* m = mf->getMesh().get();
-            RenderMeshObject* rmo = new RenderMeshObject;
-            rmo->setNumIndices(m->getTriangles().size());
-            rmo->setVertexDeclaration(
-                ResourceMapper::getInstance()
-                ->get<RenderResourceManager>()
-                ->getGPUResource(m->getVertexDeclaration()).get());
+
+            MeshStreamMsg* msg = new MeshStreamMsg;
+            msg->setMsgType(StreamMsg::RENDER);
+            msg->setHandle(m->getRenderObjectHandle());
             Vector3 pos = node->getComponent<SpaceState>()->getLocalPosition();
-            rmo->setModelMat(Transform::translate(pos.x, pos.y, pos.z).rawMatrix());
-
-            // Put it into RenderQueueItem
-            rqi->node = rmo;
-            rqi->node->type = RenderMeshObject::TYPE;
-            rqi->sortKey = 0;
-
-            num = 1;
-            return rqi;
+            MeshStreamMsg::Data* data = new MeshStreamMsg::Data;
+            data->model_mat = new Mat4x4(Transform::translate(pos.x, pos.y, pos.z).rawMatrix());
+            msg->feedData(data);
+            _renderer->_stream.push_back(msg);
         }
 
-        num = 0;
-        return nullptr;
-    }
-
-    PipelineResource* wrapPipelineResource()
-    {
-        PipelineResource* pr = new PipelineResource;
-        pr->load("forward.pipeline.xml");
-        return pr;
-    }
-
-    void RenderingVisitor::testRenderingPipeline(Node* node, Camera* camera)
-    {
-        RenderMsg msg;
-        msg.rwm.camera = wrapRenderCamera(camera);
-        msg.rwm.world = wrapRenderWorld();
-        msg.rwm.rQueue = wrapRenderQueueItem(node, msg.rwm.numQueue);
-        msg.rwm.pipeline = wrapPipelineResource();
-
-        _renderer->renderWorld(&msg);
+        traverse(node_tree);
     }
 
     RenderResourceVisitor::RenderResourceVisitor()
@@ -225,31 +166,14 @@ namespace te
         if (MeshFilter* mf = node->getComponent<MeshFilter>())
         {
             Mesh* m = mf->getMesh().get();
-            String m_res_id = m->getResourceId();
-            RenderResourceManager* rr_manager =
-                ResourceMapper::getInstance()->get<RenderResourceManager>();
 
-            // index stream
-            String i_buffer_id = gpu_resource::appendTypeStr(gpu_resource::INDEX_STREAM, m_res_id);
-            ResourceHandle i_buffer = rr_manager->create(i_buffer_id);
-            m->setIndexBuffer(i_buffer);
-
-            // vertex stream
-            String v_buffer_id = gpu_resource::appendTypeStr(gpu_resource::VERTEX_STREAM, m_res_id);
-            ResourceHandle v_buffer = rr_manager->create(v_buffer_id);
-            m->setVertexBuffer(v_buffer);
-
-            // vertex declaration stream
-            String vao_id = gpu_resource::appendTypeStr(gpu_resource::VERTEX_DECLARATION,
-                vertex_layout::getTypeStr(vertex_layout::PNTB) + ";"
-                + i_buffer_id + ";"
-                + v_buffer_id + ";");
-            ResourceHandle vao = rr_manager->create(vao_id);
-            m->setVertexDeclaration(vao);
-
-            rr_manager->immediateCreate();
+            MeshStreamMsg* msg = new MeshStreamMsg;
+            msg->setMsgType(StreamMsg::UPDATE);
+            msg->setHandle(m->getRenderObjectHandle());
+            _renderer->_stream.push_back(msg);
         }
 
+        traverse(node_tree);
     }
 
 }

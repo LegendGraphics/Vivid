@@ -5,6 +5,8 @@
 #include "renderer/resource/RenderResource.h"
 
 #include "math/Matrix.h"
+#include "renderer/resource/VertexLayoutType.h"
+#include "common/Mesh.h"
 
 namespace te
 {
@@ -21,10 +23,12 @@ namespace te
         static RenderObject::Type TYPE;
 
         RenderMeshObject();
+        RenderMeshObject(Mesh* mesh);
         ~RenderMeshObject();
 
-        void render(RenderContext* context, RenderCamera* camera, RenderDevice* device);
+        void render(RenderContext* context);
         void generateGPUResource(RenderResourceContext* context);
+        void update(RenderResourceContext* context);
 
         inline void setNumIndices(uint32 numIndices) { _numIndices = numIndices; };
         inline void setShaderObject(RenderResource* res) { _shader_object = res; };
@@ -32,11 +36,18 @@ namespace te
         inline void setModelMat(const Mat4x4& model_mat) { _model_mat = model_mat; };
 
     private:
-        GPUHandle* _index_buffer;
-        GPUHandle* _vertex_buffer;
-        GPUHandle* _vao;
+        void generateIndexBuffer(RenderResourceContext* context);
+        void generateVertexBuffer(RenderResourceContext* context);
+        void generateVertexDeclaration(RenderResourceContext* context);
 
+    private:
+        GPUHandle _index_buffer;
+        GPUHandle _vertex_buffer;
+        GPUHandle _vao;
 
+        IndexArray* _index_array;
+        VertexArray* _vertex_array;
+        vertex_layout::Type _layout_type;
 
         RenderResource*  _shader_object;
         uint32  _numIndices; // temporary to put it here

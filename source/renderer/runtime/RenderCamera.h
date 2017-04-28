@@ -27,6 +27,11 @@ namespace te
         RenderCamera(CameraData::ProjectionType type, float near_range, float far_range,
             const Mat4x4& projection, const Mat4x4& view);
 
+        void setType(CameraData::ProjectionType type);
+        void setRange(float near_range, float far_range);
+        void setMatrix(const Mat4x4& projection, const Mat4x4& view);
+        void setViewPort(int x0, int y0, int x1, int y1);
+
         float* getViewMat();
         float* getProjectionMat();
         float* getViewProjctionMat();

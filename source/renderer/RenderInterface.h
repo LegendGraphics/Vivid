@@ -29,11 +29,11 @@ namespace te
     //-------------------------------------------------------------------//
 
     class Mesh;
+    class CameraState;
 
     struct RenderWorldMsg
     {
         class PipelineResource* pipeline;
-        class RenderWorld* world;
         class RenderCamera* camera;
         class RenderQueueItem* rQueue;
         uint32 numQueue;
@@ -55,6 +55,7 @@ namespace te
     {
     public:
         bool init();
+        bool openDevice();
         void release();
 
         void registerWorld();
@@ -62,7 +63,9 @@ namespace te
 
         void renderWorld(RenderMsg* message);
         void generateResource(RenderMsg* message);
+        void renderWorld();
         void updateWorld();
+        void setCamera(CameraState* camera_state);
 
         class VertexLayoutPredefinition* getVertexDeclarationDefinition();
 
@@ -78,11 +81,16 @@ namespace te
 
         StateStream _stream;
 
+        void releaseStateStream();
+
     private:
         class RenderDevice* _renderDevice;
 
         using Worlds = HandleObjects<RenderWorld>;
         Worlds _worlds;
+
+        RenderCamera* _camera;
+        PipelineResource* _pipelien_res;
     };
 }
 

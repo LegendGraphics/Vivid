@@ -4,7 +4,7 @@
 
 namespace te
 {
-    void StreamMsg::process(RenderObject *& render_object, RenderContext* rc, RenderResourceContext* rrc)
+    void StreamMsg::process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc)
     {
         switch (_type)
         {
@@ -27,25 +27,40 @@ namespace te
         _data = nullptr;
     }
 
-    void MeshStreamMsg::feedData(RenderObject *& render_object)
+    void MeshStreamMsg::create(RenderObject*& render_object, RenderResourceContext* rrc)
     {
-        Data* data = new Data;
-        data->rmo = static_cast<RenderMeshObject*>(render_object);
-        _data = (void*)data;
+        if (render_object)
+        {
+            delete static_cast<Data*>(_data)->rmo;
+            return;
+        }
+        render_object = static_cast<Data*>(_data)->rmo;
     }
 
-    void MeshStreamMsg::create(RenderObject*& render_object, RenderResourceContext* rrc)
+    void MeshStreamMsg::update(RenderObject*& render_object, RenderResourceContext* rrc)
     {
         RenderMeshObject* rmo = dynamic_cast<RenderMeshObject*>(render_object);
         if (!rmo) return;
 
-        rmo = static_cast<Data*>(_data)->rmo;
-        rmo->generateGPUResource(rrc);
+        // do something if we want to update the status of rmo
+        // usually get the data in the message, parse it and set the rmo accordingly
+
+        rmo->update(rrc);
     }
-    void MeshStreamMsg::update(RenderObject *& render_object, RenderResourceContext* rrc)
+
+    void MeshStreamMsg::render(RenderObject*& render_object, RenderContext* rc)
     {
-    }
-    void MeshStreamMsg::render(RenderObject *& render_objcet, RenderContext* rc)
-    {
+        RenderMeshObject* rmo = dynamic_cast<RenderMeshObject*>(render_object);
+        if (!rmo) return;
+
+        // do something if we want to update the status of rmo
+        // usually get the data in the message, parse it and set the rmo accordingly
+
+        // get model matrix
+        Data* data = static_cast<Data*>(_data);
+        rmo->setModelMat(*(data->model_mat));
+        delete data->model_mat;
+
+        rmo->render(rc);
     }
 }

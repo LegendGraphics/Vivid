@@ -4,20 +4,34 @@
 #include "renderer/device/RenderDevice.h"
 #include "renderer/runtime/RenderCamera.h"
 #include "renderer/resource/VertexDeclaration.h"
+#include "renderer/resource/RenderResourceContext.h"
 
 namespace te
 {
     RenderObject::Type RenderMeshObject::TYPE = RenderObject::NOT_INITIALIZED;
 
     RenderMeshObject::RenderMeshObject()
-        : RenderObject(TYPE)
+        : RenderObject(TYPE),
+        _index_buffer(0xFFFFFFFF),
+        _vertex_buffer(0xFFFFFFFF),
+        _vao(0xFFFFFFFF)
     {
     }
+
+    RenderMeshObject::RenderMeshObject(Mesh* mesh)
+        : RenderMeshObject()
+    {
+        _index_array = &mesh->getTriangles();
+        _vertex_array = &mesh->getVertices();
+        _layout_type = mesh->getLayoutType();
+        _numIndices = (*_index_array).size();
+    }
+
     RenderMeshObject::~RenderMeshObject()
     {
     }
 
-    void RenderMeshObject::render(RenderContext* context, RenderCamera* camera, RenderDevice* device)
+    void RenderMeshObject::render(RenderContext* context)
     {
         // set index buffer
         //RenderContext::IndexCmdStream* ics = new RenderContext::IndexCmdStream;
@@ -28,7 +42,7 @@ namespace te
 
         // set vertex buffer
         RenderContext::VertexCmdStream* vcs = new RenderContext::VertexCmdStream;
-        vcs->vaoHandle = _vertex_declaration->getGPUResourceHandle();
+        vcs->vaoHandle = _vao;
         vcs->baseIndex = 0;
         vcs->baseVertex = 0;
         vcs->numIndices = _numIndices;
@@ -100,7 +114,55 @@ namespace te
 
     void RenderMeshObject::generateGPUResource(RenderResourceContext * context)
     {
+        generateIndexBuffer(context);
+        generateVertexBuffer(context);
+        generateVertexDeclaration(context);
+    }
 
+    void RenderMeshObject::update(RenderResourceContext * context)
+    {
+        // check if the GPUResource is ready
+        if (0xFFFFFFFF == _vao) generateGPUResource(context);
+    }
+
+    void RenderMeshObject::generateIndexBuffer(RenderResourceContext * context)
+    {
+        vertex_layout::IndexStream* is = new vertex_layout::IndexStream;
+        is->res = &_index_buffer;
+        is->size = 4 * (*_index_array).size();
+        is->raw_data = &(*_index_array)[0];
+
+        RenderResourceContext::Message allc_is = {
+            RenderResourceContext::MessageType::ALLOC_INDEX_BUFFER, (void*)is };
+        context->messages().push_back(allc_is);
+    }
+
+    void RenderMeshObject::generateVertexBuffer(RenderResourceContext * context)
+    {
+        vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
+        vs->res = &_vertex_buffer;
+        vs->size = (*_vertex_array).sizeInBytes();//4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
+        vs->stride = (*_vertex_array).sizeInBytes() / (*_vertex_array).size();
+        vs->raw_data = (*_vertex_array).buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed
+                                                  //float* aa = &m->getVertices()[0];
+
+        RenderResourceContext::Message allc_vs = {
+            RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER, (void*)vs };
+        context->messages().push_back(allc_vs);
+    }
+
+    void RenderMeshObject::generateVertexDeclaration(RenderResourceContext * context)
+    {
+        vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
+        vds->res = &_vao;
+        vds->layout_type = _layout_type;
+
+        vds->index_buffer = &_index_buffer;
+        vds->vertex_buffers.push_back(&_vertex_buffer);
+
+        RenderResourceContext::Message allc_vd = {
+            RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION, (void*)vds };
+        context->messages().push_back(allc_vd);
     }
 
 }

@@ -10,16 +10,20 @@
 
 namespace te
 {
-    void renderKernel(RenderWorld::RenderParams& params, RenderContext* rContext)
+    void RenderWorld::renderKernel(StateStream& stream, RenderParams& params, RenderContext* rContext)
     {
         // culling, prepare RenderQueue
-        RenderQueue& rQueue = params._renderQueue;
 
         // iterate each object
-        for (RenderQueueItem& rqItem : rQueue)
+        for (StreamMsg* msg : stream)
         {
-            if (rqItem.node->type == RenderMeshObject::TYPE)
-                ((RenderMeshObject*)rqItem.node)->render(rContext, params._camera, params._device);
+            StreamMsg::MsgType type = msg->getMsgType();
+            if (StreamMsg::RENDER == type)
+            {
+                Handle* handle = msg->getHandle();
+                RenderObject* ro = _objects.getPtr((*handle));
+                msg->process(ro, rContext, nullptr);
+            }
         }
     }
 
@@ -33,7 +37,7 @@ namespace te
     {
     }
 
-    void RenderWorld::render(RenderParams& params)
+    void RenderWorld::render(StateStream& stream, RenderParams& params)
     {
         RenderContext* renderContext = (params._device->newContext());
         renderContext->_camera = params._camera;
@@ -50,7 +54,7 @@ namespace te
                 case PipelineCommand::List::DrawGeometry:
                     // generate render job package (commands) into RenderContext
                     // separate this from real job will benefit for multi-thread
-                    renderKernel(params, renderContext);
+                    renderKernel(stream, params, renderContext);
                     break;
                 case PipelineCommand::List::ClearTarget:
                     RenderContext::ClearCmdStream* ccs = new RenderContext::ClearCmdStream;

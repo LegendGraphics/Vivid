@@ -8,6 +8,7 @@ namespace te
 {
     
     Mesh::Mesh()
+        : _render_object(0xFFFFFFFF)
     {
     }
 

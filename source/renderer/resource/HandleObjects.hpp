@@ -10,6 +10,8 @@ namespace te
     class HandleObjects
     {
     public:
+        ~HandleObjects() { clear(); }
+
         Handle add(T* obj)
         {
             if (!_free_list.empty())
