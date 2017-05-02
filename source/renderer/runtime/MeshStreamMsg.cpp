@@ -39,8 +39,7 @@ namespace te
 
         // get model matrix
         Data* data = static_cast<Data*>(_data);
-        rmo->setModelMat(*(data->model_mat));
-        delete data->model_mat; // delete after consume
+        rmo->setModelMat(data->model_mat);
 
         rmo->render(rc);
     }
