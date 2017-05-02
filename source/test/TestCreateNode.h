@@ -26,6 +26,7 @@ int main(int argc, char** argv)
     Node* node1 = Node::create("cube1.node.xml");
 
     NodeTree* node_tree = new NodeTree(node);
+    node_tree->addChildTree(new NodeTree(node1));
     scene->setSceneRoot(node_tree);
 
     Director::getInstance()->setActiveScene(scene);
