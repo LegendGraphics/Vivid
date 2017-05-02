@@ -178,7 +178,11 @@ namespace te
     Var& Var::operator=(const Var& var)
     {
         this->_type = var._type;
-        this->_value = var._value;
+        if (_type->isDouble()) _type->setDouble(_value, const_cast<Var&>(var).toDouble());
+        else if (_type->isFloat()) _type->setFloat(_value, const_cast<Var&>(var).toFloat());
+        else if (_type->isInt()) _type->setInt(_value, const_cast<Var&>(var).toInt());
+        else if (_type->isBool()) _type->setBool(_value, const_cast<Var&>(var).toBool());
+        else if (_type->isString()) _type->setString(_value, const_cast<Var&>(var).toString());
         return *this;
     }
 

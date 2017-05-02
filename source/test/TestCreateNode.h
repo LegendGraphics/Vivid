@@ -9,6 +9,7 @@ using namespace te;
 
 int main(int argc, char** argv)
 { 
+    Director::getInstance()->initialize();
     // create a scene
     Scene* scene = new Scene;
     // add a mesh filter to scene root node
