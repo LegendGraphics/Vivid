@@ -8,6 +8,10 @@ namespace te
     typedef unsigned short uint16;
     typedef unsigned int uint32;
     typedef unsigned __int64 uint64;
+    typedef uint32 Handle;
+    typedef Handle GPUHandle;
+    typedef GPUHandle GPUResourceHandle;
+
 }
 
 

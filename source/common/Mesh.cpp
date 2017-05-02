@@ -2,16 +2,23 @@
 #include "io/FileUtils.h"
 #include "io/ResourceLoader.h"
 
+#include "renderer/RenderInterface.h"
+
 namespace te
 {
     
     Mesh::Mesh()
+        : _render_object(0xFFFFFFFF)
     {
     }
 
     bool Mesh::load(const String & res)
     {
-        return ResourceLoader::load(this, res);
+        if (!ResourceLoader::load(this, res))
+            return false;
+        RenderInterface::getInstance()->create(this);
+
+        return true;
     }
 
     void Mesh::unload()

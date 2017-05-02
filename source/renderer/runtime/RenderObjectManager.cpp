@@ -4,17 +4,21 @@
 #include "renderer/resource/RenderMeshObject.h"
 #include "RenderCamera.h"
 
+#include "common/ClassType.hpp"
+
 namespace te
 {
-    RenderObjectManager::RenderObjectManager() : _type(0)
+    template <class T>
+    RenderObject::Type getRenderObjectTypeId()
     {
-        register_objects();
+        static_assert(std::is_base_of<RenderObject, T>(), "Requested class must be a RenderObject!");
+        return (RenderObject::Type)ClassTypeId<RenderObject>::getTypeId<T>();
     }
 
-    void RenderObjectManager::register_objects()
+    void render_object::register_objects()
     {
-        RenderWorld::TYPE = alloc_type("WorldRenderInterface");
-        RenderMeshObject::TYPE = alloc_type("MeshObject");
-        RenderCamera::TYPE = alloc_type("Camera");
+        RenderWorld::TYPE = getRenderObjectTypeId<RenderWorld>();
+        RenderMeshObject::TYPE = getRenderObjectTypeId<RenderMeshObject>();
+        RenderCamera::TYPE = getRenderObjectTypeId<RenderCamera>();
     }
 }

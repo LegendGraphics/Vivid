@@ -14,9 +14,6 @@ namespace te
             Model,
             Partical,
         };
-
-        String getTypeStr(Type t);
-        Type getType(const String& str);
     }
 }
 

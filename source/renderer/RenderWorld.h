@@ -1,25 +1,13 @@
 #ifndef RENDERER_RENDERWORLD_H
 #define RENDERER_RENDERWORLD_H
-#include <vector>
-#include "base/Types.h"
+
+#include "renderer/resource/HandleObjects.hpp"
 #include "renderer/resource/RenderObject.h"
+
+#include "renderer/runtime/StateStream.h"
 
 namespace te
 {
-    class RenderCamera;
-    class PipelineResource;
-
-    struct RenderQueueItem
-    {
-        RenderObject  *node;
-        float      sortKey;
-
-        RenderQueueItem() {}
-        RenderQueueItem(float sortKey, RenderObject *node)
-            : node(node), sortKey(sortKey) {}
-    };
-    typedef std::vector< RenderQueueItem > RenderQueue;
-
     // RenderWorld is the entrance of all "render" aspect things of the game world
     class RenderWorld : public RenderObject
     {
@@ -32,11 +20,17 @@ namespace te
         struct RenderParams
         {
             class RenderDevice* _device;
-            PipelineResource* _pipelineRes;
-            RenderCamera* _camera;
-            RenderQueue _renderQueue;
+            class PipelineResource* _pipelineRes;
+            class RenderCamera* _camera;
         };
-        void render(RenderParams& params);
+        void render(StateStream& stream, RenderParams& params);
+        void update(StateStream& stream, RenderDevice* device);
+
+    protected:
+        void renderKernel(StateStream& stream, RenderParams& params, RenderContext* rContext);
+
+    protected:
+        HandleObjects<RenderObject> _objects;
     };
 }
 

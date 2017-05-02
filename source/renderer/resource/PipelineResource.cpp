@@ -285,7 +285,7 @@ namespace te
         for (uint32 i = 0; i < _renderTargets.size(); ++i)
         {
             RenderTarget &rt = _renderTargets[i];
-            if (rt.rendBuf)
+            //if (rt.rendBuf)
                 /*gRDI->destroyRenderBuffer(rt.rendBuf)*/;
         }
     }
@@ -302,11 +302,11 @@ namespace te
 
         XMLDoc doc;
         doc.parseBuffer(data, size);
-        if (doc.hasError())
+        //if (doc.hasError())
             /*return raiseError("XML parsing error")*/;
 
         XMLNode rootNode = doc.getRootNode();
-        if (strcmp(rootNode.getName(), "Pipeline") != 0)
+        //if (strcmp(rootNode.getName(), "Pipeline") != 0)
             /*return raiseError("Not a pipeline resource file")*/;
 
         // Parse setup
@@ -316,14 +316,14 @@ namespace te
             XMLNode node2 = node1.getFirstChild("RenderTarget");
             while (!node2.isEmpty())
             {
-                if (!node2.getAttribute("id")) /*return raiseError("Missing RenderTarget attribute 'id'")*/;
+                //if (!node2.getAttribute("id")) /*return raiseError("Missing RenderTarget attribute 'id'")*/;
                 String id = node2.getAttribute("id");
 
-                if (!node2.getAttribute("depthBuf")) /*return raiseError("Missing RenderTarget attribute 'depthBuf'")*/;
+                //if (!node2.getAttribute("depthBuf")) /*return raiseError("Missing RenderTarget attribute 'depthBuf'")*/;
                 bool depth = false;
                 if (_stricmp(node2.getAttribute("depthBuf"), "true") == 0) depth = true;
 
-                if (!node2.getAttribute("numColBufs")) /*return raiseError("Missing RenderTarget attribute 'numColBufs'")*/;
+                //if (!node2.getAttribute("numColBufs")) /*return raiseError("Missing RenderTarget attribute 'numColBufs'")*/;
                 uint32 numBuffers = atoi(node2.getAttribute("numColBufs"));
 
                 /*TextureFormats::List format = TextureFormats::BGRA8;
@@ -362,7 +362,7 @@ namespace te
             {
                 _stages.push_back(PipelineStage());
                 String errorMsg = parseStage(node2, _stages.back());
-                if (errorMsg != "")
+                //if (errorMsg != "")
                     /*return raiseError("Error in stage '" + _stages.back().id + "': " + errorMsg)*/;
 
                 node2 = node2.getNextSibling("Stage");

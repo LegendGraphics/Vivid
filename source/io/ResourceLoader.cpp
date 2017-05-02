@@ -29,6 +29,7 @@ namespace te
 
             int vertex_type;
             memcpy(&vertex_type, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+            mesh->_layout_type = vertex_layout::Type(vertex_type);
 
             // Load mesh data
             // vertex stream

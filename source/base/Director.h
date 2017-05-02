@@ -32,14 +32,13 @@ namespace te
 
         float getDeltaTime() const { return _delta_time; }
 
+        bool initialize();
         void start();
 
         static void onEvent(GLFWwindow* window, int button, int action, int mods);
         Vector2 getCurMousePos();
 
     private:
-        bool initialize();
-
         /** calculates delta time since last time it was called */
         void calculateDeltaTime();
 
@@ -50,7 +49,6 @@ namespace te
         void renderingUpdate();
 
         void initWindow();
-        void initResource();
 
     private:
         Scene* _active_scene;
