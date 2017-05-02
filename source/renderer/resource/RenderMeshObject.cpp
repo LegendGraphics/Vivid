@@ -92,8 +92,9 @@ namespace te
             model_mat_var.semantic_name = "worldMat";
             scs->variables.push_back(model_mat_var);
 
-            scs->data = new char[4 * 4 * 4]; // for a float 4*4 matrix
-            memcpy(scs->data, &_model_mat(0, 0), 4 * 4 * 4);
+            char* data_ptr = new char[4 * 4 * 4]; // for a float 4*4 matrix
+            memcpy(data_ptr, &_model_mat(0, 0), 4 * 4 * 4);
+            scs->data = (void*)data_ptr;
 
             RenderContext::Command setShaderObject = { 0,  (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
             context->commands().push_back(setShaderObject);

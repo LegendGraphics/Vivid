@@ -133,7 +133,7 @@ namespace te
             msg->setHandle(m->getRenderObjectHandle());
             Vector3 pos = node->getComponent<SpaceState>()->getLocalPosition();
             MeshStreamMsg::Data* data = new MeshStreamMsg::Data;
-            data->model_mat = new Mat4x4(Transform::translate(pos.x, pos.y, pos.z).rawMatrix());
+            data->model_mat = Mat4x4(Transform::translate(pos.x, pos.y, pos.z).rawMatrix());
             msg->feedData(data);
             _renderer->_stream.push_back(msg);
         }

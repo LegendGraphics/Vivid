@@ -94,12 +94,12 @@ namespace te
         float yaw = MathUtils::degreeToRadians(euler_angles.z);
 
         // std using radians
-        double t0 = std::cos(yaw * 0.5f);
-        double t1 = std::sin(yaw * 0.5f);
-        double t2 = std::cos(roll * 0.5f);
-        double t3 = std::sin(roll * 0.5f);
-        double t4 = std::cos(pitch * 0.5f);
-        double t5 = std::sin(pitch * 0.5f);
+        float t0 = std::cos(yaw * 0.5f);
+        float t1 = std::sin(yaw * 0.5f);
+        float t2 = std::cos(roll * 0.5f);
+        float t3 = std::sin(roll * 0.5f);
+        float t4 = std::cos(pitch * 0.5f);
+        float t5 = std::sin(pitch * 0.5f);
 
         w = t0 * t2 * t4 + t1 * t3 * t5;
         v.x = t0 * t3 * t4 - t1 * t2 * t5;

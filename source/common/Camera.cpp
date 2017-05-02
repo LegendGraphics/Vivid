@@ -134,10 +134,10 @@ namespace te
             Transform y_diff_rotation = Transform::rotateX(y_diff);
 
             CameraState::CameraViewParas& view_paras = state->getViewParas();
-            Vector3 delta_dist = (view_paras.center - view_paras.position);
+            Vector3 delta_dist = (view_paras.position - view_paras.center);
             Vector3 dir = delta_dist.normalized();
             float dist = delta_dist.length();
-            Vector3 new_pos = x_diff_rotation * y_diff_rotation * dir * dist;
+            Vector3 new_pos = x_diff_rotation * y_diff_rotation * dir * dist + view_paras.center;
             view_paras.position = new_pos;
         }
     }

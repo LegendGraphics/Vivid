@@ -1,6 +1,7 @@
 #include "common/Resource.h"
 #include "common/Mesh.h"
 #include "common/Node.h"
+#include "common/Pipeline.h"
 
 namespace te
 {
@@ -133,6 +134,7 @@ namespace te
     {
         add<MeshManager>();
         add<MetaNodeManager>();
+        add<PipelineManager>();
     }
 
     void ResourceMapper::clear()

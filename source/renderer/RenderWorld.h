@@ -20,7 +20,7 @@ namespace te
         struct RenderParams
         {
             class RenderDevice* _device;
-            class PipelineResource* _pipelineRes;
+            class Pipeline*     _pipeline;
             class RenderCamera* _camera;
         };
         void render(StateStream& stream, RenderParams& params);

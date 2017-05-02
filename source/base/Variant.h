@@ -34,9 +34,12 @@ namespace te
             int     i;
             bool    b;
             char*   s;
+
+            ValueUnion() { memset(this, 0, sizeof(ValueUnion)); }
         };
         
     public:
+        Var();
         Var(const Var& var);
         Var(double d);
         Var(float f);

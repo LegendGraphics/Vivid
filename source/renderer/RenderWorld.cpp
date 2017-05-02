@@ -1,10 +1,10 @@
 #include "RenderWorld.h"
 
 #include "common/Clone.h"
+#include "common/Pipeline.h"
 #include "renderer/Device/RenderContext.h"
 #include "renderer/Device/RenderDevice.h"
 #include "renderer/resource/RenderMeshObject.h"
-#include "renderer/resource/PipelineResource.h"
 
 #include "math/Vector3.h"
 
@@ -43,28 +43,28 @@ namespace te
         renderContext->_camera = params._camera;
 
         // process pipeline config here
-        for (PipelineStage& stage :params._pipelineRes->getStages())
+        for (PipelineStage& stage : params._pipeline->getStages())
         {
             for (PipelineCommand& pc : stage.commands)
             {
                 switch (pc.command)
                 {
-                case PipelineCommand::List::SetTarget:
+                case PipelineCommandType::SetTarget:
                     break;
-                case PipelineCommand::List::DrawGeometry:
+                case PipelineCommandType::DrawGeometry:
                     // generate render job package (commands) into RenderContext
                     // separate this from real job will benefit for multi-thread
                     renderKernel(stream, params, renderContext);
                     break;
-                case PipelineCommand::List::ClearTarget:
+                case PipelineCommandType::ClearTarget:
                     RenderContext::ClearCmdStream* ccs = new RenderContext::ClearCmdStream;
-                    ccs->clearColor = pc.params[1].getBool() || pc.params[2].getBool()
-                        || pc.params[3].getBool() || pc.params[4].getBool();
-                    ccs->clearDepth = pc.params[0].getBool();
-                    ccs->colorRGBA[0] = pc.params[5].getFloat();
-                    ccs->colorRGBA[1] = pc.params[6].getFloat();
-                    ccs->colorRGBA[2] = pc.params[7].getFloat();
-                    ccs->colorRGBA[3] = pc.params[8].getFloat();
+                    ccs->clearColor = pc.paras[1].toBool() || pc.paras[2].toBool()
+                        || pc.paras[3].toBool() || pc.paras[4].toBool();
+                    ccs->clearDepth = pc.paras[0].toBool();
+                    ccs->colorRGBA[0] = pc.paras[5].toFloat();
+                    ccs->colorRGBA[1] = pc.paras[6].toFloat();
+                    ccs->colorRGBA[2] = pc.paras[7].toFloat();
+                    ccs->colorRGBA[3] = pc.paras[8].toFloat();
                     ccs->depth = 1.f;
                     RenderContext::Command clearTarget = { 0, (void*)ccs, RenderContext::CommandType::CLEAR };
                     renderContext->commands().push_back(clearTarget);

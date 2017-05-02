@@ -53,7 +53,7 @@ namespace te
         struct Data
         {
             RenderMeshObject* rmo;
-            Mat4x4*           model_mat;
+            Mat4x4            model_mat;
         };
 
     public:
