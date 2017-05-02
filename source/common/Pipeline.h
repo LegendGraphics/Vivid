@@ -103,6 +103,7 @@ namespace te
     {
         SwitchTarget,
         ClearTarget,
+        SetTarget,
         BindBuffer,
         UnbindBuffers,
         DrawGeometry,

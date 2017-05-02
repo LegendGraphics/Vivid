@@ -2,12 +2,12 @@
 
 #include "common/Mesh.h"
 #include "common/Camera.h"
+#include "common/Pipeline.h"
 
 #include "renderer/runtime/RenderObjectManager.h"
 #include "renderer/RenderWorld.h"
 #include "renderer/runtime/RenderCamera.h"
 #include "renderer/resource/RenderMeshObject.h"
-#include "renderer/resource/PipelineResource.h"
 
 #ifdef USE_GL
 #include "renderer/device/GLRenderDevice.h"
@@ -46,7 +46,6 @@ namespace te
     {
         delete _renderDevice; _renderDevice = nullptr;
         delete _camera; _camera = nullptr;
-        delete _pipelien_res; _pipelien_res = nullptr;
         _worlds.clear();
     }
 
@@ -59,8 +58,7 @@ namespace te
         _camera->setType(CameraData::ORTHOGRAPHIC);
         _camera->setRange(-10, -1000);
         _camera->setViewPort(0, 0, 800, 600);
-        _pipelien_res = new PipelineResource();
-        _pipelien_res->load("forward.pipeline.xml");
+        setRenderPipeline("forward.pipeline.xml");
     }
 
     void RenderInterface::unregisterWorld()
@@ -72,7 +70,7 @@ namespace te
     {
         RenderWorld::RenderParams params;
         params._device = _renderDevice;
-        params._pipelineRes = _pipelien_res;
+        params._pipeline = _pipeline.get();
         params._camera = _camera;
         _worlds.getPtr(1)->render(_stream, params);
         releaseStateStream();
@@ -90,6 +88,13 @@ namespace te
         Transform proj = camera_state->getProjectTransform();
         _camera->setMatrix(proj.rawMatrix(), view.rawMatrix());
         _camera->setRange(-10, -1000);
+    }
+
+    void RenderInterface::setRenderPipeline(const String& res)
+    {
+        Pipeline* pipeline = new Pipeline;
+        ResourceHandle handle = ResourceMapper::getInstance()->get<PipelineManager>()->create(res);
+        _pipeline = ResourceMapper::getInstance()->get<PipelineManager>()->getPipeline(handle);
     }
 
     void RenderInterface::create(Mesh* mesh)

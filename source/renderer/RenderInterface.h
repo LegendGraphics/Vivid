@@ -3,6 +3,7 @@
 
 #include "base/Types.h"
 #include "base/Singleton.hpp"
+#include "common/Pipeline.h"
 #include "renderer/resource/HandleObjects.hpp"
 #include "renderer/runtime/StateStream.h"
 
@@ -37,6 +38,7 @@ namespace te
         void renderWorld();
         void updateWorld();
         void setCamera(CameraState* camera_state);
+        void setRenderPipeline(const String& res);
 
         void create(Mesh* mesh);
 
@@ -50,8 +52,8 @@ namespace te
         using Worlds = HandleObjects<RenderWorld>;
         Worlds _worlds;
 
-        RenderCamera* _camera;
-        PipelineResource* _pipelien_res;
+        RenderCamera*   _camera;
+        PipelinePtr     _pipeline;
     };
 }
 
