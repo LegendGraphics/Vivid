@@ -1,10 +1,10 @@
-#include "RenderCamera.h"
+#include "renderer/runtime/RenderCamera.h"
 
 namespace te
 {
     RenderObject::Type RenderCamera::TYPE = RenderObject::NOT_INITIALIZED;
     RenderCamera::RenderCamera(CameraData::ProjectionType type, float near_range, float far_range,
-        const Mat4x4& projection, const Mat4x4& view)
+        const Matrix& projection, const Matrix& view)
         : RenderObject(TYPE)
     {
         setType(type);
@@ -14,16 +14,16 @@ namespace te
 
     void RenderCamera::setType(CameraData::ProjectionType type)
     {
-        _cameraData.type = type;
+        _camera_data.type = type;
     }
 
     void RenderCamera::setRange(float near_range, float far_range)
     {
-        _cameraData.nearRange = near_range;
-        _cameraData.farRange = far_range;
+        _camera_data.near_range = near_range;
+        _camera_data.far_range = far_range;
     }
 
-    void RenderCamera::setMatrix(const Mat4x4 & projection, const Mat4x4 & view)
+    void RenderCamera::setMatrix(const Matrix & projection, const Matrix & view)
     {
         _projection = projection;
         _view = view;
@@ -32,10 +32,10 @@ namespace te
 
     void RenderCamera::setViewPort(int x0, int y0, int x1, int y1)
     {
-        _viewPort[0] = x0;
-        _viewPort[1] = y0;
-        _viewPort[2] = x1;
-        _viewPort[3] = y1;
+        _view_port[0] = x0;
+        _view_port[1] = y0;
+        _view_port[2] = x1;
+        _view_port[3] = y1;
     }
 
     float* RenderCamera::getViewMat()
@@ -55,7 +55,7 @@ namespace te
 
     int * RenderCamera::getViewPort()
     {
-        return &_viewPort[0];
+        return &_view_port[0];
     }
 
 }

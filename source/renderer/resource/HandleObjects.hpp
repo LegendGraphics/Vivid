@@ -1,8 +1,10 @@
 #ifndef RENDERER_RENDEROBJECTCONTAINER_H
 #define RENDERER_RENDEROBJECTCONTAINER_H
 
-#include "base/Types.h"
 #include <vector>
+
+#include "base/Types.h"
+
 
 namespace te
 {
@@ -52,7 +54,7 @@ namespace te
         }
 
     private:
-        std::vector<T*> _objects;
+        std::vector<T*>     _objects;
         std::vector<Handle> _free_list;
     };
 }

@@ -22,7 +22,6 @@ namespace te
     class Mesh;
     class CameraState;
     class RenderCamera;
-    class PipelineResource;
     class RenderWorld;
 
     class RenderInterface : public Singleton<RenderInterface>
@@ -32,14 +31,17 @@ namespace te
         bool openDevice();
         void release();
 
+        // hard code, init one world, camera and pipeline
         void registerWorld();
         void unregisterWorld();
 
         void renderWorld();
         void updateWorld();
+
         void setCamera(CameraState* camera_state);
         void setRenderPipeline(const String& res);
 
+        // more general api needed
         void create(Mesh* mesh);
 
         StateStream _stream;
@@ -47,7 +49,7 @@ namespace te
         void releaseStateStream();
 
     private:
-        class RenderDevice* _renderDevice;
+        class RenderDevice* _render_device;
 
         using Worlds = HandleObjects<RenderWorld>;
         Worlds _worlds;

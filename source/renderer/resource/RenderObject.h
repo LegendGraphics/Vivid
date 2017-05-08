@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDEROBJECT_H
-#define RENDERER_RENDEROBJECT_H
+#ifndef RENDERER_RENDER_OBJECT_H
+#define RENDERER_RENDER_OBJECT_H
 
 #include "base/Types.h"
 

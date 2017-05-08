@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDERCAMERA_H
-#define RENDERER_RENDERCAMERA_H
+#ifndef RENDERER_RENDER_CAMERA_H
+#define RENDERER_RENDER_CAMERA_H
 
 #include "renderer/resource/RenderObject.h"
 #include "math/Matrix.h"
@@ -14,8 +14,8 @@ namespace te
             PERSPECTIVE
         };
 
-        float nearRange;
-        float farRange;
+        float near_range;
+        float far_range;
         ProjectionType type;
     };
 
@@ -25,11 +25,11 @@ namespace te
         static RenderObject::Type TYPE;
         RenderCamera() = default;
         RenderCamera(CameraData::ProjectionType type, float near_range, float far_range,
-            const Mat4x4& projection, const Mat4x4& view);
+            const Matrix& projection, const Matrix& view);
 
         void setType(CameraData::ProjectionType type);
         void setRange(float near_range, float far_range);
-        void setMatrix(const Mat4x4& projection, const Mat4x4& view);
+        void setMatrix(const Matrix& projection, const Matrix& view);
         void setViewPort(int x0, int y0, int x1, int y1);
 
         float* getViewMat();
@@ -38,11 +38,11 @@ namespace te
         int* getViewPort();
 
     private:
-        Mat4x4 _view;
-        Mat4x4 _projection;
-        Mat4x4 _view_projection;
-        int    _viewPort[4];
-        CameraData _cameraData;
+        Matrix _view;
+        Matrix _projection;
+        Matrix _view_projection;
+        int    _view_port[4];
+        CameraData _camera_data;
     };
 }
 

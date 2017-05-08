@@ -3,7 +3,6 @@
 
 #include "renderer/resource/HandleObjects.hpp"
 #include "renderer/resource/RenderObject.h"
-
 #include "renderer/runtime/StateStream.h"
 
 namespace te
@@ -19,15 +18,15 @@ namespace te
 
         struct RenderParams
         {
-            class RenderDevice* _device;
-            class Pipeline*     _pipeline;
-            class RenderCamera* _camera;
+            class RenderDevice* device;
+            class Pipeline*     pipeline;
+            class RenderCamera* camera;
         };
         void render(StateStream& stream, RenderParams& params);
         void update(StateStream& stream, RenderDevice* device);
 
     protected:
-        void renderKernel(StateStream& stream, RenderParams& params, RenderContext* rContext);
+        void renderKernel(StateStream& stream, RenderParams& params, RenderContext* render_context);
 
     protected:
         HandleObjects<RenderObject> _objects;
