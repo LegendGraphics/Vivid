@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDERWORLD_H
-#define RENDERER_RENDERWORLD_H
+#ifndef RENDERER_RENDER_WORLD_H
+#define RENDERER_RENDER_WORLD_H
 
 #include "renderer/resource/HandleObjects.hpp"
 #include "renderer/resource/RenderObject.h"

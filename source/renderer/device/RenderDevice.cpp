@@ -1,6 +1,6 @@
-#include "RenderDevice.h"
+#include "renderer/device/RenderDevice.h"
 
-#include "RenderContext.h"
+#include "renderer/device/RenderContext.h"
 #include "renderer/resource/RenderResourceContext.h"
 
 namespace te

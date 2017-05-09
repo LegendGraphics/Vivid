@@ -1,5 +1,5 @@
-#ifndef RENDERER_VERTEXLAYOUT_H
-#define RENDERER_VERTEXLAYOUT_H
+#ifndef RENDERER_VERTEX_LAYOUT_H
+#define RENDERER_VERTEX_LAYOUT_H
 #include <unordered_map>
 #include "base/Types.h"
 #include "base/String.h"
@@ -17,8 +17,8 @@ namespace te
     // stored in a chunk of memory
     struct VertexLayoutAttrib
     {
-        String  semanticName;
-        uint32       vbSlot;
+        String       semantic_name;
+        uint32       vb_slot;
         uint32       size; // number of component
         uint32       offset; // offset in bytes, for example, after a size 2 of float, offset will be 2 * (32 / 8) = 8
         //uint32       stride; // stride in bytes, for example, if two attributes XYZ and RGBA are stored together,
@@ -29,10 +29,10 @@ namespace te
 
     struct VertexLayoutPredefinition : public RenderResource
     {
-        std::unordered_map<vertex_layout::Type, VertexLayout> vertexLayoutMap;
+        std::unordered_map<vertex_layout::Type, VertexLayout> vertex_layout_map;
 
         void init();
-        const VertexLayout& getLayout(vertex_layout::Type vlType);
+        const VertexLayout& getLayout(vertex_layout::Type vl_type);
 
         VertexLayoutPredefinition() : RenderResource(OTHER) { init(); }
         VertexLayoutPredefinition(RenderResource::Type t) : RenderResource(t) { init(); }

@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDERMESHOBJECT_H
-#define RENDERER_RENDERMESHOBJECT_H
+#ifndef RENDERER_RENDER_MESH_OBJECT_H
+#define RENDERER_RENDER_MESH_OBJECT_H
 
 #include "renderer/resource/RenderObject.h"
 #include "renderer/resource/RenderResource.h"
@@ -47,7 +47,7 @@ namespace te
         vertex_layout::Type _layout_type;
 
         RenderResource*  _shader_object;
-        uint32  _numIndices; // temporary to put it here
+        uint32  _num_indices; // temporary to put it here
         Mat4x4 _model_mat;
         // TODO: consider move this to a GeometryObject? Shader belongs to Material, Material
         // belongs to Mesh, Geometry also belongs to Mesh

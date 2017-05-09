@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDERINTERFACE_H
-#define RENDERER_RENDERINTERFACE_H
+#ifndef RENDERER_RENDER_INTERFACE_H
+#define RENDERER_RENDER_INTERFACE_H
 
 #include "base/Types.h"
 #include "base/Singleton.hpp"

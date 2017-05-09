@@ -1,5 +1,5 @@
-#ifndef RENDERER_SHADEROBJECT_H
-#define RENDERER_SHADEROBJECT_H
+#ifndef RENDERER_SHADER_OBJECT_H
+#define RENDERER_SHADER_OBJECT_H
 #include <unordered_map>
 #include "base/Types.h"
 #include "base/String.h"

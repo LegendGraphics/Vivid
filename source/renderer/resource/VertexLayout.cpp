@@ -1,4 +1,4 @@
-#include "VertexLayout.h"
+#include "renderer/resource/VertexLayout.h"
 
 namespace te
 {
@@ -25,16 +25,16 @@ namespace te
     {
         // order of the vertex layout attribute
         // corresponding to the location in shader!
-        vertexLayoutMap[vertex_layout::Position] = {
+        vertex_layout_map[vertex_layout::Position] = {
             { "vertPos", 0, 3, 0 }
         };
 
-        vertexLayoutMap[vertex_layout::Overlay] = {
+        vertex_layout_map[vertex_layout::Overlay] = {
             { "vertPos", 0, 2, 0 },
             { "texCoords0", 0, 2, 8 }
         }; // Overlay is for Game GUI
 
-        vertexLayoutMap[vertex_layout::Model] = {
+        vertex_layout_map[vertex_layout::Model] = {
             { "vertPos", 0, 3, 0 },
             { "normal", 1, 3, 0 },
             { "tangent", 2, 4, 0 },
@@ -44,25 +44,25 @@ namespace te
             { "texCoords1", 3, 2, 40 }
         };
 
-        vertexLayoutMap[vertex_layout::Partical] = {
+        vertex_layout_map[vertex_layout::Partical] = {
             { "texCoords0", 0, 2, 0 },
             { "parIdx", 0, 1, 8 }
         };
 
-        vertexLayoutMap[vertex_layout::PNTB] = {
+        vertex_layout_map[vertex_layout::PNTB] = {
             { "vertPos", 0, 3, 0 },
             { "normal", 0, 3, 12 },
             { "tangent", 0, 3, 24 },
             { "bitangent", 0, 3, 36 }
         };
 
-        vertexLayoutMap[vertex_layout::PN] = {
+        vertex_layout_map[vertex_layout::PN] = {
             { "vertPos", 0, 3, 0 },
             { "normal", 0, 3, 12 }
         };
     }
-    const VertexLayout & VertexLayoutPredefinition::getLayout(vertex_layout::Type vlType)
+    const VertexLayout & VertexLayoutPredefinition::getLayout(vertex_layout::Type vl_type)
     {
-        return vertexLayoutMap[vlType];
+        return vertex_layout_map[vl_type];
     }
 }

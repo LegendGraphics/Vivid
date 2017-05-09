@@ -58,13 +58,13 @@ namespace te
                     break;
                 case PipelineCommandType::ClearTarget:
                     RenderContext::ClearCmdStream* ccs = new RenderContext::ClearCmdStream;
-                    ccs->clearColor = pc.paras[1].toBool() || pc.paras[2].toBool()
+                    ccs->clear_color = pc.paras[1].toBool() || pc.paras[2].toBool()
                         || pc.paras[3].toBool() || pc.paras[4].toBool();
-                    ccs->clearDepth = pc.paras[0].toBool();
-                    ccs->colorRGBA[0] = pc.paras[5].toFloat();
-                    ccs->colorRGBA[1] = pc.paras[6].toFloat();
-                    ccs->colorRGBA[2] = pc.paras[7].toFloat();
-                    ccs->colorRGBA[3] = pc.paras[8].toFloat();
+                    ccs->clear_depth = pc.paras[0].toBool();
+                    ccs->color_rgba[0] = pc.paras[5].toFloat();
+                    ccs->color_rgba[1] = pc.paras[6].toFloat();
+                    ccs->color_rgba[2] = pc.paras[7].toFloat();
+                    ccs->color_rgba[3] = pc.paras[8].toFloat();
                     ccs->depth = 1.f;
                     RenderContext::Command clear_target = { 0, (void*)ccs, RenderContext::CommandType::CLEAR };
                     render_context->commands().push_back(clear_target);

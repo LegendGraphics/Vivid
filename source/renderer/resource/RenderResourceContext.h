@@ -1,7 +1,7 @@
-#ifndef RENDERER_RENDERRESOURCECONTEXT_H
-#define RENDERER_RENDERRESOURCECONTEXT_H
+#ifndef RENDERER_RENDER_RESOURCE_CONTEXT_H
+#define RENDERER_RENDER_RESOURCE_CONTEXT_H
 
-#include "RenderResource.h"
+#include "renderer/resource/RenderResource.h"
 
 namespace te
 {

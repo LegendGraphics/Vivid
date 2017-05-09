@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDERRESOURCE_H
-#define RENDERER_RENDERRESOURCE_H
+#ifndef RENDERER_RENDER_RESOURCE_H
+#define RENDERER_RENDER_RESOURCE_H
 
 #include <vector>
 #include "base/Types.h"
