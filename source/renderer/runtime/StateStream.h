@@ -1,5 +1,5 @@
-#ifndef RENDERER_STATESTREAM_H
-#define RENDERER_STATESTREAM_H
+#ifndef RENDERER_STATE_STREAM_H
+#define RENDERER_STATE_STREAM_H
 
 #include "renderer/resource/RenderObject.h"
 #include "renderer/resource/RenderResource.h"
@@ -52,8 +52,8 @@ namespace te
     public:
         struct Data
         {
-            RenderMeshObject* rmo;
-            Mat4x4            model_mat;
+            RenderMeshObject*   rmo;
+            Matrix              model_mat;
         };
 
     public:

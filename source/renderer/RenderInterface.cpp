@@ -1,4 +1,4 @@
-#include "RenderInterface.h"
+#include "renderer/RenderInterface.h"
 
 #include "common/Mesh.h"
 #include "common/Camera.h"
@@ -22,13 +22,13 @@ namespace te
         // register render objects here
         render_object::register_objects();
 
+        // init render device
 #ifdef USE_GL
-        _renderDevice = new GLRenderDevice;
+        _render_device = new GLRenderDevice;
 #else
-        _renderDevice = nullptr;
+        _render_device = nullptr;
 #endif // USE_GL
-
-        if (!_renderDevice) return false;
+        if (!_render_device) return false;
 
         return true;
     }
@@ -37,14 +37,14 @@ namespace te
     {
         // init render device here
 
-        if (!_renderDevice->open()) return false;
+        if (!_render_device->open()) return false;
 
         return true;
     }
 
     void RenderInterface::release()
     {
-        delete _renderDevice; _renderDevice = nullptr;
+        delete _render_device; _render_device = nullptr;
         delete _camera; _camera = nullptr;
         _worlds.clear();
     }
@@ -69,16 +69,16 @@ namespace te
     void RenderInterface::renderWorld()
     {
         RenderWorld::RenderParams params;
-        params._device = _renderDevice;
-        params._pipeline = _pipeline.get();
-        params._camera = _camera;
+        params.device = _render_device;
+        params.pipeline = _pipeline.get();
+        params.camera = _camera;
         _worlds.getPtr(1)->render(_stream, params);
         releaseStateStream();
     }
 
     void RenderInterface::updateWorld()
     {
-        _worlds.getPtr(1)->update(_stream, _renderDevice);
+        _worlds.getPtr(1)->update(_stream, _render_device);
         releaseStateStream();
     }
 

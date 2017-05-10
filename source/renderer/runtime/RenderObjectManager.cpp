@@ -1,8 +1,8 @@
-#include "RenderObjectManager.h"
+#include "renderer/runtime/RenderObjectManager.h"
 
 #include "renderer/RenderWorld.h"
 #include "renderer/resource/RenderMeshObject.h"
-#include "RenderCamera.h"
+#include "renderer/runtime/RenderCamera.h"
 
 #include "common/ClassType.hpp"
 

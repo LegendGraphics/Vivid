@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDERCONTEXT_H
-#define RENDERER_RENDERCONTEXT_H
+#ifndef RENDERER_RENDER_CONTEXT_H
+#define RENDERER_RENDER_CONTEXT_H
 
 #include "base/Types.h"
 
@@ -31,36 +31,36 @@ namespace te
 
         struct IndexCmdStream
         {
-            uint32 bufHandle;
-            IndexFormat idxFormat;
+            uint32 buf_handle;
+            IndexFormat idx_format;
         };
 
         struct VertexCmdStream
         {
-            uint32 vaoHandle; // vao is used in OGL, probably not a very general design here?
-            uint32 baseIndex;
-            uint32 baseVertex;
-            uint32 numIndices;
+            uint32 vao_handle; // vao is used in OGL, probably not a very general design here?
+            uint32 base_index;
+            uint32 base_vertex;
+            uint32 num_indices;
         };
 
         struct ShaderCmdStream
         {
-            uint32 shaderHandle;
+            uint32 shader_handle;
             void*  data; // the data is hold by real entity, no need to be deleted here
             std::vector<ShaderVariable> variables;
         };
 
         struct RenderTargetCmdStream
         {
-            uint32 fboHandle;
+            uint32 fbo_handle;
         };
 
         struct ClearCmdStream
         {
-            float colorRGBA[4];
+            float color_rgba[4];
             float depth;
-            bool clearColor;
-            bool clearDepth;
+            bool clear_color;
+            bool clear_depth;
         };
 
         struct Command

@@ -1,4 +1,4 @@
-#include "RenderMeshObject.h"
+#include "renderer/resource/RenderMeshObject.h"
 
 #include "renderer/device/RenderContext.h"
 #include "renderer/device/RenderDevice.h"
@@ -24,7 +24,7 @@ namespace te
         _index_array = &mesh->getTriangles();
         _vertex_array = &mesh->getVertices();
         _layout_type = mesh->getLayoutType();
-        _numIndices = (*_index_array).size();
+        _num_indices = (*_index_array).size();
     }
 
     RenderMeshObject::~RenderMeshObject()
@@ -42,10 +42,10 @@ namespace te
 
         // set vertex buffer
         RenderContext::VertexCmdStream* vcs = new RenderContext::VertexCmdStream;
-        vcs->vaoHandle = _vao;
-        vcs->baseIndex = 0;
-        vcs->baseVertex = 0;
-        vcs->numIndices = _numIndices;
+        vcs->vao_handle = _vao;
+        vcs->base_index = 0;
+        vcs->base_vertex = 0;
+        vcs->num_indices = _num_indices;
         RenderContext::Command setVertexBuffer = { 0, (void*)vcs, RenderContext::CommandType::UPDATE_VERTEX_BUFFER };
         context->commands().push_back(setVertexBuffer);
 
@@ -82,7 +82,7 @@ namespace te
         if (useDebug)
         {
             RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
-            scs->shaderHandle = 0xFFFFFFFF; // use it to indicate the default shader in device
+            scs->shader_handle = 0xFFFFFFFF; // use it to indicate the default shader in device
 
             ShaderVariable model_mat_var;
             model_mat_var.klass = shader_data::MATRIX4X4;
@@ -102,7 +102,7 @@ namespace te
         else
         {
             RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
-            scs->shaderHandle = _shader_object->render_resource_handle;
+            scs->shader_handle = _shader_object->render_resource_handle;
             // set data
             // set variable
             RenderContext::Command setShaderObject = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };

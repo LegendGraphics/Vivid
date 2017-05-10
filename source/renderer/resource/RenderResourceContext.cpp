@@ -1,4 +1,4 @@
-#include "RenderResourceContext.h"
+#include "renderer/resource/RenderResourceContext.h"
 
 namespace te
 {

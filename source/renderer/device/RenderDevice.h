@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDERDEVICE_H
-#define RENDERER_RENDERDEVICE_H
+#ifndef RENDERER_RENDER_DEVICE_H
+#define RENDERER_RENDER_DEVICE_H
 
 #include "base/Types.h"
 #include "base/Assert.h"
@@ -20,10 +20,10 @@ namespace te
     public:
         uint32 add(const T& obj)
         {
-            if (!_freeList.empty())
+            if (!_free_list.empty())
             {
-                uint32 index = _freeList.back();
-                _freeList.pop_back();
+                uint32 index = _free_list.back();
+                _free_list.pop_back();
                 _objects[index] = obj;
                 return index + 1; // object handle Id starts from 1
             }
@@ -39,7 +39,7 @@ namespace te
            // ASSERT(handle > 0 && handle <= _objects.size(), "Invalid handle!");
 
             _objects[handle - 1] = T(); // replace with default object
-            _freeList.push_back(handle - 1);
+            _free_list.push_back(handle - 1);
         }
 
         T& getRef(uint32 handle)
@@ -53,7 +53,7 @@ namespace te
 
     private:
         std::vector<T>      _objects;
-        std::vector<uint32> _freeList;
+        std::vector<uint32> _free_list;
     };
 
     class RenderDevice
@@ -71,8 +71,8 @@ namespace te
         virtual void releaseResourceContext(RenderResourceContext* context);
         // RenderDevice will be called in the render thread loop and dispatch the 
         // commands to RenderContext, RenderContext will call actual Graphic API
-        virtual void dispatch(RenderContext* context_) = 0;
-        virtual void dispatch(RenderResourceContext* context_) = 0;
+        virtual void dispatch(RenderContext* context) = 0;
+        virtual void dispatch(RenderResourceContext* context) = 0;
 
         VertexLayoutPredefinition* getVertexDeclarationDefinition(); // initialize vertex declaration for this device
 

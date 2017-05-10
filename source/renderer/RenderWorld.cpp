@@ -10,7 +10,7 @@
 
 namespace te
 {
-    void RenderWorld::renderKernel(StateStream& stream, RenderParams& params, RenderContext* rContext)
+    void RenderWorld::renderKernel(StateStream& stream, RenderParams& params, RenderContext* render_context)
     {
         // culling, prepare RenderQueue
 
@@ -22,7 +22,7 @@ namespace te
             {
                 Handle* handle = msg->getHandle();
                 RenderObject* ro = _objects.getPtr((*handle));
-                msg->process(ro, rContext, nullptr);
+                msg->process(ro, render_context, nullptr);
             }
         }
     }
@@ -39,11 +39,11 @@ namespace te
 
     void RenderWorld::render(StateStream& stream, RenderParams& params)
     {
-        RenderContext* renderContext = (params._device->newContext());
-        renderContext->_camera = params._camera;
+        RenderContext* render_context = (params.device->newContext());
+        render_context->_camera = params.camera;
 
         // process pipeline config here
-        for (PipelineStage& stage : params._pipeline->getStages())
+        for (PipelineStage& stage : params.pipeline->getStages())
         {
             for (PipelineCommand& pc : stage.commands)
             {
@@ -54,28 +54,28 @@ namespace te
                 case PipelineCommandType::DrawGeometry:
                     // generate render job package (commands) into RenderContext
                     // separate this from real job will benefit for multi-thread
-                    renderKernel(stream, params, renderContext);
+                    renderKernel(stream, params, render_context);
                     break;
                 case PipelineCommandType::ClearTarget:
                     RenderContext::ClearCmdStream* ccs = new RenderContext::ClearCmdStream;
-                    ccs->clearColor = pc.paras[1].toBool() || pc.paras[2].toBool()
+                    ccs->clear_color = pc.paras[1].toBool() || pc.paras[2].toBool()
                         || pc.paras[3].toBool() || pc.paras[4].toBool();
-                    ccs->clearDepth = pc.paras[0].toBool();
-                    ccs->colorRGBA[0] = pc.paras[5].toFloat();
-                    ccs->colorRGBA[1] = pc.paras[6].toFloat();
-                    ccs->colorRGBA[2] = pc.paras[7].toFloat();
-                    ccs->colorRGBA[3] = pc.paras[8].toFloat();
+                    ccs->clear_depth = pc.paras[0].toBool();
+                    ccs->color_rgba[0] = pc.paras[5].toFloat();
+                    ccs->color_rgba[1] = pc.paras[6].toFloat();
+                    ccs->color_rgba[2] = pc.paras[7].toFloat();
+                    ccs->color_rgba[3] = pc.paras[8].toFloat();
                     ccs->depth = 1.f;
-                    RenderContext::Command clearTarget = { 0, (void*)ccs, RenderContext::CommandType::CLEAR };
-                    renderContext->commands().push_back(clearTarget);
+                    RenderContext::Command clear_target = { 0, (void*)ccs, RenderContext::CommandType::CLEAR };
+                    render_context->commands().push_back(clear_target);
                     break;
                 }
             }
         }
 
         // send render job package to RenderDevice for real work
-        params._device->dispatch(renderContext);
-        params._device->releaseContext(renderContext);
+        params.device->dispatch(render_context);
+        params.device->releaseContext(render_context);
     }
 
     void RenderWorld::update(StateStream& stream, RenderDevice* device)
