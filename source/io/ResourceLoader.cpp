@@ -1,4 +1,8 @@
 #include "io/ResourceLoader.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
+
 #include "io/Logger.h"
 #include "io/FileUtils.h"
 #include "common/Mesh.h"
@@ -6,6 +10,7 @@
 #include "common/Node.h"
 #include "common/SpaceState.h"
 #include "common/MeshFilter.h"
+#include "common/Texture.h"
 
 namespace te
 {
@@ -385,6 +390,22 @@ namespace te
         }
 
         return "";
+    }
+
+    // using stb_image loader
+    bool ResourceLoader::load(Texture* texture, const String& res)
+    {
+        int x,y,n;
+        unsigned char *data = stbi_load(res.c_str(), &x, &y, &n, 0);
+
+        if (data == nullptr) return false;
+
+        texture->setData(data);
+        texture->setWidth(x);
+        texture->setHeight(y);
+        texture->setDepth(n);
+
+        return true;
     }
 
 }
