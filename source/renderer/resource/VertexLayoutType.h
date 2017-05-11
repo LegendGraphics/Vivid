@@ -9,6 +9,7 @@ namespace te
             Position,
             PN,
             PNTB,
+            PNTB_TEX,
             PNTB_SKINNED,
             Overlay, // Position with Texture Coordinate
             Model,

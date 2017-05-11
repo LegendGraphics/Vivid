@@ -250,6 +250,11 @@ namespace te
 
                 delete vd_stream;
             }
+            else if (RenderResourceContext::MessageType::ALLOC_TEXTURE == msg.type)
+            {
+
+                //GPUResourceHandle res = createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool has_mips)
+            }
         }
 
         context->messages().clear();

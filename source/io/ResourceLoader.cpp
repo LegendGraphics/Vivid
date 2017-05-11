@@ -11,6 +11,7 @@
 #include "common/SpaceState.h"
 #include "common/MeshFilter.h"
 #include "common/Texture.h"
+#include "common/Material.h"
 
 namespace te
 {
@@ -198,60 +199,60 @@ namespace te
 
     bool ResourceLoader::load(Pipeline* pipeline, const String& res)
     {
-            char *data = nullptr;
-            int size = 0;
+        char *data = nullptr;
+        int size = 0;
 
-            FileUtils::streamFromBinaryFile(res, data, size);
+        FileUtils::streamFromBinaryFile(res, data, size);
 
-            XMLDoc doc;
-            doc.parseBuffer(data, size);
-            if (doc.hasError())
+        XMLDoc doc;
+        doc.parseBuffer(data, size);
+        if (doc.hasError())
+        {
+            cLog << "XML parsing error";
+            return false;
+        }
+
+        XMLNode rootNode = doc.getRootNode();
+        if (strcmp(rootNode.getName(), "Pipeline") != 0)
+        {
+            cLog << "Not a pipeline resource file";
+            return false;
+        }
+
+        // Parse setup
+        XMLNode node1 = rootNode.getFirstChild("Setup");
+        if (!node1.isEmpty())
+        {
+            XMLNode node2 = node1.getFirstChild("RenderTarget");
+            while (!node2.isEmpty())
             {
-                cLog << "XML parsing error";
-                return false;
+                // TODO: about render target
+                node2 = node2.getNextSibling("RenderTarget");
             }
+        }
 
-            XMLNode rootNode = doc.getRootNode();
-            if (strcmp(rootNode.getName(), "Pipeline") != 0)
-            {
-                cLog << "Not a pipeline resource file";
-                return false;
-            }
+        // Parse commands
+        node1 = rootNode.getFirstChild("CommandQueue");
+        if (!node1.isEmpty())
+        {
+            pipeline->getStages().reserve(node1.countChildNodes("Stage"));
 
-            // Parse setup
-            XMLNode node1 = rootNode.getFirstChild("Setup");
-            if (!node1.isEmpty())
+            XMLNode node2 = node1.getFirstChild("Stage");
+            while (!node2.isEmpty())
             {
-                XMLNode node2 = node1.getFirstChild("RenderTarget");
-                while (!node2.isEmpty())
+                pipeline->getStages().push_back(PipelineStage());
+                String errorMsg = ResourceLoader::parseStage(node2, &pipeline->getStages().back());
+                if (errorMsg != "")
                 {
-                    // TODO: about render target
-                    node2 = node2.getNextSibling("RenderTarget");
+                    cLog << StringUtils::format("Error in stage %s: %s", pipeline->getStages().back().id, errorMsg);
+                    return false;
                 }
+
+                node2 = node2.getNextSibling("Stage");
             }
+        }
 
-            // Parse commands
-            node1 = rootNode.getFirstChild("CommandQueue");
-            if (!node1.isEmpty())
-            {
-                pipeline->getStages().reserve(node1.countChildNodes("Stage"));
-
-                XMLNode node2 = node1.getFirstChild("Stage");
-                while (!node2.isEmpty())
-                {
-                    pipeline->getStages().push_back(PipelineStage());
-                    String errorMsg = ResourceLoader::parseStage(node2, &pipeline->getStages().back());
-                    if (errorMsg != "")
-                    {
-                        cLog << StringUtils::format("Error in stage %s: %s", pipeline->getStages().back().id, errorMsg);
-                        return false;
-                    }
-
-                    node2 = node2.getNextSibling("Stage");
-                }
-            }
-
-            return true;
+        return true;
     }
 
 
@@ -405,6 +406,129 @@ namespace te
         texture->setHeight(y);
         texture->setDepth(n);
 
+        return true;
+    }
+
+
+    bool ResourceLoader::load(Material* material, const String& res)
+    {
+        char *data = nullptr;
+        int size = 0;
+
+        FileUtils::streamFromBinaryFile(res, data, size);
+
+        XMLDoc doc;
+        doc.parseBuffer(data, size);
+        if (doc.hasError())
+        {
+            cLog << "XML parsing error";
+            return false;
+        }
+
+        XMLNode rootNode = doc.getRootNode();
+        if (strcmp(rootNode.getName(), "Material") != 0)
+        {
+            cLog << "Not a material resource file";
+            return false;
+        }
+
+        //// Shader Flags
+        //XMLNode node1 = rootNode.getFirstChild("ShaderFlag");
+        //while (!node1.isEmpty())
+        //{
+        //    if (node1.getAttribute("name") == 0x0) return raiseError("Missing ShaderFlag attribute 'name'");
+
+        //    _shaderFlags.push_back(node1.getAttribute("name"));
+
+        //    node1 = node1.getNextSibling("ShaderFlag");
+        //}
+
+        // Shader
+        XMLNode node1 = rootNode.getFirstChild("Shader");
+        if (!node1.isEmpty())
+        {
+            if (node1.getAttribute("source") == 0x0)
+            {
+                cLog << "Missing Shader attribute 'source'";
+                return false;
+            }
+
+            /*uint32 shader = Modules::resMan().addResource(
+                ResourceTypes::Shader, node1.getAttribute("source"), 0, false);
+            _shaderRes = (ShaderResource *)Modules::resMan().resolveResHandle(shader);
+
+            _combMask = ShaderResource::calcCombMask(_shaderFlags);
+            _shaderRes->preLoadCombination(_combMask);*/
+        }
+
+        // Texture samplers
+        node1 = rootNode.getFirstChild("Sampler");
+        while (!node1.isEmpty())
+        {
+            if (node1.getAttribute("name") == 0x0)
+            {
+                cLog << "Missing Sampler attribute 'name'";
+                return false;
+            }
+            if (node1.getAttribute("map") == 0x0)
+            {
+                cLog << "Missing Sampler attribute 'map'";
+                return false;
+            }
+
+            /*MatSampler sampler;
+            sampler.name = node1.getAttribute("name");
+
+            ResHandle texMap;
+            uint32 flags = 0;
+            if (!Modules::config().loadTextures) flags |= ResourceFlags::NoQuery;
+
+            if (_stricmp(node1.getAttribute("allowCompression", "true"), "false") == 0 ||
+                _stricmp(node1.getAttribute("allowCompression", "1"), "0") == 0)
+                flags |= ResourceFlags::NoTexCompression;
+
+            if (_stricmp(node1.getAttribute("mipmaps", "true"), "false") == 0 ||
+                _stricmp(node1.getAttribute("mipmaps", "1"), "0") == 0)
+                flags |= ResourceFlags::NoTexMipmaps;
+
+            if (_stricmp(node1.getAttribute("sRGB", "false"), "true") == 0 ||
+                _stricmp(node1.getAttribute("sRGB", "0"), "1") == 0)
+                flags |= ResourceFlags::TexSRGB;
+
+            texMap = Modules::resMan().addResource(
+                ResourceTypes::Texture, node1.getAttribute("map"), flags, false);
+
+            sampler.texRes = (TextureResource *)Modules::resMan().resolveResHandle(texMap);
+
+            _samplers.push_back(sampler);*/
+
+            node1 = node1.getNextSibling("Sampler");
+        }
+
+        //// Vector uniforms
+        //node1 = rootNode.getFirstChild("Uniform");
+        //while (!node1.isEmpty())
+        //{
+        //    if (node1.getAttribute("name") == 0x0) return raiseError("Missing Uniform attribute 'name'");
+
+        //    MatUniform uniform;
+        //    uniform.name = node1.getAttribute("name");
+
+        //    uniform.values[0] = (float)atof(node1.getAttribute("a", "0"));
+        //    uniform.values[1] = (float)atof(node1.getAttribute("b", "0"));
+        //    uniform.values[2] = (float)atof(node1.getAttribute("c", "0"));
+        //    uniform.values[3] = (float)atof(node1.getAttribute("d", "0"));
+
+        //    _uniforms.push_back(uniform);
+
+        //    node1 = node1.getNextSibling("Uniform");
+        //}
+
+        return true;
+    }
+
+    bool ResourceLoader::load(Shader* shader, const String& res)
+    {
         return true;
     }
 

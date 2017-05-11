@@ -17,6 +17,8 @@ namespace te
 
 // I use a top-down method of using polymorphism + virtual function tricks to code the run-time status of the different vertex type.
 // Another way to do so is a bottom-up method by encapsulating VertexBuffer from memory structure to upper layer structure.
+// Which one is better? Of course not this one....
+
     enum class VertexAttribute
     {
         VERTEX_POSITION,
@@ -47,6 +49,17 @@ namespace te
         Vector3 bitangent;
     };
 
+    struct Vertex_PNTB_TEX
+    {
+        using TexArray = Vector2[4];
+
+        Vector3 position;
+        Vector3 normal;
+        Vector3 tangent;
+        Vector3 bitangent;
+        TexArray tex;
+    };
+
     // no animation temporarily
     struct Vertex_PNTB_Skinned
     {
@@ -64,6 +77,7 @@ namespace te
     using Vertex_P_Array = std::vector<Vertex_P>;
     using Vertex_PN_Array = std::vector<Vertex_PN>;
     using Vertex_PNTB_Array = std::vector<Vertex_PNTB>;
+    using Vertex_PNTB_TEX_Array = std::vector<Vertex_PNTB_TEX>;
     using Vertex_PNTB_Skinned_Array = std::vector<Vertex_PNTB_Skinned>;
 
     struct VertexArray
@@ -73,6 +87,7 @@ namespace te
         class P_Array;
         class PN_Array;
         class PNTB_Array;
+        class PNTB_TEX_Array;
         class PNTB_Skinned_Array;
 
 
@@ -94,6 +109,7 @@ namespace te
             virtual Vector3& normal(size_t index, void*& array) { assert("No Normal Attribute!" && false); return Vector3(); }
             virtual Vector3& tangent(size_t index, void*& array) { assert("No tangent Attribute!" && false); return Vector3(); }
             virtual Vector3& bitangent(size_t index, void*& array) { assert("No bitangent Attribute!" && false); return Vector3(); }
+            virtual Vector2& tex(size_t index, size_t tex_index, void*& array) { assert("No texture Attribute!" && false); return Vector2(); }
         };
 
         class P_Array : public ArrayType
@@ -136,6 +152,23 @@ namespace te
             virtual Vector3& bitangent(size_t index, void*& array) { return (*((Vertex_PNTB_Array*)(array)))[index].bitangent; }
         };
 
+        class PNTB_TEX_Array : public ArrayType
+        {
+        public:
+            PNTB_TEX_Array() {}
+            virtual ~PNTB_TEX_Array() {}
+
+            virtual void initialize(size_t size, void*& array) { array = new Vertex_PNTB_TEX_Array(size); }
+            virtual void* buffer(void*& array) { return &(*((Vertex_PNTB_TEX_Array*)(array)))[0].position.x; }
+            virtual size_t sizeInBytes(size_t size, void*& array) { return sizeof(Vertex_PNTB_TEX_Array) * size; }
+            virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_PNTB_TEX_Array*)(array)))[index].position; }
+            virtual Vector3& normal(size_t index, void*& array) { return (*((Vertex_PNTB_TEX_Array*)(array)))[index].normal; }
+            virtual Vector3& tangent(size_t index, void*& array) { return (*((Vertex_PNTB_TEX_Array*)(array)))[index].tangent; }
+            virtual Vector3& bitangent(size_t index, void*& array) { return (*((Vertex_PNTB_TEX_Array*)(array)))[index].bitangent; }
+            virtual Vector2& tex(size_t index, size_t tex_index, void*& array) { return (*((Vertex_PNTB_TEX_Array*)(array)))[index].tex[tex_index]; }
+
+        };
+
         class PNTB_Skinned_Array : public ArrayType
         {
         public:
@@ -174,6 +207,9 @@ namespace te
                 break;
             case vertex_layout::PNTB:
                 _type = new PNTB_Array;
+                break;
+            case vertex_layout::PNTB_TEX:
+                _type = new PNTB_TEX_Array;
                 break;
             case vertex_layout::PNTB_SKINNED:
                 _type = new PNTB_Skinned_Array;
@@ -220,6 +256,11 @@ namespace te
         Vector3& bitangent(size_t index)
         {
             return _type->bitangent(index, _vertex_buffer);
+        }
+
+        Vector2& tex(size_t index, size_t tex_index)
+        {
+            return _type->tex(index, tex_index, _vertex_buffer);
         }
     };
 

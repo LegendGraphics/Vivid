@@ -5,7 +5,7 @@
 #include "base/Assert.h"
 
 #include "renderer/resource/ShaderObject.h"
-#include "renderer/Resource/Texture.h"
+#include "renderer/Resource/RenderTexture.h"
 #include "renderer/Resource/VertexLayout.h"
 
 namespace te

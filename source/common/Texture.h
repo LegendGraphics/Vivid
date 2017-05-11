@@ -32,6 +32,20 @@ namespace te
         uint8*      _img;
 
     };
+
+    using TexturePtr = RefPtr<Texture>;
+
+    class TextureManager : public ResourceManager
+    {
+    public:
+        TextureManager();
+        ~TextureManager();
+
+        ResourceHandle create(const String& res);
+
+        TexturePtr   getTexture(ResourceHandle handle);
+        TexturePtr   getTexture(const String& res);
+    };
 }
 
 #endif // COMMON_TEXTURE_H

@@ -11,6 +11,8 @@ namespace te
     class Pipeline;
     struct PipelineStage;
     class Texture;
+    class Material;
+    class Shader;
 
     class ResourceLoader
     {
@@ -19,6 +21,8 @@ namespace te
         static bool load(Pipeline* pipeline, const String& res);
         static bool load(MetaNode* meta_node, const String& res);
         static bool load(Texture* texture, const String& res);
+        static bool load(Material* material, const String& res);
+        static bool load(Shader* shader, const String& res);
 
     // private function used by loader itself
     public:
