@@ -301,7 +301,7 @@ struct DaeGeometry
     std::vector< DaeSource >    sources;
     std::vector< DaeVSource >   vsources;
     std::vector< DaeTriGroup >  triGroups;
-    unsigned int                vertexType; // 0 == Position, 1 == PN
+    unsigned int                vertexType; // 0 == Position, 1 == PN, 2 == PN_TEX1
 
 
     DaeSource *findSource( const std::string &id )
@@ -407,9 +407,15 @@ struct DaeGeometry
                         log("Warning: Mesh '" + id + "' has no normal coordinates and is ignored");
                         vertexType = 0;
                     }
+
+                    if (triGroup.texSource[0] == 0x0)
+                    {
+                        log("Warning: Mesh '" + id + "' has no texture 1 coordinates and is ignored");
+                        vertexType = 1;
+                    }
                     else
                     {
-                        vertexType = 1;
+                        vertexType = 2;
                     }
                 }
                 else triGroups.pop_back();

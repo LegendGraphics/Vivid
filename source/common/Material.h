@@ -3,9 +3,13 @@
 
 #include "common/Resource.h"
 
-
 namespace te
 {
+    struct MaterialSampler
+    {
+        ResourceHandle  texture;
+        String          tag;
+    };
 
     class Material : public Resource
     {
@@ -19,7 +23,9 @@ namespace te
         void unload();
 
         // shader, texture...
-
+    protected:
+        ResourceHandle                  _shader;
+        std::vector<MaterialSampler>    _samplers;
     };
 
     using MaterialPtr = RefPtr<Material>;

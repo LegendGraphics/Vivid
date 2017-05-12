@@ -1,12 +1,11 @@
-#ifndef COMMON_Shader_H
-#define COMMON_Shader_H
+#ifndef COMMON_SHADER_H
+#define COMMON_SHADER_H
 
 #include "common/Resource.h"
 
-
 namespace te
 {
-
+    // using glsl shader
     class Shader : public Resource
     {
     public:
@@ -18,7 +17,8 @@ namespace te
         bool load(const String & res);
         void unload();
 
-        // shader, texture...
+    protected:
+        String      _shader_context;
 
     };
 
@@ -37,4 +37,4 @@ namespace te
     };
 }
 
-#endif // COMMON_Shader_H
+#endif // COMMON_SHADER_H

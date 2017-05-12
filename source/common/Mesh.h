@@ -51,7 +51,7 @@ namespace te
 
     struct Vertex_PNTB_TEX
     {
-        using TexArray = Vector2[4];
+        using TexArray = Vector2[2];
 
         Vector3 position;
         Vector3 normal;

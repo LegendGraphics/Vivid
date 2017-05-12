@@ -8,8 +8,8 @@ namespace te
         enum Type {
             Position,
             PN,
-            PNTB,
             PNTB_TEX,
+            PNTB,
             PNTB_SKINNED,
             Overlay, // Position with Texture Coordinate
             Model,

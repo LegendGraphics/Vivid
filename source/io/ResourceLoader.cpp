@@ -12,6 +12,7 @@
 #include "common/MeshFilter.h"
 #include "common/Texture.h"
 #include "common/Material.h"
+#include "common/Shader.h"
 
 namespace te
 {
@@ -84,32 +85,57 @@ namespace te
                         memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).z = sh / 32767.0f;
                     }
                     break;
-                case 2:		// Tangent
-                    if (elem_size != 6)
+                //case 2:		// Tangent
+                //    if (elem_size != 6)
+                //    {
+                //        errormsg = "Invalid tangent base stream";
+                //        break;
+                //    }
+                //    for (int j = 0; j < vertex_num; ++j)
+                //    {
+                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).x = sh / 32767.0f;
+                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).y = sh / 32767.0f;
+                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).z = sh / 32767.0f;
+                //    }
+                //    break;
+                //case 3:		// Bitangent
+                //    if (elem_size != 6)
+                //    {
+                //        errormsg = "Invalid bitangent base stream";
+                //        break;
+                //    }
+                //    for (int j = 0; j < vertex_num; ++j)
+                //    {
+                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).x = sh / 32767.0f;
+                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).y = sh / 32767.0f;
+                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).z = sh / 32767.0f;
+                //    }
+                //    break;
+                case 2:		// Texture1
+                    if (elem_size != 8)
                     {
-                        errormsg = "Invalid tangent base stream";
+                        errormsg = "Invalid texture 1 base stream";
                         break;
                     }
                     for (int j = 0; j < vertex_num; ++j)
                     {
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).x = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).y = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).z = sh / 32767.0f;
+                        memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                        memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                     }
                     break;
-                case 3:		// Bitangent
-                    if (elem_size != 6)
-                    {
-                        errormsg = "Invalid bitangent base stream";
-                        break;
-                    }
-                    for (int j = 0; j < vertex_num; ++j)
-                    {
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).x = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).y = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).z = sh / 32767.0f;
-                    }
-                    break;
+                //case 5:		// Texture2
+                //    if (elem_size != 8)
+                //    {
+                //        errormsg = "Invalid texture 2 base stream";
+                //        break;
+                //    }
+                //    for (int j = 0; j < vertex_num; ++j)
+                //    {
+                //        memcpy(&sh, data_ptr, sizeof(float)); data_ptr += sizeof(float); mesh->_vertices.tex(j, 1).x = sh;
+                //        memcpy(&sh, data_ptr, sizeof(float)); data_ptr += sizeof(float); mesh->_vertices.tex(j, 1).y = sh;
+                //    }
+                //    break;
+
                 default:
                     data_ptr += elem_size * vertex_num;
                     continue;
@@ -432,17 +458,6 @@ namespace te
             return false;
         }
 
-        //// Shader Flags
-        //XMLNode node1 = rootNode.getFirstChild("ShaderFlag");
-        //while (!node1.isEmpty())
-        //{
-        //    if (node1.getAttribute("name") == 0x0) return raiseError("Missing ShaderFlag attribute 'name'");
-
-        //    _shaderFlags.push_back(node1.getAttribute("name"));
-
-        //    node1 = node1.getNextSibling("ShaderFlag");
-        //}
-
         // Shader
         XMLNode node1 = rootNode.getFirstChild("Shader");
         if (!node1.isEmpty())
@@ -453,12 +468,7 @@ namespace te
                 return false;
             }
 
-            /*uint32 shader = Modules::resMan().addResource(
-                ResourceTypes::Shader, node1.getAttribute("source"), 0, false);
-            _shaderRes = (ShaderResource *)Modules::resMan().resolveResHandle(shader);
-
-            _combMask = ShaderResource::calcCombMask(_shaderFlags);
-            _shaderRes->preLoadCombination(_combMask);*/
+            material->_shader = ResourceMapper::getInstance()->get<ShaderManager>()->create(node1.getAttribute("source"));
         }
 
         // Texture samplers
@@ -476,59 +486,27 @@ namespace te
                 return false;
             }
 
-            /*MatSampler sampler;
-            sampler.name = node1.getAttribute("name");
-
-            ResHandle texMap;
-            uint32 flags = 0;
-            if (!Modules::config().loadTextures) flags |= ResourceFlags::NoQuery;
-
-            if (_stricmp(node1.getAttribute("allowCompression", "true"), "false") == 0 ||
-                _stricmp(node1.getAttribute("allowCompression", "1"), "0") == 0)
-                flags |= ResourceFlags::NoTexCompression;
-
-            if (_stricmp(node1.getAttribute("mipmaps", "true"), "false") == 0 ||
-                _stricmp(node1.getAttribute("mipmaps", "1"), "0") == 0)
-                flags |= ResourceFlags::NoTexMipmaps;
-
-            if (_stricmp(node1.getAttribute("sRGB", "false"), "true") == 0 ||
-                _stricmp(node1.getAttribute("sRGB", "0"), "1") == 0)
-                flags |= ResourceFlags::TexSRGB;
-
-            texMap = Modules::resMan().addResource(
-                ResourceTypes::Texture, node1.getAttribute("map"), flags, false);
-
-            sampler.texRes = (TextureResource *)Modules::resMan().resolveResHandle(texMap);
-
-            _samplers.push_back(sampler);*/
+            MaterialSampler sampler;
+            sampler.tag = node1.getAttribute("name");
+            sampler.texture = ResourceMapper::getInstance()->get<TextureManager>()->create(node1.getAttribute("map"));
+            material->_samplers.push_back(sampler);
 
             node1 = node1.getNextSibling("Sampler");
         }
 
-        //// Vector uniforms
-        //node1 = rootNode.getFirstChild("Uniform");
-        //while (!node1.isEmpty())
-        //{
-        //    if (node1.getAttribute("name") == 0x0) return raiseError("Missing Uniform attribute 'name'");
-
-        //    MatUniform uniform;
-        //    uniform.name = node1.getAttribute("name");
-
-        //    uniform.values[0] = (float)atof(node1.getAttribute("a", "0"));
-        //    uniform.values[1] = (float)atof(node1.getAttribute("b", "0"));
-        //    uniform.values[2] = (float)atof(node1.getAttribute("c", "0"));
-        //    uniform.values[3] = (float)atof(node1.getAttribute("d", "0"));
-
-        //    _uniforms.push_back(uniform);
-
-        //    node1 = node1.getNextSibling("Uniform");
-        //}
-
         return true;
     }
 
+
+    // no parsing now
     bool ResourceLoader::load(Shader* shader, const String& res)
     {
+        char *data = nullptr;
+        int size = 0;
+        FileUtils::streamFromBinaryFile(res, data, size);
+        if (data == nullptr) return false;
+
+        shader->_shader_context = String(data);
         return true;
     }
 

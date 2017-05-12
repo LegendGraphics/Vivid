@@ -484,13 +484,19 @@ bool Converter::writeMesh( const string &assetPath, const string &assetName )
     fwrite(&vertex_type, sizeof(int), 1, f);
 
     // vertex type with different number of attributes
-    switch (vertex_type) // 0 == position, 1 == position and normal
+    // 0 == position, 
+    // 1 == position and normal, 
+    // 2 == position, normal and texture1
+    switch (vertex_type) 
     {
     case 0:
         count = 1;
         break;
     case 1:
         count = 2;
+        break;
+    case 2:
+        count = 3;
         break;
     default:
         break;
@@ -528,26 +534,36 @@ bool Converter::writeMesh( const string &assetPath, const string &assetName )
                 sh = (short)(_vertices[j].normal.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
             }
             break;
-        case 2:		// Tangent
-            fwrite( &i, sizeof( int ), 1, f );
-            streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < vert_count; ++j )
+        case 2:		// Texture1
+            fwrite(&i, sizeof(int), 1, f);
+            streamElemSize = 2 * sizeof(float); fwrite(&streamElemSize, sizeof(int), 1, f);
+            for (unsigned int j = 0; j < vert_count; ++j)
             {
-                sh = (short)(_vertices[j].tangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
-                sh = (short)(_vertices[j].tangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
-                sh = (short)(_vertices[j].tangent.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
+                fwrite(&_vertices[j].texCoords[0].x, sizeof(float), 1, f);
+                fwrite(&_vertices[j].texCoords[0].y, sizeof(float), 1, f);
+               // fwrite(&_vertices[j].texCoords[0].z, sizeof(float), 1, f);
             }
             break;
-        case 3:		// Bitangent
-            fwrite( &i, sizeof( int ), 1, f );
-            streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < vert_count; ++j )
-            {
-                sh = (short)(_vertices[j].bitangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
-                sh = (short)(_vertices[j].bitangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
-                sh = (short)(_vertices[j].bitangent.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
-            }
-            break;
+        //case 2:		// Tangent
+        //    fwrite( &i, sizeof( int ), 1, f );
+        //    streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
+        //    for( unsigned int j = 0; j < vert_count; ++j )
+        //    {
+        //        sh = (short)(_vertices[j].tangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
+        //        sh = (short)(_vertices[j].tangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
+        //        sh = (short)(_vertices[j].tangent.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
+        //    }
+        //    break;
+        //case 3:		// Bitangent
+        //    fwrite( &i, sizeof( int ), 1, f );
+        //    streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
+        //    for( unsigned int j = 0; j < vert_count; ++j )
+        //    {
+        //        sh = (short)(_vertices[j].bitangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
+        //        sh = (short)(_vertices[j].bitangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
+        //        sh = (short)(_vertices[j].bitangent.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
+        //    }
+        //    break;
         }
     }
 
