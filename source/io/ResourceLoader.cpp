@@ -9,7 +9,7 @@
 #include "common/Pipeline.h"
 #include "common/Node.h"
 #include "common/SpaceState.h"
-#include "common/MeshFilter.h"
+#include "common/MeshRender.h"
 #include "common/Texture.h"
 #include "common/Material.h"
 #include "common/Shader.h"
@@ -212,7 +212,7 @@ namespace te
                 XMLNode file_node = node1.getFirstChild("FileName");
                 String file_name = file_node.getAttribute("name");
 
-                MeshFilter* mesh_filter = new MeshFilter(repo_path + file_name);
+                MeshRender* mesh_filter = new MeshRender(repo_path + file_name);
                 meta_node->components.push_back(mesh_filter);
             }
 

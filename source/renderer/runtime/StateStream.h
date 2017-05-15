@@ -11,6 +11,7 @@ namespace te
     class RenderContext;
     class RenderResourceContext;
 
+    // intermediate stream data between engine and renderer
     class StreamMsg
     {
     public:
@@ -45,6 +46,26 @@ namespace te
     };
 
     using StateStream = std::vector<StreamMsg*>;
+
+    // camera data stream
+    class CameraStreamMsg : public StreamMsg
+    {
+    public:
+        struct Data
+        {
+            RenderCamera*   _camera;
+
+        };
+    public:
+        virtual ~CameraStreamMsg();
+
+    protected:
+        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void render(RenderObject*& render_object, RenderContext* rc);
+
+    };
+
 
     // test a mesh stream msg
     class MeshStreamMsg : public StreamMsg

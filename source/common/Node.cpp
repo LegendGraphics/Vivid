@@ -4,7 +4,7 @@
 #include "common/Node.h"
 #include "common/NodeVisitor.h"
 #include "common/SpaceState.h"
-#include "common/MeshFilter.h"
+#include "common/MeshRender.h"
 #include "io/ResourceLoader.h"
 
 namespace te
@@ -74,24 +74,24 @@ namespace te
         ComponentType type = component->getType();
         if (type == ComponentType::SPACE_STATUS)
             addComponent(component, getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_FILTER)
-            addComponent(component, getComponentTypeId<MeshFilter>());
+        else if (type == ComponentType::MESH_RENDER)
+            addComponent(component, getComponentTypeId<MeshRender>());
     }
 
     void Node::removeComponent(ComponentType type)
     {
         if (type == ComponentType::SPACE_STATUS)
             removeComponent(getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_FILTER)
-            removeComponent(getComponentTypeId<MeshFilter>());
+        else if (type == ComponentType::MESH_RENDER)
+            removeComponent(getComponentTypeId<MeshRender>());
     }
 
     Component* Node::getComponent(ComponentType type)
     {
         if (type == ComponentType::SPACE_STATUS)
             return getComponent(getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_FILTER)
-            return getComponent(getComponentTypeId<MeshFilter>());
+        else if (type == ComponentType::MESH_RENDER)
+            return getComponent(getComponentTypeId<MeshRender>());
         else return nullptr;
     }
 
@@ -99,8 +99,8 @@ namespace te
     {
         if (type == ComponentType::SPACE_STATUS)
             return hasComponent(getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_FILTER)
-            return hasComponent(getComponentTypeId<MeshFilter>());
+        else if (type == ComponentType::MESH_RENDER)
+            return hasComponent(getComponentTypeId<MeshRender>());
         else return false;
     }
 

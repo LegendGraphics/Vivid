@@ -17,8 +17,8 @@ namespace te
     {
         UNDEFINED,
         SPACE_STATUS,
-        MESH_FILTER,
         CAMERA_STATUS,
+        MESH_RENDER,
         LOGIC_BEHAVIOR
     };
 
@@ -53,6 +53,9 @@ namespace te
         inline ComponentType getType() const { return _type; }
 
         template <typename C>
+        bool hasComponent();
+
+        template <typename C>
         C* getComponent();
 
     protected:
@@ -62,6 +65,14 @@ namespace te
         MetaType            _meta_type;
         ComponentType       _type;
     };
+
+
+    template <typename C>
+    bool Component::hasComponent()
+    {
+        if (_owner) return _owner->hasComponent<C>();
+        else return false;
+    }
 
     template <typename C>
     C* Component::getComponent()

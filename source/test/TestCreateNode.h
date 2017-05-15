@@ -2,7 +2,7 @@
 #include "base/Director.h"
 #include "common/Scene.h"
 #include "common/Node.h"
-#include "common/MeshFilter.h"
+#include "common/MeshRender.h"
 #include "base/Singleton.hpp"
 #include "io/ResourceLoader.h"
 using namespace te;

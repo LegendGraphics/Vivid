@@ -9,7 +9,7 @@
 #include "common/Scene.h"
 #include "renderer/RenderInterface.h"
 
-#include "common/MeshFilter.h"
+#include "common/MeshRender.h"
 #include "common/Mesh.h"
 
 #include "io/Logger.h"
@@ -124,7 +124,7 @@ namespace te
         // Now simply rendering every node
         Node* node = node_tree->node().get();
 
-        if (MeshFilter* mf = node->getComponent<MeshFilter>())
+        if (MeshRender* mf = node->getComponent<MeshRender>())
         {
             Mesh* m = mf->getMesh().get();
 
@@ -163,7 +163,7 @@ namespace te
     void RenderResourceVisitor::apply(NodeTree * node_tree)
     {
         Node* node = node_tree->node().get();
-        if (MeshFilter* mf = node->getComponent<MeshFilter>())
+        if (MeshRender* mf = node->getComponent<MeshRender>())
         {
             Mesh* m = mf->getMesh().get();
 
