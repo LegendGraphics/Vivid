@@ -52,6 +52,8 @@ namespace te
 
         inline ComponentType getType() const { return _type; }
 
+        inline NodeType getOwnerType() const { return _owner->getNodeType(); }
+
         template <typename C>
         bool hasComponent();
 

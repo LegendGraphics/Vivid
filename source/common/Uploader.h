@@ -5,6 +5,8 @@
 
 namespace te
 {
+    class NodeStreamMsg;
+
     class UploadToRender : public Behavior
     {
     public:
@@ -13,9 +15,11 @@ namespace te
         void update();
 
     private:
-        void uploadMeshRender();
-        void uploadCameraStatus();
-        void uploadSpaceStatus();
+        void uploadMeshRender(NodeStreamMsg* msg);
+        void uploadCameraStatus(NodeStreamMsg* msg);
+        void uploadSpaceStatus(NodeStreamMsg* msg);
+
+        void initStreamMsg(NodeStreamMsg* msg);
 
     private:
         class RenderInterface*    _renderer;

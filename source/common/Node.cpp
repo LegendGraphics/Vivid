@@ -24,6 +24,7 @@ namespace te
 
     Node::Node()
         :_visible(true),
+        _node_type(NodeType::NODE),
         _component_container(this)
     {
 

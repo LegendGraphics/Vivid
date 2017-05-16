@@ -24,6 +24,13 @@ namespace te
     using NodeTreePtr = RefPtr<NodeTree>;
     using NodeTreeList = std::vector<NodeTreePtr>;
 
+    // some special nodes
+    enum class NodeType
+    {
+        NODE,
+        CAMERA,
+        SCENE
+    };
 
     class Node: public Ref, public Cloneable
     {
@@ -39,6 +46,8 @@ namespace te
 
         void setVisible(bool visible);
         inline bool getVisible() { return _visible; }
+
+        inline NodeType getNodeType() { return _node_type; }
 
         template <typename C, typename ... Args>
         C* addComponent(Args&& ... args);
@@ -67,7 +76,8 @@ namespace te
         bool hasComponent(int component_id);
 
     protected:
-        bool _visible;
+        bool        _visible;
+        NodeType    _node_type;
         ComponentContainer _component_container;
     };
 

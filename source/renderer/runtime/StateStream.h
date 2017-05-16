@@ -5,6 +5,7 @@
 #include "renderer/resource/RenderResource.h"
 #include "renderer/resource/RenderMeshObject.h"
 #include "math/Matrix.h"
+#include "common/Component.h"
 
 namespace te
 {
@@ -12,6 +13,18 @@ namespace te
     class RenderResourceContext;
 
     // intermediate stream data between engine and renderer
+    // remember the basic msg data unit is based on component
+    class StreamData
+    {
+    private:
+        using StreamDataMap = std::unordered_map<ComponentType, void*>;
+    public:
+        void feed(ComponentType type, void* data) { _data_map.insert({ type, data }); }
+        void* get(ComponentType type) { return _data_map[type]; }
+    private:
+        StreamDataMap   _data_map;
+    };
+
     class StreamMsg
     {
     public:
@@ -24,15 +37,19 @@ namespace te
         };
 
     public:
-        StreamMsg() : _data(nullptr), _type(NOT_INITIALIZED), _handle(nullptr) {};
+        StreamMsg() : _data(nullptr), _msg_type(NOT_INITIALIZED)/*, _handle(nullptr)*/ {};
         virtual ~StreamMsg() {};
 
-        void setMsgType(MsgType type) { _type = type; }
-        MsgType getMsgType() { return _type; }
-        void setHandle(Handle* handle) { _handle = handle; }
-        Handle* getHandle() { return _handle; }
+        void setMsgType(MsgType type) { _msg_type = type; }
+        MsgType getMsgType() const { return _msg_type; }
+
+        /*void setNodeType(NodeType type) { _node_type = type; }
+        NodeType getNodeType() const { return _node_type; }*/
+
+        //void setHandle(Handle* handle) { _handle = handle; }
+        //Handle* getHandle() { return _handle; }
         virtual void process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc);
-        virtual void feedData(void* data) { _data = data; }
+        virtual void feedData(ComponentType type, void* data) { _data->feed(type, data); }
 
     protected:
         virtual void create(RenderObject*& render_object, RenderResourceContext* rrc) = 0;
@@ -40,35 +57,45 @@ namespace te
         virtual void render(RenderObject*& render_object, RenderContext* rc) = 0;
 
     protected:
-        void*         _data;
-        MsgType       _type;
-        Handle*       _handle;
+        StreamData*        _data;        // store component data
+        MsgType            _msg_type;
+        //NodeType           _node_type;
+        //Handle*       _handle;
     };
 
-    using StateStream = std::vector<StreamMsg*>;
 
-    // camera data stream
-    class CameraStreamMsg : public StreamMsg
+    // general node stream
+    class NodeStreamMsg : public StreamMsg
     {
     public:
-        struct Data
-        {
-            RenderCamera*   _camera;
+        NodeStreamMsg();
+        virtual ~NodeStreamMsg();
 
-        };
+    protected:
+        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void render(RenderObject*& render_object, RenderContext* rc);
+    };
+
+
+    using StateStream = std::vector<NodeStreamMsg*>;
+
+    // camera data stream
+    class CameraStreamMsg : public NodeStreamMsg
+    {
     public:
+        CameraStreamMsg();
         virtual ~CameraStreamMsg();
 
     protected:
         virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void render(RenderObject*& render_object, RenderContext* rc);
-
     };
 
 
     // test a mesh stream msg
-    class MeshStreamMsg : public StreamMsg
+    class MeshStreamMsg : public NodeStreamMsg
     {
     public:
         struct Data

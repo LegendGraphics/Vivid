@@ -14,6 +14,7 @@ namespace te
 
     Camera::Camera()
     {
+        _node_type = NodeType::CAMERA;
         addComponent<CameraState>();
     }
 
