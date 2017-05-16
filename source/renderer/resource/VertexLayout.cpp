@@ -60,6 +60,14 @@ namespace te
             { "vertPos", 0, 3, 0 },
             { "normal", 0, 3, 12 }
         };
+
+        vertex_layout_map[vertex_layout::PNTB_TEX] = {
+            { "vertPos", 0, 3, 0 },
+            { "normal", 0, 3, 12 },
+            { "tangent", 0, 3, 24 },
+            { "bitangent", 0, 3, 36 },
+            //{ "texCoords0", 3, 2, 0 }, -- bug exists
+        };
     }
     const VertexLayout & VertexLayoutPredefinition::getLayout(vertex_layout::Type vl_type)
     {

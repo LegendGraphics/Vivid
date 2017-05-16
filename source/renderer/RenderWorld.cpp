@@ -1,6 +1,5 @@
-#include "RenderWorld.h"
+#include "renderer/RenderWorld.h"
 
-#include "common/Clone.h"
 #include "common/Pipeline.h"
 #include "renderer/Device/RenderContext.h"
 #include "renderer/Device/RenderDevice.h"
@@ -37,6 +36,7 @@ namespace te
     {
     }
 
+    // rendering image
     void RenderWorld::render(StateStream& stream, RenderParams& params)
     {
         RenderContext* render_context = (params.device->newContext());
@@ -78,6 +78,7 @@ namespace te
         params.device->releaseContext(render_context);
     }
 
+    // updating resource status 
     void RenderWorld::update(StateStream& stream, RenderDevice* device)
     {
         RenderResourceContext* rrc = device->newResourceContext();
