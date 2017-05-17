@@ -22,33 +22,38 @@ namespace te
         static RenderObject::Type TYPE;
 
         RenderNodeObject();
-        RenderNodeObject(Mesh* mesh);
         ~RenderNodeObject();
 
-        void render(RenderContext* context);
-        void generateGPUResource(RenderResourceContext* context);
-        void update(RenderResourceContext* context);
+        void create(RenderResourceContext* context, NodeStreamMsg* msg);
+        void update(RenderResourceContext* context, NodeStreamMsg* msg);
+        void render(RenderContext* context, NodeStreamMsg* msg);
+
+        void allocMeshResource(RenderResourceContext* context);
+        void allocTextureResource(RenderResourceContext* context);
 
         inline void setShaderObject(RenderResource* res) { _shader_object = res; };
         inline void setModelMat(const Mat4x4& model_mat) { _model_mat = model_mat; };
 
     private:
-        void generateIndexBuffer(RenderResourceContext* context);
-        void generateVertexBuffer(RenderResourceContext* context);
-        void generateVertexDeclaration(RenderResourceContext* context);
+        void allocIndexBuffer(RenderResourceContext* context);
+        void allocVertexBuffer(RenderResourceContext* context);
+        void allocVertexDeclaration(RenderResourceContext* context);
+
+        void parseMeshRender(NodeStreamMsg* msg);
+        void parseSpaceState(NodeStreamMsg* msg);
 
     private:
         GPUHandle _index_buffer;
         GPUHandle _vertex_buffer;
         GPUHandle _vao;
 
-        IndexArray* _index_array;
-        VertexArray* _vertex_array;
+        IndexArray*         _index_array;
+        VertexArray*        _vertex_array;
         vertex_layout::Type _layout_type;
 
         RenderResource*  _shader_object;
         uint32  _num_indices; // temporary to put it here
-        Mat4x4 _model_mat;
+        Matrix  _model_mat;
         // TODO: consider move this to a GeometryObject? Shader belongs to Material, Material
         // belongs to Mesh, Geometry also belongs to Mesh
     };

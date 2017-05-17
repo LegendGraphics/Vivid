@@ -12,18 +12,33 @@ namespace te
     class RenderContext;
     class RenderResourceContext;
 
+
+    // data type communication between engine and renderer
+    enum class RenderObjectType
+    {
+        MESH,
+        TEXTURE,
+        NOT_INITIALIZED
+    };
+
+    /*struct StreamData
+    {
+        RenderObjectType type;
+        void*            data;
+    };*/
+
     // intermediate stream data between engine and renderer
     // remember the basic msg data unit is based on component
-    class StreamData
+    /*class StreamData
     {
     private:
-        using StreamDataMap = std::unordered_map<ComponentType, void*>;
+        using StreamDataMap = std::unordered_map<RenderObjectType, void*>;
     public:
-        void feed(ComponentType type, void* data) { _data_map.insert({ type, data }); }
-        void* get(ComponentType type) { return _data_map[type]; }
+        void feed(RenderObjectType type, void* data) { _data_map.insert({ type, data }); }
+        void* get(RenderObjectType type) { return _data_map[type]; }
     private:
         StreamDataMap   _data_map;
-    };
+    };*/
 
     class StreamMsg
     {
@@ -37,19 +52,24 @@ namespace te
         };
 
     public:
-        StreamMsg() : _data(nullptr), _msg_type(NOT_INITIALIZED)/*, _handle(nullptr)*/ {};
+        StreamMsg() : _data(nullptr), _msg_type(NOT_INITIALIZED), _handle(0xFFFFFFFF), _ro_type(RenderObjectType::NOT_INITIALIZED) {};
+        StreamMsg(MsgType type, Handle handle, void* data, RenderObjectType ro_type) : 
+            _data(data), _msg_type(type), _handle(handle), _ro_type(RenderObjectType::NOT_INITIALIZED){};
         virtual ~StreamMsg() {};
 
         void setMsgType(MsgType type) { _msg_type = type; }
         MsgType getMsgType() const { return _msg_type; }
 
-        /*void setNodeType(NodeType type) { _node_type = type; }
-        NodeType getNodeType() const { return _node_type; }*/
+        void setHandle(Handle handle) { _handle = handle; }
+        Handle getHandle() const { return _handle; }
 
-        //void setHandle(Handle* handle) { _handle = handle; }
-        //Handle* getHandle() { return _handle; }
+        void feedData(void* data) { _data = data; }
+        void* getData() const { return _data; }
+
+        virtual RenderObject* createRenderObject() { return nullptr; }
+
         virtual void process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc);
-        virtual void feedData(ComponentType type, void* data) { _data->feed(type, data); }
+        
 
     protected:
         virtual void create(RenderObject*& render_object, RenderResourceContext* rrc) = 0;
@@ -57,61 +77,69 @@ namespace te
         virtual void render(RenderObject*& render_object, RenderContext* rc) = 0;
 
     protected:
-        StreamData*        _data;        // store component data
-        MsgType            _msg_type;
-        //NodeType           _node_type;
-        //Handle*       _handle;
+        void*               _data;
+        MsgType             _msg_type;
+        Handle              _handle;
+        RenderObjectType    _ro_type;
     };
 
-
-    // general node stream
-    class NodeStreamMsg : public StreamMsg
-    {
-    public:
-        NodeStreamMsg();
-        virtual ~NodeStreamMsg();
-
-    protected:
-        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void render(RenderObject*& render_object, RenderContext* rc);
-    };
+    using StateStream = std::vector<StreamMsg*>;
 
 
-    using StateStream = std::vector<NodeStreamMsg*>;
+    //// general node stream
+    //class NodeStreamMsg : public StreamMsg
+    //{
+    //public:
+    //    NodeStreamMsg();
+    //    virtual ~NodeStreamMsg();
 
-    // camera data stream
-    class CameraStreamMsg : public NodeStreamMsg
-    {
-    public:
-        CameraStreamMsg();
-        virtual ~CameraStreamMsg();
+    //protected:
+    //    virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+    //    virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+    //    virtual void render(RenderObject*& render_object, RenderContext* rc);
+    //};
 
-    protected:
-        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void render(RenderObject*& render_object, RenderContext* rc);
-    };
+
+    //// camera data stream
+    //class CameraStreamMsg : public StreamMsg
+    //{
+    //public:
+    //    CameraStreamMsg();
+    //    virtual ~CameraStreamMsg();
+
+    //protected:
+    //    virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+    //    virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+    //    virtual void render(RenderObject*& render_object, RenderContext* rc);
+    //};
 
 
     // test a mesh stream msg
-    class MeshStreamMsg : public NodeStreamMsg
+    class MeshStreamMsg : public StreamMsg
     {
     public:
-        struct Data
-        {
-            RenderMeshObject*   rmo;
-            Matrix              model_mat;
-        };
-
-    public:
+        MeshStreamMsg(MsgType type, Handle handle, void* data);
         virtual ~MeshStreamMsg();
+
+        virtual RenderObject* createRenderObject() { return new RenderMeshObject; }
 
     protected:
         virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void render(RenderObject*& render_object, RenderContext* rc);
     };
+
+    /*class TextureStreamMsg : public StreamMsg
+    {
+    public:
+        TextureStreamMsg();
+        virtual ~TextureStreamMsg();
+
+    protected:
+        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void render(RenderObject*& render_object, RenderContext* rc);
+    };*/
 }
 
 #endif

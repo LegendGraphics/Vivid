@@ -5,6 +5,10 @@
 #include "renderer/runtime/RenderCamera.h"
 #include "renderer/resource/RenderResourceContext.h"
 #include "renderer/resource/ResourceStream.h"
+#include "renderer/runtime/StateStream.h"
+
+#include "common/MeshRender.h"
+#include "common/SpaceState.h"
 
 namespace te
 {
@@ -18,18 +22,98 @@ namespace te
     {
     }
 
-    RenderNodeObject::RenderNodeObject(Mesh* mesh)
-        : RenderNodeObject()
-    {
-        _index_array = &mesh->getTriangles();
-        _vertex_array = &mesh->getVertices();
-        _layout_type = mesh->getLayoutType();
-        _num_indices = (*_index_array).size();
-    }
-
     RenderNodeObject::~RenderNodeObject()
     {
     }
+
+    void RenderNodeObject::create(RenderResourceContext* context, NodeStreamMsg* msg)
+    {
+        // parse components from msg
+        parseMeshRender(msg);
+
+        allocMeshResource(context);
+    }
+
+    void RenderNodeObject::update(RenderResourceContext* context, NodeStreamMsg* msg)
+    {
+
+    }
+
+    void RenderNodeObject::render(RenderContext* context, NodeStreamMsg* msg)
+    {
+
+    }
+
+    void RenderNodeObject::parseMeshRender(NodeStreamMsg* msg)
+    {
+        MeshRender* mesh_render = static_cast<MeshRender*>(msg->getData(ComponentType::MESH_RENDER));
+
+        _index_array = &mesh_render->getMesh()->getTriangles();
+        _vertex_array = &mesh_render->getMesh()->getVertices();
+        _layout_type = mesh_render->getMesh()->getLayoutType();
+        _num_indices = (*_index_array).size();
+    }
+
+    void RenderNodeObject::parseSpaceState(NodeStreamMsg* msg)
+    {
+        SpaceState* space_state = static_cast<SpaceState*>(msg->getData(ComponentType::SPACE_STATE));
+        
+        //_model_mat = from msg
+    }
+
+
+    void RenderNodeObject::allocMeshResource(RenderResourceContext * context)
+    {
+        allocIndexBuffer(context);
+        allocVertexBuffer(context);
+        allocVertexDeclaration(context);
+    }
+
+    void RenderNodeObject::allocTextureResource(RenderResourceContext * context)
+    {
+
+    }
+
+    void RenderNodeObject::allocIndexBuffer(RenderResourceContext * context)
+    {
+        vertex_layout::IndexStream* is = new vertex_layout::IndexStream;
+        is->res = &_index_buffer;
+        is->size = 4 * (*_index_array).size();
+        is->raw_data = &(*_index_array)[0];
+
+        RenderResourceContext::Message allc_is = {
+            RenderResourceContext::MessageType::ALLOC_INDEX_BUFFER, (void*)is };
+        context->messages().push_back(allc_is);
+    }
+
+    void RenderNodeObject::allocVertexBuffer(RenderResourceContext * context)
+    {
+        vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
+        vs->res = &_vertex_buffer;
+        vs->size = (*_vertex_array).sizeInBytes();//4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
+        vs->stride = (*_vertex_array).sizeInBytes() / (*_vertex_array).size();
+        vs->raw_data = (*_vertex_array).buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed
+                                                  //float* aa = &m->getVertices()[0];
+
+        RenderResourceContext::Message allc_vs = {
+            RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER, (void*)vs };
+        context->messages().push_back(allc_vs);
+    }
+
+    void RenderNodeObject::allocVertexDeclaration(RenderResourceContext * context)
+    {
+        vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
+        vds->res = &_vao;
+        vds->layout_type = _layout_type;
+
+        vds->index_buffer = &_index_buffer;
+        vds->vertex_buffers.push_back(&_vertex_buffer);
+
+        RenderResourceContext::Message allc_vd = {
+            RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION, (void*)vds };
+        context->messages().push_back(allc_vd);
+    }
+
 
     void RenderNodeObject::render(RenderContext* context)
     {
@@ -113,12 +197,7 @@ namespace te
         context->commands().push_back(triggerDraw);
     }
 
-    void RenderNodeObject::generateGPUResource(RenderResourceContext * context)
-    {
-        generateIndexBuffer(context);
-        generateVertexBuffer(context);
-        generateVertexDeclaration(context);
-    }
+    
 
     void RenderNodeObject::update(RenderResourceContext * context)
     {
@@ -126,44 +205,6 @@ namespace te
         if (0xFFFFFFFF == _vao) generateGPUResource(context);
     }
 
-    void RenderNodeObject::generateIndexBuffer(RenderResourceContext * context)
-    {
-        vertex_layout::IndexStream* is = new vertex_layout::IndexStream;
-        is->res = &_index_buffer;
-        is->size = 4 * (*_index_array).size();
-        is->raw_data = &(*_index_array)[0];
-
-        RenderResourceContext::Message allc_is = {
-            RenderResourceContext::MessageType::ALLOC_INDEX_BUFFER, (void*)is };
-        context->messages().push_back(allc_is);
-    }
-
-    void RenderNodeObject::generateVertexBuffer(RenderResourceContext * context)
-    {
-        vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
-        vs->res = &_vertex_buffer;
-        vs->size = (*_vertex_array).sizeInBytes();//4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
-        vs->stride = (*_vertex_array).sizeInBytes() / (*_vertex_array).size();
-        vs->raw_data = (*_vertex_array).buffer(); // assume memory in std::vector<Vertex_PNTB> is tight packed
-                                                  //float* aa = &m->getVertices()[0];
-
-        RenderResourceContext::Message allc_vs = {
-            RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER, (void*)vs };
-        context->messages().push_back(allc_vs);
-    }
-
-    void RenderNodeObject::generateVertexDeclaration(RenderResourceContext * context)
-    {
-        vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
-        vds->res = &_vao;
-        vds->layout_type = _layout_type;
-
-        vds->index_buffer = &_index_buffer;
-        vds->vertex_buffers.push_back(&_vertex_buffer);
-
-        RenderResourceContext::Message allc_vd = {
-            RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION, (void*)vds };
-        context->messages().push_back(allc_vd);
-    }
+    
 
 }

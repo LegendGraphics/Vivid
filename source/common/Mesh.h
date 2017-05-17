@@ -282,13 +282,14 @@ namespace te
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
         vertex_layout::Type getLayoutType() { return _layout_type; }
-        void setVertexDeclaration(ResourceHandle res_handle) { _vertex_declaration = res_handle; };
+        /*void setVertexDeclaration(ResourceHandle res_handle) { _vertex_declaration = res_handle; };
         void setIndexBuffer(ResourceHandle res_handle) { _index_buffer = res_handle; };
         void setVertexBuffer(ResourceHandle res_handle) { _vertex_buffer = res_handle; };
         ResourceHandle getVertexDeclaration() { return _vertex_declaration; }
         ResourceHandle getIndexBuffer() { return _index_buffer; }
-        ResourceHandle getVertexBuffer() { return _vertex_buffer; }
-        Handle* getRenderObjectHandle() { return &_render_object; }
+        ResourceHandle getVertexBuffer() { return _vertex_buffer; }*/
+        void setROHandle(Handle handle) { _render_object = handle; }
+        Handle getROHandle() { return _render_object; }
 
     protected:
         VertexArray         _vertices;

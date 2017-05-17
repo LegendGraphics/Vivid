@@ -16,8 +16,8 @@ namespace te
     enum class ComponentType
     {
         UNDEFINED,
-        SPACE_STATUS,
-        CAMERA_STATUS,
+        SPACE_STATE,
+        CAMERA_STATE,
         MESH_RENDER,
         LOGIC_BEHAVIOR
     };

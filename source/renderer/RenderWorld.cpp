@@ -86,17 +86,10 @@ namespace te
         for (StreamMsg* msg : stream)
         {
             StreamMsg::MsgType type = msg->getMsgType();
-            if (StreamMsg::CREATE == type)
+            if (StreamMsg::UPDATE == type)
             {
-                Handle* handle = msg->getHandle();
-                RenderObject* ro = nullptr;
-                msg->process(ro, nullptr, rrc);
-                (*handle) = _objects.add(ro);
-            }
-            else if (StreamMsg::UPDATE == type)
-            {
-                Handle* handle = msg->getHandle();
-                RenderObject* ro = _objects.getPtr((*handle));
+                Handle handle = msg->getHandle();
+                RenderObject* ro = _objects.getPtr(handle);
                 msg->process(ro, nullptr, rrc);
             }
         }
@@ -104,4 +97,29 @@ namespace te
         device->dispatch(rrc);
         device->releaseResourceContext(rrc);
     }
+
+    // creating resource 
+    void RenderWorld::create(StateStream& stream, RenderDevice* device)
+    {
+        RenderResourceContext* rrc = device->newResourceContext();
+
+        for (StreamMsg* msg : stream)
+        {
+            StreamMsg::MsgType type = msg->getMsgType();
+            if (StreamMsg::CREATE == type)
+            {
+                Handle handle = msg->getHandle();
+                if (!_objects.has(handle))
+                {
+                    RenderObject* ro = msg->createRenderObject();
+                    msg->process(ro, nullptr, rrc);
+                    handle = _objects.add(ro);
+                }
+            }
+        }
+
+        device->dispatch(rrc);
+        device->releaseResourceContext(rrc);
+    }
+
 }

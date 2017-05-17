@@ -73,7 +73,7 @@ namespace te
     void Node::addComponent(Component* component)
     {
         ComponentType type = component->getType();
-        if (type == ComponentType::SPACE_STATUS)
+        if (type == ComponentType::SPACE_STATE)
             addComponent(component, getComponentTypeId<SpaceState>());
         else if (type == ComponentType::MESH_RENDER)
             addComponent(component, getComponentTypeId<MeshRender>());
@@ -81,7 +81,7 @@ namespace te
 
     void Node::removeComponent(ComponentType type)
     {
-        if (type == ComponentType::SPACE_STATUS)
+        if (type == ComponentType::SPACE_STATE)
             removeComponent(getComponentTypeId<SpaceState>());
         else if (type == ComponentType::MESH_RENDER)
             removeComponent(getComponentTypeId<MeshRender>());
@@ -89,7 +89,7 @@ namespace te
 
     Component* Node::getComponent(ComponentType type)
     {
-        if (type == ComponentType::SPACE_STATUS)
+        if (type == ComponentType::SPACE_STATE)
             return getComponent(getComponentTypeId<SpaceState>());
         else if (type == ComponentType::MESH_RENDER)
             return getComponent(getComponentTypeId<MeshRender>());
@@ -98,7 +98,7 @@ namespace te
 
     bool Node::hasComponent(ComponentType type)
     {
-        if (type == ComponentType::SPACE_STATUS)
+        if (type == ComponentType::SPACE_STATE)
             return hasComponent(getComponentTypeId<SpaceState>());
         else if (type == ComponentType::MESH_RENDER)
             return hasComponent(getComponentTypeId<MeshRender>());

@@ -2,27 +2,25 @@
 #define COMMON_UPLOADER_H
 
 #include "common/Component.h"
+#include "renderer/runtime/StateStream.h"
 
 namespace te
 {
-    class NodeStreamMsg;
-
     class UploadToRender : public Behavior
     {
     public:
-        UploadToRender();
+        UploadToRender(StreamMsg::MsgType type);
 
         void update();
 
     private:
-        void uploadMeshRender(NodeStreamMsg* msg);
-        void uploadCameraStatus(NodeStreamMsg* msg);
-        void uploadSpaceStatus(NodeStreamMsg* msg);
-
-        void initStreamMsg(NodeStreamMsg* msg);
+        void uploadMesh();
+        void uploadTexture();
+        void uploadPosition();
 
     private:
         class RenderInterface*    _renderer;
+        StreamMsg::MsgType        _type;
     };
 }
 

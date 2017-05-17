@@ -7,61 +7,50 @@
 
 namespace te
 {
-    UploadToRender::UploadToRender()
+    UploadToRender::UploadToRender(StreamMsg::MsgType type)
+        :_type(type)
     {
         // using default renderer
         _renderer = RenderInterface::getInstance();
     }
 
-    void UploadToRender::initStreamMsg(NodeStreamMsg* msg)
-    {
-        if (getOwnerType() == NodeType::NODE)
-            msg = new NodeStreamMsg;
-        else if (getOwnerType() == NodeType::CAMERA)
-            msg = new CameraStreamMsg;
-    }
-
     // send data to renderer
-    // component as basic unit
     void UploadToRender::update()
     {
-        NodeStreamMsg* msg = nullptr;
-        initStreamMsg(msg);
-
-        msg->setMsgType(NodeStreamMsg::UPDATE);
-
         // feed data into msg
-        uploadSpaceStatus(msg);
-        uploadCameraStatus(msg);
-        uploadMeshRender(msg);
-
-        _renderer->_stream.push_back(msg);
+        uploadMesh();
+        uploadTexture();
+        uploadPosition();
     }
 
-    void UploadToRender::uploadMeshRender(NodeStreamMsg* msg)
+    void UploadToRender::uploadMesh()
     {
         if (hasComponent<MeshRender>())
         {
             MeshRender* mr = getComponent<MeshRender>();
-            msg->feedData(ComponentType::MESH_RENDER, mr);
+            MeshStreamMsg* msg = new MeshStreamMsg(_type, 
+                mr->getMesh()->getROHandle(), 
+                mr->getMesh().get());
+            _renderer->_stream.push_back(msg);
         }
     }
-
-    void UploadToRender::uploadCameraStatus(NodeStreamMsg* msg)
+    void UploadToRender::uploadTexture()
     {
-        if (hasComponent<CameraState>())
+        if (hasComponent<MeshRender>())
         {
-            CameraState* cs = getComponent<CameraState>();
-            msg->feedData(ComponentType::CAMERA_STATUS, cs);
+            /*TextureStreamMsg* msg = new TextureStreamMsg;
+            MeshRender* mr = getComponent<MeshRender>();
+            msg->feedData(mr->getMesh().get());
+            _renderer->_stream.push_back(msg);*/
         }
     }
-
-    void UploadToRender::uploadSpaceStatus(NodeStreamMsg* msg)
+    void UploadToRender::uploadPosition()
     {
         if (hasComponent<SpaceState>())
         {
             SpaceState* ss = getComponent<SpaceState>();
-            msg->feedData(ComponentType::SPACE_STATUS, ss);
+            /*msg->feedData(ComponentType::SPACE_STATE, ss);
+            _renderer->_stream.push_back(msg); */
         }
     }
 }

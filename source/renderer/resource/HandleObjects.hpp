@@ -32,15 +32,25 @@ namespace te
 
         void remove(Handle handle)
         {
-            if (!_objects[handle - 1]) return;
-            delete _objects[handle - 1];
-            _objects[handle - 1] = nullptr;
-            _free_list.push_back(handle);
+            if (has(handle))
+            {
+                delete _objects[handle - 1];
+                _objects[handle - 1] = nullptr;
+                _free_list.push_back(handle);
+            }
+        }
+
+        bool has(Handle handle)
+        {
+            if (handle > _objects.size() || !_objects[handle - 1]) return false;
+            else return true;
         }
 
         T* getPtr(Handle handle)
         {
-            return _objects[handle - 1];
+            if (has(handle))
+                return _objects[handle - 1];
+            else return nullptr;
         }
 
         void clear()
