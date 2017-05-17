@@ -9,12 +9,18 @@
 
 namespace te
 {
+    String ResourceLoader::_data_path = "";
+    void ResourceLoader::setDataPath(const String& res)
+    {
+        ResourceLoader::_data_path = res;
+    }
+
     bool ResourceLoader::load(Mesh* mesh, const String& res)
     {
             char *data_ptr = nullptr;
             int size = 0;
 
-            FileUtils::streamFromBinaryFile(res, data_ptr, size);
+            FileUtils::streamFromBinaryFile(_data_path + res, data_ptr, size);
 
             // Check header and version
             char id[3];
@@ -129,7 +135,7 @@ namespace te
         char *data = nullptr;
         int size = 0;
 
-        FileUtils::streamFromBinaryFile(res, data, size);
+        FileUtils::streamFromBinaryFile(_data_path + res, data, size);
 
         XMLDoc doc;
         doc.parseBuffer(data, size);
@@ -196,7 +202,7 @@ namespace te
             char *data = nullptr;
             int size = 0;
 
-            FileUtils::streamFromBinaryFile(res, data, size);
+            FileUtils::streamFromBinaryFile(_data_path + res, data, size);
 
             XMLDoc doc;
             doc.parseBuffer(data, size);
