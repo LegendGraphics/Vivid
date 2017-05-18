@@ -67,7 +67,8 @@ namespace te
         Component* getComponent(ComponentType type);
         bool hasComponent(ComponentType type);
 
-        void updateComponents();
+        void updateBehavior();
+        void updateRender();
 
     private:
         void addComponent(Component* component, int component_id);

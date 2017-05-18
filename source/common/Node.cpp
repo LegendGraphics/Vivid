@@ -65,9 +65,14 @@ namespace te
         return _component_container.has(component_id);
     }
 
-    void Node::updateComponents()
+    void Node::updateBehavior()
     {
-        _component_container.updateAll();
+        _component_container.updateBehavior();
+    }
+
+    void Node::updateRender()
+    {
+        _component_container.updateRender();
     }
 
     void Node::addComponent(Component* component)

@@ -36,7 +36,8 @@ namespace te
 
         bool isEmpty() const { return _component_map.empty(); } 
 
-        void updateAll();
+        void updateBehavior();
+        void updateRender();
 
     private:
         void destroyAll();

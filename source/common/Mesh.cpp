@@ -16,8 +16,6 @@ namespace te
     {
         if (!ResourceLoader::load(this, res))
             return false;
-        RenderInterface::getInstance()->create(this);
-
         return true;
     }
 

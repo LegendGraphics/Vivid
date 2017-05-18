@@ -5,7 +5,7 @@ namespace te
 {
     void StreamMsg::process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc)
     {
-        switch (_type)
+        switch (_msg_type)
         {
         case MsgType::CREATE:
             create(render_object, rrc);

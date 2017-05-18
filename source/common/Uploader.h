@@ -6,10 +6,12 @@
 
 namespace te
 {
-    class UploadToRender : public Behavior
+    class UploadToRender : public Render
     {
     public:
-        UploadToRender(StreamMsg::MsgType type);
+        UploadToRender();
+
+        void setMsgType(StreamMsg::MsgType type);
 
         void update();
 
@@ -20,7 +22,7 @@ namespace te
 
     private:
         class RenderInterface*    _renderer;
-        StreamMsg::MsgType        _type;
+        StreamMsg::MsgType        _msg_type;
     };
 }
 

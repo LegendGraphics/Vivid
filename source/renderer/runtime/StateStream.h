@@ -13,13 +13,13 @@ namespace te
     class RenderResourceContext;
 
 
-    // data type communication between engine and renderer
-    enum class RenderObjectType
-    {
-        MESH,
-        TEXTURE,
-        NOT_INITIALIZED
-    };
+    //// data type communication between engine and renderer
+    //enum class RenderObjectType
+    //{
+    //    MESH,
+    //    TEXTURE,
+    //    NOT_INITIALIZED
+    //};
 
     /*struct StreamData
     {
@@ -52,9 +52,8 @@ namespace te
         };
 
     public:
-        StreamMsg() : _data(nullptr), _msg_type(NOT_INITIALIZED), _handle(0xFFFFFFFF), _ro_type(RenderObjectType::NOT_INITIALIZED) {};
-        StreamMsg(MsgType type, Handle handle, void* data, RenderObjectType ro_type) : 
-            _data(data), _msg_type(type), _handle(handle), _ro_type(RenderObjectType::NOT_INITIALIZED){};
+        StreamMsg() : _data(nullptr), _msg_type(NOT_INITIALIZED), _handle(0xFFFFFFFF){};
+        StreamMsg(MsgType type, Handle handle, void* data) : _data(data), _msg_type(type), _handle(handle){};
         virtual ~StreamMsg() {};
 
         void setMsgType(MsgType type) { _msg_type = type; }
@@ -80,7 +79,6 @@ namespace te
         void*               _data;
         MsgType             _msg_type;
         Handle              _handle;
-        RenderObjectType    _ro_type;
     };
 
     using StateStream = std::vector<StreamMsg*>;

@@ -7,12 +7,18 @@
 
 namespace te
 {
-    UploadToRender::UploadToRender(StreamMsg::MsgType type)
-        :_type(type)
+    UploadToRender::UploadToRender()
+        :Render(ComponentType::UPLOAD_TO_RENDER)
     {
         // using default renderer
         _renderer = RenderInterface::getInstance();
     }
+
+    void UploadToRender::setMsgType(StreamMsg::MsgType type)
+    {
+        _msg_type = type;
+    }
+
 
     // send data to renderer
     void UploadToRender::update()
@@ -28,7 +34,7 @@ namespace te
         if (hasComponent<MeshRender>())
         {
             MeshRender* mr = getComponent<MeshRender>();
-            MeshStreamMsg* msg = new MeshStreamMsg(_type, 
+            MeshStreamMsg* msg = new MeshStreamMsg(_msg_type,
                 mr->getMesh()->getROHandle(), 
                 mr->getMesh().get());
             _renderer->_stream.push_back(msg);

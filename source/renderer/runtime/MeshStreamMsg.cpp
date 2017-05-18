@@ -1,9 +1,9 @@
-#include "StateStream.h"
+#include "renderer/runtime/StateStream.h"
 
 namespace te
 {
     MeshStreamMsg::MeshStreamMsg(MsgType type, Handle handle, void* data)
-        :StreamMsg(type, handle, data, RenderObjectType::MESH)
+        :StreamMsg(type, handle, data)
     {
     }
 
