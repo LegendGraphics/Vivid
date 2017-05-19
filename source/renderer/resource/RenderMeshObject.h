@@ -26,8 +26,8 @@ namespace te
 
         void parseStreamMsg(StreamMsg* msg);
 
-        inline void setShaderObject(RenderResource* res) { _shader_object = res; };
-        inline void setModelMat(const Mat4x4& model_mat) { _model_mat = model_mat; };
+        //inline void setShaderObject(RenderResource* res) { _shader_object = res; };
+        //inline void setModelMat(const Mat4x4& model_mat) { _model_mat = model_mat; };
 
     private:
         void allocMeshResource(RenderResourceContext* context);
@@ -47,9 +47,9 @@ namespace te
         VertexArray*        _vertex_array;
         vertex_layout::Type _layout_type;
 
-        RenderResource*  _shader_object;
+        //RenderResource*  _shader_object;
         uint32  _num_indices; // temporary to put it here
-        Matrix  _model_mat;
+        //Matrix  _model_mat;
         // TODO: consider move this to a GeometryObject? Shader belongs to Material, Material
         // belongs to Mesh, Geometry also belongs to Mesh
     };

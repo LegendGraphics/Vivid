@@ -5,9 +5,43 @@
 
 namespace te
 {
+    enum class ShaderUniformType
+    {
+        SCALAR = 0,
+        VECTOR2,
+        VECTOR3,
+        VECTOR4,
+        MATRIX4X4,
+        UINT,
+        INT,
+        BOOL,
+
+        SCALAR_ARRAY,
+        VECTOR2_ARRAY,
+        VECTOR3_ARRAY,
+        VECTOR4_ARRAY,
+        MATRIX4X4_ARRAY,
+        UINT_ARRAY,
+        INT_ARRAY,
+        BOOL_ARRAY,
+
+        UNKNOWN_CLASS,
+    };
+
     // using glsl shader
     class Shader : public Resource
     {
+    public:
+        using UniformTypeMap = std::unordered_map<String, ShaderUniformType>;
+        static UniformTypeMap uni_type_map;
+
+        enum Type
+        {
+            VERTEX_SHADER,
+            FRAGMENT_SHADER,
+            UNDEFINED
+        };
+
     public:
         Shader() = default;
         ~Shader() = default;
@@ -19,7 +53,7 @@ namespace te
 
     protected:
         String      _shader_context;
-
+        Type        _type;
     };
 
     using ShaderPtr = RefPtr<Shader>;

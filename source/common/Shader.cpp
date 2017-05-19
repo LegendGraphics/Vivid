@@ -3,6 +3,18 @@
 
 namespace te
 {
+    Shader::UniformTypeMap Shader::uni_type_map =
+    {
+        // Predefined uniforms
+        { "viewMat", ShaderUniformType::MATRIX4X4 },
+        { "viewMatInv", ShaderUniformType::MATRIX4X4 },
+        { "projMat", ShaderUniformType::MATRIX4X4 },
+        { "viewProjMat", ShaderUniformType::MATRIX4X4 },
+        // ...
+
+        // Custom uniforms, register from xml file
+    };
+
     bool Shader::load(const String & res)
     {
         return ResourceLoader::load(this, res);

@@ -1,5 +1,5 @@
-#ifndef RENDERER_SHADER_OBJECT_H
-#define RENDERER_SHADER_OBJECT_H
+#ifndef RENDERER_RENDER_SHADER_OBJECT_H
+#define RENDERER_RENDER_SHADER_OBJECT_H
 #include <unordered_map>
 #include "base/Types.h"
 #include "base/String.h"
@@ -72,6 +72,41 @@ namespace te
     {
         std::vector<ShaderObject> _shaders;
     };
+
+    class RenderShaderObject : public RenderObject
+    {
+    public:
+        static RenderObject::Type TYPE;
+
+        RenderShaderObject();
+        ~RenderShaderObject();
+
+        void create(RenderResourceContext* context);
+        void update(RenderResourceContext* context);
+        void render(RenderContext* context);
+
+        void parseStreamMsg(StreamMsg* msg);
+
+        //inline void setShaderObject(RenderResource* res) { _shader_object = res; };
+        //inline void setModelMat(const Mat4x4& model_mat) { _model_mat = model_mat; };
+
+    private:
+        void allocMeshResource(RenderResourceContext* context);
+        void allocIndexBuffer(RenderResourceContext* context);
+        void allocVertexBuffer(RenderResourceContext* context);
+        void allocVertexDeclaration(RenderResourceContext* context);
+
+        void setVertexContext(RenderContext* context);
+
+
+    private:
+        GPUHandle       _index_buffer;
+        GPUHandle       _vertex_buffer;
+        GPUHandle       _vao;
+
+        IndexArray*         _index_array;
+        VertexArray*        _vertex_array;
+        vertex_layout::Type _layout_type;
 }
 
 #endif

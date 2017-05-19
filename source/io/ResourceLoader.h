@@ -26,7 +26,8 @@ namespace te
 
     // private function used by loader itself
     public:
-        static const String parseStage(XMLNode &node, PipelineStage* cur_stage);
+        static const String parseStage(XMLNode& node, PipelineStage* cur_stage);
+        static const String parseGLSL(const String& res);
     };
 }
 

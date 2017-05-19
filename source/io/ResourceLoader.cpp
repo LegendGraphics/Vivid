@@ -498,7 +498,6 @@ namespace te
     }
 
 
-    // no parsing now
     bool ResourceLoader::load(Shader* shader, const String& res)
     {
         char *data = nullptr;
@@ -506,8 +505,64 @@ namespace te
         FileUtils::streamFromBinaryFile(res, data, size);
         if (data == nullptr) return false;
 
-        shader->_shader_context = String(data);
+        XMLDoc doc;
+        doc.parseBuffer(data, size);
+        if (doc.hasError())
+        {
+            cLog << "XML parsing error";
+            return false;
+        }
+
+        XMLNode rootNode = doc.getRootNode();
+        if (strcmp(rootNode.getName(), "Shader") != 0)
+        {
+            cLog << "Not a pipeline resource file";
+            return false;
+        }
+
+        if (strcmp(rootNode.getAttribute("type"), "vertex") == 0)
+            shader->_type = Shader::VERTEX_SHADER;
+        else if (strcmp(rootNode.getAttribute("type"), "fragment") == 0)
+            shader->_type = Shader::FRAGMENT_SHADER;
+
+        // Parse uniforms
+        XMLNode node1 = rootNode.getFirstChild("Uniforms");
+        if (!node1.isEmpty())
+        {
+            XMLNode node2 = node1.getFirstChild("Uniform");
+            while (!node2.isEmpty())
+            {
+                // TODO: add shader uniform
+                node2.getAttribute("name");
+                node2.getAttribute("type");
+                node2 = node2.getNextSibling("Uniform");
+            }
+        }
+
+        // Parse glsl, currently using only one glsl file
+        node1 = rootNode.getFirstChild("GLSL");
+        if (!node1.isEmpty())
+        {
+            XMLNode node2 = node1.getFirstChild("FileName");
+            while (!node2.isEmpty())
+            {
+                // load glsl file
+                shader->_shader_context = parseGLSL(node2.getAttribute("name"));
+                //node2 = node2.getNextSibling("FileName");
+            }
+        }
+
         return true;
+    }
+
+    const String ResourceLoader::parseGLSL(const String& res)
+    {
+        char *data = nullptr;
+        int size = 0;
+        FileUtils::streamFromBinaryFile(res, data, size);
+        if (data == nullptr) return "";
+
+        return String(data);
     }
 
 }
