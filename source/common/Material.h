@@ -22,6 +22,8 @@ namespace te
         bool load(const String & res);
         void unload();
 
+        ShaderPtr   getShader();
+
         // shader, texture...
     protected:
         ResourceHandle                  _shader;

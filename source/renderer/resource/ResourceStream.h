@@ -30,6 +30,40 @@ namespace te
             GPUHandle*              res;
         };
     }
+
+    namespace shader_data
+    {
+        enum Class {
+            SCALAR = 0,
+            VECTOR2,
+            VECTOR3,
+            VECTOR4,
+            MATRIX4X4,
+            UINT,
+            INT,
+            BOOL,
+
+            SCALAR_ARRAY,
+            VECTOR2_ARRAY,
+            VECTOR3_ARRAY,
+            VECTOR4_ARRAY,
+            MATRIX4X4_ARRAY,
+            UINT_ARRAY,
+            INT_ARRAY,
+            BOOL_ARRAY,
+
+            UNKNOWN_CLASS,
+            NUM_CLASSES = UNKNOWN_CLASS
+        };
+
+        struct ShaderStream
+        {
+            GPUHandle*          res;
+            String              vs;
+            String              fs;
+            ShaderUniformfs*    uniforms;
+        };
+    }
 }
 
 #endif

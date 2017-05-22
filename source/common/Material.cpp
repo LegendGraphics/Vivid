@@ -1,4 +1,5 @@
 #include "common/Material.h"
+#include "common/Shader.h"
 #include "io/ResourceLoader.h"
 
 namespace te
@@ -11,6 +12,11 @@ namespace te
     void Material::unload()
     {
 
+    }
+
+    ShaderPtr  Material::getShader()
+    {
+        return ResourceMapper::get<ShaderManager>()->getShader(_shader);
     }
 
     MaterialManager::MaterialManager()

@@ -25,6 +25,8 @@ namespace te
     {
         // feed data into msg
         uploadMesh();
+        uploadShader();
+
         uploadTexture();
         uploadPosition();
     }
@@ -48,6 +50,16 @@ namespace te
             MeshRender* mr = getComponent<MeshRender>();
             msg->feedData(mr->getMesh().get());
             _renderer->_stream.push_back(msg);*/
+        }
+    }
+    void UploadToRender::uploadShader()
+    {
+        if (hasComponent<MeshRender>())
+        {
+            ShaderStreamMsg* msg = new ShaderStreamMsg;
+            MeshRender* mr = getComponent<MeshRender>();
+            msg->feedData(mr->getMaterial()->getShader().get());
+            _renderer->_stream.push_back(msg);
         }
     }
     void UploadToRender::uploadPosition()

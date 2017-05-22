@@ -4,6 +4,7 @@
 #include "renderer/resource/RenderObject.h"
 #include "renderer/resource/RenderResource.h"
 #include "renderer/resource/RenderMeshObject.h"
+#include "renderer/resource/RenderShaderObject.h"
 #include "math/Matrix.h"
 #include "common/Component.h"
 
@@ -120,6 +121,21 @@ namespace te
         virtual ~MeshStreamMsg();
 
         virtual RenderObject* createRenderObject() { return new RenderMeshObject; }
+
+    protected:
+        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void render(RenderObject*& render_object, RenderContext* rc);
+    };
+
+    // test a shader stream msg
+    class ShaderStreamMsg : public StreamMsg
+    {
+    public:
+        ShaderStreamMsg(MsgType type, Handle handle, void* data);
+        virtual ~ShaderStreamMsg();
+
+        virtual RenderObject* createRenderObject() { return new RenderShaderObject; }
 
     protected:
         virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);

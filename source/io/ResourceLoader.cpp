@@ -516,7 +516,7 @@ namespace te
         XMLNode rootNode = doc.getRootNode();
         if (strcmp(rootNode.getName(), "Shader") != 0)
         {
-            cLog << "Not a pipeline resource file";
+            cLog << "Not a shader resource file";
             return false;
         }
 
@@ -533,8 +533,9 @@ namespace te
             while (!node2.isEmpty())
             {
                 // TODO: add shader uniform
-                node2.getAttribute("name");
-                node2.getAttribute("type");
+                String name = node2.getAttribute("name");
+                String type = node2.getAttribute("type");
+                shader->_custom_uniforms.insert({ name, Shader::uni_type_map[type] });
                 node2 = node2.getNextSibling("Uniform");
             }
         }

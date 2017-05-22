@@ -115,6 +115,10 @@ namespace te
                     // use setShaderConst()
                     // header of all uniform data is in ShaderCmdStream::data
                     // ShaderCmdStream::variables give information for how to read
+                    for (auto& uniform : c_stream->uniforms)
+                    {
+                        setShaderConst(uniform.loc, shader_data::Class(uniform.type), uniform.data);
+                    }
                     delete c_stream;
                 }
                 else
@@ -249,6 +253,21 @@ namespace te
                     index_handle);
 
                 delete vd_stream;
+            }
+            else if (RenderResourceContext::MessageType::ALLOC_SHADER == msg.type)
+            {
+                shader_data::ShaderStream* s_stream
+                    = static_cast<shader_data::ShaderStream*>(msg.head);
+                GPUResourceHandle* res = s_stream->res;
+                (*res) = createShader(s_stream->vs.c_str(), s_stream->fs.c_str(), 0);
+                bindShader(*res);
+
+                for (auto& uniform : s_stream->uniforms)
+                {
+                    uniform.loc = getShaderConstLoc(*res, uniform.name);
+                }
+
+                delete s_stream;
             }
             else if (RenderResourceContext::MessageType::ALLOC_TEXTURE == msg.type)
             {

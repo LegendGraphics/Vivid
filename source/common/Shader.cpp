@@ -3,16 +3,25 @@
 
 namespace te
 {
+    //Shader::Uniforms Shader::prefined_uniforms =
+    //{
+    //    // Predefined uniforms
+    //    { "viewMat", ShaderUniformType::MATRIX4X4 },
+    //    { "viewMatInv", ShaderUniformType::MATRIX4X4 },
+    //    { "projMat", ShaderUniformType::MATRIX4X4 },
+    //    { "viewProjMat", ShaderUniformType::MATRIX4X4 }
+    //    // ...
+    //};
+
     Shader::UniformTypeMap Shader::uni_type_map =
     {
-        // Predefined uniforms
-        { "viewMat", ShaderUniformType::MATRIX4X4 },
-        { "viewMatInv", ShaderUniformType::MATRIX4X4 },
-        { "projMat", ShaderUniformType::MATRIX4X4 },
-        { "viewProjMat", ShaderUniformType::MATRIX4X4 },
+        // Predefined types
+        { "float", ShaderUniformType::SCALAR },
+        { "float2", ShaderUniformType::VECTOR2 },
+        { "float3", ShaderUniformType::VECTOR3 },
+        { "float4", ShaderUniformType::VECTOR4 },
+        { "matrix4", ShaderUniformType::MATRIX4X4 }
         // ...
-
-        // Custom uniforms, register from xml file
     };
 
     bool Shader::load(const String & res)

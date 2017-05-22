@@ -7,7 +7,7 @@
 
 namespace te
 {
-    namespace shader_data 
+    /*namespace shader_data
     {
         enum Class {
             SCALAR = 0,
@@ -36,7 +36,7 @@ namespace te
         {
             RenderResource* res;
         };
-    }
+    }*/
 
     struct ShaderVariable
     {
@@ -91,22 +91,19 @@ namespace te
         //inline void setModelMat(const Mat4x4& model_mat) { _model_mat = model_mat; };
 
     private:
-        void allocMeshResource(RenderResourceContext* context);
-        void allocIndexBuffer(RenderResourceContext* context);
+        void createShader(RenderResourceContext* context);
+        /*void allocIndexBuffer(RenderResourceContext* context);
         void allocVertexBuffer(RenderResourceContext* context);
         void allocVertexDeclaration(RenderResourceContext* context);
 
-        void setVertexContext(RenderContext* context);
-
+        void setVertexContext(RenderContext* context);*/
 
     private:
-        GPUHandle       _index_buffer;
-        GPUHandle       _vertex_buffer;
-        GPUHandle       _vao;
+        GPUHandle   _shader_handle;
+        String      _vs;
+        String      _fs;
 
-        IndexArray*         _index_array;
-        VertexArray*        _vertex_array;
-        vertex_layout::Type _layout_type;
+        ShaderUniformfs       _uniforms;
 }
 
 #endif

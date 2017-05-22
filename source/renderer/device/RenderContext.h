@@ -45,9 +45,8 @@ namespace te
 
         struct ShaderCmdStream
         {
-            uint32 shader_handle;
-            void*  data; // the data is hold by real entity, no need to be deleted here
-            std::vector<ShaderVariable> variables;
+            uint32          shader_handle;
+            ShaderUniformfs uniforms;
         };
 
         struct RenderTargetCmdStream

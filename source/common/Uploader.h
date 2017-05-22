@@ -18,6 +18,7 @@ namespace te
     private:
         void uploadMesh();
         void uploadTexture();
+        void uploadShader();
         void uploadPosition();
 
     private:
