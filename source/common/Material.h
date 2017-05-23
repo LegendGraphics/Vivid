@@ -2,6 +2,7 @@
 #define COMMON_MATERIAL_H
 
 #include "common/Resource.h"
+#include "common/Shader.h"
 
 namespace te
 {

@@ -3,7 +3,8 @@
 
 #include "base/Types.h"
 
-#include "renderer/resource/ShaderObject.h"
+//#include "renderer/resource/ShaderObject.h"
+#include "common/Shader.h"
 #include "renderer/resource/RenderTexture.h"
 
 namespace te

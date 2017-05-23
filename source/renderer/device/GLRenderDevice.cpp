@@ -50,7 +50,7 @@ namespace te
         char* version = (char*)glGetString(GL_VERSION);
 
         bool bOK = true;
-        bOK = bOK && createDefaultShader(getDefaultVSCode(), getDefaultFSCode(), _default_shader);
+        //bOK = bOK && createDefaultShader(getDefaultVSCode(), getDefaultFSCode(), _default_shader);
 
         testVao();
 
@@ -117,36 +117,36 @@ namespace te
                     // ShaderCmdStream::variables give information for how to read
                     for (auto& uniform : c_stream->uniforms)
                     {
-                        setShaderConst(uniform.loc, shader_data::Class(uniform.type), uniform.data);
+                        setShaderConst(uniform.second.loc, shader_data::Class(uniform.second.type), &uniform.second.data);
                     }
                     delete c_stream;
                 }
                 else
                 {
-                    // debug mode, use default shader
-                    if (_cur_shader_handle != _default_shader.shader_handle)
-                        bindShader(_default_shader.shader_handle);
+                    //// debug mode, use default shader
+                    //if (_cur_shader_handle != _default_shader.shader_handle)
+                    //    bindShader(_default_shader.shader_handle);
 
-                    // set view params
-                    if (_default_shader.uni_view_mat >= 0)
-                        setShaderConst(_default_shader.uni_view_mat, shader_data::MATRIX4X4, curCamera->getViewMat());
-                    if (_default_shader.uni_proj_mat >= 0)
-                        setShaderConst(_default_shader.uni_proj_mat, shader_data::MATRIX4X4, curCamera->getProjectionMat());
-                    if (_default_shader.uni_view_proj_mat >= 0)
-                        setShaderConst(_default_shader.uni_view_proj_mat, shader_data::MATRIX4X4, curCamera->getViewProjctionMat());
+                    //// set view params
+                    //if (_default_shader.uni_view_mat >= 0)
+                    //    setShaderConst(_default_shader.uni_view_mat, shader_data::MATRIX4X4, curCamera->getViewMat());
+                    //if (_default_shader.uni_proj_mat >= 0)
+                    //    setShaderConst(_default_shader.uni_proj_mat, shader_data::MATRIX4X4, curCamera->getProjectionMat());
+                    //if (_default_shader.uni_view_proj_mat >= 0)
+                    //    setShaderConst(_default_shader.uni_view_proj_mat, shader_data::MATRIX4X4, curCamera->getViewProjctionMat());
 
-                    char* data_ptr = static_cast<char*>(c_stream->data);
-                    for (auto i : c_stream->variables)
-                    {
-                        setShaderConst(_default_shader.custom_uniform_handles[i.semantic_name], shader_data::Class(i.klass), data_ptr + i.offset);
-                    }
-                    delete[] data_ptr;
+                    //char* data_ptr = static_cast<char*>(c_stream->data);
+                    //for (auto i : c_stream->variables)
+                    //{
+                    //    setShaderConst(_default_shader.custom_uniform_handles[i.semantic_name], shader_data::Class(i.klass), data_ptr + i.offset);
+                    //}
+                    //delete[] data_ptr;
 
-                    // set default color
-                    float color[4] = { 0.75f, 0.5, 0.25f, 1 };
-                    setShaderConst(_default_shader.custom_uniform_handles["color"], shader_data::VECTOR4, &color);
+                    //// set default color
+                    //float color[4] = { 0.75f, 0.5, 0.25f, 1 };
+                    //setShaderConst(_default_shader.custom_uniform_handles["color"], shader_data::VECTOR4, &color);
 
-                    delete c_stream;
+                    //delete c_stream;
                 }
             }
             else if (RenderContext::CommandType::RENDER == command.command_type)
@@ -259,12 +259,12 @@ namespace te
                 shader_data::ShaderStream* s_stream
                     = static_cast<shader_data::ShaderStream*>(msg.head);
                 GPUResourceHandle* res = s_stream->res;
-                (*res) = createShader(s_stream->vs.c_str(), s_stream->fs.c_str(), 0);
+                (*res) = createShader(s_stream->vs.c_str(), s_stream->fs.c_str(), vertex_layout::PNTB);
                 bindShader(*res);
 
-                for (auto& uniform : s_stream->uniforms)
+                for (auto& uniform : *s_stream->uniforms)
                 {
-                    uniform.loc = getShaderConstLoc(*res, uniform.name);
+                    uniform.second.loc = getShaderConstLoc(*res, uniform.second.name.c_str());
                 }
 
                 delete s_stream;
@@ -727,7 +727,7 @@ namespace te
         _testVao = createVertexArray(nLoc, locations, sizes, offsets, vertex_handles, index_handle);
     }
 
-    bool GLRenderDevice::createDefaultShader(const char* vertex_shader, const char* fragment_shader, ShaderObject& so)
+    /*bool GLRenderDevice::createDefaultShader(const char* vertex_shader, const char* fragment_shader, ShaderObject& so)
     {
         uint32 shader_handle = createShader(vertex_shader, fragment_shader, vertex_layout::PNTB);
         if (0 == shader_handle) return false;
@@ -744,5 +744,5 @@ namespace te
         so.uni_view_proj_mat_inv = getShaderConstLoc(shader_handle, "viewProjMatInv");
 
         return true;
-    }
+    }*/
 }

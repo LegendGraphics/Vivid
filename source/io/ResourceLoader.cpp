@@ -520,11 +520,6 @@ namespace te
             return false;
         }
 
-        if (strcmp(rootNode.getAttribute("type"), "vertex") == 0)
-            shader->_type = Shader::VERTEX_SHADER;
-        else if (strcmp(rootNode.getAttribute("type"), "fragment") == 0)
-            shader->_type = Shader::FRAGMENT_SHADER;
-
         // Parse uniforms
         XMLNode node1 = rootNode.getFirstChild("Uniforms");
         if (!node1.isEmpty())
@@ -535,22 +530,24 @@ namespace te
                 // TODO: add shader uniform
                 String name = node2.getAttribute("name");
                 String type = node2.getAttribute("type");
-                shader->_custom_uniforms.insert({ name, Shader::uni_type_map[type] });
+                ShaderUniformf uniform;
+                uniform.name = name;
+                uniform.type = Shader::uni_type_map[type];
+
+                shader->_custom_uniforms.insert({ name,  uniform });
                 node2 = node2.getNextSibling("Uniform");
             }
         }
 
-        // Parse glsl, currently using only one glsl file
+        // Parse glsl, currently using vertex and fragment glsl file
         node1 = rootNode.getFirstChild("GLSL");
         if (!node1.isEmpty())
         {
-            XMLNode node2 = node1.getFirstChild("FileName");
-            while (!node2.isEmpty())
-            {
-                // load glsl file
-                shader->_shader_context = parseGLSL(node2.getAttribute("name"));
-                //node2 = node2.getNextSibling("FileName");
-            }
+            XMLNode vs_node = node1.getFirstChild("Vertex");
+            shader->_vs_context = parseGLSL(vs_node.getAttribute("name"));
+
+            XMLNode fs_node = node1.getFirstChild("Fragment");
+            shader->_fs_context = parseGLSL(fs_node.getAttribute("name"));
         }
 
         return true;

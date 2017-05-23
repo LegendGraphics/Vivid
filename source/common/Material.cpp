@@ -16,7 +16,7 @@ namespace te
 
     ShaderPtr  Material::getShader()
     {
-        return ResourceMapper::get<ShaderManager>()->getShader(_shader);
+        return ResourceMapper::getInstance()->get<ShaderManager>()->getShader(_shader);
     }
 
     MaterialManager::MaterialManager()

@@ -1,6 +1,8 @@
 #ifndef RENDERER_RESOURCE_STREAM_H
 #define RENDERER_RESOURCE_STREAM_H
 
+#include "common/Shader.h"
+
 namespace te
 {
     namespace vertex_layout

@@ -4,7 +4,7 @@
 #include "base/Types.h"
 #include "base/Assert.h"
 
-#include "renderer/resource/ShaderObject.h"
+//#include "renderer/resource/ShaderObject.h"
 #include "renderer/Resource/RenderTexture.h"
 #include "renderer/Resource/VertexLayout.h"
 

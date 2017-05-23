@@ -2,7 +2,6 @@
 #include "io/FileUtils.h"
 #include "io/ResourceLoader.h"
 
-#include "renderer/RenderInterface.h"
 
 namespace te
 {

@@ -66,10 +66,15 @@ namespace te
         String getFragmentShaderContext() const { return _fs_context; }
         ShaderUniformfs getShaderUniforms() const { return _custom_uniforms; }
 
+        void setROHandle(Handle handle) { _render_object = handle; }
+        Handle getROHandle() { return _render_object; }
+
+
     protected:
         String              _vs_context;
         String              _fs_context;
         ShaderUniformfs     _custom_uniforms;
+        Handle              _render_object;
     };
 
     using ShaderPtr = RefPtr<Shader>;

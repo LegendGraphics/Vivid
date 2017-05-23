@@ -1,9 +1,11 @@
 #ifndef RENDERER_RENDER_SHADER_OBJECT_H
 #define RENDERER_RENDER_SHADER_OBJECT_H
+
 #include <unordered_map>
 #include "base/Types.h"
 #include "base/String.h"
-#include "renderer/resource/RenderResource.h"
+#include "common/Shader.h"
+#include "renderer/resource/RenderObject.h"
 
 namespace te
 {
@@ -38,40 +40,44 @@ namespace te
         };
     }*/
 
-    struct ShaderVariable
-    {
-        unsigned klass;
-        unsigned elements;
-        unsigned offset;
-        unsigned element_stride;
-        String semantic_name;
+    //struct ShaderVariable
+    //{
+    //    unsigned klass;
+    //    unsigned elements;
+    //    unsigned offset;
+    //    unsigned element_stride;
+    //    String semantic_name;
 
-        ShaderVariable() :
-            klass(shader_data::UNKNOWN_CLASS),
-            elements(0),
-            offset(0xffffffff),
-            element_stride(0),
-            semantic_name("") {}
-    };
+    //    ShaderVariable() :
+    //        klass(shader_data::UNKNOWN_CLASS),
+    //        elements(0),
+    //        offset(0xffffffff),
+    //        element_stride(0),
+    //        semantic_name("") {}
+    //};
 
-    struct ShaderObject
-    {
-        uint32 shader_handle;
+    //struct ShaderObject
+    //{
+    //    uint32 shader_handle;
 
-        std::unordered_map<String, int> custom_uniform_handles; // TODO: reconsider if we need map here
-        std::unordered_map<String, int> custom_sampler_handles;
+    //    std::unordered_map<String, int> custom_uniform_handles; // TODO: reconsider if we need map here
+    //    std::unordered_map<String, int> custom_sampler_handles;
 
-        int uni_view_mat, uni_proj_mat, uni_view_proj_mat, uni_view_proj_mat_inv;
-    };
+    //    int uni_view_mat, uni_proj_mat, uni_view_proj_mat, uni_view_proj_mat_inv;
+    //};
 
     // <del>seems in Horde3D all shader resource is managed in one
     // instance of ShaderResource??? </del>
     // one kind of mesh may have one ShaderResource; light may have its
     // own ShaderResource, etc
-    class ShaderResource : public RenderResource
+    /*class ShaderResource : public RenderResource
     {
         std::vector<ShaderObject> _shaders;
-    };
+    };*/
+    
+    class RenderResourceContext;
+    class RenderContext;
+    class StreamMsg;
 
     class RenderShaderObject : public RenderObject
     {
@@ -97,6 +103,7 @@ namespace te
         void allocVertexDeclaration(RenderResourceContext* context);
 
         void setVertexContext(RenderContext* context);*/
+        void setShader(RenderContext* context);
 
     private:
         GPUHandle   _shader_handle;
@@ -104,6 +111,7 @@ namespace te
         String      _fs;
 
         ShaderUniformfs       _uniforms;
+    };
 }
 
 #endif

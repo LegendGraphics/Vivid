@@ -56,9 +56,10 @@ namespace te
     {
         if (hasComponent<MeshRender>())
         {
-            ShaderStreamMsg* msg = new ShaderStreamMsg;
             MeshRender* mr = getComponent<MeshRender>();
-            msg->feedData(mr->getMaterial()->getShader().get());
+            ShaderStreamMsg* msg = new ShaderStreamMsg(_msg_type,
+                mr->getMaterial()->getShader()->getROHandle(),
+                mr->getMaterial()->getShader().get());
             _renderer->_stream.push_back(msg);
         }
     }
