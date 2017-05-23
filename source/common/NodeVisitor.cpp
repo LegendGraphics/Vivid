@@ -124,8 +124,9 @@ namespace te
         // Now simply rendering every node
         Node* node = node_tree->node().get();
 
-        if (UploadToRender* uploader = node->getComponent<UploadToRender>())
+        if (node->hasComponent<UploadToRender>())
         {
+            UploadToRender* uploader = node->getComponent<UploadToRender>();
             uploader->setMsgType(StreamMsg::MsgType::RENDER);
             node->updateRender();
         }
@@ -171,8 +172,9 @@ namespace te
     {
         Node* node = node_tree->node().get();
 
-        if (UploadToRender* uploader = node->getComponent<UploadToRender>())
+        if (node->hasComponent<UploadToRender>())
         {
+            UploadToRender* uploader = node->getComponent<UploadToRender>();
             uploader->setMsgType(StreamMsg::MsgType::UPDATE);
             node->updateRender();
         }

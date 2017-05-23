@@ -14,6 +14,10 @@ namespace te
     class Material;
     class Shader;
 
+    // currently use simply string
+    // in the future we need FileSystem which could be made by python
+    const String ASSETS_PATH = "Assets/";
+
     class ResourceLoader
     {
     public:

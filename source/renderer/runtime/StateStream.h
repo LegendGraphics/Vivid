@@ -60,11 +60,12 @@ namespace te
         void setMsgType(MsgType type) { _msg_type = type; }
         MsgType getMsgType() const { return _msg_type; }
 
-        void setHandle(Handle handle) { _handle = handle; }
         Handle getHandle() const { return _handle; }
 
         void feedData(void* data) { _data = data; }
         void* getData() const { return _data; }
+
+        virtual void setHandle(Handle handle) { _handle = handle; }
 
         virtual RenderObject* createRenderObject() { return nullptr; }
 
@@ -120,6 +121,11 @@ namespace te
         MeshStreamMsg(MsgType type, Handle handle, void* data);
         virtual ~MeshStreamMsg();
 
+        virtual void setHandle(Handle handle) 
+        { 
+            _handle = handle; 
+            static_cast<Mesh*>(_data)->setROHandle(handle); 
+        }
         virtual RenderObject* createRenderObject() { return new RenderMeshObject; }
 
     protected:
@@ -135,6 +141,11 @@ namespace te
         ShaderStreamMsg(MsgType type, Handle handle, void* data);
         virtual ~ShaderStreamMsg();
 
+        virtual void setHandle(Handle handle)
+        {
+            _handle = handle;
+            static_cast<Shader*>(_data)->setROHandle(handle);
+        }
         virtual RenderObject* createRenderObject() { return new RenderShaderObject; }
 
     protected:

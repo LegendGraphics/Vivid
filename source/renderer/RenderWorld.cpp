@@ -90,7 +90,12 @@ namespace te
             {
                 Handle handle = msg->getHandle();
                 RenderObject* ro = nullptr;
-                if (!_objects.has(handle)) ro = msg->createRenderObject();
+                if (!_objects.has(handle))
+                {
+                    ro = msg->createRenderObject();
+                    Handle ro_handle = _objects.add(ro);
+                    msg->setHandle(ro_handle);
+                }
                 else ro = _objects.getPtr(handle);
                 msg->process(ro, nullptr, rrc);
             }

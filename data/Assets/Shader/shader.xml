@@ -5,7 +5,7 @@
         <Uniform name="ks" type="float"/>
     </Uniforms>
     <GLSL>
-        <Vertex name="vertex.glsl"/>
-        <Fragment name="fragment.glsl"/>
+        <Vertex name="Shader/glsl/vertex.glsl"/>
+        <Fragment name="Shader/glsl/fragment.glsl"/>
     </GLSL>
 </Shader>

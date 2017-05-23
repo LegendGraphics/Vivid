@@ -9,10 +9,11 @@ namespace te
     {
     }
 
-    MeshRender::MeshRender(const String& mesh_res)
+    MeshRender::MeshRender(const String& mesh_res, const String& material_res)
         :Component(ComponentType::MESH_RENDER)
     {
         loadMesh(mesh_res);
+        loadMaterial(material_res);
     }
 
     bool MeshRender::loadMesh(const String& res)

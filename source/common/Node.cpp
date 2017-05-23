@@ -5,6 +5,7 @@
 #include "common/NodeVisitor.h"
 #include "common/SpaceState.h"
 #include "common/MeshRender.h"
+#include "common/Uploader.h"
 #include "io/ResourceLoader.h"
 
 namespace te
@@ -82,6 +83,9 @@ namespace te
             addComponent(component, getComponentTypeId<SpaceState>());
         else if (type == ComponentType::MESH_RENDER)
             addComponent(component, getComponentTypeId<MeshRender>());
+        else if (type == ComponentType::UPLOAD_TO_RENDER)
+            addComponent(component, getComponentTypeId<UploadToRender>());
+
     }
 
     void Node::removeComponent(ComponentType type)
@@ -90,6 +94,8 @@ namespace te
             removeComponent(getComponentTypeId<SpaceState>());
         else if (type == ComponentType::MESH_RENDER)
             removeComponent(getComponentTypeId<MeshRender>());
+        else if (type == ComponentType::UPLOAD_TO_RENDER)
+            removeComponent(getComponentTypeId<UploadToRender>());
     }
 
     Component* Node::getComponent(ComponentType type)
@@ -98,6 +104,8 @@ namespace te
             return getComponent(getComponentTypeId<SpaceState>());
         else if (type == ComponentType::MESH_RENDER)
             return getComponent(getComponentTypeId<MeshRender>());
+        else if (type == ComponentType::UPLOAD_TO_RENDER)
+            return getComponent(getComponentTypeId<UploadToRender>());
         else return nullptr;
     }
 
@@ -107,6 +115,8 @@ namespace te
             return hasComponent(getComponentTypeId<SpaceState>());
         else if (type == ComponentType::MESH_RENDER)
             return hasComponent(getComponentTypeId<MeshRender>());
+        else if (type == ComponentType::UPLOAD_TO_RENDER)
+            return hasComponent(getComponentTypeId<UploadToRender>());
         else return false;
     }
 

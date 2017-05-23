@@ -13,6 +13,7 @@
 #include "common/Texture.h"
 #include "common/Material.h"
 #include "common/Shader.h"
+#include "common/Uploader.h"
 
 namespace te
 {
@@ -184,7 +185,7 @@ namespace te
         XMLNode node1 = com_node.getFirstChild();
         while (!node1.isEmpty())
         {
-            if (strcmp(node1.getName(), "SpaceStatus") == 0)
+            if (strcmp(node1.getName(), "SpaceState") == 0)
             {
                 XMLNode position_node = node1.getFirstChild("Position");
                 float px = (float)atof(position_node.getAttribute("x", "0"));
@@ -204,16 +205,21 @@ namespace te
                 SpaceState* space_status = new SpaceState(Vector3(px, py, pz), Vector3(sx, sy, sz), Vector3(rx, ry, rz));
                 meta_node->components.push_back(space_status);
             }
-            else if (strcmp(node1.getName(), "MeshFilter") == 0)
+            else if (strcmp(node1.getName(), "MeshRender") == 0)
             {
-                XMLNode path_node = node1.getFirstChild("RepoPath");
-                String repo_path = path_node.getAttribute("path");
+                XMLNode geo_node = node1.getFirstChild("Geometry");
+                String geo_name = geo_node.getAttribute("name");
 
-                XMLNode file_node = node1.getFirstChild("FileName");
-                String file_name = file_node.getAttribute("name");
+                XMLNode mat_node = node1.getFirstChild("Material");
+                String mat_name = mat_node.getAttribute("name");
 
-                MeshRender* mesh_filter = new MeshRender(repo_path + file_name);
-                meta_node->components.push_back(mesh_filter);
+                MeshRender* mesh_render = new MeshRender(ASSETS_PATH + geo_name, ASSETS_PATH + mat_name);
+                meta_node->components.push_back(mesh_render);
+            }
+            else if (strcmp(node1.getName(), "UploadToRender") == 0)
+            {
+                UploadToRender* uploader = new UploadToRender();
+                meta_node->components.push_back(uploader);
             }
 
             node1 = node1.getNextSibling();
@@ -467,8 +473,8 @@ namespace te
                 cLog << "Missing Shader attribute 'source'";
                 return false;
             }
-
-            material->_shader = ResourceMapper::getInstance()->get<ShaderManager>()->create(node1.getAttribute("source"));
+            String shader_file = ASSETS_PATH + node1.getAttribute("source");
+            material->_shader = ResourceMapper::getInstance()->get<ShaderManager>()->create(shader_file);
         }
 
         // Texture samplers
@@ -488,8 +494,8 @@ namespace te
 
             MaterialSampler sampler;
             sampler.tag = node1.getAttribute("name");
-            sampler.texture = ResourceMapper::getInstance()->get<TextureManager>()->create(node1.getAttribute("map"));
-            material->_samplers.push_back(sampler);
+            //sampler.texture = ResourceMapper::getInstance()->get<TextureManager>()->create(node1.getAttribute("map"));
+            //material->_samplers.push_back(sampler);
 
             node1 = node1.getNextSibling("Sampler");
         }
@@ -544,10 +550,12 @@ namespace te
         if (!node1.isEmpty())
         {
             XMLNode vs_node = node1.getFirstChild("Vertex");
-            shader->_vs_context = parseGLSL(vs_node.getAttribute("name"));
+            String vertex_file = ASSETS_PATH + vs_node.getAttribute("name");
+            shader->_vs_context = parseGLSL(vertex_file);
 
             XMLNode fs_node = node1.getFirstChild("Fragment");
-            shader->_fs_context = parseGLSL(fs_node.getAttribute("name"));
+            String fragment_file = ASSETS_PATH + fs_node.getAttribute("name");
+            shader->_fs_context = parseGLSL(fragment_file);
         }
 
         return true;
@@ -557,7 +565,7 @@ namespace te
     {
         char *data = nullptr;
         int size = 0;
-        FileUtils::streamFromBinaryFile(res, data, size);
+        FileUtils::loadShader(res, data, size);
         if (data == nullptr) return "";
 
         return String(data);

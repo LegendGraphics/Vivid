@@ -12,7 +12,7 @@ namespace te
     {
     public:
         MeshRender();
-        MeshRender(const String& mesh_res);
+        MeshRender(const String& mesh_res, const String& material_res);
 
         bool loadMesh(const String& res);
         bool loadMaterial(const String& res);
