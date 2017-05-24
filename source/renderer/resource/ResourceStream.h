@@ -63,7 +63,7 @@ namespace te
             GPUHandle*          res;
             String              vs;
             String              fs;
-            ShaderUniformfs*    uniforms;
+            ShaderUniforms*    uniforms;
         };
     }
 }

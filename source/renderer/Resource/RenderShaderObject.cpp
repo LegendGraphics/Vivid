@@ -40,7 +40,7 @@ namespace te
 
         _vs = shader->getVertexShaderContext();
         _fs = shader->getFragmentShaderContext();
-        _uniforms = shader->getShaderUniforms();
+        _uniforms = shader->uniforms;
     }
 
     void RenderShaderObject::createShader(RenderResourceContext* context)

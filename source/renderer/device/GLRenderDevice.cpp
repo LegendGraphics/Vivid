@@ -107,15 +107,23 @@ namespace te
                 _vp_height = curCamera->getViewPort()[3];
                 _pending_mask |= PM_VIEWPORT;
 
+
                 // set shader
                 RenderContext::ShaderCmdStream* c_stream = static_cast<RenderContext::ShaderCmdStream*>(command.head);
+
+                // set uniform value from camera, may be not proper
+                for (auto& uniform : c_stream->uniforms.getUniforms())
+                {
+                }
+
+                // TODO: need to be changed, set uniform value in engine part
                 if (c_stream->shader_handle != 0xFFFFFFFF)
                 {
                     // TODO
                     // use setShaderConst()
                     // header of all uniform data is in ShaderCmdStream::data
                     // ShaderCmdStream::variables give information for how to read
-                    for (auto& uniform : c_stream->uniforms)
+                    for (auto& uniform : c_stream->uniforms.getUniforms())
                     {
                         setShaderConst(uniform.second.loc, shader_data::Class(uniform.second.type), &uniform.second.data);
                     }
@@ -262,7 +270,7 @@ namespace te
                 (*res) = createShader(s_stream->vs.c_str(), s_stream->fs.c_str(), vertex_layout::PNTB);
                 bindShader(*res);
 
-                for (auto& uniform : *s_stream->uniforms)
+                for (auto& uniform : s_stream->uniforms->getUniforms())
                 {
                     uniform.second.loc = getShaderConstLoc(*res, uniform.second.name.c_str());
                 }

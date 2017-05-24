@@ -19,6 +19,37 @@ namespace te
         return ResourceMapper::getInstance()->get<ShaderManager>()->getShader(_shader);
     }
 
+    float Material::getFloat(const String& name)
+    {
+        return getShader()->uniforms.getFloat(name);
+    }
+
+    Vector3 Material::getVector3(const String& name)
+    {
+        return getShader()->uniforms.getVector3(name);
+    }
+
+    Matrix Material::getMatrix(const String& name)
+    {
+        return getShader()->uniforms.getMatrix(name);
+    }
+
+    void Material::setFloat(const String& name, float value)
+    {
+        getShader()->uniforms.setFloat(name, value);
+    }
+
+    void Material::setVector3(const String& name, const Vector3& value)
+    {
+        getShader()->uniforms.setVector3(name, value);
+    }
+
+    void Material::setMatrix(const String& name, const Matrix& value)
+    {
+        getShader()->uniforms.setMatrix(name, value);
+    }
+
+
     MaterialManager::MaterialManager()
         :ResourceManager(ResourceType::Material)
     {}

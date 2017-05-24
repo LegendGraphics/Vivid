@@ -110,7 +110,7 @@ namespace te
         String      _vs;
         String      _fs;
 
-        ShaderUniformfs       _uniforms;
+        ShaderUniforms       _uniforms;
     };
 }
 

@@ -500,6 +500,9 @@ namespace te
             node1 = node1.getNextSibling("Sampler");
         }
 
+        // Uniform values
+
+
         return true;
     }
 
@@ -536,11 +539,9 @@ namespace te
                 // TODO: add shader uniform
                 String name = node2.getAttribute("name");
                 String type = node2.getAttribute("type");
-                ShaderUniformf uniform;
-                uniform.name = name;
-                uniform.type = Shader::uni_type_map[type];
 
-                shader->_custom_uniforms.insert({ name,  uniform });
+                // set uniform
+                shader->uniforms.setUniform(name, nullptr, 0, Shader::uni_type_map[type]);
                 node2 = node2.getNextSibling("Uniform");
             }
         }

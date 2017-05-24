@@ -2,46 +2,47 @@
 #define COMMON_SHADER_H
 
 #include "common/Resource.h"
+#include "common/ShaderUniform.h"
 
 namespace te
 {
-    enum class ShaderUniformType
-    {
-        SCALAR = 0,
-        VECTOR2,
-        VECTOR3,
-        VECTOR4,
-        MATRIX4X4,
-        UINT,
-        INT,
-        BOOL,
+    //enum class ShaderUniformType
+    //{
+    //    SCALAR = 0,
+    //    VECTOR2,
+    //    VECTOR3,
+    //    VECTOR4,
+    //    MATRIX4X4,
+    //    UINT,
+    //    INT,
+    //    BOOL,
 
-        SCALAR_ARRAY,
-        VECTOR2_ARRAY,
-        VECTOR3_ARRAY,
-        VECTOR4_ARRAY,
-        MATRIX4X4_ARRAY,
-        UINT_ARRAY,
-        INT_ARRAY,
-        BOOL_ARRAY,
+    //    SCALAR_ARRAY,
+    //    VECTOR2_ARRAY,
+    //    VECTOR3_ARRAY,
+    //    VECTOR4_ARRAY,
+    //    MATRIX4X4_ARRAY,
+    //    UINT_ARRAY,
+    //    INT_ARRAY,
+    //    BOOL_ARRAY,
 
-        UNKNOWN_CLASS,
-    };
+    //    UNKNOWN_CLASS,
+    //};
 
-    template <typename T>
-    struct ShaderUniform
-    {
-        String                      name;
-        ShaderUniformType           type;
-        std::vector<T>              data;
-        unsigned char               size;
-        int                         loc;
-    };
+    //template <typename T>
+    //struct ShaderUniform
+    //{
+    //    String                      name;
+    //    ShaderUniformType           type;
+    //    std::vector<T>              data;
+    //    unsigned char               size;
+    //    int                         loc;
+    //};
 
-    using ShaderUniformf = ShaderUniform<float>;
-    using ShaderUniformi = ShaderUniform<int>;  // what is uniformi used for?
+    //using ShaderUniformf = ShaderUniform<float>;
+    //using ShaderUniformi = ShaderUniform<int>;  // what is uniformi used for?
 
-    using ShaderUniformfs = std::unordered_map<String, ShaderUniformf>;
+    ////using ShaderUniforms = std::unordered_map<String, ShaderUniformf>;
 
     // using glsl shader
     class Shader : public Resource
@@ -64,16 +65,15 @@ namespace te
 
         String getVertexShaderContext() const { return _vs_context; }
         String getFragmentShaderContext() const { return _fs_context; }
-        ShaderUniformfs getShaderUniforms() const { return _custom_uniforms; }
 
         void setROHandle(Handle handle) { _render_object = handle; }
         Handle getROHandle() { return _render_object; }
 
+        ShaderUniforms      uniforms;
 
     protected:
         String              _vs_context;
         String              _fs_context;
-        ShaderUniformfs     _custom_uniforms;
         Handle              _render_object;
     };
 

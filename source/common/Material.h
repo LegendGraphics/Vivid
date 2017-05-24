@@ -4,6 +4,7 @@
 #include "common/Resource.h"
 #include "common/Shader.h"
 
+
 namespace te
 {
     struct MaterialSampler
@@ -24,6 +25,14 @@ namespace te
         void unload();
 
         ShaderPtr   getShader();
+
+        float getFloat(const String& name);
+        Vector3 getVector3(const String& name);
+        Matrix getMatrix(const String& name);
+
+        void setFloat(const String& name, float value);
+        void setVector3(const String& name, const Vector3& value);
+        void setMatrix(const String& name, const Matrix& value);
 
         // shader, texture...
     protected:
