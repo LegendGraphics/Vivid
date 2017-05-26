@@ -13,32 +13,42 @@ namespace te
     {
         if (hasUniform(name))
         {
-            ShaderUniformf& uniform = _uniforms[name];
-            uniform.size = size;
-            uniform.data.assign(value, value + size);
+            ShaderUniform& uniform = _uniforms[name];
+            uniform.value.type = type;
+            uniform.value.size = size;
+            uniform.value.data.assign(value, value + size);
         }
         else
         {
-            ShaderUniformf uniform;
-            uniform.loc = 0;
-            uniform.name = name;
-            uniform.type = type;
-            uniform.size = size;
-            uniform.data.assign(value, value + size);
-
-            _uniforms.insert({ name, uniform });
+            cLog << StringUtils::format("Uniform %s doesn't exist in the shader", name);
         }
     }
 
-    float* ShaderUniforms::getUniformValue(const String& name)
+    void ShaderUniforms::addUniform(const String& name)
     {
-        if (hasUniform(name) && _uniforms[name].size) return &_uniforms[name].data[0];
+        if (!hasUniform(name))
+        {
+            ShaderUniform uniform;
+            uniform.loc = 0;
+            uniform.value.size = 0;
+            uniform.value.type = ShaderUniformType::UNKNOWN_CLASS;
+            _uniforms.insert({ name, uniform });
+        }
+        else
+        {
+            cLog << StringUtils::format("Uniform %s already exists in the shader", name);
+        }
+    }
+
+    /*float* ShaderUniforms::getUniformValue(const String& name)
+    {
+        if (hasUniform(name) && _uniforms[name].value.size) return &_uniforms[name].value.data[0];
         else return nullptr;
     }
 
     int ShaderUniforms::getUniformSize(const String& name)
     {
-        if (hasUniform(name)) return _uniforms[name].size;
+        if (hasUniform(name)) return _uniforms[name].value.size;
         else return 0;
     }
 
@@ -79,8 +89,8 @@ namespace te
         {
             float* value = getUniformValue(name);
             return Matrix(value[0], value[1], value[2], value[3],
-                value[4], value[5], value[6], value[7], 
-                value[8], value[9], value[10], value[11], 
+                value[4], value[5], value[6], value[7],
+                value[8], value[9], value[10], value[11],
                 value[12], value[13], value[14], value[15]);
         }
         else
@@ -103,5 +113,5 @@ namespace te
     void ShaderUniforms::setMatrix(const String& name, const Matrix& value)
     {
         setUniform(name, &value(0, 0), 4*4, ShaderUniformType::MATRIX4X4);
-    }
+    }*/
 }

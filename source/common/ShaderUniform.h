@@ -31,41 +31,43 @@ namespace te
         UNKNOWN_CLASS,
     };
 
-    template <typename T>
+    struct ShaderUniformValue
+    {
+        ShaderUniformType           type;
+        std::vector<float>          data;
+        size_t                      size;
+    };
+
     struct ShaderUniform
     {
-        String                      name;
-        ShaderUniformType           type;
-        std::vector<T>              data;
-        size_t                      size;
+        //String                      name;
+        ShaderUniformValue          value;
         int                         loc;
     };
 
-    using ShaderUniformf = ShaderUniform<float>;
-    using ShaderUniformi = ShaderUniform<int>;  // what is uniformi used for?
-
+    // store run-time uniforms in shader
     class ShaderUniforms
     {
     public:
-        float getFloat(const String& name);
+        /*float getFloat(const String& name);
         Vector3 getVector3(const String& name);
         Matrix getMatrix(const String& name);
 
         void setFloat(const String& name, const float value);
         void setVector3(const String& name, const Vector3& value);
-        void setMatrix(const String& name, const Matrix& value);
-
+        void setMatrix(const String& name, const Matrix& value);*/
+    public:
         auto& getUniforms() { return _uniforms; }
 
-    public:
         bool hasUniform(const String& name);
+        void addUniform(const String& name);
         void setUniform(const String& name, const float* value, int size, ShaderUniformType type);
-        float* getUniformValue(const String& name);
+        /*float* getUniformValue(const String& name);
         int getUniformSize(const String& name);
-        ShaderUniformType getUniformType(const String& name);
+        ShaderUniformType getUniformType(const String& name);*/
 
     private:
-        std::unordered_map<String, ShaderUniformf>  _uniforms;
+        std::unordered_map<String, ShaderUniform>  _uniforms;
     };
 }
 

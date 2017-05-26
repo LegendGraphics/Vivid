@@ -134,25 +134,25 @@ namespace te
         virtual void render(RenderObject*& render_object, RenderContext* rc);
     };
 
-    // test a shader stream msg
-    class ShaderStreamMsg : public StreamMsg
-    {
-    public:
-        ShaderStreamMsg(MsgType type, Handle handle, void* data);
-        virtual ~ShaderStreamMsg();
+    //// test a shader stream msg
+    //class ShaderStreamMsg : public StreamMsg
+    //{
+    //public:
+    //    ShaderStreamMsg(MsgType type, Handle handle, void* data);
+    //    virtual ~ShaderStreamMsg();
 
-        virtual void setHandle(Handle handle)
-        {
-            _handle = handle;
-            static_cast<Shader*>(_data)->setROHandle(handle);
-        }
-        virtual RenderObject* createRenderObject() { return new RenderShaderObject; }
+    //    virtual void setHandle(Handle handle)
+    //    {
+    //        _handle = handle;
+    //        static_cast<Shader*>(_data)->setROHandle(handle);
+    //    }
+    //    virtual RenderObject* createRenderObject() { return new RenderShaderObject; }
 
-    protected:
-        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void render(RenderObject*& render_object, RenderContext* rc);
-    };
+    //protected:
+    //    virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+    //    virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+    //    virtual void render(RenderObject*& render_object, RenderContext* rc);
+    //};
 
     /*class TextureStreamMsg : public StreamMsg
     {
