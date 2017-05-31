@@ -24,14 +24,14 @@ namespace te
         }
     }
 
-    void ShaderUniforms::addUniform(const String& name)
+    void ShaderUniforms::addUniform(const String& name, ShaderUniformType type)
     {
         if (!hasUniform(name))
         {
             ShaderUniform uniform;
-            uniform.loc = 0;
+            uniform.loc = -1;
             uniform.value.size = 0;
-            uniform.value.type = ShaderUniformType::UNKNOWN_CLASS;
+            uniform.value.type = type;
             _uniforms.insert({ name, uniform });
         }
         else

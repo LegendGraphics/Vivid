@@ -49,7 +49,7 @@ namespace te
         auto& getUniforms() { return _uniforms; }
 
         bool hasUniform(const String& name);
-        void addUniform(const String& name);
+        void addUniform(const String& name, ShaderUniformType type);
         void setUniform(const String& name, const float* value, int size, ShaderUniformType type);
 
     private:

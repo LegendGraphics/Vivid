@@ -27,8 +27,14 @@ namespace te
         virtual ~Camera();
 
         bool cull(Node* node);
+
+        void setROHandle(Handle handle) { _render_object = handle; }
+        Handle getROHandle() { return _render_object; }
     private:
         bool frustumCullingImpl(Node* node);
+
+    private:
+        Handle _render_object;
     };
 
     class CameraState : public Component
@@ -102,16 +108,19 @@ namespace te
         void setViewTransform(const CameraViewParas& view_paras);
         void setPersProjectTransform(const CameraPersParas& pers_paras);
         void setOrthoProjectTransform(const CameraOrthoParas& ortho_paras);
+        void setViewPort(const Vector4& view_port);
 
         CameraViewParas& getViewParas() { return _view_paras; }
         CameraPersParas& getPersParas() { return _pers_paras; }
         CameraOrthoParas& getOrthoParas() { return _ortho_paras; }
+        Vector4& getViewPort() { return _view_port; }
 
         Transform getViewTransform() const;
         Transform getProjectTransform() const;
         const Frustum& getFrustum();
 
     protected: 
+        Vector4             _view_port;
         CameraViewParas     _view_paras;
         CameraPersParas     _pers_paras;
         CameraOrthoParas    _ortho_paras;

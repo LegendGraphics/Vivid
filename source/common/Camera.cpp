@@ -45,6 +45,11 @@ namespace te
         _mode = mode;
     }
 
+    void CameraState::setViewPort(const Vector4& view_port)
+    {
+        _view_port = view_port;
+    }
+
     void CameraState::setViewTransform(const CameraViewParas& view_paras)
     {
         _view_paras = view_paras;
@@ -57,6 +62,7 @@ namespace te
     {
         _ortho_paras = ortho_paras;
     }
+
 
     Transform CameraState::getViewTransform() const
     {

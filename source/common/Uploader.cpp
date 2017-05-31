@@ -26,9 +26,9 @@ namespace te
         // feed data into msg
         uploadMesh();
         uploadShader();
-
-        uploadTexture();
-        uploadPosition();
+        uploadMaterial();
+        //uploadTexture();
+        //uploadPosition();
     }
 
     void UploadToRender::uploadMesh()
@@ -63,13 +63,52 @@ namespace te
             _renderer->_stream.push_back(msg);
         }
     }
-    void UploadToRender::uploadPosition()
+    void UploadToRender::uploadMaterial()
     {
-        if (hasComponent<SpaceState>())
+        setWorldPosition();
+
+        if (hasComponent<MeshRender>())
         {
-            SpaceState* ss = getComponent<SpaceState>();
-            /*msg->feedData(ComponentType::SPACE_STATE, ss);
-            _renderer->_stream.push_back(msg); */
+            MeshRender* mr = getComponent<MeshRender>();
+            MaterialStreamMsg* msg = new MaterialStreamMsg(_msg_type,
+                mr->getMaterial()->getROHandle(),
+                mr->getMaterial().get());
+            _renderer->_stream.push_back(msg);
         }
     }
+    //void UploadToRender::uploadPosition()
+    //{
+    //    if (hasComponent<SpaceState>())
+    //    {
+    //        SpaceState* ss = getComponent<SpaceState>();
+    //        /*msg->feedData(ComponentType::SPACE_STATE, ss);
+    //        _renderer->_stream.push_back(msg); */
+    //    }
+    //}
+
+    void UploadToRender::uploadCameraState()
+    {
+        if (hasComponent<CameraState>())
+        {
+            CameraState* cs = getComponent<CameraState>();
+            CameraStreamMsg* msg = new CameraStreamMsg(_msg_type,
+                dynamic_cast<Camera*>(_owner)->getROHandle(),
+                dynamic_cast<Camera*>(_owner));
+            _renderer->_stream.push_back(msg);
+        }
+    }
+
+
+    void UploadToRender::setWorldPosition()
+    {
+        if (hasComponent<SpaceState>() && hasComponent<MeshRender>())
+        {
+            SpaceState* ss = getComponent<SpaceState>();
+            Vector3 pos = ss->getLocalPosition();
+            MeshRender* mr = getComponent<MeshRender>();
+            mr->getMaterial()->setMatrix("worldMat", Matrix::translate(pos.x, pos.y, pos.z));
+        }
+    }
+
+
 }

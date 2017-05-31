@@ -541,7 +541,7 @@ namespace te
                 String type = node2.getAttribute("type");
 
                 // set uniform
-                shader->uniforms.setUniform(name, nullptr, 0, Shader::uni_type_map[type]);
+                shader->uniforms.addUniform(name, Shader::uni_type_map[type]);
                 node2 = node2.getNextSibling("Uniform");
             }
         }

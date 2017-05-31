@@ -23,6 +23,7 @@ namespace te
             UPDATE_VERTEX_BUFFER,
             UPDATE_INDEX_BUFFER,
             UPDATE_TEXTURE,
+            UPDATE_CAMERA,
             BIND_SHADER_OBJECT,
             SET_RENDER_TARGET,
             CLEAR,
@@ -48,6 +49,13 @@ namespace te
         {
             uint32          shader_handle;
             ShaderUniforms  uniforms;
+        };
+
+        struct CameraCmdStream
+        {
+            Vector4     view_port;
+            Matrix      proj_mat;
+            Matrix      view_mat;
         };
 
         struct RenderTargetCmdStream

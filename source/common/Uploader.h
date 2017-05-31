@@ -19,7 +19,11 @@ namespace te
         void uploadMesh();
         void uploadTexture();
         void uploadShader();
-        void uploadPosition();
+        void uploadMaterial();
+        void uploadCameraState();
+
+    private:
+        void setWorldPosition();
 
     private:
         class RenderInterface*    _renderer;

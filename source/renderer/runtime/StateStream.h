@@ -5,6 +5,8 @@
 #include "renderer/resource/RenderResource.h"
 #include "renderer/resource/RenderMeshObject.h"
 #include "renderer/resource/RenderShaderObject.h"
+#include "renderer/resource/RenderMaterialObject.h"
+#include "renderer/resource/RenderCameraObject.h"
 #include "math/Matrix.h"
 #include "common/Component.h"
 
@@ -100,18 +102,25 @@ namespace te
     //};
 
 
-    //// camera data stream
-    //class CameraStreamMsg : public StreamMsg
-    //{
-    //public:
-    //    CameraStreamMsg();
-    //    virtual ~CameraStreamMsg();
+    // camera data stream, a very special msg
+    class CameraStreamMsg : public StreamMsg
+    {
+    public:
+        CameraStreamMsg(MsgType type, Handle handle, void* data);
+        virtual ~CameraStreamMsg();
 
-    //protected:
-    //    virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
-    //    virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
-    //    virtual void render(RenderObject*& render_object, RenderContext* rc);
-    //};
+        virtual void setHandle(Handle handle)
+        {
+            _handle = handle;
+            static_cast<Camera*>(_data)->setROHandle(handle);
+        }
+        virtual RenderObject* createRenderObject() { return new RenderCameraObject; }
+
+    protected:
+        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void render(RenderObject*& render_object, RenderContext* rc);
+    };
 
 
     // test a mesh stream msg
@@ -147,6 +156,26 @@ namespace te
             static_cast<Shader*>(_data)->setROHandle(handle);
         }
         virtual RenderObject* createRenderObject() { return new RenderShaderObject; }
+
+    protected:
+        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+        virtual void render(RenderObject*& render_object, RenderContext* rc);
+    };
+
+    // test a material stream msg
+    class MaterialStreamMsg : public StreamMsg
+    {
+    public:
+        MaterialStreamMsg(MsgType type, Handle handle, void* data);
+        virtual ~MaterialStreamMsg();
+
+        virtual void setHandle(Handle handle)
+        {
+            _handle = handle;
+            static_cast<Material*>(_data)->setROHandle(handle);
+        }
+        virtual RenderObject* createRenderObject() { return new RenderMaterialObject; }
 
     protected:
         virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);

@@ -38,6 +38,9 @@ namespace te
         void setMatrix(const String& name, const Matrix& value);
 
         const UniformValueMap& getUniformValueMap() const { return _uniform_map; }
+       
+        void setROHandle(Handle handle) { _render_object = handle; }
+        Handle getROHandle() { return _render_object; }
     public:
         bool hasUniform(const String& name);
         void setUniform(const String& name, const float* value, int size, ShaderUniformType type);
@@ -50,6 +53,8 @@ namespace te
         ResourceHandle                  _shader;
         std::vector<MaterialSampler>    _samplers;
         UniformValueMap                 _uniform_map;
+
+        Handle                          _render_object;
     };
 
     using MaterialPtr = RefPtr<Material>;

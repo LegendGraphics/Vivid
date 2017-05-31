@@ -157,6 +157,25 @@ namespace te
                     //delete c_stream;
                 }
             }
+            else if (RenderContext::CommandType::UPDATE_CAMERA == command.command_type)
+            {
+                RenderContext::CameraCmdStream* c_stream = static_cast<RenderContext::CameraCmdStream*>(command.head);
+                _vp_x = c_stream->view_port.x;
+                _vp_y = c_stream->view_port.y;
+                _vp_width = c_stream->view_port.z;
+                _vp_height = c_stream->view_port.w;
+                _pending_mask |= PM_VIEWPORT;
+
+                GLShader& cur_shader = _shaders.getRef(_cur_shader_handle);
+                int proj_mat_loc = getShaderConstLoc(cur_shader.gl_program_obj, "projMat");
+                int view_mat_loc = getShaderConstLoc(cur_shader.gl_program_obj, "viewMat");
+
+                if (proj_mat_loc == -1) cLog << "Could not find uniform projMat in current shader";
+                if (view_mat_loc == -1) cLog << "Could not find uniform viewMat in current shader";
+
+                setShaderConst(proj_mat_loc, shader_data::MATRIX4X4, &c_stream->proj_mat);
+                setShaderConst(view_mat_loc, shader_data::MATRIX4X4, &c_stream->view_mat);
+            }
             else if (RenderContext::CommandType::RENDER == command.command_type)
             {
                 draw();
