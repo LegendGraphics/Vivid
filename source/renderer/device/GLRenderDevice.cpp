@@ -125,7 +125,7 @@ namespace te
                     // ShaderCmdStream::variables give information for how to read
                     for (auto& uniform : c_stream->uniforms.getUniforms())
                     {
-                        setShaderConst(uniform.second.loc, shader_data::Class(uniform.second.type), &uniform.second.data);
+                        setShaderConst(uniform.second.loc, shader_data::Class(uniform.second.value.type), &uniform.second.value.data);
                     }
                     delete c_stream;
                 }
@@ -272,7 +272,7 @@ namespace te
 
                 for (auto& uniform : s_stream->uniforms->getUniforms())
                 {
-                    uniform.second.loc = getShaderConstLoc(*res, uniform.second.name.c_str());
+                    uniform.second.loc = getShaderConstLoc(*res, uniform.first.c_str());
                 }
 
                 delete s_stream;

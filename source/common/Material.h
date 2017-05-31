@@ -3,7 +3,8 @@
 
 #include "common/Resource.h"
 #include "common/Shader.h"
-
+#include "math/Vector3.h"
+#include "math/Matrix.h"
 
 namespace te
 {
@@ -36,6 +37,7 @@ namespace te
         void setVector3(const String& name, const Vector3& value);
         void setMatrix(const String& name, const Matrix& value);
 
+        const UniformValueMap& getUniformValueMap() const { return _uniform_map; }
     public:
         bool hasUniform(const String& name);
         void setUniform(const String& name, const float* value, int size, ShaderUniformType type);

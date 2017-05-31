@@ -61,8 +61,6 @@ namespace te
         bool load(const String & res);
         void unload();
 
-        // get/set uniform function needed
-
         String getVertexShaderContext() const { return _vs_context; }
         String getFragmentShaderContext() const { return _fs_context; }
 

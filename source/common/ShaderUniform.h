@@ -3,8 +3,6 @@
 
 #include <unordered_map>
 #include "base/String.h"
-#include "math/Vector3.h"
-#include "math/Matrix.h"
 
 namespace te
 {
@@ -40,7 +38,6 @@ namespace te
 
     struct ShaderUniform
     {
-        //String                      name;
         ShaderUniformValue          value;
         int                         loc;
     };
@@ -49,22 +46,11 @@ namespace te
     class ShaderUniforms
     {
     public:
-        /*float getFloat(const String& name);
-        Vector3 getVector3(const String& name);
-        Matrix getMatrix(const String& name);
-
-        void setFloat(const String& name, const float value);
-        void setVector3(const String& name, const Vector3& value);
-        void setMatrix(const String& name, const Matrix& value);*/
-    public:
         auto& getUniforms() { return _uniforms; }
 
         bool hasUniform(const String& name);
         void addUniform(const String& name);
         void setUniform(const String& name, const float* value, int size, ShaderUniformType type);
-        /*float* getUniformValue(const String& name);
-        int getUniformSize(const String& name);
-        ShaderUniformType getUniformType(const String& name);*/
 
     private:
         std::unordered_map<String, ShaderUniform>  _uniforms;

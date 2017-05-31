@@ -47,7 +47,7 @@ namespace te
         struct ShaderCmdStream
         {
             uint32          shader_handle;
-            ShaderUniforms uniforms;
+            ShaderUniforms  uniforms;
         };
 
         struct RenderTargetCmdStream

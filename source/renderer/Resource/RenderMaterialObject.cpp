@@ -12,7 +12,7 @@ namespace te
     RenderObject::Type RenderMaterialObject::TYPE = RenderObject::NOT_INITIALIZED;
 
     RenderMaterialObject::RenderMaterialObject()
-        :_shader_handle(0xFFFFFFFF)
+        :_material_handle(0xFFFFFFFF)
     {
     }
 
@@ -26,7 +26,7 @@ namespace te
 
     void RenderMaterialObject::update(RenderResourceContext* context)
     {
-        createShader(context);
+        // no gpu resource allocated 
     }
 
     void RenderMaterialObject::render(RenderContext* context)
@@ -36,30 +36,18 @@ namespace te
 
     void RenderMaterialObject::parseStreamMsg(StreamMsg* msg)
     {
-        Shader* shader = static_cast<Shader*>(msg->getData());
+        Material* material = static_cast<Material*>(msg->getData());
 
-        _vs = shader->getVertexShaderContext();
-        _fs = shader->getFragmentShaderContext();
-        _uniforms = shader->uniforms;
-    }
-
-    void RenderMaterialObject::createShader(RenderResourceContext* context)
-    {
-        shader_data::ShaderStream* ss = new shader_data::ShaderStream;
-        ss->res = &_shader_handle;
-        ss->vs = _vs;
-        ss->fs = _fs;
-        ss->uniforms = &_uniforms;
-
-        RenderResourceContext::Message allc_shader = {
-            RenderResourceContext::MessageType::ALLOC_SHADER, (void*)ss };
-        context->messages().push_back(allc_shader);
+        for (auto& uniform : material->getUniformValueMap())
+        {
+            _uniforms.setUniform(uniform.first, &uniform.second.data[0], uniform.second.size, uniform.second.type);
+        }
     }
 
     void RenderMaterialObject::setShader(RenderContext* context)
     {
         RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
-        scs->shader_handle = _shader_handle;
+        scs->shader_handle = _material_handle;
         scs->uniforms = _uniforms;
         RenderContext::Command set_shader = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
         context->commands().push_back(set_shader);
