@@ -19,9 +19,12 @@ namespace te
         const static Vector3 WORLD_FORWARD;
     };
 
+
     // Consider Camera as a special leaf node
     class Camera : public Node
     {
+    public:
+        static Camera* create(const String& res);
     public:
         Camera();
         virtual ~Camera();

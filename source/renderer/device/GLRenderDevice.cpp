@@ -8,6 +8,7 @@
 #include "renderer/resource/ResourceStream.h"
 
 #include "math/Vector4.h"
+#include "io/Logger.h"
 
 namespace te
 {

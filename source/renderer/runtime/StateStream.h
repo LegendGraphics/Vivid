@@ -102,7 +102,7 @@ namespace te
     //};
 
 
-    // camera data stream, a very special msg
+    // camera data stream, a very special msg which may be not proper
     class CameraStreamMsg : public StreamMsg
     {
     public:

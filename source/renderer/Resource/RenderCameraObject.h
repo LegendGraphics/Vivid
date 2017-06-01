@@ -4,8 +4,9 @@
 #include <unordered_map>
 #include "base/Types.h"
 #include "base/String.h"
-#include "common/Material.h"
 #include "renderer/resource/RenderObject.h"
+
+#include "common/Camera.h"
 
 namespace te
 {

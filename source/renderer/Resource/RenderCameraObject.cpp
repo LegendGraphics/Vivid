@@ -7,6 +7,8 @@
 #include "renderer/resource/ResourceStream.h"
 #include "renderer/runtime/StateStream.h"
 
+
+
 namespace te
 {
     RenderObject::Type RenderCameraObject::TYPE = RenderObject::NOT_INITIALIZED;
@@ -40,8 +42,8 @@ namespace te
         CameraState* cs = camera->getComponent<CameraState>();
         
         _view_port = cs->getViewPort();
-        _proj_mat = cs->getProjectTransform();
-        _view_mat = cs->getViewTransform();
+        _proj_mat = cs->getProjectTransform().rawMatrix();
+        _view_mat = cs->getViewTransform().rawMatrix();
     }
 
     void RenderCameraObject::setCamera(RenderContext* context)

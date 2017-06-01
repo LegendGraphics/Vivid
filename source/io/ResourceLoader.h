@@ -13,6 +13,7 @@ namespace te
     class Texture;
     class Material;
     class Shader;
+    class CameraState;
 
     // currently use simply string
     // in the future we need FileSystem which could be made by python
@@ -32,6 +33,9 @@ namespace te
     public:
         static const String parseStage(XMLNode& node, PipelineStage* cur_stage);
         static const String parseGLSL(const String& res);
+
+        static bool load(CameraState* camera_state, const String& res);
+
     };
 }
 

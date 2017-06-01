@@ -2,7 +2,8 @@
 <Shader>
     <Uniforms>
         <Uniform name="color" type="float4"/>
-        <Uniform name="ks" type="float"/>
+        <Uniform name="viewProjMat" type="mat4"/>
+        <Uniform name="worldMat" type="mat4"/>
     </Uniforms>
     <GLSL>
         <Vertex name="Shader/glsl/vertex.glsl"/>

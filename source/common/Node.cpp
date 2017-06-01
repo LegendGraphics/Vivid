@@ -195,7 +195,7 @@ namespace te
     }
 
     MetaNodeManager::MetaNodeManager()
-        :ResourceManager(ResourceType::Mesh)
+        :ResourceManager(ResourceType::Node)
     {}
 
     MetaNodeManager::~MetaNodeManager() {}

@@ -19,73 +19,73 @@ namespace te
 {
     bool ResourceLoader::load(Mesh* mesh, const String& res)
     {
-            char *data_ptr = nullptr;
-            int size = 0;
+        char *data_ptr = nullptr;
+        int size = 0;
 
-            FileUtils::streamFromBinaryFile(res, data_ptr, size);
+        FileUtils::streamFromBinaryFile(res, data_ptr, size);
 
-            // Check header and version
-            char id[3];
-            memcpy(&id, data_ptr, 3); data_ptr += 3;
-            if (id[0] != 'T' || id[1] != 'E' || id[2] != 'M')
-                return false; //("Invalid mesh resource");
+        // Check header and version
+        char id[3];
+        memcpy(&id, data_ptr, 3); data_ptr += 3;
+        if (id[0] != 'T' || id[1] != 'E' || id[2] != 'M')
+            return false; //("Invalid mesh resource");
 
-            int version;
-            memcpy(&version, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-            if (version != 1)
-                return false; //("Unsupported version of mesh resource");
+        int version;
+        memcpy(&version, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        if (version != 1)
+            return false; //("Unsupported version of mesh resource");
 
-            int vertex_type;
-            memcpy(&vertex_type, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-            mesh->_layout_type = vertex_layout::Type(vertex_type);
+        int vertex_type;
+        memcpy(&vertex_type, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        mesh->_layout_type = vertex_layout::Type(vertex_type);
 
-            // Load mesh data
-            // vertex stream
-            int attribute_num;
-            memcpy(&attribute_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        // Load mesh data
+        // vertex stream
+        int attribute_num;
+        memcpy(&attribute_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
 
-            int vertex_num;
-            memcpy(&vertex_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        int vertex_num;
+        memcpy(&vertex_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
 
-            mesh->_vertices.convert(vertex_layout::Type(vertex_type));
-            mesh->_vertices.initialize(vertex_num);
+        mesh->_vertices.convert(vertex_layout::Type(vertex_type));
+        mesh->_vertices.initialize(vertex_num);
 
-            for (int i = 0; i < attribute_num; ++i)
+        for (int i = 0; i < attribute_num; ++i)
+        {
+            short sh;
+            int stream_id, elem_size;
+            memcpy(&stream_id, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+            memcpy(&elem_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+            String errormsg;
+
+            switch (stream_id)
             {
-                short sh;
-                int stream_id, elem_size;
-                memcpy(&stream_id, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-                memcpy(&elem_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
-                String errormsg;
-
-                switch (stream_id)
+            case 0:		// Position
+                if (elem_size != 12)
                 {
-                case 0:		// Position
-                    if (elem_size != 12)
-                    {
-                        errormsg = "Invalid position base stream";
-                        break;
-                    }
-                    for (int j = 0; j < vertex_num; ++j)
-                    {
-                        memcpy(&mesh->_vertices.position(j).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
-                        memcpy(&mesh->_vertices.position(j).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
-                        memcpy(&mesh->_vertices.position(j).z, data_ptr, sizeof(float)); data_ptr += sizeof(float);
-                    }
+                    errormsg = "Invalid position base stream";
                     break;
-                case 1:		// Normal
-                    if (elem_size != 6)
-                    {
-                        errormsg = "Invalid normal base stream";
-                        break;
-                    }
-                    for (int j = 0; j < vertex_num; ++j)
-                    {
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).x = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).y = sh / 32767.0f;
-                        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).z = sh / 32767.0f;
-                    }
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&mesh->_vertices.position(j).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                    memcpy(&mesh->_vertices.position(j).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                    memcpy(&mesh->_vertices.position(j).z, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                }
+                break;
+            case 1:		// Normal
+                if (elem_size != 6)
+                {
+                    errormsg = "Invalid normal base stream";
                     break;
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).x = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).y = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).z = sh / 32767.0f;
+                }
+                break;
                 //case 2:		// Tangent
                 //    if (elem_size != 6)
                 //    {
@@ -112,18 +112,18 @@ namespace te
                 //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).z = sh / 32767.0f;
                 //    }
                 //    break;
-                case 2:		// Texture1
-                    if (elem_size != 8)
-                    {
-                        errormsg = "Invalid texture 1 base stream";
-                        break;
-                    }
-                    for (int j = 0; j < vertex_num; ++j)
-                    {
-                        memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
-                        memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
-                    }
+            case 2:		// Texture1
+                if (elem_size != 8)
+                {
+                    errormsg = "Invalid texture 1 base stream";
                     break;
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                    memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                }
+                break;
                 //case 5:		// Texture2
                 //    if (elem_size != 8)
                 //    {
@@ -137,24 +137,24 @@ namespace te
                 //    }
                 //    break;
 
-                default:
-                    data_ptr += elem_size * vertex_num;
-                    continue;
-                }
-                cLog << errormsg;
+            default:
+                data_ptr += elem_size * vertex_num;
+                continue;
             }
+            cLog << errormsg;
+        }
 
-            // triangle stream
-            int indice_num;
-            memcpy(&indice_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        // triangle stream
+        int indice_num;
+        memcpy(&indice_num, data_ptr, sizeof(int)); data_ptr += sizeof(int);
 
-            mesh->_triangles.resize(indice_num);
-            for (int i = 0; i < indice_num; ++i)
-            {
-                memcpy(&mesh->_triangles[i], data_ptr, sizeof(int)); data_ptr += sizeof(int);
-            }
+        mesh->_triangles.resize(indice_num);
+        for (int i = 0; i < indice_num; ++i)
+        {
+            memcpy(&mesh->_triangles[i], data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        }
 
-            return true;
+        return true;
     }
 
     bool ResourceLoader::load(MetaNode* meta_node, const String& res)
@@ -220,6 +220,15 @@ namespace te
             {
                 UploadToRender* uploader = new UploadToRender();
                 meta_node->components.push_back(uploader);
+            }
+            else if (strcmp(node1.getName(), "CameraState") == 0)
+            {
+                XMLNode camera_node = node1.getFirstChild("Camera");
+                String camera_name = camera_node.getAttribute("name");
+
+                CameraState* camera_state = new CameraState();
+                load(camera_state, camera_name);
+                meta_node->components.push_back(camera_state);
             }
 
             node1 = node1.getNextSibling();
@@ -428,7 +437,7 @@ namespace te
     // using stb_image loader
     bool ResourceLoader::load(Texture* texture, const String& res)
     {
-        int x,y,n;
+        int x, y, n;
         unsigned char *data = stbi_load(res.c_str(), &x, &y, &n, 0);
 
         if (data == nullptr) return false;
@@ -572,4 +581,117 @@ namespace te
         return String(data);
     }
 
+    bool ResourceLoader::load(CameraState* camera_state, const String& res)
+    {
+        char *data = nullptr;
+        int size = 0;
+        FileUtils::streamFromBinaryFile(res, data, size);
+        if (data == nullptr) return false;
+
+        XMLDoc doc;
+        doc.parseBuffer(data, size);
+        if (doc.hasError())
+        {
+            cLog << "XML parsing error";
+            return false;
+        }
+
+        XMLNode rootNode = doc.getRootNode();
+        if (strcmp(rootNode.getName(), "Camera") != 0)
+        {
+            cLog << "Not a camera resource file";
+            return false;
+        }
+
+        // Camera mode
+        XMLNode node1 = rootNode.getFirstChild("CameraMode");
+        if (!node1.isEmpty())
+        {
+            if (node1.getAttribute("mode") == 0x0)
+            {
+                cLog << "Missing Camera attribute 'mode'";
+                return false;
+            }
+            String mode = node1.getAttribute("mode");
+            if (mode == "ORTHOGRAPHIC") camera_state->setCameraMode(CameraState::CameraMode::ORTHOGONAL);
+            else if (mode == "PERSPECTIVE") camera_state->setCameraMode(CameraState::CameraMode::PERSPECTIVE);
+        }
+
+        // View port
+        node1 = rootNode.getFirstChild("ViewPort");
+        if (!node1.isEmpty())
+        {
+            XMLNode node2 = node1.getFirstChild("Position");
+            Var x = node1.getAttribute("x");
+            Var y = node1.getAttribute("y");
+            Var z = node1.getAttribute("z");
+            Vector3 position(x.toFloat(), y.toFloat(), z.toFloat());
+
+            node2 = node1.getFirstChild("Center");
+            x = node1.getAttribute("x");
+            y = node1.getAttribute("y");
+            z = node1.getAttribute("z");
+            Vector3 center(x.toFloat(), y.toFloat(), z.toFloat());
+
+            node2 = node1.getFirstChild("Up");
+            x = node1.getAttribute("x");
+            y = node1.getAttribute("y");
+            z = node1.getAttribute("z");
+            Vector3 up(x.toFloat(), y.toFloat(), z.toFloat());
+
+            camera_state->setViewTransform(CameraState::CameraViewParas(position, center, up));
+        }
+
+        // View Transform
+        node1 = rootNode.getFirstChild("ViewTransform");
+        if (!node1.isEmpty())
+        {
+            Var x = node1.getAttribute("x");
+            Var y = node1.getAttribute("y");
+            Var w = node1.getAttribute("w");
+            Var h = node1.getAttribute("h");
+
+            camera_state->setViewPort(Vector4(x.toFloat(), y.toFloat(), w.toFloat(), h.toFloat()));
+        }
+
+        // View Transform
+        node1 = rootNode.getFirstChild("ViewTransform");
+        if (!node1.isEmpty())
+        {
+            Var x = node1.getAttribute("x");
+            Var y = node1.getAttribute("y");
+            Var w = node1.getAttribute("w");
+            Var h = node1.getAttribute("h");
+
+            camera_state->setViewPort(Vector4(x.toFloat(), y.toFloat(), w.toFloat(), h.toFloat()));
+        }
+
+        // Perspective Transform
+        node1 = rootNode.getFirstChild("PerspectiveT");
+        if (!node1.isEmpty())
+        {
+            Var fov = node1.getAttribute("fov");
+            Var aspect = node1.getAttribute("y");
+            Var znear = node1.getAttribute("znear");
+            Var zfar = node1.getAttribute("zfar");
+
+            camera_state->setPersProjectTransform(CameraState::CameraPersParas(fov.toFloat(), aspect.toFloat(), znear.toFloat(), zfar.toFloat()));
+        }
+
+        // Orthographic Transform
+        node1 = rootNode.getFirstChild("OrthographicT");
+        if (!node1.isEmpty())
+        {
+            Var left = node1.getAttribute("left");
+            Var right = node1.getAttribute("right");
+            Var bottom = node1.getAttribute("bottom");
+            Var top = node1.getAttribute("top");
+            Var znear = node1.getAttribute("znear");
+            Var zfar = node1.getAttribute("zfar");
+
+            camera_state->setOrthoProjectTransform(CameraState::CameraOrthoParas(left.toFloat(), right.toFloat(), 
+                bottom.toFloat(), top.toFloat(), znear.toFloat(), zfar.toFloat()));
+
+        }
+    }
 }

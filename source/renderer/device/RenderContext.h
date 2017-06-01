@@ -7,6 +7,9 @@
 #include "common/Shader.h"
 #include "renderer/resource/RenderTexture.h"
 
+#include "math/Vector4.h"
+#include "math/Matrix.h"
+
 namespace te
 {
     class RenderCamera; // used in RenderContext, to pass the camera

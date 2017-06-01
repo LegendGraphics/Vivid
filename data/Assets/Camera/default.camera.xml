@@ -1,0 +1,12 @@
+<!-- Camera -->
+<Camera>
+	<CameraMode mode="ORTHOGRAPHIC"/>
+    <ViewPort x="0.0" y="0.0" w="800" h="600"/>
+    <ViewTransform>
+		<Position x="0.0" y="0.0" z="0.0"/>
+        <Center x="0.0" y="0.0" z="0.0"/>
+        <Up x="0.0" y="1.0" z="0.0"/>
+	</ViewTransform>
+    <PerspectiveT fov="60.0" aspect="4.0/3" znear="1.0" zfar="1000.0"/>
+	<OrthographicT left="0.0" right="0.0" bottom="0.0" top="0.0" znear="0.0" zfar="0.0"/>	
+</Camera>

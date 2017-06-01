@@ -12,6 +12,11 @@ namespace te
     const Vector3 WorldCoordinate::WORLD_FORWARD(0, 0, -1);
 
 
+    Camera* Camera::create(const String& res)
+    {
+        return dynamic_cast<Camera*>(Node::create(res));
+    }
+
     Camera::Camera()
     {
         _node_type = NodeType::CAMERA;
