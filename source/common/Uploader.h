@@ -2,6 +2,7 @@
 #define COMMON_UPLOADER_H
 
 #include "common/Component.h"
+#include "common/Material.h"
 #include "renderer/runtime/StateStream.h"
 
 namespace te
@@ -17,11 +18,13 @@ namespace te
 
         void assembleResourceMsg(ResourceStream& resource_stream);
 
+        Material::UniformValueMap& getUniformValueMap();
     private:
-
         void uploadMesh(ResourceStream& resource_stream);
         void uploadTexture(ResourceStream& resource_stream);
         void uploadShader(ResourceStream& resource_stream);
+
+
         /* void uploadMaterial();
          void uploadCameraState();
 

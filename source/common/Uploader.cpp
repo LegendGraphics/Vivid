@@ -69,6 +69,16 @@ namespace te
         }
     }
 
+    Material::UniformValueMap& UploadToRender::getUniformValueMap()
+    {
+        if (hasComponent<MeshRender>())
+        {
+            MeshRender* mr = getComponent<MeshRender>();
+            return mr->getMaterial()->getUniformValueMap();
+        }
+    }
+
+
     /*void UploadToRender::uploadMaterial()
     {
         setWorldPosition();

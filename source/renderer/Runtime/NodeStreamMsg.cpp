@@ -1,4 +1,5 @@
 #include "renderer/runtime/StateStream.h"
+#include "renderer/device/RenderContext.h"
 #include "renderer/RenderWorld.h"
 #include "common/Uploader.h"
 
@@ -54,7 +55,22 @@ namespace te
             }
         }
 
-        // other render status: position...
+        // other render status: uniforms, position...
+        setShaderUniforms(rc);
+    }
 
+    void NodeStreamMsg::setShaderUniforms(RenderContext* rc)
+    {
+        RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
+
+        Node* node = static_cast<Node*>(_data);
+        auto& uniform_map = node->getComponent<UploadToRender>()->getUniformValueMap();
+        for (auto& uniform : uniform_map)
+        {
+            scs->uniforms.setUniform(uniform.first, &uniform.second.data[0], uniform.second.size, uniform.second.type);
+        }
+
+        RenderContext::Command set_shader = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
+        rc->commands().push_back(set_shader);
     }
 }

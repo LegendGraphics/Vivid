@@ -3,7 +3,6 @@
 
 #include "renderer/resource/RenderMeshObject.h"
 #include "renderer/resource/RenderShaderObject.h"
-#include "renderer/resource/RenderMaterialObject.h"
 #include "renderer/resource/RenderCameraObject.h"
 
 namespace te
@@ -116,6 +115,10 @@ namespace te
     protected:
         virtual void update(RenderWorld*& rw, RenderResourceContext* rrc);
         virtual void render(RenderWorld*& rw, RenderContext* rc);
+        void setShaderUniforms(RenderContext* rc);
+    protected:
+        ShaderUniforms  _uniforms;
+
     };
 
 
@@ -169,25 +172,25 @@ namespace te
         virtual void render(RenderObject*& render_object, RenderContext* rc);
     };
 
-    // test a material stream msg
-    class MaterialStreamMsg : public ResourceStreamMsg
-    {
-    public:
-        MaterialStreamMsg(MsgType type, Handle handle, void* data);
-        virtual ~MaterialStreamMsg();
+    //// test a material stream msg
+    //class MaterialStreamMsg : public ResourceStreamMsg
+    //{
+    //public:
+    //    MaterialStreamMsg(MsgType type, Handle handle, void* data);
+    //    virtual ~MaterialStreamMsg();
 
-        virtual void setHandle(Handle handle)
-        {
-            _handle = handle;
-            static_cast<Material*>(_data)->setROHandle(handle);
-        }
-        virtual RenderObject* createRenderObject() { return new RenderMaterialObject; }
+    //    virtual void setHandle(Handle handle)
+    //    {
+    //        _handle = handle;
+    //        static_cast<Material*>(_data)->setROHandle(handle);
+    //    }
+    //    virtual RenderObject* createRenderObject() { return new RenderMaterialObject; }
 
-    protected:
-        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void render(RenderObject*& render_object, RenderContext* rc);
-    };
+    //protected:
+    //    virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
+    //    virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
+    //    virtual void render(RenderObject*& render_object, RenderContext* rc);
+    //};
 
     /*class TextureStreamMsg : public StreamMsg
     {
