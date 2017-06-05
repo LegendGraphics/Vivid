@@ -29,12 +29,19 @@ namespace te
 
         ShaderPtr   getShader();
 
+        void setUniform(const String& name, float a, float b, float c, float d);
+
         float getFloat(const String& name);
         Vector3 getVector3(const String& name);
         Matrix getMatrix(const String& name);
 
         void setFloat(const String& name, float value);
+        void setVector2(const String& name, float a, float b);
+        void setVector2(const String& name, const Vector2& value);
+        void setVector3(const String& name, float a, float b, float c);
         void setVector3(const String& name, const Vector3& value);
+        void setVector4(const String& name, float a, float b, float c, float d);
+        void setVector4(const String& name, const Vector4& value);
         void setMatrix(const String& name, const Matrix& value);
 
         UniformValueMap& getUniformValueMap() { return _uniform_map; }

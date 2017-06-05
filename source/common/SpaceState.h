@@ -46,6 +46,8 @@ namespace te
         const Vector3& getWorldEulerAngles();
         const Quaternion& getWorldRotation();
 
+        Transform getSpaceTransform();
+
     protected:
         Transform getTranslateTransform(const SpaceStateRef& tr);
         Transform getScaleTransform(const SpaceStateRef& tr);

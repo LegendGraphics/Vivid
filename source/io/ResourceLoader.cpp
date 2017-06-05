@@ -510,7 +510,25 @@ namespace te
         }
 
         // Uniform values
+        node1 = rootNode.getFirstChild("Uniform");
+        while (!node1.isEmpty())
+        {
+            if (node1.getAttribute("name") == 0x0)
+            {
+                cLog << "Missing Uniform attribute 'name'";
+                return false;
+            }
+            String uniform_name = node1.getAttribute("name");
+            Var a = node1.getAttribute("a", "0");
+            Var b = node1.getAttribute("b", "0");
+            Var c = node1.getAttribute("c", "0");
+            Var d = node1.getAttribute("d", "0");
 
+            material->setUniform(uniform_name, a.toFloat(), b.toFloat(),
+                c.toFloat(), d.toFloat());
+
+            node1 = node1.getNextSibling("Uniform");
+        }
 
         return true;
     }

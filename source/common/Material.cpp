@@ -62,14 +62,58 @@ namespace te
         }
     }
 
+    // get uniform type from shader
+    void Material::setUniform(const String& name, float a, float b, float c, float d)
+    {
+        ShaderPtr shader = ResourceMapper::getInstance()->get<ShaderManager>()->getShader(_shader);
+        if (shader->uniforms.hasUniform(name))
+        {
+            auto& uniforms = shader->uniforms.getUniforms();
+            if (uniforms[name].value.type == ShaderUniformType::SCALAR)
+                setFloat(name, a);
+            else if (uniforms[name].value.type == ShaderUniformType::VECTOR2)
+                setVector2(name, a, b);
+            else if (uniforms[name].value.type == ShaderUniformType::VECTOR3)
+                setVector3(name, a, b, c);
+            else if (uniforms[name].value.type == ShaderUniformType::VECTOR4)
+                setVector4(name, a, b, c, d);
+        }
+    }
+
+
     void Material::setFloat(const String& name, float value)
     {
         setUniform(name, &value, 1, ShaderUniformType::SCALAR);
     }
 
+    void Material::setVector2(const String& name, float a, float b)
+    {
+        setVector2(name, Vector2(a, b));
+    }
+
+    void Material::setVector2(const String& name, const Vector2& value)
+    {
+        setUniform(name, &value.x, 2, ShaderUniformType::VECTOR2);
+    }
+
+    void Material::setVector3(const String& name, float a, float b, float c)
+    {
+        setVector3(name, Vector3(a, b, c));
+    }
+
     void Material::setVector3(const String& name, const Vector3& value)
     {
         setUniform(name, &value.x, 3, ShaderUniformType::VECTOR3);
+    }
+
+    void Material::setVector4(const String& name, float a, float b, float c, float d)
+    {
+        setVector4(name, Vector4(a, b, c, d));
+    }
+
+    void Material::setVector4(const String& name, const Vector4& value)
+    {
+        setUniform(name, &value.x, 4, ShaderUniformType::VECTOR4);
     }
 
     void Material::setMatrix(const String& name, const Matrix& value)
@@ -101,6 +145,8 @@ namespace te
             _uniform_map.insert({ name, uniform });
         }
     }
+
+    
 
     float* Material::getUniformValue(const String& name)
     {

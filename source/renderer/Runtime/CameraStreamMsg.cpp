@@ -33,7 +33,7 @@ namespace te
         ccs->proj_mat = camera_state.getProjectTransform().rawMatrix();
         ccs->view_mat = camera_state.getViewTransform().rawMatrix();
 
-        RenderContext::Command set_camera = { 0, (void*)ccs, RenderContext::CommandType::UPDATE_CAMERA };
+        RenderContext::Command set_camera = { 0, (void*)ccs, RenderContext::CommandType::SET_CAMERA };
         rc->commands().push_back(set_camera);
     }
 }

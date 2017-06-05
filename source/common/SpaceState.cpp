@@ -126,6 +126,12 @@ namespace te
         return getTranslateTransform(tr) * getRotateTransform(tr) * getScaleTransform(tr);
     }
 
+    // for test
+    Transform SpaceState::getSpaceTransform()
+    {
+        return getInnerTransform(SpaceStateRef::RELATIVE_TO_WORLD);
+    }
+
     Transform SpaceState::getTranslateTransform(const SpaceStateRef& tr)
     {
         float tx, ty, tz;

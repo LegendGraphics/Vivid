@@ -87,7 +87,14 @@ namespace te
         }
     }
 
-
+    SpaceState& UploadToRender::getSpaceState()
+    {
+        if (hasComponent<SpaceState>())
+        {
+            SpaceState* ss = getComponent<SpaceState>();
+            return *ss;
+        }
+    }
 
     /*void UploadToRender::uploadMaterial()
     {

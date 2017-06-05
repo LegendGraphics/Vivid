@@ -20,7 +20,7 @@ namespace te
         { "float2", ShaderUniformType::VECTOR2 },
         { "float3", ShaderUniformType::VECTOR3 },
         { "float4", ShaderUniformType::VECTOR4 },
-        { "matrix4", ShaderUniformType::MATRIX4X4 }
+        { "mat4", ShaderUniformType::MATRIX4X4 }
         // ...
     };
 

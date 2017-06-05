@@ -158,7 +158,7 @@ namespace te
                     //delete c_stream;
                 }
             }
-            else if (RenderContext::CommandType::UPDATE_CAMERA == command.command_type)
+            else if (RenderContext::CommandType::SET_CAMERA == command.command_type)
             {
                 RenderContext::CameraCmdStream* c_stream = static_cast<RenderContext::CameraCmdStream*>(command.head);
                 _vp_x = c_stream->view_port.x;
@@ -176,6 +176,17 @@ namespace te
 
                 setShaderConst(proj_mat_loc, shader_data::MATRIX4X4, &c_stream->proj_mat);
                 setShaderConst(view_mat_loc, shader_data::MATRIX4X4, &c_stream->view_mat);
+            }
+            else if (RenderContext::CommandType::SET_CAMERA == command.command_type)
+            {
+                RenderContext::SpaceCmdStream* c_stream = static_cast<RenderContext::SpaceCmdStream*>(command.head);
+                GLShader& cur_shader = _shaders.getRef(_cur_shader_handle);
+                int world_mat_loc = getShaderConstLoc(cur_shader.gl_program_obj, "worldMat");
+
+                if (world_mat_loc == -1) cLog << "Could not find uniform worldMat in current shader";
+
+                setShaderConst(world_mat_loc, shader_data::MATRIX4X4, &c_stream->world_mat);
+
             }
             else if (RenderContext::CommandType::RENDER == command.command_type)
             {

@@ -57,6 +57,10 @@ namespace te
 
         // other render status: uniforms, position...
         setShaderUniforms(rc);
+        setSpaceState(rc);
+
+        // draw command
+        setDraw(rc);
     }
 
     void NodeStreamMsg::setShaderUniforms(RenderContext* rc)
@@ -72,5 +76,24 @@ namespace te
 
         RenderContext::Command set_shader = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
         rc->commands().push_back(set_shader);
+    }
+
+    void NodeStreamMsg::setSpaceState(RenderContext* rc)
+    {
+        RenderContext::SpaceCmdStream* scs = new RenderContext::SpaceCmdStream;
+
+        Node* node = static_cast<Node*>(_data);
+        auto& space_state = node->getComponent<UploadToRender>()->getSpaceState();
+        scs->world_mat = space_state.getSpaceTransform().rawMatrix();
+
+        RenderContext::Command set_space = { 0, (void*)scs, RenderContext::CommandType::SET_SPACE };
+        rc->commands().push_back(set_space);
+    }
+
+
+    void NodeStreamMsg::setDraw(RenderContext* rc)
+    {
+        RenderContext::Command draw = { 0, nullptr, RenderContext::CommandType::RENDER };
+        rc->commands().push_back(draw);
     }
 }
