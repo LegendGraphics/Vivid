@@ -1,15 +1,25 @@
 #include "renderer/runtime/StateStream.h"
-#include "renderer/resource/RenderMeshObject.h"
 
 namespace te
 {
-    void StreamMsg::process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc)
+    void RenderStreamMsg::process(RenderWorld* rw, RenderContext* rc, RenderResourceContext* rrc)
     {
         switch (_msg_type)
         {
-        case MsgType::CREATE:
-            create(render_object, rrc);
+        case MsgType::UPDATE:
+            update(rw, rrc);
             break;
+        case MsgType::RENDER:
+            render(rw, rc);
+            break;
+        default: break;
+        }
+    }
+
+    void ResourceStreamMsg::process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc)
+    {
+        switch (_msg_type)
+        {
         case MsgType::UPDATE:
             update(render_object, rrc);
             break;

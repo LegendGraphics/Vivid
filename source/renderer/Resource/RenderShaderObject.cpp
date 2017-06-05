@@ -20,10 +20,6 @@ namespace te
     {
     }
 
-    void RenderShaderObject::create(RenderResourceContext* context)
-    {
-    }
-
     void RenderShaderObject::update(RenderResourceContext* context)
     {
         createShader(context);

@@ -3,7 +3,6 @@
 #include "common/SpaceState.h"
 #include "common/MeshRender.h"
 #include "renderer/RenderInterface.h"
-#include "renderer/runtime/StateStream.h"
 
 namespace te
 {
@@ -24,14 +23,18 @@ namespace te
     void UploadToRender::update()
     {
         // feed data into msg
-        uploadMesh();
-        uploadShader();
-        uploadMaterial();
-        //uploadTexture();
-        //uploadPosition();
+        NodeStreamMsg* msg = new NodeStreamMsg(_msg_type, _owner);
+        _renderer->_stream.push_back(msg);
     }
 
-    void UploadToRender::uploadMesh()
+    void UploadToRender::assembleResourceMsg(ResourceStream& resource_stream)
+    {
+        uploadMesh(resource_stream);
+        uploadTexture(resource_stream);
+        uploadShader(resource_stream);
+    }
+
+    void UploadToRender::uploadMesh(ResourceStream& resource_stream)
     {
         if (hasComponent<MeshRender>())
         {
@@ -39,10 +42,11 @@ namespace te
             MeshStreamMsg* msg = new MeshStreamMsg(_msg_type,
                 mr->getMesh()->getROHandle(), 
                 mr->getMesh().get());
-            _renderer->_stream.push_back(msg);
+            resource_stream.push_back(msg);
         }
     }
-    void UploadToRender::uploadTexture()
+
+    void UploadToRender::uploadTexture(ResourceStream& resource_stream)
     {
         if (hasComponent<MeshRender>())
         {
@@ -52,7 +56,8 @@ namespace te
             _renderer->_stream.push_back(msg);*/
         }
     }
-    void UploadToRender::uploadShader()
+
+    void UploadToRender::uploadShader(ResourceStream& resource_stream)
     {
         if (hasComponent<MeshRender>())
         {
@@ -60,10 +65,11 @@ namespace te
             ShaderStreamMsg* msg = new ShaderStreamMsg(_msg_type,
                 mr->getMaterial()->getShader()->getROHandle(),
                 mr->getMaterial()->getShader().get());
-            _renderer->_stream.push_back(msg);
+            resource_stream.push_back(msg);
         }
     }
-    void UploadToRender::uploadMaterial()
+
+    /*void UploadToRender::uploadMaterial()
     {
         setWorldPosition();
 
@@ -75,7 +81,7 @@ namespace te
                 mr->getMaterial().get());
             _renderer->_stream.push_back(msg);
         }
-    }
+    }*/
     //void UploadToRender::uploadPosition()
     //{
     //    if (hasComponent<SpaceState>())
@@ -86,7 +92,7 @@ namespace te
     //    }
     //}
 
-    void UploadToRender::uploadCameraState()
+    /*void UploadToRender::uploadCameraState()
     {
         if (hasComponent<CameraState>())
         {
@@ -108,7 +114,7 @@ namespace te
             MeshRender* mr = getComponent<MeshRender>();
             mr->getMaterial()->setMatrix("worldMat", Matrix::translate(pos.x, pos.y, pos.z));
         }
-    }
+    }*/
 
 
 }

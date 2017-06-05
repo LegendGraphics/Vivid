@@ -26,10 +26,6 @@ namespace te
     {
     }
 
-    void RenderMeshObject::create(RenderResourceContext* context)
-    {
-        allocMeshResource(context);
-    }
 
     void RenderMeshObject::update(RenderResourceContext* context)
     {

@@ -15,15 +15,18 @@ namespace te
 
         void update();
 
-    private:
-        void uploadMesh();
-        void uploadTexture();
-        void uploadShader();
-        void uploadMaterial();
-        void uploadCameraState();
+        void assembleResourceMsg(ResourceStream& resource_stream);
 
     private:
-        void setWorldPosition();
+
+        void uploadMesh(ResourceStream& resource_stream);
+        void uploadTexture(ResourceStream& resource_stream);
+        void uploadShader(ResourceStream& resource_stream);
+        /* void uploadMaterial();
+         void uploadCameraState();
+
+     private:
+         void setWorldPosition();*/
 
     private:
         class RenderInterface*    _renderer;

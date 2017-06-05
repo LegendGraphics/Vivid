@@ -3,9 +3,6 @@
 #include "common/Pipeline.h"
 #include "renderer/Device/RenderContext.h"
 #include "renderer/Device/RenderDevice.h"
-#include "renderer/resource/RenderMeshObject.h"
-
-#include "math/Vector3.h"
 
 namespace te
 {
@@ -14,15 +11,9 @@ namespace te
         // culling, prepare RenderQueue
 
         // iterate each object
-        for (StreamMsg* msg : stream)
+        for (RenderStreamMsg* msg : stream)
         {
-            StreamMsg::MsgType type = msg->getMsgType();
-            if (StreamMsg::RENDER == type)
-            {
-                Handle handle = msg->getHandle();
-                RenderObject* ro = _objects.getPtr(handle);
-                msg->process(ro, render_context, nullptr);
-            }
+            msg->process(this, render_context, nullptr);
         }
     }
 
@@ -83,50 +74,17 @@ namespace te
     {
         RenderResourceContext* rrc = device->newResourceContext();
 
-        for (StreamMsg* msg : stream)
+        for (RenderStreamMsg* msg : stream)
         {
-            StreamMsg::MsgType type = msg->getMsgType();
-            if (StreamMsg::UPDATE == type)
+            RenderStreamMsg::MsgType type = msg->getMsgType();
+            if (RenderStreamMsg::UPDATE == type)
             {
-                Handle handle = msg->getHandle();
-                RenderObject* ro = nullptr;
-                if (!_objects.has(handle))
-                {
-                    ro = msg->createRenderObject();
-                    Handle ro_handle = _objects.add(ro);
-                    msg->setHandle(ro_handle);
-                }
-                else ro = _objects.getPtr(handle);
-                msg->process(ro, nullptr, rrc);
+                msg->process(this, nullptr, rrc);
             }
         }
 
         device->dispatch(rrc);
         device->releaseResourceContext(rrc);
     }
-
-    //// creating resource 
-    //void RenderWorld::create(StateStream& stream, RenderDevice* device)
-    //{
-    //    RenderResourceContext* rrc = device->newResourceContext();
-
-    //    for (StreamMsg* msg : stream)
-    //    {
-    //        StreamMsg::MsgType type = msg->getMsgType();
-    //        if (StreamMsg::CREATE == type)
-    //        {
-    //            Handle handle = msg->getHandle();
-    //            if (!_objects.has(handle))
-    //            {
-    //                RenderObject* ro = msg->createRenderObject();
-    //                msg->process(ro, nullptr, rrc);
-    //                handle = _objects.add(ro);
-    //            }
-    //        }
-    //    }
-
-    //    device->dispatch(rrc);
-    //    device->releaseResourceContext(rrc);
-    //}
 
 }

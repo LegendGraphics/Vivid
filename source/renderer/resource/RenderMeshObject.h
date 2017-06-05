@@ -20,7 +20,6 @@ namespace te
         RenderMeshObject();
         ~RenderMeshObject();
 
-        void create(RenderResourceContext* context);
         void update(RenderResourceContext* context);
         void render(RenderContext* context);
 

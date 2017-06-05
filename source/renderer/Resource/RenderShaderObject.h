@@ -87,7 +87,6 @@ namespace te
         RenderShaderObject();
         ~RenderShaderObject();
 
-        void create(RenderResourceContext* context);
         void update(RenderResourceContext* context);
         void render(RenderContext* context);
 

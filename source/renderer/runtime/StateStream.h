@@ -1,20 +1,16 @@
 #ifndef RENDERER_STATE_STREAM_H
 #define RENDERER_STATE_STREAM_H
 
-#include "renderer/resource/RenderObject.h"
-#include "renderer/resource/RenderResource.h"
 #include "renderer/resource/RenderMeshObject.h"
 #include "renderer/resource/RenderShaderObject.h"
 #include "renderer/resource/RenderMaterialObject.h"
 #include "renderer/resource/RenderCameraObject.h"
-#include "math/Matrix.h"
-#include "common/Component.h"
 
 namespace te
 {
     class RenderContext;
     class RenderResourceContext;
-
+    class RenderWorld;
 
     //// data type communication between engine and renderer
     //enum class RenderObjectType
@@ -48,83 +44,95 @@ namespace te
     public:
         enum MsgType
         {
-            CREATE,
-            UPDATE,
-            RENDER,
+            UPDATE,     // update gpu object
+            RENDER,     // set render status
             NOT_INITIALIZED
         };
 
     public:
-        StreamMsg() : _data(nullptr), _msg_type(NOT_INITIALIZED), _handle(0xFFFFFFFF){};
-        StreamMsg(MsgType type, Handle handle, void* data) : _data(data), _msg_type(type), _handle(handle){};
+        StreamMsg() : _data(nullptr), _msg_type(NOT_INITIALIZED) {};
+        StreamMsg(MsgType type, void* data) : _data(data), _msg_type(type){};
         virtual ~StreamMsg() {};
 
         void setMsgType(MsgType type) { _msg_type = type; }
         MsgType getMsgType() const { return _msg_type; }
 
-        Handle getHandle() const { return _handle; }
-
         void feedData(void* data) { _data = data; }
         void* getData() const { return _data; }
+
+    protected:
+        void*               _data;
+        MsgType             _msg_type;
+    };
+
+    class ResourceStreamMsg : public StreamMsg
+    {
+    public:
+        ResourceStreamMsg() : _handle(0xFFFFFFFF) {};
+        ResourceStreamMsg(MsgType type, Handle handle, void* data) : StreamMsg(type, data), _handle(handle) {};
+        virtual ~ResourceStreamMsg() {};
+
+        Handle getHandle() const { return _handle; }
 
         virtual void setHandle(Handle handle) { _handle = handle; }
 
         virtual RenderObject* createRenderObject() { return nullptr; }
 
         virtual void process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc);
-        
-
     protected:
-        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc) = 0;
         virtual void update(RenderObject*& render_object, RenderResourceContext* rrc) = 0;
         virtual void render(RenderObject*& render_object, RenderContext* rc) = 0;
 
     protected:
-        void*               _data;
-        MsgType             _msg_type;
-        Handle              _handle;
+        Handle  _handle;
     };
 
-    using StateStream = std::vector<StreamMsg*>;
+    using ResourceStream = std::vector<ResourceStreamMsg*>;
 
-
-    //// general node stream
-    //class NodeStreamMsg : public StreamMsg
-    //{
-    //public:
-    //    NodeStreamMsg();
-    //    virtual ~NodeStreamMsg();
-
-    //protected:
-    //    virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
-    //    virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
-    //    virtual void render(RenderObject*& render_object, RenderContext* rc);
-    //};
-
-
-    // camera data stream, a very special msg which may be not proper
-    class CameraStreamMsg : public StreamMsg
+    class RenderStreamMsg : public StreamMsg
     {
     public:
-        CameraStreamMsg(MsgType type, Handle handle, void* data);
-        virtual ~CameraStreamMsg();
+        RenderStreamMsg() {};
+        RenderStreamMsg(MsgType type, void* data) : StreamMsg(type, data){};
+        virtual ~RenderStreamMsg() {};
 
-        virtual void setHandle(Handle handle)
-        {
-            _handle = handle;
-            static_cast<Camera*>(_data)->setROHandle(handle);
-        }
-        virtual RenderObject* createRenderObject() { return new RenderCameraObject; }
+        virtual void process(RenderWorld* rw, RenderContext* rc, RenderResourceContext* rrc);
+    protected:
+        virtual void update(RenderWorld*& rw, RenderResourceContext* rrc) = 0;
+        virtual void render(RenderWorld*& rw, RenderContext* rc) = 0;
+    protected:
+        ResourceStream  _resources;
+    };
+
+    using StateStream = std::vector<RenderStreamMsg*>;
+
+
+    class NodeStreamMsg : public RenderStreamMsg
+    {
+    public:
+        NodeStreamMsg(MsgType type, void* data);
+        virtual ~NodeStreamMsg();
 
     protected:
-        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
-        virtual void render(RenderObject*& render_object, RenderContext* rc);
+        virtual void update(RenderWorld*& rw, RenderResourceContext* rrc);
+        virtual void render(RenderWorld*& rw, RenderContext* rc);
+    };
+
+
+    class CameraStreamMsg : public NodeStreamMsg
+    {
+    public:
+        CameraStreamMsg(MsgType type, void* data);
+        virtual ~CameraStreamMsg();
+
+    protected:
+        virtual void update(RenderWorld*& rw, RenderResourceContext* rrc);
+        virtual void render(RenderWorld*& rw, RenderContext* rc);
     };
 
 
     // test a mesh stream msg
-    class MeshStreamMsg : public StreamMsg
+    class MeshStreamMsg : public ResourceStreamMsg
     {
     public:
         MeshStreamMsg(MsgType type, Handle handle, void* data);
@@ -138,13 +146,12 @@ namespace te
         virtual RenderObject* createRenderObject() { return new RenderMeshObject; }
 
     protected:
-        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void render(RenderObject*& render_object, RenderContext* rc);
     };
 
     // test a shader stream msg
-    class ShaderStreamMsg : public StreamMsg
+    class ShaderStreamMsg : public ResourceStreamMsg
     {
     public:
         ShaderStreamMsg(MsgType type, Handle handle, void* data);
@@ -158,13 +165,12 @@ namespace te
         virtual RenderObject* createRenderObject() { return new RenderShaderObject; }
 
     protected:
-        virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void render(RenderObject*& render_object, RenderContext* rc);
     };
 
     // test a material stream msg
-    class MaterialStreamMsg : public StreamMsg
+    class MaterialStreamMsg : public ResourceStreamMsg
     {
     public:
         MaterialStreamMsg(MsgType type, Handle handle, void* data);

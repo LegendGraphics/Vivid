@@ -4,7 +4,7 @@
 namespace te
 {
     ShaderStreamMsg::ShaderStreamMsg(MsgType type, Handle handle, void* data)
-        :StreamMsg(type, handle, data)
+        :ResourceStreamMsg(type, handle, data)
     {
     }
 
@@ -12,20 +12,6 @@ namespace te
     {
         /* delete static_cast<Data*>(_data);
          _data = nullptr;*/
-    }
-
-    void ShaderStreamMsg::create(RenderObject*& render_object, RenderResourceContext* rrc)
-    {
-        RenderShaderObject* rso = static_cast<RenderShaderObject*>(render_object);
-        if (!rso) return;
-
-        // do something if we want to update the status of rmo
-        // usually get the data in the message, parse it and set the rmo accordingly
-        rso->parseStreamMsg(this);
-
-        // create resource context
-        rso->create(rrc);
-
     }
 
     void ShaderStreamMsg::update(RenderObject*& render_object, RenderResourceContext* rrc)

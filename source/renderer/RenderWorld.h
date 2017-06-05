@@ -24,7 +24,8 @@ namespace te
         };
         void render(StateStream& stream, RenderParams& params);
         void update(StateStream& stream, RenderDevice* device);
-        //void create(StateStream& stream, RenderDevice* device);
+
+        auto& getRenderObject() { return _objects; }
 
     protected:
         void renderKernel(StateStream& stream, RenderParams& params, RenderContext* render_context);

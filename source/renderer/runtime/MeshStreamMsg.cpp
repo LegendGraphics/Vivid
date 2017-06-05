@@ -3,27 +3,12 @@
 namespace te
 {
     MeshStreamMsg::MeshStreamMsg(MsgType type, Handle handle, void* data)
-        :StreamMsg(type, handle, data)
+        :ResourceStreamMsg(type, handle, data)
     {
     }
 
     MeshStreamMsg::~MeshStreamMsg()
     {
-        /* delete static_cast<Data*>(_data);
-         _data = nullptr;*/
-    }
-
-    void MeshStreamMsg::create(RenderObject*& render_object, RenderResourceContext* rrc)
-    {
-        RenderMeshObject* rmo = static_cast<RenderMeshObject*>(render_object);
-        if (!rmo) return;
-
-        // do something if we want to update the status of rmo
-        // usually get the data in the message, parse it and set the rmo accordingly
-        rmo->parseStreamMsg(this);
-
-        // create resource context
-        rmo->create(rrc);
 
     }
 
@@ -35,7 +20,6 @@ namespace te
         // do something if we want to update the status of rmo
         // usually get the data in the message, parse it and set the rmo accordingly
         rmo->parseStreamMsg(this);
-
         rmo->update(rrc);
     }
 
