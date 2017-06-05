@@ -27,17 +27,22 @@ namespace te
         static Camera* create(const String& res);
     public:
         Camera();
+        Camera(const Camera& node, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Camera();
+
+        friend class CopyOperator;
+        ENABLE_CLONE(Camera);
+
+        virtual RenderStreamMsg* createStreamMsg(StreamMsg::MsgType msg_type)
+        {
+            return new CameraStreamMsg(msg_type, this);
+        }
 
         bool cull(Node* node);
 
-        void setROHandle(Handle handle) { _render_object = handle; }
-        Handle getROHandle() { return _render_object; }
     private:
         bool frustumCullingImpl(Node* node);
 
-    private:
-        Handle _render_object;
     };
 
     class CameraState : public Component

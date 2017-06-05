@@ -11,6 +11,7 @@ namespace te
     class Component;
     class ComponentContainer;
     class Scene;
+    class Camera;
 
     class CopyOperator
     {
@@ -32,6 +33,7 @@ namespace te
         virtual Component* operator()(const Component* component) const;
         virtual ComponentContainer* operator()(const ComponentContainer* ccontainer) const;
         virtual Scene* operator()(const Scene* scene) const;
+        virtual Camera* operator()(const Camera* camera) const;
 
     private:
         Options _flag;

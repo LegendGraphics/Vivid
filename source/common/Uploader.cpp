@@ -23,7 +23,7 @@ namespace te
     void UploadToRender::update()
     {
         // feed data into msg
-        NodeStreamMsg* msg = new NodeStreamMsg(_msg_type, _owner);
+        RenderStreamMsg* msg = _owner->createStreamMsg(_msg_type);
         _renderer->_stream.push_back(msg);
     }
 
@@ -77,6 +77,16 @@ namespace te
             return mr->getMaterial()->getUniformValueMap();
         }
     }
+
+    CameraState& UploadToRender::getCameraState()
+    {
+        if (hasComponent<CameraState>())
+        {
+            CameraState* cs = getComponent<CameraState>();
+            return *cs;
+        }
+    }
+
 
 
     /*void UploadToRender::uploadMaterial()

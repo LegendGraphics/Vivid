@@ -3,7 +3,6 @@
 
 #include "renderer/resource/RenderMeshObject.h"
 #include "renderer/resource/RenderShaderObject.h"
-#include "renderer/resource/RenderCameraObject.h"
 
 namespace te
 {
@@ -121,8 +120,7 @@ namespace te
 
     };
 
-
-    class CameraStreamMsg : public NodeStreamMsg
+    class CameraStreamMsg : public RenderStreamMsg
     {
     public:
         CameraStreamMsg(MsgType type, void* data);
@@ -131,6 +129,9 @@ namespace te
     protected:
         virtual void update(RenderWorld*& rw, RenderResourceContext* rrc);
         virtual void render(RenderWorld*& rw, RenderContext* rc);
+        void setCameraState(RenderContext* rc);
+    protected:
+        
     };
 
 
@@ -171,26 +172,6 @@ namespace te
         virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void render(RenderObject*& render_object, RenderContext* rc);
     };
-
-    //// test a material stream msg
-    //class MaterialStreamMsg : public ResourceStreamMsg
-    //{
-    //public:
-    //    MaterialStreamMsg(MsgType type, Handle handle, void* data);
-    //    virtual ~MaterialStreamMsg();
-
-    //    virtual void setHandle(Handle handle)
-    //    {
-    //        _handle = handle;
-    //        static_cast<Material*>(_data)->setROHandle(handle);
-    //    }
-    //    virtual RenderObject* createRenderObject() { return new RenderMaterialObject; }
-
-    //protected:
-    //    virtual void create(RenderObject*& render_object, RenderResourceContext* rrc);
-    //    virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
-    //    virtual void render(RenderObject*& render_object, RenderContext* rc);
-    //};
 
     /*class TextureStreamMsg : public StreamMsg
     {

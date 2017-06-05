@@ -11,6 +11,7 @@
 #include "common/Resource.h"
 #include "common/Component.h"
 #include "common/ComponentContainer.h"
+#include "renderer/runtime/StateStream.h"
 
 
 namespace te
@@ -48,6 +49,11 @@ namespace te
         inline bool getVisible() { return _visible; }
 
         inline NodeType getNodeType() { return _node_type; }
+
+        virtual RenderStreamMsg* createStreamMsg(StreamMsg::MsgType msg_type) 
+        { 
+            return new NodeStreamMsg(msg_type, this); 
+        }
 
         template <typename C, typename ... Args>
         C* addComponent(Args&& ... args);

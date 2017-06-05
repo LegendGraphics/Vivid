@@ -23,6 +23,11 @@ namespace te
         addComponent<CameraState>();
     }
 
+    Camera::Camera(const Camera& node, const CopyOperator& copyop)
+    {
+        copyop(&node);
+    }
+
     Camera::~Camera(){}
 
     bool Camera::cull(Node* node)

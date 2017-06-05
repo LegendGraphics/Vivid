@@ -3,6 +3,7 @@
 
 #include "common/Component.h"
 #include "common/Material.h"
+#include "common/Camera.h"
 #include "renderer/runtime/StateStream.h"
 
 namespace te
@@ -19,6 +20,8 @@ namespace te
         void assembleResourceMsg(ResourceStream& resource_stream);
 
         Material::UniformValueMap& getUniformValueMap();
+        CameraState& getCameraState();
+
     private:
         void uploadMesh(ResourceStream& resource_stream);
         void uploadTexture(ResourceStream& resource_stream);
