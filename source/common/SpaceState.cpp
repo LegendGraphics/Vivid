@@ -129,7 +129,7 @@ namespace te
     // for test
     Transform SpaceState::getSpaceTransform()
     {
-        return getInnerTransform(SpaceStateRef::RELATIVE_TO_WORLD);
+        return getTranslateTransform(SpaceStateRef::RELATIVE_TO_WORLD);
     }
 
     Transform SpaceState::getTranslateTransform(const SpaceStateRef& tr)

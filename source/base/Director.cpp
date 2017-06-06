@@ -92,6 +92,7 @@ namespace te
 
         FocusCamera* focus_camera = new FocusCamera;
         focus_camera->getComponent<CameraState>()->setCameraMode(CameraState::CameraMode::ORTHOGONAL);
+        focus_camera->getComponent<CameraState>()->setViewPort(Vector4(0, 0, 800, 600));
         focus_camera->getComponent<CameraState>()->setViewTransform(CameraState::CameraViewParas(
             Vector3(200, 200, 200), Vector3(10, 0, 0), Vector3(0, 1, 0)));
         focus_camera->getComponent<CameraState>()->setOrthoProjectTransform(CameraState::CameraOrthoParas(

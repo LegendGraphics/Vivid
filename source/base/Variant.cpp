@@ -164,6 +164,12 @@ namespace te
         _type->setBool(_value, b);
     }
 
+    Var::Var(const char* s)
+        : _type(&VariantString::instance)
+    {
+        _type->setString(_value, String(s));
+    }
+
     Var::Var(String s)
         : _type(&VariantString::instance)
     {
@@ -211,6 +217,13 @@ namespace te
     {
         _type = &VariantBool::instance;
         _type->setBool(_value, b);
+        return *this;
+    }
+
+    Var& Var::operator=(const char* s)
+    {
+        _type = &VariantString::instance;
+        _type->setString(_value, String(s));
         return *this;
     }
 

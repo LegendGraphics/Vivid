@@ -37,7 +37,7 @@ namespace te
 
         _vs = shader->getVertexShaderContext();
         _fs = shader->getFragmentShaderContext();
-        _uniforms = shader->uniforms;
+        _uniforms = &shader->uniforms;
     }
 
     void RenderShaderObject::createShader(RenderResourceContext* context)
@@ -46,7 +46,7 @@ namespace te
         ss->res = &_shader_handle;
         ss->vs = _vs;
         ss->fs = _fs;
-        ss->uniforms = &_uniforms;
+        ss->uniforms = _uniforms;
 
         RenderResourceContext::Message allc_shader = {
             RenderResourceContext::MessageType::ALLOC_SHADER, (void*)ss };

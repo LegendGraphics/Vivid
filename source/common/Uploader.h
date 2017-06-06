@@ -20,7 +20,7 @@ namespace te
 
         void assembleResourceMsg(ResourceStream& resource_stream);
 
-        Material::UniformValueMap& getUniformValueMap();
+        ShaderUniforms getShaderUniforms();
         CameraState& getCameraState();
         SpaceState& getSpaceState();
 

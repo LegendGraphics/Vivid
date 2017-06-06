@@ -99,23 +99,23 @@ namespace te
             }
             else if (RenderContext::CommandType::BIND_SHADER_OBJECT == command.command_type)
             {
-                // set camera
-                RenderCamera* curCamera = context->_camera;
-                // set view port to
-                _vp_x = curCamera->getViewPort()[0];
-                _vp_y = curCamera->getViewPort()[1];
-                _vp_width = curCamera->getViewPort()[2];
-                _vp_height = curCamera->getViewPort()[3];
-                _pending_mask |= PM_VIEWPORT;
+                //// set camera
+                //RenderCamera* curCamera = context->_camera;
+                //// set view port to
+                //_vp_x = curCamera->getViewPort()[0];
+                //_vp_y = curCamera->getViewPort()[1];
+                //_vp_width = curCamera->getViewPort()[2];
+                //_vp_height = curCamera->getViewPort()[3];
+                //_pending_mask |= PM_VIEWPORT;
 
 
                 // set shader
                 RenderContext::ShaderCmdStream* c_stream = static_cast<RenderContext::ShaderCmdStream*>(command.head);
 
-                // set uniform value from camera, may be not proper
-                for (auto& uniform : c_stream->uniforms.getUniforms())
-                {
-                }
+                //// set uniform value from camera, may be not proper
+                //for (auto& uniform : c_stream->uniforms.getUniforms())
+                //{
+                //}
 
                 // TODO: need to be changed, set uniform value in engine part
                 if (c_stream->shader_handle != 0xFFFFFFFF)
@@ -126,7 +126,8 @@ namespace te
                     // ShaderCmdStream::variables give information for how to read
                     for (auto& uniform : c_stream->uniforms.getUniforms())
                     {
-                        setShaderConst(uniform.second.loc, shader_data::Class(uniform.second.value.type), &uniform.second.value.data);
+                        setShaderConst(uniform.second.loc, shader_data::Class(uniform.second.value.type), &uniform.second.value.data[0]);
+                        break;
                     }
                     delete c_stream;
                 }
@@ -167,25 +168,23 @@ namespace te
                 _vp_height = c_stream->view_port.w;
                 _pending_mask |= PM_VIEWPORT;
 
-                GLShader& cur_shader = _shaders.getRef(_cur_shader_handle);
-                int proj_mat_loc = getShaderConstLoc(cur_shader.gl_program_obj, "projMat");
-                int view_mat_loc = getShaderConstLoc(cur_shader.gl_program_obj, "viewMat");
+                int proj_mat_loc = getShaderConstLoc(_cur_shader_handle, "projMat");
+                int view_mat_loc = getShaderConstLoc(_cur_shader_handle, "viewMat");
 
                 if (proj_mat_loc == -1) cLog << "Could not find uniform projMat in current shader";
                 if (view_mat_loc == -1) cLog << "Could not find uniform viewMat in current shader";
 
-                setShaderConst(proj_mat_loc, shader_data::MATRIX4X4, &c_stream->proj_mat);
-                setShaderConst(view_mat_loc, shader_data::MATRIX4X4, &c_stream->view_mat);
+                setShaderConst(proj_mat_loc, shader_data::MATRIX4X4, c_stream->proj_mat.ptr());
+                setShaderConst(view_mat_loc, shader_data::MATRIX4X4, c_stream->view_mat.ptr());
             }
-            else if (RenderContext::CommandType::SET_CAMERA == command.command_type)
+            else if (RenderContext::CommandType::SET_SPACE == command.command_type)
             {
                 RenderContext::SpaceCmdStream* c_stream = static_cast<RenderContext::SpaceCmdStream*>(command.head);
-                GLShader& cur_shader = _shaders.getRef(_cur_shader_handle);
-                int world_mat_loc = getShaderConstLoc(cur_shader.gl_program_obj, "worldMat");
+                int world_mat_loc = getShaderConstLoc(_cur_shader_handle, "worldMat");
 
                 if (world_mat_loc == -1) cLog << "Could not find uniform worldMat in current shader";
 
-                setShaderConst(world_mat_loc, shader_data::MATRIX4X4, &c_stream->world_mat);
+                setShaderConst(world_mat_loc, shader_data::MATRIX4X4, c_stream->world_mat.ptr());
 
             }
             else if (RenderContext::CommandType::RENDER == command.command_type)

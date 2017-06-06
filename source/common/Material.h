@@ -17,8 +17,6 @@ namespace te
     class Material : public Resource
     {
     public:
-        using UniformValueMap = std::unordered_map<String, ShaderUniformValue>;
-    public:
         Material() = default;
         ~Material() = default;
 
@@ -44,7 +42,8 @@ namespace te
         void setVector4(const String& name, const Vector4& value);
         void setMatrix(const String& name, const Matrix& value);
 
-        UniformValueMap& getUniformValueMap() { return _uniform_map; }
+        ShaderUniformValueMap& getUniformValueMap() { return _uniform_map; }
+        ShaderUniforms getShaderUniformsByMap();
     public:
         bool hasUniform(const String& name);
         void setUniform(const String& name, const float* value, int size, ShaderUniformType type);
@@ -56,7 +55,7 @@ namespace te
     protected:
         ResourceHandle                  _shader;
         std::vector<MaterialSampler>    _samplers;
-        UniformValueMap                 _uniform_map;
+        ShaderUniformValueMap           _uniform_map;
     };
 
     using MaterialPtr = RefPtr<Material>;

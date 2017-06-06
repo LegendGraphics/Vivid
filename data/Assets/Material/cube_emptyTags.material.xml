@@ -1,5 +1,5 @@
 <Material class="Translucent.MyClass">
     <Shader source="Shader/shader.xml" />
     <Sampler name="albedoMap" map="mytex.jpg" />
-    <Uniform name="color" a="1.0" b="1.0" c="0.5" />
+    <Uniform name="color" a="0.0" b="1.0" c="0.5" d="1.0" />
 </Material>

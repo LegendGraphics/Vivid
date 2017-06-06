@@ -519,10 +519,10 @@ namespace te
                 return false;
             }
             String uniform_name = node1.getAttribute("name");
-            Var a = node1.getAttribute("a", "0");
-            Var b = node1.getAttribute("b", "0");
-            Var c = node1.getAttribute("c", "0");
-            Var d = node1.getAttribute("d", "0");
+            Var a = String(node1.getAttribute("a", "0"));
+            Var b = String(node1.getAttribute("b", "0"));
+            Var c = String(node1.getAttribute("c", "0"));
+            Var d = String(node1.getAttribute("d", "0"));
 
             material->setUniform(uniform_name, a.toFloat(), b.toFloat(),
                 c.toFloat(), d.toFloat());
@@ -640,21 +640,21 @@ namespace te
         if (!node1.isEmpty())
         {
             XMLNode node2 = node1.getFirstChild("Position");
-            Var x = node1.getAttribute("x");
-            Var y = node1.getAttribute("y");
-            Var z = node1.getAttribute("z");
+            Var x = String(node1.getAttribute("x"));
+            Var y = String(node1.getAttribute("y"));
+            Var z = String(node1.getAttribute("z"));
             Vector3 position(x.toFloat(), y.toFloat(), z.toFloat());
 
             node2 = node1.getFirstChild("Center");
-            x = node1.getAttribute("x");
-            y = node1.getAttribute("y");
-            z = node1.getAttribute("z");
+            x = String(node1.getAttribute("x"));
+            y = String(node1.getAttribute("y"));
+            z = String(node1.getAttribute("z"));
             Vector3 center(x.toFloat(), y.toFloat(), z.toFloat());
 
             node2 = node1.getFirstChild("Up");
-            x = node1.getAttribute("x");
-            y = node1.getAttribute("y");
-            z = node1.getAttribute("z");
+            x = String(node1.getAttribute("x"));
+            y = String(node1.getAttribute("y"));
+            z = String(node1.getAttribute("z"));
             Vector3 up(x.toFloat(), y.toFloat(), z.toFloat());
 
             camera_state->setViewTransform(CameraState::CameraViewParas(position, center, up));
@@ -664,10 +664,10 @@ namespace te
         node1 = rootNode.getFirstChild("ViewTransform");
         if (!node1.isEmpty())
         {
-            Var x = node1.getAttribute("x");
-            Var y = node1.getAttribute("y");
-            Var w = node1.getAttribute("w");
-            Var h = node1.getAttribute("h");
+            Var x = String(node1.getAttribute("x"));
+            Var y = String(node1.getAttribute("y"));
+            Var w = String(node1.getAttribute("w"));
+            Var h = String(node1.getAttribute("h"));
 
             camera_state->setViewPort(Vector4(x.toFloat(), y.toFloat(), w.toFloat(), h.toFloat()));
         }
@@ -676,10 +676,10 @@ namespace te
         node1 = rootNode.getFirstChild("ViewTransform");
         if (!node1.isEmpty())
         {
-            Var x = node1.getAttribute("x");
-            Var y = node1.getAttribute("y");
-            Var w = node1.getAttribute("w");
-            Var h = node1.getAttribute("h");
+            Var x = String(node1.getAttribute("x"));
+            Var y = String(node1.getAttribute("y"));
+            Var w = String(node1.getAttribute("w"));
+            Var h = String(node1.getAttribute("h"));
 
             camera_state->setViewPort(Vector4(x.toFloat(), y.toFloat(), w.toFloat(), h.toFloat()));
         }
@@ -688,10 +688,10 @@ namespace te
         node1 = rootNode.getFirstChild("PerspectiveT");
         if (!node1.isEmpty())
         {
-            Var fov = node1.getAttribute("fov");
-            Var aspect = node1.getAttribute("y");
-            Var znear = node1.getAttribute("znear");
-            Var zfar = node1.getAttribute("zfar");
+            Var fov = String(node1.getAttribute("fov"));
+            Var aspect = String(node1.getAttribute("y"));
+            Var znear = String(node1.getAttribute("znear"));
+            Var zfar = String(node1.getAttribute("zfar"));
 
             camera_state->setPersProjectTransform(CameraState::CameraPersParas(fov.toFloat(), aspect.toFloat(), znear.toFloat(), zfar.toFloat()));
         }
@@ -700,12 +700,12 @@ namespace te
         node1 = rootNode.getFirstChild("OrthographicT");
         if (!node1.isEmpty())
         {
-            Var left = node1.getAttribute("left");
-            Var right = node1.getAttribute("right");
-            Var bottom = node1.getAttribute("bottom");
-            Var top = node1.getAttribute("top");
-            Var znear = node1.getAttribute("znear");
-            Var zfar = node1.getAttribute("zfar");
+            Var left = String(node1.getAttribute("left"));
+            Var right = String(node1.getAttribute("right"));
+            Var bottom = String(node1.getAttribute("bottom"));
+            Var top = String(node1.getAttribute("top"));
+            Var znear = String(node1.getAttribute("znear"));
+            Var zfar = String(node1.getAttribute("zfar"));
 
             camera_state->setOrthoProjectTransform(CameraState::CameraOrthoParas(left.toFloat(), right.toFloat(), 
                 bottom.toFloat(), top.toFloat(), znear.toFloat(), zfar.toFloat()));

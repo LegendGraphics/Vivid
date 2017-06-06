@@ -157,6 +157,7 @@ namespace te
     class FocusCameraBehavior : public Behavior
     {
     public:
+        FocusCameraBehavior();
         void update();
     };
 }

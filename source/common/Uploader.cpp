@@ -1,4 +1,6 @@
 #include "common/Uploader.h"
+#include "base/Director.h"
+#include "common/Scene.h"
 #include "common/Camera.h"
 #include "common/SpaceState.h"
 #include "common/MeshRender.h"
@@ -69,22 +71,21 @@ namespace te
         }
     }
 
-    Material::UniformValueMap& UploadToRender::getUniformValueMap()
+    ShaderUniforms UploadToRender::getShaderUniforms()
     {
         if (hasComponent<MeshRender>())
         {
             MeshRender* mr = getComponent<MeshRender>();
-            return mr->getMaterial()->getUniformValueMap();
+            return mr->getMaterial()->getShaderUniformsByMap();
         }
     }
 
+    // for test
     CameraState& UploadToRender::getCameraState()
     {
-        if (hasComponent<CameraState>())
-        {
-            CameraState* cs = getComponent<CameraState>();
-            return *cs;
-        }
+        Camera* camera = Director::getInstance()->getActiveScene()->getActiveCamera();
+        CameraState* cs = camera->getComponent<CameraState>();
+        return *cs;
     }
 
     SpaceState& UploadToRender::getSpaceState()

@@ -58,6 +58,7 @@ namespace te
         // other render status: uniforms, position...
         setShaderUniforms(rc);
         setSpaceState(rc);
+        setCameraState(rc);
 
         // draw command
         setDraw(rc);
@@ -68,12 +69,8 @@ namespace te
         RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
 
         Node* node = static_cast<Node*>(_data);
-        auto& uniform_map = node->getComponent<UploadToRender>()->getUniformValueMap();
-        for (auto& uniform : uniform_map)
-        {
-            scs->uniforms.setUniform(uniform.first, &uniform.second.data[0], uniform.second.size, uniform.second.type);
-        }
-
+        scs->uniforms = node->getComponent<UploadToRender>()->getShaderUniforms();
+        
         RenderContext::Command set_shader = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
         rc->commands().push_back(set_shader);
     }
@@ -88,6 +85,20 @@ namespace te
 
         RenderContext::Command set_space = { 0, (void*)scs, RenderContext::CommandType::SET_SPACE };
         rc->commands().push_back(set_space);
+    }
+
+    void NodeStreamMsg::setCameraState(RenderContext* rc)
+    {
+        RenderContext::CameraCmdStream* ccs = new RenderContext::CameraCmdStream;
+
+        Node* node = static_cast<Node*>(_data);
+        auto& camera_state = node->getComponent<UploadToRender>()->getCameraState();
+        ccs->view_port = camera_state.getViewPort();
+        ccs->proj_mat = camera_state.getProjectTransform().rawMatrix();
+        ccs->view_mat = camera_state.getViewTransform().rawMatrix();
+
+        RenderContext::Command set_camera = { 0, (void*)ccs, RenderContext::CommandType::SET_CAMERA };
+        rc->commands().push_back(set_camera);
     }
 
 

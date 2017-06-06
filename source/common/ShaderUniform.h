@@ -42,6 +42,8 @@ namespace te
         int                         loc;
     };
 
+    using ShaderUniformValueMap = std::unordered_map<String, ShaderUniformValue>;
+
     // store run-time uniforms in shader
     class ShaderUniforms
     {

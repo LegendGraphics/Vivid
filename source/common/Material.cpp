@@ -20,6 +20,19 @@ namespace te
         return ResourceMapper::getInstance()->get<ShaderManager>()->getShader(_shader);
     }
 
+    // build shader uniforms based on current material values
+    ShaderUniforms Material::getShaderUniformsByMap()
+    {
+        ShaderUniforms shader_uniforms;
+        shader_uniforms = getShader()->uniforms;
+        for (auto& uniform : _uniform_map)
+        {
+            shader_uniforms.setUniform(uniform.first, &uniform.second.data[0], uniform.second.size, uniform.second.type);
+        }
+        return shader_uniforms;
+    }
+
+
     float Material::getFloat(const String& name)
     {
         if (getUniformType(name) == ShaderUniformType::SCALAR)

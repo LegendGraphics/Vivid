@@ -116,6 +116,7 @@ namespace te
         virtual void render(RenderWorld*& rw, RenderContext* rc);
         void setShaderUniforms(RenderContext* rc);
         void setSpaceState(RenderContext* rc);
+        void setCameraState(RenderContext* rc);
         void setDraw(RenderContext* rc);
     protected:
         ShaderUniforms  _uniforms;

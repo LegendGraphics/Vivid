@@ -52,7 +52,7 @@ namespace te
                     ccs->clear_color = pc.paras[1].toBool() || pc.paras[2].toBool()
                         || pc.paras[3].toBool() || pc.paras[4].toBool();
                     ccs->clear_depth = pc.paras[0].toBool();
-                    ccs->color_rgba[0] = pc.paras[5].toFloat();
+                    ccs->color_rgba[0] = 0.4;//pc.paras[5].toFloat();
                     ccs->color_rgba[1] = pc.paras[6].toFloat();
                     ccs->color_rgba[2] = pc.paras[7].toFloat();
                     ccs->color_rgba[3] = pc.paras[8].toFloat();

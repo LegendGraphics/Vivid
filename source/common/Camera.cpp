@@ -135,6 +135,10 @@ namespace te
 
     }
 
+    FocusCameraBehavior::FocusCameraBehavior()
+        :Behavior(ComponentType::LOGIC_BEHAVIOR)
+    {}
+
     void FocusCameraBehavior::update()
     {
         FocusCamera* focus_camera = dynamic_cast<FocusCamera*>(_owner);
