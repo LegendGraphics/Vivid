@@ -50,11 +50,6 @@ namespace te
 
         inline NodeType getNodeType() { return _node_type; }
 
-        virtual RenderStreamMsg* createStreamMsg(StreamMsg::MsgType msg_type) 
-        { 
-            return new NodeStreamMsg(msg_type, this); 
-        }
-
         template <typename C, typename ... Args>
         C* addComponent(Args&& ... args);
 

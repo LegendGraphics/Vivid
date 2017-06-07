@@ -3,34 +3,18 @@
 //
 //namespace te
 //{
-//    ShaderStreamMsg::ShaderStreamMsg(MsgType type, Handle handle, void* data)
-//        :StreamMsg(type, handle, data)
+//    TextureStreamMsg::TextureStreamMsg(ActionType type, Handle handle, void* data)
+//        :ResourceStreamMsg(type, handle, data)
 //    {
 //    }
 //
-//    ShaderStreamMsg::~ShaderStreamMsg()
+//    TextureStreamMsg::~TextureStreamMsg()
 //    {
-//        /* delete static_cast<Data*>(_data);
-//         _data = nullptr;*/
 //    }
 //
-//    void ShaderStreamMsg::create(RenderObject*& render_object, RenderResourceContext* rrc)
+//    void TextureStreamMsg::update(RenderObject*& render_object, RenderResourceContext* rrc)
 //    {
-//        RenderShaderObject* rso = static_cast<RenderShaderObject*>(render_object);
-//        if (!rso) return;
-//
-//        // do something if we want to update the status of rmo
-//        // usually get the data in the message, parse it and set the rmo accordingly
-//        rso->parseStreamMsg(this);
-//
-//        // create resource context
-//        rso->create(rrc);
-//
-//    }
-//
-//    void ShaderStreamMsg::update(RenderObject*& render_object, RenderResourceContext* rrc)
-//    {
-//        RenderShaderObject* rso = static_cast<RenderShaderObject*>(render_object);
+//        RenderTextureObject* rso = static_cast<RenderTextureObject*>(render_object);
 //        if (!rso) return;
 //
 //        // do something if we want to update the status of rmo
@@ -40,9 +24,9 @@
 //        rso->update(rrc);
 //    }
 //
-//    void ShaderStreamMsg::render(RenderObject*& render_object, RenderContext* rc)
+//    void TextureStreamMsg::render(RenderObject*& render_object, RenderContext* rc)
 //    {
-//        RenderShaderObject* rso = static_cast<RenderShaderObject*>(render_object);
+//        RenderTextureObject* rso = static_cast<RenderTextureObject*>(render_object);
 //        if (!rso) return;
 //
 //        // do something if we want to update the status of rmo

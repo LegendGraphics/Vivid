@@ -2,31 +2,22 @@
 
 namespace te
 {
-    void RenderStreamMsg::process(RenderWorld* rw, RenderContext* rc, RenderResourceContext* rrc)
+    void ResourceStreamMsg::process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc)
     {
-        switch (_msg_type)
+        switch (_type)
         {
-        case MsgType::UPDATE:
-            update(rw, rrc);
+        case ActionType::UPDATE:
+            update(render_object, rrc);
             break;
-        case MsgType::RENDER:
-            render(rw, rc);
+        case ActionType::RENDER:
+            render(render_object, rc);
             break;
         default: break;
         }
     }
 
-    void ResourceStreamMsg::process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc)
+    void DataStreamMsg::process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc)
     {
-        switch (_msg_type)
-        {
-        case MsgType::UPDATE:
-            update(render_object, rrc);
-            break;
-        case MsgType::RENDER:
-            render(render_object, rc);
-            break;
-        default: break;
-        }
+        render(render_object, rc);
     }
 }

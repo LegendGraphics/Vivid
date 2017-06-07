@@ -7,7 +7,7 @@
 namespace te
 {
     SpaceState::SpaceState()
-        :Component(ComponentType::SPACE_STATE),
+        :ComData(ComponentType::SPACE_STATE),
         _local_scale(1, 1, 1),
         _world_scale(1, 1, 1),
         _dirty(true)
@@ -15,7 +15,7 @@ namespace te
     }
 
     SpaceState::SpaceState(const Vector3& position)
-        :Component(ComponentType::SPACE_STATE),
+        :ComData(ComponentType::SPACE_STATE),
         _local_scale(1, 1, 1),
         _world_scale(1, 1, 1),
         _dirty(true)
@@ -24,7 +24,7 @@ namespace te
     }
 
     SpaceState::SpaceState(float x, float y, float z)
-        :Component(ComponentType::SPACE_STATE),
+        :ComData(ComponentType::SPACE_STATE),
         _local_scale(1, 1, 1),
         _world_scale(1, 1, 1),
         _dirty(true)
@@ -33,7 +33,7 @@ namespace te
     }
 
     SpaceState::SpaceState(const Vector3& position, const Vector3& scale, const Vector3& rotation)
-        :Component(ComponentType::SPACE_STATE)
+        :ComData(ComponentType::SPACE_STATE)
     {
         this->translate(position);
         this->scale(scale);

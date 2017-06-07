@@ -11,7 +11,7 @@ namespace te
 {
     class RenderResourceContext;
     class RenderContext;
-    class StreamMsg;
+    class StateStreamMsg;
 
     class RenderTextureObject : public RenderObject
     {
@@ -25,7 +25,7 @@ namespace te
         void update(RenderResourceContext* context);
         void render(RenderContext* context);
 
-        void parseStreamMsg(StreamMsg* msg);
+        void parseStreamMsg(StateStreamMsg* msg);
 
     private:
         void allocTexture(RenderResourceContext* context);

@@ -127,7 +127,7 @@ namespace te
         if (node->hasComponent<UploadToRender>())
         {
             UploadToRender* uploader = node->getComponent<UploadToRender>();
-            uploader->setMsgType(StreamMsg::MsgType::RENDER);
+            uploader->setActionType(StateStreamMsg::ActionType::RENDER);
             node->updateRender();
         }
         
@@ -175,7 +175,7 @@ namespace te
         if (node->hasComponent<UploadToRender>())
         {
             UploadToRender* uploader = node->getComponent<UploadToRender>();
-            uploader->setMsgType(StreamMsg::MsgType::UPDATE);
+            uploader->setActionType(StateStreamMsg::ActionType::UPDATE);
             node->updateRender();
         }
         /*if (MeshRender* mf = node->getComponent<MeshRender>())

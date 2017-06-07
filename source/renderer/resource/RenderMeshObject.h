@@ -10,7 +10,7 @@ namespace te
 {
     class RenderContext;
     class RenderResourceContext;
-    class StreamMsg;
+    class StateStreamMsg;
 
     class RenderMeshObject : public RenderObject
     {
@@ -23,7 +23,7 @@ namespace te
         void update(RenderResourceContext* context);
         void render(RenderContext* context);
 
-        void parseStreamMsg(StreamMsg* msg);
+        void parseStreamMsg(StateStreamMsg* msg);
 
         //inline void setShaderObject(RenderResource* res) { _shader_object = res; };
         //inline void setModelMat(const Mat4x4& model_mat) { _model_mat = model_mat; };

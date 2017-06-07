@@ -124,10 +124,9 @@ namespace te
                     // use setShaderConst()
                     // header of all uniform data is in ShaderCmdStream::data
                     // ShaderCmdStream::variables give information for how to read
-                    for (auto& uniform : c_stream->uniforms.getUniforms())
+                    for (auto& uniform : c_stream->uniforms->getUniforms())
                     {
                         setShaderConst(uniform.second.loc, shader_data::Class(uniform.second.value.type), &uniform.second.value.data[0]);
-                        break;
                     }
                     delete c_stream;
                 }
@@ -159,7 +158,7 @@ namespace te
                     //delete c_stream;
                 }
             }
-            else if (RenderContext::CommandType::SET_CAMERA == command.command_type)
+            /*else if (RenderContext::CommandType::SET_CAMERA == command.command_type)
             {
                 RenderContext::CameraCmdStream* c_stream = static_cast<RenderContext::CameraCmdStream*>(command.head);
                 _vp_x = c_stream->view_port.x;
@@ -186,7 +185,7 @@ namespace te
 
                 setShaderConst(world_mat_loc, shader_data::MATRIX4X4, c_stream->world_mat.ptr());
 
-            }
+            }*/
             else if (RenderContext::CommandType::RENDER == command.command_type)
             {
                 draw();

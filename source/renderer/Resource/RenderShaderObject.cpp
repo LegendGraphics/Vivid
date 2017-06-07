@@ -27,11 +27,11 @@ namespace te
 
     void RenderShaderObject::render(RenderContext* context)
     {
-        //setShader(context);
-        // set shader status from material msg
+        setShader(context);
+        setDraw(context);
     }
 
-    void RenderShaderObject::parseStreamMsg(StreamMsg* msg)
+    void RenderShaderObject::parseStreamMsg(StateStreamMsg* msg)
     {
         Shader* shader = static_cast<Shader*>(msg->getData());
 
@@ -53,13 +53,19 @@ namespace te
         context->messages().push_back(allc_shader);
     }
 
-    /*void RenderShaderObject::setShader(RenderContext* context)
+    void RenderShaderObject::setShader(RenderContext* context)
     {
         RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
         scs->shader_handle = _shader_handle;
         scs->uniforms = _uniforms;
         RenderContext::Command set_shader = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
         context->commands().push_back(set_shader);
-    }*/
+    }
+
+    void RenderShaderObject::setDraw(RenderContext* context)
+    {
+        RenderContext::Command draw = { 0, nullptr, RenderContext::CommandType::RENDER };
+        context->commands().push_back(draw);
+    }
 }
 

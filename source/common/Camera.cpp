@@ -44,7 +44,7 @@ namespace te
     }
 
     CameraState::CameraState()
-        :Component(ComponentType::CAMERA_STATE)
+        :ComData(ComponentType::CAMERA_STATE)
     {}
 
     CameraState::~CameraState(){}

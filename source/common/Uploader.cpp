@@ -15,40 +15,45 @@ namespace te
         _renderer = RenderInterface::getInstance();
     }
 
-    void UploadToRender::setMsgType(StreamMsg::MsgType type)
+    void UploadToRender::setActionType(StateStreamMsg::ActionType type)
     {
-        _msg_type = type;
+        _action_type = type;
     }
-
 
     // send data to renderer
     void UploadToRender::update()
     {
-        // feed data into msg
-        RenderStreamMsg* msg = _owner->createStreamMsg(_msg_type);
-        _renderer->_stream.push_back(msg);
+        if (_action_type == StateStreamMsg::UPDATE)
+            assembleUpdateMsg();
+        else if (_action_type == StateStreamMsg::RENDER)
+            assembleRenderMsg();
     }
 
-    void UploadToRender::assembleResourceMsg(ResourceStream& resource_stream)
+    void UploadToRender::assembleUpdateMsg()
     {
-        uploadMesh(resource_stream);
-        uploadTexture(resource_stream);
-        uploadShader(resource_stream);
+        updateMesh();
+        updateShader();
     }
 
-    void UploadToRender::uploadMesh(ResourceStream& resource_stream)
+    void UploadToRender::assembleRenderMsg()
+    {
+        renderMesh();
+        renderShader();
+    }
+
+    void UploadToRender::updateMesh()
     {
         if (hasComponent<MeshRender>())
         {
             MeshRender* mr = getComponent<MeshRender>();
-            MeshStreamMsg* msg = new MeshStreamMsg(_msg_type,
+            MeshStreamMsg* msg = new MeshStreamMsg(StateStreamMsg::UPDATE,
                 mr->getMesh()->getROHandle(), 
                 mr->getMesh().get());
-            resource_stream.push_back(msg);
+            _renderer->_stream.push_back(msg);
         }
     }
 
-    void UploadToRender::uploadTexture(ResourceStream& resource_stream)
+    void UploadToRender::updateTexture()
     {
         if (hasComponent<MeshRender>())
         {
@@ -59,43 +64,92 @@ namespace te
         }
     }
 
-    void UploadToRender::uploadShader(ResourceStream& resource_stream)
+    void UploadToRender::updateShader()
+    {
+        fillShaderUniforms();
+
+        if (hasComponent<MeshRender>())
+        {
+            MeshRender* mr = getComponent<MeshRender>();
+            ShaderStreamMsg* msg = new ShaderStreamMsg(StateStreamMsg::UPDATE,
+                mr->getMaterial()->getShader()->getROHandle(),
+                mr->getMaterial()->getShader().get());
+            _renderer->_stream.push_back(msg);
+        }
+    }
+
+    void UploadToRender::renderMesh()
     {
         if (hasComponent<MeshRender>())
         {
             MeshRender* mr = getComponent<MeshRender>();
-            ShaderStreamMsg* msg = new ShaderStreamMsg(_msg_type,
-                mr->getMaterial()->getShader()->getROHandle(),
-                mr->getMaterial()->getShader().get());
-            resource_stream.push_back(msg);
+            MeshStreamMsg* msg = new MeshStreamMsg(StateStreamMsg::RENDER,
+                mr->getMesh()->getROHandle(),
+                nullptr);
+            _renderer->_stream.push_back(msg);
         }
     }
 
-    ShaderUniforms UploadToRender::getShaderUniforms()
+    void UploadToRender::renderTexture()
+    {
+        if (hasComponent<MeshRender>())
+        {
+            /*TextureStreamMsg* msg = new TextureStreamMsg;
+            MeshRender* mr = getComponent<MeshRender>();
+            msg->feedData(mr->getMesh().get());
+            _renderer->_stream.push_back(msg);*/
+        }
+    }
+
+    void UploadToRender::renderShader()
+    {
+        if (hasComponent<MeshRender>())
+        {
+            MeshRender* mr = getComponent<MeshRender>();
+            ShaderStreamMsg* msg = new ShaderStreamMsg(StateStreamMsg::RENDER,
+                mr->getMaterial()->getShader()->getROHandle(),
+                nullptr);
+            _renderer->_stream.push_back(msg);
+        }
+    }
+
+    void UploadToRender::fillShaderUniforms()
+    {
+        if (hasComponent<MeshRender>())
+        {
+            MeshRender* mr = getComponent<MeshRender>();
+            MaterialPtr mtl = mr->getMaterial();
+            setSpaceState(mtl);
+            setCameraState(mtl);
+            mtl->setShaderUniforms();
+        }
+    }
+
+    void UploadToRender::setCameraState(MaterialPtr mtl)
+    {
+        Camera* camera = Director::getInstance()->getActiveScene()->getActiveCamera();
+        CameraState* cs = camera->getComponent<CameraState>();
+        mtl->setMatrix("projMat", cs->getProjectTransform().rawMatrix());
+        mtl->setMatrix("viewMat", cs->getViewTransform().rawMatrix());
+    }
+
+    void UploadToRender::setSpaceState(MaterialPtr mtl)
+    {
+        if (hasComponent<SpaceState>())
+        {
+            SpaceState* ss = getComponent<SpaceState>();
+            mtl->setMatrix("worldMat", ss->getSpaceTransform().rawMatrix());
+        }
+    }
+
+    /*ShaderUniforms UploadToRender::getShaderUniforms()
     {
         if (hasComponent<MeshRender>())
         {
             MeshRender* mr = getComponent<MeshRender>();
             return mr->getMaterial()->getShaderUniformsByMap();
         }
-    }
-
-    // for test
-    CameraState& UploadToRender::getCameraState()
-    {
-        Camera* camera = Director::getInstance()->getActiveScene()->getActiveCamera();
-        CameraState* cs = camera->getComponent<CameraState>();
-        return *cs;
-    }
-
-    SpaceState& UploadToRender::getSpaceState()
-    {
-        if (hasComponent<SpaceState>())
-        {
-            SpaceState* ss = getComponent<SpaceState>();
-            return *ss;
-        }
-    }
+    }*/
 
     /*void UploadToRender::uploadMaterial()
     {

@@ -20,18 +20,14 @@ namespace te
         return ResourceMapper::getInstance()->get<ShaderManager>()->getShader(_shader);
     }
 
-    // build shader uniforms based on current material values
-    ShaderUniforms Material::getShaderUniformsByMap()
+    void Material::setShaderUniforms()
     {
-        ShaderUniforms shader_uniforms;
-        shader_uniforms = getShader()->uniforms;
+        ShaderUniforms* shader_uniforms = &getShader()->uniforms;
         for (auto& uniform : _uniform_map)
         {
-            shader_uniforms.setUniform(uniform.first, &uniform.second.data[0], uniform.second.size, uniform.second.type);
+            shader_uniforms->setUniform(uniform.first, &uniform.second.data[0], uniform.second.size, uniform.second.type);
         }
-        return shader_uniforms;
     }
-
 
     float Material::getFloat(const String& name)
     {
@@ -131,7 +127,7 @@ namespace te
 
     void Material::setMatrix(const String& name, const Matrix& value)
     {
-        setUniform(name, &value(0, 0), 4 * 4, ShaderUniformType::MATRIX4X4);
+        setUniform(name, value.ptr(), 4 * 4, ShaderUniformType::MATRIX4X4);
     }
 
     bool Material::hasUniform(const String& name)

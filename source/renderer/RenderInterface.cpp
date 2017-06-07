@@ -110,7 +110,7 @@ namespace te
 
     void RenderInterface::releaseStateStream()
     {
-        for (StreamMsg* msg : _stream)
+        for (StateStreamMsg* msg : _stream)
         {
             delete msg;
         }

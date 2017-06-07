@@ -8,7 +8,7 @@
 namespace te
 {
     // containing render resource: mesh, material, light...
-    class MeshRender: public Component
+    class MeshRender: public ComData
     {
     public:
         MeshRender();

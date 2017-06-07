@@ -39,15 +39,17 @@ namespace te
         _owner = owner;
     }
 
-    Behavior::Behavior()
+    ComData::ComData(ComponentType type)
+        :Component(type)
+    {}
+
+    ComData::ComData(const ComData& Data, const CopyOperator& copyop)
     {
+        copyop(&Data);
     }
 
     Behavior::Behavior(ComponentType type)
         :Component(type)
-    {}
-
-    Behavior::~Behavior()
     {}
 
     Behavior::Behavior(const Behavior& behavior, const CopyOperator& copyop)
@@ -62,10 +64,6 @@ namespace te
     void Behavior::update()
     {}
 
-    Render::Render()
-    {
-    }
-
     Render::Render(ComponentType type)
         :Component(type)
     {}
@@ -74,9 +72,6 @@ namespace te
     {
         copyop(&render);
     }
-
-    Render::~Render()
-    {}
 
     void Render::init()
     {}

@@ -44,8 +44,6 @@ namespace te
         inline Node* getOwner() const { return _owner; }
         void setOwner(Node* owner);
 
-        //inline MetaType getMetaType() const { return _meta_type; }
-
         inline ComponentType getType() const { return _type; }
 
         template <typename C>
@@ -58,7 +56,6 @@ namespace te
         String              _name;
         bool                _enabled;
         Node*               _owner;
-        //MetaType            _meta_type;
         ComponentType       _type;
     };
 
@@ -77,26 +74,25 @@ namespace te
         else return nullptr;
     }
 
-    class Data : public Component
+    class ComData : public Component
     {
     public:
-        Data();
-        Data(ComponentType type);
-        Data(const Data& data, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
-        virtual ~Data();
+        ComData() = default;
+        ComData(ComponentType type);
+        ComData(const ComData& data, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        virtual ~ComData() = default;
 
-        ENABLE_CLONE(Data);
-
+        ENABLE_CLONE(ComData);
 
     };
 
     class Behavior : public Component
     {
     public:
-        Behavior();
+        Behavior() = default;
         Behavior(ComponentType type);
         Behavior(const Behavior& behavior, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
-        virtual ~Behavior();
+        virtual ~Behavior() = default;
 
         ENABLE_CLONE(Behavior);
 
@@ -107,10 +103,10 @@ namespace te
     class Render : public Component
     {
     public:
-        Render();
+        Render() = default;
         Render(ComponentType type);
         Render(const Render& render, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
-        virtual ~Render();
+        virtual ~Render() = default;
 
         ENABLE_CLONE(Render);
 

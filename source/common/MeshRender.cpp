@@ -3,14 +3,14 @@
 namespace te
 {
     MeshRender::MeshRender()
-        :Component(ComponentType::MESH_RENDER),
+        :ComData(ComponentType::MESH_RENDER),
         _mes_handle(0),
         _mat_handle(0)
     {
     }
 
     MeshRender::MeshRender(const String& mesh_res, const String& material_res)
-        :Component(ComponentType::MESH_RENDER)
+        :ComData(ComponentType::MESH_RENDER)
     {
         loadMesh(mesh_res);
         loadMaterial(material_res);

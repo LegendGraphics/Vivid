@@ -14,20 +14,27 @@ namespace te
     public:
         UploadToRender();
 
-        void setMsgType(StreamMsg::MsgType type);
+        void setActionType(StateStreamMsg::ActionType type);
 
         void update();
 
-        void assembleResourceMsg(ResourceStream& resource_stream);
+    protected:
+        virtual void assembleUpdateMsg();
+        virtual void assembleRenderMsg();
 
-        ShaderUniforms getShaderUniforms();
-        CameraState& getCameraState();
-        SpaceState& getSpaceState();
+        // build state stream msg
+        void updateMesh();
+        void updateTexture();
+        void updateShader();
 
-    private:
-        void uploadMesh(ResourceStream& resource_stream);
-        void uploadTexture(ResourceStream& resource_stream);
-        void uploadShader(ResourceStream& resource_stream);
+        void renderMesh();
+        void renderTexture();
+        void renderShader();
+
+    protected:
+        void fillShaderUniforms();
+        void setCameraState(MaterialPtr mtl);
+        void setSpaceState(MaterialPtr mtl);
 
 
         /* void uploadMaterial();
@@ -37,8 +44,8 @@ namespace te
          void setWorldPosition();*/
 
     private:
-        class RenderInterface*    _renderer;
-        StreamMsg::MsgType        _msg_type;
+        class RenderInterface*              _renderer;
+        StateStreamMsg::ActionType          _action_type;
     };
 }
 

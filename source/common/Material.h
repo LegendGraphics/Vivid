@@ -42,8 +42,7 @@ namespace te
         void setVector4(const String& name, const Vector4& value);
         void setMatrix(const String& name, const Matrix& value);
 
-        ShaderUniformValueMap& getUniformValueMap() { return _uniform_map; }
-        ShaderUniforms getShaderUniformsByMap();
+        void setShaderUniforms();
     public:
         bool hasUniform(const String& name);
         void setUniform(const String& name, const float* value, int size, ShaderUniformType type);

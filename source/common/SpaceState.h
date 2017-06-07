@@ -9,7 +9,7 @@
 namespace te
 {
     // store position, scale and rotation data
-    class SpaceState : public Component
+    class SpaceState : public ComData
     {
     public:
         enum class SpaceStateRef

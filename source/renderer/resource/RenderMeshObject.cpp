@@ -85,7 +85,7 @@ namespace te
 
     }
 
-    void RenderMeshObject::parseStreamMsg(StreamMsg* msg)
+    void RenderMeshObject::parseStreamMsg(StateStreamMsg* msg)
     {
         Mesh* mesh = static_cast<Mesh*>(msg->getData());
 

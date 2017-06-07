@@ -33,7 +33,7 @@ namespace te
 
     }
 
-    void RenderTextureObject::parseStreamMsg(StreamMsg* msg)
+    void RenderTextureObject::parseStreamMsg(StateStreamMsg* msg)
     {
         /*Shader* shader = static_cast<Shader*>(msg->getData());
 

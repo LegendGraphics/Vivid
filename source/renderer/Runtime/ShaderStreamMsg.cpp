@@ -3,15 +3,13 @@
 
 namespace te
 {
-    ShaderStreamMsg::ShaderStreamMsg(MsgType type, Handle handle, void* data)
+    ShaderStreamMsg::ShaderStreamMsg(ActionType type, Handle handle, void* data)
         :ResourceStreamMsg(type, handle, data)
     {
     }
 
     ShaderStreamMsg::~ShaderStreamMsg()
     {
-        /* delete static_cast<Data*>(_data);
-         _data = nullptr;*/
     }
 
     void ShaderStreamMsg::update(RenderObject*& render_object, RenderResourceContext* rrc)

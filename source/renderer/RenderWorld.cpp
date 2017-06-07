@@ -11,9 +11,17 @@ namespace te
         // culling, prepare RenderQueue
 
         // iterate each object
-        for (RenderStreamMsg* msg : stream)
+        for (StateStreamMsg* msg : stream)
         {
-            msg->process(this, render_context, nullptr);
+            StateStreamMsg::ActionType type = msg->getActionType();
+            if (StateStreamMsg::RENDER == type)
+            {
+                Handle handle = msg->getHandle();
+                RenderObject* ro = nullptr;
+                if (!_objects.has(handle)) ro = msg->createRenderObject();
+                else ro = _objects.getPtr(handle);
+                msg->process(ro, render_context, nullptr);
+            }
         }
     }
 
@@ -52,7 +60,7 @@ namespace te
                     ccs->clear_color = pc.paras[1].toBool() || pc.paras[2].toBool()
                         || pc.paras[3].toBool() || pc.paras[4].toBool();
                     ccs->clear_depth = pc.paras[0].toBool();
-                    ccs->color_rgba[0] = 0.4;//pc.paras[5].toFloat();
+                    ccs->color_rgba[0] = pc.paras[5].toFloat();
                     ccs->color_rgba[1] = pc.paras[6].toFloat();
                     ccs->color_rgba[2] = pc.paras[7].toFloat();
                     ccs->color_rgba[3] = pc.paras[8].toFloat();
@@ -74,12 +82,21 @@ namespace te
     {
         RenderResourceContext* rrc = device->newResourceContext();
 
-        for (RenderStreamMsg* msg : stream)
+        for (StateStreamMsg* msg : stream)
         {
-            RenderStreamMsg::MsgType type = msg->getMsgType();
-            if (RenderStreamMsg::UPDATE == type)
+            StateStreamMsg::ActionType type = msg->getActionType();
+            if (StateStreamMsg::UPDATE == type)
             {
-                msg->process(this, nullptr, rrc);
+                Handle handle = msg->getHandle();
+                RenderObject* ro = nullptr;
+                if (!_objects.has(handle))
+                {
+                    ro = msg->createRenderObject();
+                    Handle ro_handle = _objects.add(ro);
+                    msg->setHandle(ro_handle);
+                }
+                else ro = _objects.getPtr(handle);
+                msg->process(ro, nullptr, rrc);
             }
         }
 

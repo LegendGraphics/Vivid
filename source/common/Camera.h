@@ -33,11 +33,6 @@ namespace te
         friend class CopyOperator;
         ENABLE_CLONE(Camera);
 
-        virtual RenderStreamMsg* createStreamMsg(StreamMsg::MsgType msg_type)
-        {
-            return new CameraStreamMsg(msg_type, this);
-        }
-
         bool cull(Node* node);
 
     private:
@@ -45,7 +40,7 @@ namespace te
 
     };
 
-    class CameraState : public Component
+    class CameraState : public ComData
     {
     public:
         enum class CameraMode

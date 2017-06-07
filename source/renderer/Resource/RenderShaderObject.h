@@ -77,7 +77,7 @@ namespace te
     
     class RenderResourceContext;
     class RenderContext;
-    class StreamMsg;
+    class StateStreamMsg;
 
     class RenderShaderObject : public RenderObject
     {
@@ -90,7 +90,7 @@ namespace te
         void update(RenderResourceContext* context);
         void render(RenderContext* context);
 
-        void parseStreamMsg(StreamMsg* msg);
+        void parseStreamMsg(StateStreamMsg* msg);
 
         //inline void setShaderObject(RenderResource* res) { _shader_object = res; };
         //inline void setModelMat(const Mat4x4& model_mat) { _model_mat = model_mat; };
@@ -102,7 +102,8 @@ namespace te
         void allocVertexDeclaration(RenderResourceContext* context);
 
         void setVertexContext(RenderContext* context);*/
-        //void setShader(RenderContext* context);
+        void setShader(RenderContext* context);
+        void setDraw(RenderContext* context);
 
     private:
         GPUHandle   _shader_handle;

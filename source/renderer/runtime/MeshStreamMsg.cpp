@@ -2,7 +2,7 @@
 
 namespace te
 {
-    MeshStreamMsg::MeshStreamMsg(MsgType type, Handle handle, void* data)
+    MeshStreamMsg::MeshStreamMsg(ActionType type, Handle handle, void* data)
         :ResourceStreamMsg(type, handle, data)
     {
     }
