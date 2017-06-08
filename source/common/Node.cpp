@@ -4,7 +4,8 @@
 #include "common/Node.h"
 #include "common/NodeVisitor.h"
 #include "common/SpaceState.h"
-#include "common/MeshFilter.h"
+#include "common/MeshRender.h"
+#include "common/Uploader.h"
 #include "io/ResourceLoader.h"
 
 namespace te
@@ -24,6 +25,7 @@ namespace te
 
     Node::Node()
         :_visible(true),
+        _node_type(NodeType::NODE),
         _component_container(this)
     {
 
@@ -64,43 +66,57 @@ namespace te
         return _component_container.has(component_id);
     }
 
-    void Node::updateComponents()
+    void Node::updateBehavior()
     {
-        _component_container.updateAll();
+        _component_container.updateBehavior();
+    }
+
+    void Node::updateRender()
+    {
+        _component_container.updateRender();
     }
 
     void Node::addComponent(Component* component)
     {
         ComponentType type = component->getType();
-        if (type == ComponentType::SPACE_STATUS)
+        if (type == ComponentType::SPACE_STATE)
             addComponent(component, getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_FILTER)
-            addComponent(component, getComponentTypeId<MeshFilter>());
+        else if (type == ComponentType::MESH_RENDER)
+            addComponent(component, getComponentTypeId<MeshRender>());
+        else if (type == ComponentType::UPLOAD_TO_RENDER)
+            addComponent(component, getComponentTypeId<UploadToRender>());
+
     }
 
     void Node::removeComponent(ComponentType type)
     {
-        if (type == ComponentType::SPACE_STATUS)
+        if (type == ComponentType::SPACE_STATE)
             removeComponent(getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_FILTER)
-            removeComponent(getComponentTypeId<MeshFilter>());
+        else if (type == ComponentType::MESH_RENDER)
+            removeComponent(getComponentTypeId<MeshRender>());
+        else if (type == ComponentType::UPLOAD_TO_RENDER)
+            removeComponent(getComponentTypeId<UploadToRender>());
     }
 
     Component* Node::getComponent(ComponentType type)
     {
-        if (type == ComponentType::SPACE_STATUS)
+        if (type == ComponentType::SPACE_STATE)
             return getComponent(getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_FILTER)
-            return getComponent(getComponentTypeId<MeshFilter>());
+        else if (type == ComponentType::MESH_RENDER)
+            return getComponent(getComponentTypeId<MeshRender>());
+        else if (type == ComponentType::UPLOAD_TO_RENDER)
+            return getComponent(getComponentTypeId<UploadToRender>());
         else return nullptr;
     }
 
     bool Node::hasComponent(ComponentType type)
     {
-        if (type == ComponentType::SPACE_STATUS)
+        if (type == ComponentType::SPACE_STATE)
             return hasComponent(getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_FILTER)
-            return hasComponent(getComponentTypeId<MeshFilter>());
+        else if (type == ComponentType::MESH_RENDER)
+            return hasComponent(getComponentTypeId<MeshRender>());
+        else if (type == ComponentType::UPLOAD_TO_RENDER)
+            return hasComponent(getComponentTypeId<UploadToRender>());
         else return false;
     }
 
@@ -179,7 +195,7 @@ namespace te
     }
 
     MetaNodeManager::MetaNodeManager()
-        :ResourceManager(ResourceType::Mesh)
+        :ResourceManager(ResourceType::Node)
     {}
 
     MetaNodeManager::~MetaNodeManager() {}

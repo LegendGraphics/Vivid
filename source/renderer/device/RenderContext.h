@@ -3,8 +3,12 @@
 
 #include "base/Types.h"
 
-#include "renderer/resource/ShaderObject.h"
-#include "renderer/resource/Texture.h"
+//#include "renderer/resource/ShaderObject.h"
+#include "common/Shader.h"
+#include "renderer/resource/RenderTexture.h"
+
+#include "math/Vector4.h"
+#include "math/Matrix.h"
 
 namespace te
 {
@@ -32,7 +36,7 @@ namespace te
         struct IndexCmdStream
         {
             uint32 buf_handle;
-            IndexFormat idx_format;
+            //IndexFormat idx_format;
         };
 
         struct VertexCmdStream
@@ -45,9 +49,8 @@ namespace te
 
         struct ShaderCmdStream
         {
-            uint32 shader_handle;
-            void*  data; // the data is hold by real entity, no need to be deleted here
-            std::vector<ShaderVariable> variables;
+            uint32          shader_handle;
+            ShaderUniforms* uniforms;
         };
 
         struct RenderTargetCmdStream

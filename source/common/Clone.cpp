@@ -3,6 +3,7 @@
 #include "common/Component.h"
 #include "common/ComponentContainer.h"
 #include "common/Scene.h"
+#include "common/Camera.h"
 
 namespace te
 {
@@ -76,6 +77,21 @@ namespace te
         else
         {
             Scene* copied = new Scene;
+            // copy the all components
+            return copied;
+        }
+    }
+
+    Camera* CopyOperator::operator()(const Camera* camera) const
+    {
+        if (_flag == SHALLOW_COPY)
+        {
+            Camera* copied = const_cast<Camera*>(camera);
+            return copied;
+        }
+        else
+        {
+            Camera* copied = new Camera;
             // copy the all components
             return copied;
         }

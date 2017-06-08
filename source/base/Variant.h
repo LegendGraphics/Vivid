@@ -45,6 +45,7 @@ namespace te
         Var(float f);
         Var(int i);
         Var(bool b);
+        Var(const char* s);
         Var(String s);
         ~Var();
 
@@ -53,6 +54,7 @@ namespace te
         Var& operator=(float f);
         Var& operator=(int i);
         Var& operator=(bool b);
+        Var& operator=(const char* s);
         Var& operator=(String s);
 
         double toDouble();

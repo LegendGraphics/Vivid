@@ -97,7 +97,7 @@ namespace te
         _pipeline = ResourceMapper::getInstance()->get<PipelineManager>()->getPipeline(handle);
     }
 
-    void RenderInterface::create(Mesh* mesh)
+    /*void RenderInterface::create(Mesh* mesh)
     {
         MeshStreamMsg* msm = new MeshStreamMsg;
         msm->setMsgType(StreamMsg::CREATE);
@@ -106,11 +106,11 @@ namespace te
         data->rmo = new RenderMeshObject(mesh);
         msm->feedData(data);
         _stream.push_back(msm);
-    }
+    }*/
 
     void RenderInterface::releaseStateStream()
     {
-        for (StreamMsg* msg : _stream)
+        for (StateStreamMsg* msg : _stream)
         {
             delete msg;
         }

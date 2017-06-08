@@ -62,14 +62,14 @@ namespace te
         Camera*     _camera;
     };
 
-    class SpacingVisitor : public NodeVisitor
+    class BehaviorVisitor : public NodeVisitor
     {
     public:
-        SpacingVisitor();
-        SpacingVisitor(const TraversalMode& tm);
-        SpacingVisitor(const SpacingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        BehaviorVisitor();
+        BehaviorVisitor(const TraversalMode& tm);
+        BehaviorVisitor(const BehaviorVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
-        virtual ~SpacingVisitor();
+        virtual ~BehaviorVisitor();
 
         virtual void apply(NodeTree* node_tree);
 
@@ -82,19 +82,16 @@ namespace te
     class RenderQueueItem;
     class PipelineResource;
 
-    class RenderingVisitor : public NodeVisitor
+    class RenderVisitor : public NodeVisitor
     {
     public:
-        RenderingVisitor();
-        RenderingVisitor(const TraversalMode& tm, RenderInterface* renderer, Scene* scene);
-        RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        RenderVisitor();
+        RenderVisitor(const TraversalMode& tm, RenderInterface* renderer, Scene* scene);
+        RenderVisitor(const RenderVisitor& node_visitor, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
 
-        virtual ~RenderingVisitor();
+        virtual ~RenderVisitor();
 
         virtual void apply(NodeTree* node_tree);
-
-    private:
-        void testRenderingPipeline(Node* node, Camera* camera);
 
     protected:
         RenderInterface*    _renderer;
@@ -102,7 +99,7 @@ namespace te
 
     };
 
-    class RenderResourceVisitor : public RenderingVisitor
+    class RenderResourceVisitor : public RenderVisitor
     {
     public:
         RenderResourceVisitor();

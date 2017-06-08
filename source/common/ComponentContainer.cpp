@@ -73,7 +73,7 @@ namespace te
         return _component_types[component_id];
     }
 
-    void ComponentContainer::updateAll()
+    void ComponentContainer::updateBehavior()
     {
         if (!_component_map.empty())
         {
@@ -81,10 +81,28 @@ namespace te
             while (iter != _component_map.end())
             {
                 Component* component = *iter;
-                if (component && component->getMetaType() == Component::MetaType::BEHAVIOR)
+                if (component && component->getType() == ComponentType::LOGIC_BEHAVIOR)
                 {
                     Behavior* behavior = dynamic_cast<Behavior*>(component);
                     behavior->update();
+                }
+                iter++;
+            }
+        }
+    }
+
+    void ComponentContainer::updateRender()
+    {
+        if (!_component_map.empty())
+        {
+            ComponentMap::iterator iter = _component_map.begin();
+            while (iter != _component_map.end())
+            {
+                Component* component = *iter;
+                if (component && component->getType() == ComponentType::UPLOAD_TO_RENDER)
+                {
+                    Render* render = dynamic_cast<Render*>(component);
+                    render->update();
                 }
                 iter++;
             }

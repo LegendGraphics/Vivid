@@ -9,7 +9,7 @@
 namespace te
 {
     // store position, scale and rotation data
-    class SpaceState : public Component
+    class SpaceState : public ComData
     {
     public:
         enum class SpaceStateRef
@@ -45,6 +45,8 @@ namespace te
         const Vector3& getWorldScale();
         const Vector3& getWorldEulerAngles();
         const Quaternion& getWorldRotation();
+
+        Transform getSpaceTransform();
 
     protected:
         Transform getTranslateTransform(const SpaceStateRef& tr);

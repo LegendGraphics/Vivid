@@ -19,19 +19,28 @@ namespace te
         const static Vector3 WORLD_FORWARD;
     };
 
+
     // Consider Camera as a special leaf node
     class Camera : public Node
     {
     public:
+        static Camera* create(const String& res);
+    public:
         Camera();
+        Camera(const Camera& node, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
         virtual ~Camera();
 
+        friend class CopyOperator;
+        ENABLE_CLONE(Camera);
+
         bool cull(Node* node);
+
     private:
         bool frustumCullingImpl(Node* node);
+
     };
 
-    class CameraState : public Component
+    class CameraState : public ComData
     {
     public:
         enum class CameraMode
@@ -102,16 +111,19 @@ namespace te
         void setViewTransform(const CameraViewParas& view_paras);
         void setPersProjectTransform(const CameraPersParas& pers_paras);
         void setOrthoProjectTransform(const CameraOrthoParas& ortho_paras);
+        void setViewPort(const Vector4& view_port);
 
         CameraViewParas& getViewParas() { return _view_paras; }
         CameraPersParas& getPersParas() { return _pers_paras; }
         CameraOrthoParas& getOrthoParas() { return _ortho_paras; }
+        Vector4& getViewPort() { return _view_port; }
 
         Transform getViewTransform() const;
         Transform getProjectTransform() const;
         const Frustum& getFrustum();
 
     protected: 
+        Vector4             _view_port;
         CameraViewParas     _view_paras;
         CameraPersParas     _pers_paras;
         CameraOrthoParas    _ortho_paras;
@@ -140,6 +152,7 @@ namespace te
     class FocusCameraBehavior : public Behavior
     {
     public:
+        FocusCameraBehavior();
         void update();
     };
 }

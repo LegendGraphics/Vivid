@@ -41,9 +41,6 @@ namespace te
         void setCamera(CameraState* camera_state);
         void setRenderPipeline(const String& res);
 
-        // more general api needed
-        void create(Mesh* mesh);
-
         StateStream _stream;
 
         void releaseStateStream();

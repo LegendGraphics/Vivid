@@ -1,0 +1,13 @@
+<!-- Shader -->
+<Shader>
+    <Uniforms>
+        <Uniform name="color" type="float4"/>
+        <Uniform name="projMat" type="mat4"/>
+        <Uniform name="viewMat" type="mat4"/>
+        <Uniform name="worldMat" type="mat4"/>
+    </Uniforms>
+    <GLSL>
+        <Vertex name="Shader/glsl/vertex.glsl"/>
+        <Fragment name="Shader/glsl/fragment.glsl"/>
+    </GLSL>
+</Shader>

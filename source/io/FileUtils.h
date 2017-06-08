@@ -9,6 +9,10 @@ namespace te
     {
     public:
         static void streamFromBinaryFile(const String& filename, char*& data, int& size);
+        
+        static int getFileLength(std::ifstream& file);
+        static int loadShader(const String& filename, char*& data, int& size);
+
     };
 }
 

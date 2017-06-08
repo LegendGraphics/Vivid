@@ -1,12 +1,12 @@
-#ifndef RENDERER_TEXTURE_H
-#define RENDERER_TEXTURE_H
+#ifndef RENDERER_RENDER_TEXTURE_H
+#define RENDERER_RENDER_TEXTURE_H
 
-#include "RenderResource.h"
+#include "renderer/resource/RenderResource.h"
 
 namespace te
 {
 
-    enum class IndexFormat : uint8
+    /*enum class IndexFormat : uint8
     {
         IDXFMT_16,
         IDXFMT_32
@@ -31,14 +31,15 @@ namespace te
             RGBA32F,
             DEPTH
         };
-    }
+    }*/
 
-    struct Texture : public RenderResource {
-        Texture() : RenderResource(TEXTURE) { }
-        Texture(RenderResource::Type t) : RenderResource(t) { }
+    /*class RenderTexture : public RenderResource 
+    {
+        RenderTexture() : RenderResource(TEXTURE) { }
+        RenderTexture(RenderResource::Type t) : RenderResource(t) { }
 
         image_data::Format format;
-    };
+    };*/
 }
 
 #endif

@@ -22,8 +22,12 @@ namespace te
             class Pipeline*     pipeline;
             class RenderCamera* camera;
         };
-        void render(StateStream& stream, RenderParams& params);
+
         void update(StateStream& stream, RenderDevice* device);
+        void render(StateStream& stream, RenderParams& params);
+
+        RenderObject* getRenderObject(Handle handle);
+        Handle        addRenderObject(RenderObject* ro);
 
     protected:
         void renderKernel(StateStream& stream, RenderParams& params, RenderContext* render_context);

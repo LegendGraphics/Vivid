@@ -9,7 +9,7 @@
 #include "common/Scene.h"
 #include "renderer/RenderInterface.h"
 
-#include "common/MeshFilter.h"
+#include "common/Uploader.h"
 #include "common/Mesh.h"
 
 #include "io/Logger.h"
@@ -75,56 +75,64 @@ namespace te
         traverse(node_tree);
     }
 
-    SpacingVisitor::SpacingVisitor()
+    BehaviorVisitor::BehaviorVisitor()
     {
     }
 
-    SpacingVisitor::SpacingVisitor(const TraversalMode& tm)
+    BehaviorVisitor::BehaviorVisitor(const TraversalMode& tm)
         :NodeVisitor(tm, VisitorType::SPACING_UPDATE)
     {}
 
-    SpacingVisitor::SpacingVisitor(const SpacingVisitor& node_visitor, const CopyOperator& copyop)
+    BehaviorVisitor::BehaviorVisitor(const BehaviorVisitor& node_visitor, const CopyOperator& copyop)
         : NodeVisitor(node_visitor, copyop)
     {
 
     }
 
-    SpacingVisitor::~SpacingVisitor()
+    BehaviorVisitor::~BehaviorVisitor()
     {}
 
-    void SpacingVisitor::apply(NodeTree* node_tree)
+    void BehaviorVisitor::apply(NodeTree* node_tree)
     {
         Node* node = node_tree->node().get();
-        node->updateComponents();
+        node->updateBehavior();
         traverse(node_tree);
     }
 
-    RenderingVisitor::RenderingVisitor()
+    RenderVisitor::RenderVisitor()
     {
         
     }
 
-    RenderingVisitor::RenderingVisitor(const TraversalMode& tm, RenderInterface* renderer, Scene* scene)
+    RenderVisitor::RenderVisitor(const TraversalMode& tm, RenderInterface* renderer, Scene* scene)
         :NodeVisitor(tm, VisitorType::RENDERING_UPDATE),
         _renderer(renderer),
         _scene(scene)
     {}
 
-    RenderingVisitor::RenderingVisitor(const RenderingVisitor& node_visitor, const CopyOperator& copyop)
+    RenderVisitor::RenderVisitor(const RenderVisitor& node_visitor, const CopyOperator& copyop)
         : NodeVisitor(node_visitor, copyop)
     {
 
     }
 
-    RenderingVisitor::~RenderingVisitor()
+    RenderVisitor::~RenderVisitor()
     {}
 
-    void RenderingVisitor::apply(NodeTree* node_tree)
+    void RenderVisitor::apply(NodeTree* node_tree)
     {
         // Now simply rendering every node
         Node* node = node_tree->node().get();
 
-        if (MeshFilter* mf = node->getComponent<MeshFilter>())
+        if (node->hasComponent<UploadToRender>())
+        {
+            UploadToRender* uploader = node->getComponent<UploadToRender>();
+            uploader->setActionType(stream_message::RENDER);
+            node->updateRender();
+        }
+        
+
+        /*if (MeshRender* mf = node->getComponent<MeshRender>())
         {
             Mesh* m = mf->getMesh().get();
 
@@ -136,7 +144,7 @@ namespace te
             data->model_mat = Mat4x4(Transform::translate(pos.x, pos.y, pos.z).rawMatrix());
             msg->feedData(data);
             _renderer->_stream.push_back(msg);
-        }
+        }*/
 
         traverse(node_tree);
     }
@@ -146,12 +154,12 @@ namespace te
     }
 
     RenderResourceVisitor::RenderResourceVisitor(const TraversalMode & tm, RenderInterface * renderer, Scene* scene)
-        : RenderingVisitor(tm, renderer, scene)
+        : RenderVisitor(tm, renderer, scene)
     {
     }
 
     RenderResourceVisitor::RenderResourceVisitor(const RenderResourceVisitor & node_visitor, const CopyOperator & copyop)
-        : RenderingVisitor(node_visitor, copyop)
+        : RenderVisitor(node_visitor, copyop)
     {
     }
 
@@ -163,7 +171,14 @@ namespace te
     void RenderResourceVisitor::apply(NodeTree * node_tree)
     {
         Node* node = node_tree->node().get();
-        if (MeshFilter* mf = node->getComponent<MeshFilter>())
+
+        if (node->hasComponent<UploadToRender>())
+        {
+            UploadToRender* uploader = node->getComponent<UploadToRender>();
+            uploader->setActionType(stream_message::ActionType::UPDATE);
+            node->updateRender();
+        }
+        /*if (MeshRender* mf = node->getComponent<MeshRender>())
         {
             Mesh* m = mf->getMesh().get();
 
@@ -171,7 +186,7 @@ namespace te
             msg->setMsgType(StreamMsg::UPDATE);
             msg->setHandle(m->getRenderObjectHandle());
             _renderer->_stream.push_back(msg);
-        }
+        }*/
 
         traverse(node_tree);
     }

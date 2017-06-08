@@ -2,7 +2,6 @@
 #include "io/FileUtils.h"
 #include "io/ResourceLoader.h"
 
-#include "renderer/RenderInterface.h"
 
 namespace te
 {
@@ -16,8 +15,6 @@ namespace te
     {
         if (!ResourceLoader::load(this, res))
             return false;
-        RenderInterface::getInstance()->create(this);
-
         return true;
     }
 

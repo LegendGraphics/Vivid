@@ -50,6 +50,7 @@ namespace te
                  float m30, float m31, float m32, float m33);
 
         inline const float* ptr() const { return (float*)_m;}
+        inline float* ptr() { return (float*)_m; }
         inline float determinant() const { return computeDeterminant(); }
         inline const Mat4x4 inverse() const { return computeInverse(); }
         inline const Mat4x4 transpose() const { return computeTranspose(); }

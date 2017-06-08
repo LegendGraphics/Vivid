@@ -2,6 +2,7 @@
 #define RENDERER_GL_RENDER_DEVICE_H
 
 #include "renderer/Device/RenderDevice.h"
+#include "renderer/resource/ResourceStream.h"
 
 namespace te
 {
@@ -20,7 +21,7 @@ namespace te
     {
         uint32 gl_obj;
         uint32 gl_type;
-        image_data::Format format;
+        texture_data::Format format;
         int    width, height, depth;
         bool   has_mips;
     };
@@ -74,7 +75,7 @@ namespace te
         void updateBufferData(uint32 buf_obj, uint32 offset, uint32 size, void* data);
 
         // Shaders
-        bool createDefaultShader(const char* vertex_shader, const char* fragment_shader, ShaderObject& so);
+        //bool createDefaultShader(const char* vertex_shader, const char* fragment_shader, ShaderObject& so);
         const char* getDefaultVSCode();
         const char* getDefaultFSCode();
         uint32 createShader(const char* vertex_shader_src, const char* fragment_shader_src, vertex_layout::Type vl_type);
@@ -86,11 +87,11 @@ namespace te
         void bindShader(uint32 shader_handle);
 
         // RenderBuffer
-        uint32 createRenderBuffer(uint32 width, uint32 height, image_data::Format format,
+        uint32 createRenderBuffer(uint32 width, uint32 height, texture_data::Format format,
             bool depth, uint32 num_col_bufs);
 
         // Textures
-        uint32 createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool has_mips);
+        uint32 createTexture(int width, int height, int depth, texture_data::Type type, texture_data::Format format, bool has_mips);
         void updateTextureData(uint32 tex_obj, int mip_level, const void* pixels);
 
     protected:
@@ -123,7 +124,7 @@ namespace te
         RDObjects<uint32> _vaos; // vertex array objects
 
         uint32 _prev_shader_handle, _cur_shader_handle;
-        ShaderObject _default_shader;
+        //ShaderObject _default_shader;
         GLRenderTarget _default_render_target;
 
         uint32                _cur_base_index, _cur_base_vertex, _cur_num_indices;

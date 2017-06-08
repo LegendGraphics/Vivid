@@ -8,6 +8,7 @@
 #include "renderer/resource/ResourceStream.h"
 
 #include "math/Vector4.h"
+#include "io/Logger.h"
 
 namespace te
 {
@@ -50,7 +51,7 @@ namespace te
         char* version = (char*)glGetString(GL_VERSION);
 
         bool bOK = true;
-        bOK = bOK && createDefaultShader(getDefaultVSCode(), getDefaultFSCode(), _default_shader);
+        //bOK = bOK && createDefaultShader(getDefaultVSCode(), getDefaultFSCode(), _default_shader);
 
         testVao();
 
@@ -98,53 +99,93 @@ namespace te
             }
             else if (RenderContext::CommandType::BIND_SHADER_OBJECT == command.command_type)
             {
-                // set camera
-                RenderCamera* curCamera = context->_camera;
-                // set view port to
-                _vp_x = curCamera->getViewPort()[0];
-                _vp_y = curCamera->getViewPort()[1];
-                _vp_width = curCamera->getViewPort()[2];
-                _vp_height = curCamera->getViewPort()[3];
-                _pending_mask |= PM_VIEWPORT;
+                //// set camera
+                //RenderCamera* curCamera = context->_camera;
+                //// set view port to
+                //_vp_x = curCamera->getViewPort()[0];
+                //_vp_y = curCamera->getViewPort()[1];
+                //_vp_width = curCamera->getViewPort()[2];
+                //_vp_height = curCamera->getViewPort()[3];
+                //_pending_mask |= PM_VIEWPORT;
+
 
                 // set shader
                 RenderContext::ShaderCmdStream* c_stream = static_cast<RenderContext::ShaderCmdStream*>(command.head);
+
+                //// set uniform value from camera, may be not proper
+                //for (auto& uniform : c_stream->uniforms.getUniforms())
+                //{
+                //}
+
+                // TODO: need to be changed, set uniform value in engine part
                 if (c_stream->shader_handle != 0xFFFFFFFF)
                 {
                     // TODO
                     // use setShaderConst()
                     // header of all uniform data is in ShaderCmdStream::data
                     // ShaderCmdStream::variables give information for how to read
+                    for (auto& uniform : c_stream->uniforms->getUniforms())
+                    {
+                        setShaderConst(uniform.second.loc, shader_data::Class(uniform.second.value.type), &uniform.second.value.data[0]);
+                    }
                     delete c_stream;
                 }
                 else
                 {
-                    // debug mode, use default shader
-                    if (_cur_shader_handle != _default_shader.shader_handle)
-                        bindShader(_default_shader.shader_handle);
+                    //// debug mode, use default shader
+                    //if (_cur_shader_handle != _default_shader.shader_handle)
+                    //    bindShader(_default_shader.shader_handle);
 
-                    // set view params
-                    if (_default_shader.uni_view_mat >= 0)
-                        setShaderConst(_default_shader.uni_view_mat, shader_data::MATRIX4X4, curCamera->getViewMat());
-                    if (_default_shader.uni_proj_mat >= 0)
-                        setShaderConst(_default_shader.uni_proj_mat, shader_data::MATRIX4X4, curCamera->getProjectionMat());
-                    if (_default_shader.uni_view_proj_mat >= 0)
-                        setShaderConst(_default_shader.uni_view_proj_mat, shader_data::MATRIX4X4, curCamera->getViewProjctionMat());
+                    //// set view params
+                    //if (_default_shader.uni_view_mat >= 0)
+                    //    setShaderConst(_default_shader.uni_view_mat, shader_data::MATRIX4X4, curCamera->getViewMat());
+                    //if (_default_shader.uni_proj_mat >= 0)
+                    //    setShaderConst(_default_shader.uni_proj_mat, shader_data::MATRIX4X4, curCamera->getProjectionMat());
+                    //if (_default_shader.uni_view_proj_mat >= 0)
+                    //    setShaderConst(_default_shader.uni_view_proj_mat, shader_data::MATRIX4X4, curCamera->getViewProjctionMat());
 
-                    char* data_ptr = static_cast<char*>(c_stream->data);
-                    for (auto i : c_stream->variables)
-                    {
-                        setShaderConst(_default_shader.custom_uniform_handles[i.semantic_name], shader_data::Class(i.klass), data_ptr + i.offset);
-                    }
-                    delete[] data_ptr;
+                    //char* data_ptr = static_cast<char*>(c_stream->data);
+                    //for (auto i : c_stream->variables)
+                    //{
+                    //    setShaderConst(_default_shader.custom_uniform_handles[i.semantic_name], shader_data::Class(i.klass), data_ptr + i.offset);
+                    //}
+                    //delete[] data_ptr;
 
-                    // set default color
-                    float color[4] = { 0.75f, 0.5, 0.25f, 1 };
-                    setShaderConst(_default_shader.custom_uniform_handles["color"], shader_data::VECTOR4, &color);
+                    //// set default color
+                    //float color[4] = { 0.75f, 0.5, 0.25f, 1 };
+                    //setShaderConst(_default_shader.custom_uniform_handles["color"], shader_data::VECTOR4, &color);
 
-                    delete c_stream;
+                    //delete c_stream;
                 }
             }
+            /*else if (RenderContext::CommandType::SET_CAMERA == command.command_type)
+            {
+                RenderContext::CameraCmdStream* c_stream = static_cast<RenderContext::CameraCmdStream*>(command.head);
+                _vp_x = c_stream->view_port.x;
+                _vp_y = c_stream->view_port.y;
+                _vp_width = c_stream->view_port.z;
+                _vp_height = c_stream->view_port.w;
+                _pending_mask |= PM_VIEWPORT;
+
+                int proj_mat_loc = getShaderConstLoc(_cur_shader_handle, "projMat");
+                int view_mat_loc = getShaderConstLoc(_cur_shader_handle, "viewMat");
+
+                if (proj_mat_loc == -1) cLog << "Could not find uniform projMat in current shader";
+                if (view_mat_loc == -1) cLog << "Could not find uniform viewMat in current shader";
+
+                setShaderConst(proj_mat_loc, shader_data::MATRIX4X4, c_stream->proj_mat.ptr());
+                setShaderConst(view_mat_loc, shader_data::MATRIX4X4, c_stream->view_mat.ptr());
+            }
+            else if (RenderContext::CommandType::SET_SPACE == command.command_type)
+            {
+                RenderContext::SpaceCmdStream* c_stream = static_cast<RenderContext::SpaceCmdStream*>(command.head);
+                int world_mat_loc = getShaderConstLoc(_cur_shader_handle, "worldMat");
+
+                if (world_mat_loc == -1) cLog << "Could not find uniform worldMat in current shader";
+
+                setShaderConst(world_mat_loc, shader_data::MATRIX4X4, c_stream->world_mat.ptr());
+
+            }*/
             else if (RenderContext::CommandType::RENDER == command.command_type)
             {
                 draw();
@@ -249,6 +290,29 @@ namespace te
                     index_handle);
 
                 delete vd_stream;
+            }
+            else if (RenderResourceContext::MessageType::ALLOC_SHADER == msg.type)
+            {
+                shader_data::ShaderStream* s_stream
+                    = static_cast<shader_data::ShaderStream*>(msg.head);
+                GPUResourceHandle* res = s_stream->res;
+                (*res) = createShader(s_stream->vs.c_str(), s_stream->fs.c_str(), vertex_layout::PNTB);
+                bindShader(*res);
+
+                for (auto& uniform : s_stream->uniforms->getUniforms())
+                {
+                    uniform.second.loc = getShaderConstLoc(*res, uniform.first.c_str());
+                }
+
+                delete s_stream;
+            }
+            else if (RenderResourceContext::MessageType::ALLOC_TEXTURE == msg.type)
+            {
+                texture_data::TextureStream* t_stream
+                    = static_cast<texture_data::TextureStream*>(msg.head);
+                GPUResourceHandle* res = t_stream->res;
+                (*res) = createTexture(t_stream->width, t_stream->height, t_stream->depth,
+                    t_stream->type, t_stream->format, t_stream->has_mips);
             }
         }
 
@@ -526,7 +590,7 @@ namespace te
         _cur_shader_handle = shader_handle;
     }
 
-    uint32 GLRenderDevice::createRenderBuffer(uint32 width, uint32 height, image_data::Format format, bool depth, uint32 num_col_bufs)
+    uint32 GLRenderDevice::createRenderBuffer(uint32 width, uint32 height, texture_data::Format format, bool depth, uint32 num_col_bufs)
     {
         GLRenderTarget render_target;
         glGenFramebuffers(1, &render_target.gl_fbo);
@@ -537,7 +601,7 @@ namespace te
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, render_target.gl_fbo);
                 // create color texture
-                uint32 tex_obj = createTexture(width, height, 1, image_data::IMAGE2D, image_data::RGBA32F, false);
+                uint32 tex_obj = createTexture(width, height, 1, texture_data::IMAGE2D, texture_data::RGBA32F, false);
                // ASSERT(tex_obj != 0, "Not a Valid Texture Object!");
                 updateTextureData(tex_obj, 0, nullptr);
                 // attach the texture to fbo
@@ -555,7 +619,7 @@ namespace te
         {
             glBindFramebuffer(GL_FRAMEBUFFER, render_target.gl_fbo);
             // create a depth texture
-            uint32 tex_obj = createTexture(width, height, 1, image_data::IMAGE2D, image_data::DEPTH, false);
+            uint32 tex_obj = createTexture(width, height, 1, texture_data::IMAGE2D, texture_data::DEPTH, false);
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
             updateTextureData(tex_obj, 0, nullptr);
             GLTexture& tex = _textures.getRef(tex_obj);
@@ -571,7 +635,7 @@ namespace te
         return _render_targets.add(render_target);
     }
 
-    uint32 GLRenderDevice::createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool has_mips)
+    uint32 GLRenderDevice::createTexture(int width, int height, int depth, texture_data::Type type, texture_data::Format format, bool has_mips)
     {
         GLTexture tex;
         tex.format = format;
@@ -582,13 +646,13 @@ namespace te
 
         switch (type)
         {
-        case image_data::IMAGE2D:
+        case texture_data::IMAGE2D:
             tex.gl_type = GL_TEXTURE_2D;
             break;
-        case image_data::IMAGE3D:
+        case texture_data::IMAGE3D:
             tex.gl_type = GL_TEXTURE_3D;
             break;
-        case image_data::IMAGECUBE:
+        case texture_data::IMAGECUBE:
             tex.gl_type = GL_TEXTURE_CUBE_MAP;
             break;
         }
@@ -596,9 +660,10 @@ namespace te
         glGenTextures(1, &tex.gl_obj);
         glActiveTexture(GL_TEXTURE0 + 15); // assume the 16th texture unit isn't usually used
         glBindTexture(tex.gl_type, tex.gl_obj);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        glTexParameteri(tex.gl_type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(tex.gl_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(tex.gl_type, 0);
 
         return _textures.add(tex);
     }
@@ -607,24 +672,35 @@ namespace te
     {
         const GLTexture tex = _textures.getRef(tex_obj);
 
+        glActiveTexture(GL_TEXTURE0 + 15);
         glBindTexture(tex.gl_type, tex.gl_obj);
 
         int input_format = GL_BGRA, input_type = GL_UNSIGNED_BYTE;
         switch (tex.format)
         {
-        case image_data::RGBA16F:
+        case texture_data::RGBA16F:
             input_format = GL_RGBA;
             input_type = GL_FLOAT;
             break;
-        case image_data::RGBA32F:
+        case texture_data::RGBA32F:
             input_format = GL_RGBA;
             input_type = GL_FLOAT;
             break;
-        case image_data::DEPTH:
+        case texture_data::DEPTH:
             input_format = GL_DEPTH_COMPONENT;
             input_type = GL_FLOAT;
         };
-        glTexImage2D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 0, input_format, input_type, pixels);
+
+        if (tex.gl_type == texture_data::IMAGE2D)
+        {
+            glTexImage2D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 0, input_format, input_type, pixels);
+        }
+        else if (tex.gl_type == texture_data::IMAGE3D)
+        {
+            glTexImage3D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 256, 0, input_format, input_type, pixels);
+        }
+        // How about ImageCube?
+       
         glBindTexture(tex.gl_type, 0);
     }
 
@@ -703,7 +779,7 @@ namespace te
         _testVao = createVertexArray(nLoc, locations, sizes, offsets, vertex_handles, index_handle);
     }
 
-    bool GLRenderDevice::createDefaultShader(const char* vertex_shader, const char* fragment_shader, ShaderObject& so)
+    /*bool GLRenderDevice::createDefaultShader(const char* vertex_shader, const char* fragment_shader, ShaderObject& so)
     {
         uint32 shader_handle = createShader(vertex_shader, fragment_shader, vertex_layout::PNTB);
         if (0 == shader_handle) return false;
@@ -720,5 +796,5 @@ namespace te
         so.uni_view_proj_mat_inv = getShaderConstLoc(shader_handle, "viewProjMatInv");
 
         return true;
-    }
+    }*/
 }

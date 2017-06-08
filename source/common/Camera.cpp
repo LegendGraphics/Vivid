@@ -12,9 +12,20 @@ namespace te
     const Vector3 WorldCoordinate::WORLD_FORWARD(0, 0, -1);
 
 
+    Camera* Camera::create(const String& res)
+    {
+        return dynamic_cast<Camera*>(Node::create(res));
+    }
+
     Camera::Camera()
     {
+        _node_type = NodeType::CAMERA;
         addComponent<CameraState>();
+    }
+
+    Camera::Camera(const Camera& node, const CopyOperator& copyop)
+    {
+        copyop(&node);
     }
 
     Camera::~Camera(){}
@@ -33,7 +44,7 @@ namespace te
     }
 
     CameraState::CameraState()
-        :Component(ComponentType::CAMERA_STATUS)
+        :ComData(ComponentType::CAMERA_STATE)
     {}
 
     CameraState::~CameraState(){}
@@ -42,6 +53,11 @@ namespace te
     void CameraState::setCameraMode(CameraMode mode)
     {
         _mode = mode;
+    }
+
+    void CameraState::setViewPort(const Vector4& view_port)
+    {
+        _view_port = view_port;
     }
 
     void CameraState::setViewTransform(const CameraViewParas& view_paras)
@@ -56,6 +72,7 @@ namespace te
     {
         _ortho_paras = ortho_paras;
     }
+
 
     Transform CameraState::getViewTransform() const
     {
@@ -117,6 +134,10 @@ namespace te
     {
 
     }
+
+    FocusCameraBehavior::FocusCameraBehavior()
+        :Behavior(ComponentType::LOGIC_BEHAVIOR)
+    {}
 
     void FocusCameraBehavior::update()
     {

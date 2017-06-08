@@ -48,7 +48,7 @@ namespace te
             //std::cout << "fps:" << 1.0 / _delta_time << std::endl;
             spacingUpdate();
             cullingUpdate();
-            _active_scene->getActiveCamera()->updateComponents();
+            _active_scene->getActiveCamera()->updateBehavior();
             renderingUpdate();
 
             // waiting events
@@ -67,7 +67,7 @@ namespace te
     void Director::spacingUpdate()
     {
         // update space status
-        SpacingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
+        BehaviorVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN);
         visitor.apply(_active_scene->getSceneRoot());
     }
 
@@ -81,7 +81,7 @@ namespace te
         RenderInterface::getInstance()->updateWorld();
 
         // render world
-        RenderingVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::getInstance(), _active_scene);
+        RenderVisitor visitor(NodeVisitor::TraversalMode::TRAVERSE_CHILDREN, RenderInterface::getInstance(), _active_scene);
         visitor.apply(_active_scene->getSceneRoot());
         RenderInterface::getInstance()->renderWorld();
     }
@@ -92,6 +92,7 @@ namespace te
 
         FocusCamera* focus_camera = new FocusCamera;
         focus_camera->getComponent<CameraState>()->setCameraMode(CameraState::CameraMode::ORTHOGONAL);
+        focus_camera->getComponent<CameraState>()->setViewPort(Vector4(0, 0, 800, 600));
         focus_camera->getComponent<CameraState>()->setViewTransform(CameraState::CameraViewParas(
             Vector3(200, 200, 200), Vector3(10, 0, 0), Vector3(0, 1, 0)));
         focus_camera->getComponent<CameraState>()->setOrthoProjectTransform(CameraState::CameraOrthoParas(

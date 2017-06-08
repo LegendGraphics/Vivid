@@ -1,22 +1,34 @@
 #include "renderer/runtime/StateStream.h"
-#include "renderer/resource/RenderMeshObject.h"
+#include "renderer/RenderWorld.h"
 
 namespace te
 {
-    void StreamMsg::process(RenderObject*& render_object, RenderContext* rc, RenderResourceContext* rrc)
+    void ResourceStreamMsg::process(RenderContext* rc, RenderResourceContext* rrc, RenderWorld* rw)
     {
+        RenderObject* ro = rw->getRenderObject(getHandle());
+        if (!ro)
+        {
+            ro = createRenderObject();
+            setHandle(rw->addRenderObject(ro));
+        }
+
         switch (_type)
         {
-        case MsgType::CREATE:
-            create(render_object, rrc);
+        case stream_message::UPDATE:
+            // need assert here to check rrc is not null
+            update(ro, rrc);
             break;
-        case MsgType::UPDATE:
-            update(render_object, rrc);
-            break;
-        case MsgType::RENDER:
-            render(render_object, rc);
+        case stream_message::RENDER:
+            // need assert here to check rc is not null
+            render(ro, rc);
             break;
         default: break;
         }
+    }
+
+    void DataStreamMsg::process(RenderContext* rc, RenderResourceContext* rrc, RenderWorld* rw)
+    {
+        // do whatever you want here
+        //render(render_object, rc);
     }
 }

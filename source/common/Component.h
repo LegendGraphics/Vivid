@@ -13,24 +13,20 @@ namespace te
 {
     class Node;
 
+    // In the future, we need to build a dynamic component system, which could 
+    // register custom component type
     enum class ComponentType
     {
         UNDEFINED,
-        SPACE_STATUS,
-        MESH_FILTER,
-        CAMERA_STATUS,
-        LOGIC_BEHAVIOR
+        SPACE_STATE,
+        CAMERA_STATE,
+        MESH_RENDER,
+        LOGIC_BEHAVIOR,
+        UPLOAD_TO_RENDER
     };
 
     class Component: public Cloneable
     {
-    public:
-        enum class MetaType
-        {
-            DATA,
-            BEHAVIOR
-        };
-
     public:
         Component();
         Component(ComponentType type);
@@ -48,9 +44,10 @@ namespace te
         inline Node* getOwner() const { return _owner; }
         void setOwner(Node* owner);
 
-        inline MetaType getMetaType() const { return _meta_type; }
-
         inline ComponentType getType() const { return _type; }
+
+        template <typename C>
+        bool hasComponent();
 
         template <typename C>
         C* getComponent();
@@ -59,9 +56,16 @@ namespace te
         String              _name;
         bool                _enabled;
         Node*               _owner;
-        MetaType            _meta_type;
         ComponentType       _type;
     };
+
+
+    template <typename C>
+    bool Component::hasComponent()
+    {
+        if (_owner) return _owner->hasComponent<C>();
+        else return false;
+    }
 
     template <typename C>
     C* Component::getComponent()
@@ -70,11 +74,42 @@ namespace te
         else return nullptr;
     }
 
+    class ComData : public Component
+    {
+    public:
+        ComData() = default;
+        ComData(ComponentType type);
+        ComData(const ComData& data, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        virtual ~ComData() = default;
+
+        ENABLE_CLONE(ComData);
+
+    };
+
     class Behavior : public Component
     {
     public:
-        Behavior();
-        virtual ~Behavior();
+        Behavior() = default;
+        Behavior(ComponentType type);
+        Behavior(const Behavior& behavior, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        virtual ~Behavior() = default;
+
+        ENABLE_CLONE(Behavior);
+
+        virtual void init();
+        virtual void update();
+    };
+
+    class Render : public Component
+    {
+    public:
+        Render() = default;
+        Render(ComponentType type);
+        Render(const Render& render, const CopyOperator& copyop = CopyOperator::SHALLOW_COPY);
+        virtual ~Render() = default;
+
+        ENABLE_CLONE(Render);
+
         virtual void init();
         virtual void update();
     };

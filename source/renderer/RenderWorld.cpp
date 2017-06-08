@@ -1,12 +1,8 @@
-#include "RenderWorld.h"
+#include "renderer/RenderWorld.h"
 
-#include "common/Clone.h"
 #include "common/Pipeline.h"
 #include "renderer/Device/RenderContext.h"
 #include "renderer/Device/RenderDevice.h"
-#include "renderer/resource/RenderMeshObject.h"
-
-#include "math/Vector3.h"
 
 namespace te
 {
@@ -15,16 +11,8 @@ namespace te
         // culling, prepare RenderQueue
 
         // iterate each object
-        for (StreamMsg* msg : stream)
-        {
-            StreamMsg::MsgType type = msg->getMsgType();
-            if (StreamMsg::RENDER == type)
-            {
-                Handle* handle = msg->getHandle();
-                RenderObject* ro = _objects.getPtr((*handle));
-                msg->process(ro, render_context, nullptr);
-            }
-        }
+        for (StateStreamMsg* msg : stream)
+            msg->process(render_context, nullptr, this);
     }
 
     RenderObject::Type RenderWorld::TYPE = RenderObject::NOT_INITIALIZED;
@@ -37,6 +25,7 @@ namespace te
     {
     }
 
+    // rendering image
     void RenderWorld::render(StateStream& stream, RenderParams& params)
     {
         RenderContext* render_context = (params.device->newContext());
@@ -78,29 +67,29 @@ namespace te
         params.device->releaseContext(render_context);
     }
 
+    RenderObject* RenderWorld::getRenderObject(Handle handle)
+    {
+        if (!_objects.has(handle))
+            return nullptr;
+        else
+            return _objects.getPtr(handle);
+    }
+
+    Handle RenderWorld::addRenderObject(RenderObject* ro)
+    {
+        return _objects.add(ro);
+    }
+
+    // updating resource status 
     void RenderWorld::update(StateStream& stream, RenderDevice* device)
     {
         RenderResourceContext* rrc = device->newResourceContext();
 
-        for (StreamMsg* msg : stream)
-        {
-            StreamMsg::MsgType type = msg->getMsgType();
-            if (StreamMsg::CREATE == type)
-            {
-                Handle* handle = msg->getHandle();
-                RenderObject* ro = nullptr;
-                msg->process(ro, nullptr, rrc);
-                (*handle) = _objects.add(ro);
-            }
-            else if (StreamMsg::UPDATE == type)
-            {
-                Handle* handle = msg->getHandle();
-                RenderObject* ro = _objects.getPtr((*handle));
-                msg->process(ro, nullptr, rrc);
-            }
-        }
+        for (StateStreamMsg* msg : stream)
+            msg->process(nullptr, rrc, this);
 
         device->dispatch(rrc);
         device->releaseResourceContext(rrc);
     }
+
 }
