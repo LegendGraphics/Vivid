@@ -1,0 +1,11 @@
+<!-- Shader -->
+<Shader>
+    <Uniforms>
+        <Uniform name="color" type="float4"/>
+        <Uniform name="ks" type="float"/>
+    </Uniforms>
+    <GLSL>
+        <Vertex name="vertex.glsl"/>
+        <Fragment name="fragment.glsl"/>
+    </GLSL>
+</Shader>

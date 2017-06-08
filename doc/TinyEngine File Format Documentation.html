@@ -1,0 +1,212 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0064)file:///D:/Workspace/TinyEngine/doc/Horde3D%20Documentation.html -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=windows-1252">
+    <title>TinyEngine File Format Documentation</title>
+    <link rel="stylesheet" type="text/css" href="./TinyEngine File Format Documentation_files/manual.css" title="ALL" media="screen,projection">
+</head>
+
+<body style="position: static;">
+<div id="content">
+
+<h1>TinyEngine Data Format Reference</h1>
+
+<h2>Mesh</h2>
+<p><i>Filename-extensions: .mesh</i></p>
+<p>The file format for mesh is a binary format and has to be created with a suitable tool
+like the Collada Converter.
+A mesh resource contains the raw vertex data and triangle data organized as streams. No skinning data currently.</p>
+
+
+<p>The file format is based on streams. The streams are written in that order:
+</p><ul>
+	<li>header</li>
+	<li>vertices (number of vertices: <b>#V</b>)</li>
+	<li>triangle indices (number of triangle indices: <b>#TI</b>)</li>
+</ul>
+<p></p>
+
+<div class="descbox">
+<table>
+    <tbody><tr>
+        <td><b>Header</b></td>
+        <td>File header at beginning of the file
+			<table>
+                <tbody><tr>
+                    <td><b>magic</b></td>
+					<td>3 <b>char</b>s</td>
+                    <td>byte sequence 'TEM'</td>
+					</tr>
+				<tr>
+					<td><b>version</b></td>
+					<td><b>int</b></td>
+					<td>version number: 1</td>
+				</tr>
+                <tr>
+					<td><b>vertex declaration</b></td>
+					<td><b>int</b></td>
+					<td>vertex with different attributes</td>
+				</tr
+
+            </tbody></table>
+		</td>
+	</tr>
+
+	<tr>
+        <td><b>Vertices</b></td>
+        <td>Vertex stream
+			<table>
+                <tbody><tr>
+					</tr><tr>
+						<td><b>numVertexStreams</b></td>
+						<td><b>int</b></td>
+						<td>
+							number of parts of your vertex data. If you want to write only position and normals write 2 here.<br>
+							The following attributes may be included:
+							<ul>
+								<li>position</li>
+								<li>normals</li>
+								<li>tangents</li>
+								<li>bitangents</li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td><b>numVertices</b></td>
+						<td><b>int</b></td>
+						<td>Number of vertices <b>#V</b></td>
+					</tr>
+            </tbody></table>
+		</td>
+    </tr>
+
+	<tr>
+        <td><b>Vertices - positions</b></td>
+		<td>May be written at any position <i>inside</i> the vertex stream
+			<table>
+                <tbody><tr>
+                    <td><b>magic</b></td>
+					<td><b>int</b></td>
+                    <td>position identifier, write 0</td>
+                </tr>
+				<tr>
+					<td><b>streamElementSize</b></td>
+					<td><b>int</b></td>
+					<td>size of <i>one</i> element of the stream. Here 12</td>
+				</tr>
+				<tr>
+					<td><b>positions</b></td>
+					<td><b>#V</b> * 3 <b>float</b>s</td>
+					<td>Write position data as contiguous array of X0,Y0,Z0,X1,Y1,Z1,...</td>
+				</tr>
+            </tbody></table>
+		</td>
+    </tr>
+    <tr>
+
+	</tr><tr>
+        <td><b>Vertices - normals</b></td>
+		<td>May be written at any position <i>inside</i> the vertex stream
+			<table>
+                <tbody><tr>
+                    <td><b>magic</b></td>
+					<td><b>int</b></td>
+                    <td>normal identifier, write 1</td>
+                </tr>
+				<tr>
+					<td><b>streamElementSize</b></td>
+					<td><b>int</b></td>
+					<td>size of <i>one</i> element of the stream. Here 6</td>
+				</tr>
+				<tr>
+					<td><b>normals</b></td>
+					<td><b>#V</b> * 3 <b>short</b>s</td>
+					<td>
+						Write normal data as contiguous array of X0,Y0,Z0,X1,Y1,Z1,...<br>
+						To save space normals are stored as <b>short</b>s. Before writing multiply your <b>float</b> with 32767 and convert it then to <b>short</b>
+					</td>
+				</tr>
+            </tbody></table>
+		</td>
+    </tr>
+    <tr>
+
+	</tr><tr>
+        <td><b>Vertices - tangents</b></td>
+		<td>May be written at any position <i>inside</i> the vertex stream
+			<table>
+                <tbody><tr>
+                    <td><b>magic</b></td>
+					<td><b>int</b></td>
+                    <td>tangent identifier, write 2</td>
+                </tr>
+				<tr>
+					<td><b>streamElementSize</b></td>
+					<td><b>int</b></td>
+					<td>size of <i>one</i> element of the stream. Here 6</td>
+				</tr>
+				<tr>
+					<td><b>tangents</b></td>
+					<td><b>#V</b> * 3 <b>short</b>s</td>
+					<td>
+						Write tangent data as contiguous array of X0,Y0,Z0,X1,Y1,Z1,...<br>
+						To save space tangents are stored as <b>short</b>s. Before writing multiply your <b>float</b> with 32767 and convert it then to <b>short</b>
+					</td>
+
+				</tr>
+            </tbody></table>
+		</td>
+    </tr>
+    <tr>
+
+	</tr><tr>
+        <td><b>Vertices - bitangents</b></td>
+		<td>May be written at any position <i>inside</i> the vertex stream
+			<table>
+                <tbody><tr>
+                    <td><b>magic</b></td>
+					<td><b>int</b></td>
+                    <td>bitangents identifier, write 3</td>
+                </tr>
+				<tr>
+					<td><b>streamElementSize</b></td>
+					<td><b>int</b></td>
+					<td>size of <i>one</i> element of the stream. Here 6</td>
+				</tr>
+				<tr>
+					<td><b>bitangents</b></td>
+					<td><b>#V</b> * 3 <b>short</b>s</td>
+					<td>
+						Write bitangent data as contiguous array of X0,Y0,Z0,X1,Y1,Z1,...<br>
+						To save space bitangents are stored as <b>short</b>s. Before writing multiply your <b>float</b> with 32767 and convert it then to <b>short</b>
+					</td>
+
+				</tr>
+            </tbody></table>
+		</td>
+    </tr>
+    <tr>
+
+	</tr><tr>
+        <td><b>Triangle indices</b></td>
+		<td>Triangle index stream, just after the vertex stream
+			<table>
+                <tbody><tr>
+                    <td><b>numTriangleIndices</b></td>
+					<td><b>int</b></td>
+					<td>number of triangle indices</td>
+                </tr>
+				<tr>
+					<td><b>triangleIndices</b></td>
+					<td><b>#TI</b> <b>int</b>s</td>
+					<td></td>
+				</tr>
+            </tbody></table>
+		</td>
+    </tr>
+    <tr>
+
+</tr></tbody></table>
+</div>
+
+
+</div><audio controls="controls" style="display: none;"></audio><style type="text/css">#yddContainer{display:block;font-family:Microsoft YaHei;position:relative;width:100%;height:100%;top:-4px;left:-4px;font-size:12px;border:1px solid}#yddTop{display:block;height:22px}#yddTopBorderlr{display:block;position:static;height:17px;padding:2px 28px;line-height:17px;font-size:12px;color:#5079bb;font-weight:bold;border-style:none solid;border-width:1px}#yddTopBorderlr .ydd-sp{position:absolute;top:2px;height:0;overflow:hidden}.ydd-icon{left:5px;width:17px;padding:0px 0px 0px 0px;padding-top:17px;background-position:-16px -44px}.ydd-close{right:5px;width:16px;padding-top:16px;background-position:left -44px}#yddKeyTitle{float:left;text-decoration:none}#yddMiddle{display:block;margin-bottom:10px}.ydd-tabs{display:block;margin:5px 0;padding:0 5px;height:18px;border-bottom:1px solid}.ydd-tab{display:block;float:left;height:18px;margin:0 5px -1px 0;padding:0 4px;line-height:18px;border:1px solid;border-bottom:none}.ydd-trans-container{display:block;line-height:160%}.ydd-trans-container a{text-decoration:none;}#yddBottom{position:absolute;bottom:0;left:0;width:100%;height:22px;line-height:22px;overflow:hidden;background-position:left -22px}.ydd-padding010{padding:0 10px}#yddWrapper{color:#252525;z-index:10001;background:url(chrome-extension://eopjamdnofihpioajgfdikhhbobonhbb/ab20.png);}#yddContainer{background:#fff;border-color:#4b7598}#yddTopBorderlr{border-color:#f0f8fc}#yddWrapper .ydd-sp{background-image:url(chrome-extension://eopjamdnofihpioajgfdikhhbobonhbb/ydd-sprite.png)}#yddWrapper a,#yddWrapper a:hover,#yddWrapper a:visited{color:#50799b}#yddWrapper .ydd-tabs{color:#959595}.ydd-tabs,.ydd-tab{background:#fff;border-color:#d5e7f3}#yddBottom{color:#363636}#yddWrapper{min-width:250px;max-width:400px;}</style></body></html>
