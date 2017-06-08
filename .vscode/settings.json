@@ -1,0 +1,8 @@
+// Place your settings in this file to overwrite default and user settings.
+{
+    "cmake.buildDirectory": "${workspaceRoot}-build",
+    "cmake.generator": "Visual Studio 14 2015 Win64",
+    "files.associations": {
+        "iostream": "cpp"
+    }
+}

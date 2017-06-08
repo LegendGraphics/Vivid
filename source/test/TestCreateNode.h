@@ -9,6 +9,16 @@ using namespace te;
 
 int main(int argc, char** argv)
 { 
+    if (argc < 2)
+    {
+        std::cout << "please add data path.\n";
+        //return 1;
+    }
+    else
+    {
+        ResourceLoader::setDataPath(String(argv[1]));
+    }
+
     Director::getInstance()->initialize();
     // create a scene
     Scene* scene = new Scene;

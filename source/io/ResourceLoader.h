@@ -22,6 +22,7 @@ namespace te
     class ResourceLoader
     {
     public:
+        static void setDataPath(const String& data_path);
         static bool load(Mesh* mesh, const String& res);
         static bool load(Pipeline* pipeline, const String& res);
         static bool load(MetaNode* meta_node, const String& res);
@@ -36,6 +37,7 @@ namespace te
 
         static bool load(CameraState* camera_state, const String& res);
 
+        static String _data_path;
     };
 }
 
