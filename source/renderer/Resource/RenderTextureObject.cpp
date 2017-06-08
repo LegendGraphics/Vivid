@@ -1,8 +1,6 @@
 #include "renderer/resource/RenderTextureObject.h"
 
 #include "renderer/device/RenderContext.h"
-#include "renderer/device/RenderDevice.h"
-#include "renderer/runtime/RenderCamera.h"
 #include "renderer/resource/RenderResourceContext.h"
 #include "renderer/resource/ResourceStream.h"
 #include "renderer/runtime/StateStream.h"
@@ -20,12 +18,9 @@ namespace te
     {
     }
 
-    void RenderTextureObject::create(RenderResourceContext* context)
-    {
-    }
-
     void RenderTextureObject::update(RenderResourceContext* context)
     {
+        allocTexture(context);
     }
 
     void RenderTextureObject::render(RenderContext* context)
@@ -35,24 +30,27 @@ namespace te
 
     void RenderTextureObject::parseStreamMsg(StateStreamMsg* msg)
     {
-        /*Shader* shader = static_cast<Shader*>(msg->getData());
-
-        _vs = shader->getVertexShaderContext();
-        _fs = shader->getFragmentShaderContext();
-        _uniforms = shader->getShaderUniforms();*/
+        Texture* texture = static_cast<Texture*>(msg->getData());
+        _width = texture->getWidth();
+        _height = texture->getHeight();
+        _depth = texture->getDepth();
+        _img = texture->getData();
     }
 
     void RenderTextureObject::allocTexture(RenderResourceContext* context)
     {
-        /*shader_data::ShaderStream* ss = new shader_data::ShaderStream;
-        ss->res = &_shader_handle;
-        ss->vs = _vs;
-        ss->fs = _fs;
-        ss->uniforms = &_uniforms;
+        texture_data::TextureStream* ts = new texture_data::TextureStream;
+        ts->res = &_tex_handle;
+        ts->raw_data = &_img;
+        ts->width = _width;
+        ts->height = _height;
+        ts->depth = _depth;
+        ts->type = texture_data::Type::IMAGE2D; // Hard code currently
+        ts->format = texture_data::Format::BGRA8; 
 
-        RenderResourceContext::Message allc_shader = {
-            RenderResourceContext::MessageType::ALLOC_SHADER, (void*)ss };
-        context->messages().push_back(allc_shader);*/
+        RenderResourceContext::Message allc_texture = {
+            RenderResourceContext::MessageType::ALLOC_TEXTURE, (void*)ts };
+        context->messages().push_back(allc_texture);
     }
 }
 

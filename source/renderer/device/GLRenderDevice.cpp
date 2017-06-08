@@ -308,8 +308,11 @@ namespace te
             }
             else if (RenderResourceContext::MessageType::ALLOC_TEXTURE == msg.type)
             {
-
-                //GPUResourceHandle res = createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool has_mips)
+                texture_data::TextureStream* t_stream
+                    = static_cast<texture_data::TextureStream*>(msg.head);
+                GPUResourceHandle* res = t_stream->res;
+                (*res) = createTexture(t_stream->width, t_stream->height, t_stream->depth,
+                    t_stream->type, t_stream->format, t_stream->has_mips);
             }
         }
 
@@ -587,7 +590,7 @@ namespace te
         _cur_shader_handle = shader_handle;
     }
 
-    uint32 GLRenderDevice::createRenderBuffer(uint32 width, uint32 height, image_data::Format format, bool depth, uint32 num_col_bufs)
+    uint32 GLRenderDevice::createRenderBuffer(uint32 width, uint32 height, texture_data::Format format, bool depth, uint32 num_col_bufs)
     {
         GLRenderTarget render_target;
         glGenFramebuffers(1, &render_target.gl_fbo);
@@ -598,7 +601,7 @@ namespace te
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, render_target.gl_fbo);
                 // create color texture
-                uint32 tex_obj = createTexture(width, height, 1, image_data::IMAGE2D, image_data::RGBA32F, false);
+                uint32 tex_obj = createTexture(width, height, 1, texture_data::IMAGE2D, texture_data::RGBA32F, false);
                // ASSERT(tex_obj != 0, "Not a Valid Texture Object!");
                 updateTextureData(tex_obj, 0, nullptr);
                 // attach the texture to fbo
@@ -616,7 +619,7 @@ namespace te
         {
             glBindFramebuffer(GL_FRAMEBUFFER, render_target.gl_fbo);
             // create a depth texture
-            uint32 tex_obj = createTexture(width, height, 1, image_data::IMAGE2D, image_data::DEPTH, false);
+            uint32 tex_obj = createTexture(width, height, 1, texture_data::IMAGE2D, texture_data::DEPTH, false);
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
             updateTextureData(tex_obj, 0, nullptr);
             GLTexture& tex = _textures.getRef(tex_obj);
@@ -632,7 +635,7 @@ namespace te
         return _render_targets.add(render_target);
     }
 
-    uint32 GLRenderDevice::createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool has_mips)
+    uint32 GLRenderDevice::createTexture(int width, int height, int depth, texture_data::Type type, texture_data::Format format, bool has_mips)
     {
         GLTexture tex;
         tex.format = format;
@@ -643,13 +646,13 @@ namespace te
 
         switch (type)
         {
-        case image_data::IMAGE2D:
+        case texture_data::IMAGE2D:
             tex.gl_type = GL_TEXTURE_2D;
             break;
-        case image_data::IMAGE3D:
+        case texture_data::IMAGE3D:
             tex.gl_type = GL_TEXTURE_3D;
             break;
-        case image_data::IMAGECUBE:
+        case texture_data::IMAGECUBE:
             tex.gl_type = GL_TEXTURE_CUBE_MAP;
             break;
         }
@@ -657,9 +660,9 @@ namespace te
         glGenTextures(1, &tex.gl_obj);
         glActiveTexture(GL_TEXTURE0 + 15); // assume the 16th texture unit isn't usually used
         glBindTexture(tex.gl_type, tex.gl_obj);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glBindTexture(GL_TEXTURE_2D, 0);
+        glTexParameteri(tex.gl_type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameteri(tex.gl_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        glBindTexture(tex.gl_type, 0);
 
         return _textures.add(tex);
     }
@@ -673,19 +676,29 @@ namespace te
         int input_format = GL_BGRA, input_type = GL_UNSIGNED_BYTE;
         switch (tex.format)
         {
-        case image_data::RGBA16F:
+        case texture_data::RGBA16F:
             input_format = GL_RGBA;
             input_type = GL_FLOAT;
             break;
-        case image_data::RGBA32F:
+        case texture_data::RGBA32F:
             input_format = GL_RGBA;
             input_type = GL_FLOAT;
             break;
-        case image_data::DEPTH:
+        case texture_data::DEPTH:
             input_format = GL_DEPTH_COMPONENT;
             input_type = GL_FLOAT;
         };
-        glTexImage2D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 0, input_format, input_type, pixels);
+
+        if (tex.gl_type == texture_data::IMAGE2D)
+        {
+            glTexImage2D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 0, input_format, input_type, pixels);
+        }
+        else if (tex.gl_type == texture_data::IMAGE3D)
+        {
+            glTexImage3D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 256, 0, input_format, input_type, pixels);
+        }
+        // How about ImageCube?
+       
         glBindTexture(tex.gl_type, 0);
     }
 

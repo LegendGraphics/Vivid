@@ -1,11 +1,8 @@
 #ifndef RENDERER_RENDER_TEXTURE_OBJECT_H
 #define RENDERER_RENDER_TEXTURE_OBJECT_H
 
-#include <unordered_map>
-#include "base/Types.h"
-#include "base/String.h"
-#include "common/Shader.h"
 #include "renderer/resource/RenderObject.h"
+#include "common/Texture.h"
 
 namespace te
 {
@@ -21,7 +18,6 @@ namespace te
         RenderTextureObject();
         ~RenderTextureObject();
 
-        void create(RenderResourceContext* context);
         void update(RenderResourceContext* context);
         void render(RenderContext* context);
 
@@ -32,6 +28,10 @@ namespace te
 
     private:
         GPUHandle   _tex_handle;
+        void*       _img;
+        uint32      _width;
+        uint32      _height;
+        uint32      _depth;
     };
 }
 

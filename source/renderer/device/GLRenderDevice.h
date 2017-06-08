@@ -21,7 +21,7 @@ namespace te
     {
         uint32 gl_obj;
         uint32 gl_type;
-        image_data::Format format;
+        texture_data::Format format;
         int    width, height, depth;
         bool   has_mips;
     };
@@ -87,11 +87,11 @@ namespace te
         void bindShader(uint32 shader_handle);
 
         // RenderBuffer
-        uint32 createRenderBuffer(uint32 width, uint32 height, image_data::Format format,
+        uint32 createRenderBuffer(uint32 width, uint32 height, texture_data::Format format,
             bool depth, uint32 num_col_bufs);
 
         // Textures
-        uint32 createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool has_mips);
+        uint32 createTexture(int width, int height, int depth, texture_data::Type type, texture_data::Format format, bool has_mips);
         void updateTextureData(uint32 tex_obj, int mip_level, const void* pixels);
 
     protected:

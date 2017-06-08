@@ -7,9 +7,6 @@
 #include "renderer/resource/ResourceStream.h"
 #include "renderer/runtime/StateStream.h"
 
-#include "common/MeshRender.h"
-#include "common/SpaceState.h"
-
 namespace te
 {
     RenderObject::Type RenderMeshObject::TYPE = RenderObject::NOT_INITIALIZED;

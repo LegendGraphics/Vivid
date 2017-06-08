@@ -2,6 +2,7 @@
 #define RENDERER_RESOURCE_STREAM_H
 
 #include "common/Shader.h"
+#include "renderer/resource/VertexLayoutType.h"
 
 namespace te
 {
@@ -63,7 +64,40 @@ namespace te
             GPUHandle*          res;
             String              vs;
             String              fs;
-            ShaderUniforms*    uniforms;
+            ShaderUniforms*     uniforms;
+        };
+    }
+
+    namespace texture_data
+    {
+        enum Type {
+            IMAGE2D,
+            IMAGE3D,
+            IMAGECUBE,
+            UNKNOWN
+        };
+
+        enum Format {
+            Unknown,
+            BGRA8,
+            DXT1,
+            DXT3,
+            DXT5,
+            RGBA16F,
+            RGBA32F,
+            DEPTH
+        };
+
+        struct TextureStream
+        {
+            GPUHandle*          res;
+            void*               raw_data;
+            uint32              width;
+            uint32              height;
+            uint32              depth;
+            Type                type;
+            Format              format;
+            bool                has_mips;
         };
     }
 }

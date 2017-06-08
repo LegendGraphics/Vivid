@@ -27,9 +27,13 @@ namespace te
         void setHeight(uint32 height) { _height = height; }
         void setDepth(uint32 depth) { _depth = depth; }
         void setData(uint8* data) { _img = data; }
+
+        void setROHandle(Handle handle) { _render_object = handle; }
+        Handle getROHandle() { return _render_object; }
     protected:
         uint32      _width, _height, _depth;
         uint8*      _img;
+        Handle      _render_object;
 
     };
 

@@ -6,7 +6,7 @@
 namespace te
 {
 
-    enum class IndexFormat : uint8
+    /*enum class IndexFormat : uint8
     {
         IDXFMT_16,
         IDXFMT_32
@@ -31,15 +31,15 @@ namespace te
             RGBA32F,
             DEPTH
         };
-    }
+    }*/
 
-    class RenderTexture : public RenderResource 
+    /*class RenderTexture : public RenderResource 
     {
         RenderTexture() : RenderResource(TEXTURE) { }
         RenderTexture(RenderResource::Type t) : RenderResource(t) { }
 
         image_data::Format format;
-    };
+    };*/
 }
 
 #endif

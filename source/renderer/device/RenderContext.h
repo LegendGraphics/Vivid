@@ -36,7 +36,7 @@ namespace te
         struct IndexCmdStream
         {
             uint32 buf_handle;
-            IndexFormat idx_format;
+            //IndexFormat idx_format;
         };
 
         struct VertexCmdStream

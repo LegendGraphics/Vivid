@@ -159,7 +159,7 @@ namespace te
         virtual void render(RenderObject*& render_object, RenderContext* rc);
     };
 
-    /*class TextureStreamMsg : public ResourceStreamMsg
+    class TextureStreamMsg : public ResourceStreamMsg
     {
         TextureStreamMsg(ActionType type, Handle handle, void* data);
         virtual ~TextureStreamMsg();
@@ -174,7 +174,7 @@ namespace te
     protected:
         virtual void update(RenderObject*& render_object, RenderResourceContext* rrc);
         virtual void render(RenderObject*& render_object, RenderContext* rc);
-    };*/
+    };
 }
 
 #endif
