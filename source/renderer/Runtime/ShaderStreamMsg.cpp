@@ -10,6 +10,13 @@ namespace te
 
     ShaderStreamMsg::~ShaderStreamMsg()
     {
+        if (_data) delete static_cast<Data*>(_data);
+    }
+
+    void ShaderStreamMsg::setHandle(Handle handle)
+    {
+        _handle = handle;
+        static_cast<Data*>(_data)->shader->setROHandle(handle);
     }
 
     void ShaderStreamMsg::update(RenderObject* render_object, RenderResourceContext* rrc)

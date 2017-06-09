@@ -3,6 +3,7 @@
 
 #include "common/Resource.h"
 #include "common/Shader.h"
+#include "common/Texture.h"
 #include "math/Vector3.h"
 #include "math/Matrix.h"
 
@@ -26,6 +27,7 @@ namespace te
         void unload();
 
         ShaderPtr   getShader();
+        std::vector<TexturePtr> getTextures();
 
         void setUniform(const String& name, float a, float b, float c, float d);
 

@@ -2,7 +2,7 @@
 #define COMMON_SHADER_H
 
 #include "common/Resource.h"
-#include "common/ShaderUniform.h"
+#include "renderer/resource/ShaderUniform.h"
 
 namespace te
 {
@@ -68,6 +68,7 @@ namespace te
         Handle getROHandle() { return _render_object; }
 
         ShaderUniforms      uniforms;
+        ShaderSamplers      samplers;
 
     protected:
         String              _vs_context;

@@ -3,13 +3,12 @@
 
 #include "base/Types.h"
 
-#include "renderer/resource/ShaderDataType.h"
+#include "renderer/resource/ShaderUniform.h"
 #include "renderer/resource/VertexLayoutType.h"
 #include "renderer/resource/Image.h"
 
 namespace te
 {
-    class ShaderUniforms;
     namespace resource_stream
     {
         enum class MessageType : uint8
@@ -53,6 +52,8 @@ namespace te
             String              vs;
             String              fs;
             ShaderUniforms*     uniforms;
+            ShaderSamplers*     samplers;
+            vertex_layout::Type layout_type;
         };
 
         struct TextureStream

@@ -2,7 +2,7 @@
 #define RENDERER_RENDER_WORLD_H
 
 #include "renderer/resource/HandleObjects.hpp"
-#include "renderer/resource/RenderObject.h"
+#include "renderer/runtime/RenderObject.h"
 #include "renderer/runtime/StateStream.h"
 
 namespace te

@@ -1,4 +1,4 @@
-#include "renderer/resource/RenderShaderObject.h"
+#include "renderer/runtime/RenderShaderObject.h"
 
 #include "renderer/device/RenderContext.h"
 #include "renderer/device/RenderDevice.h"
@@ -6,6 +6,8 @@
 #include "renderer/resource/RenderResourceContext.h"
 #include "renderer/resource/ResourceStream.h"
 #include "renderer/runtime/StateStream.h"
+
+#include "common/Mesh.h"
 
 namespace te
 {
@@ -22,22 +24,25 @@ namespace te
 
     void RenderShaderObject::update(RenderResourceContext* context)
     {
-        createShader(context);
+        if (0xFFFFFFFF == _shader_handle)
+            createShader(context);
     }
 
     void RenderShaderObject::render(RenderContext* context)
     {
         setShader(context);
-        setDraw(context);
+        setDraw(context); // TODO: this should be moved out to a single DataStreamMsg
     }
 
     void RenderShaderObject::parseStreamMsg(StateStreamMsg* msg)
     {
-        Shader* shader = static_cast<Shader*>(msg->getData());
+        ShaderStreamMsg::Data* msg_data = static_cast<ShaderStreamMsg::Data*>(msg->getData());
 
-        _vs = shader->getVertexShaderContext();
-        _fs = shader->getFragmentShaderContext();
-        _uniforms = &shader->uniforms;
+        _vs = msg_data->shader->getVertexShaderContext();
+        _fs = msg_data->shader->getFragmentShaderContext();
+        _uniforms = &(msg_data->shader->uniforms);
+        _samplers = &(msg_data->shader->samplers);
+        _layout_type = msg_data->mesh->getLayoutType();
     }
 
     void RenderShaderObject::createShader(RenderResourceContext* context)
@@ -47,6 +52,8 @@ namespace te
         ss->vs = _vs;
         ss->fs = _fs;
         ss->uniforms = _uniforms;
+        ss->samplers = _samplers;
+        ss->layout_type = _layout_type;
 
         RenderResourceContext::Message allc_shader = {
             resource_stream::MessageType::ALLOC_SHADER, (void*)ss };
@@ -58,6 +65,7 @@ namespace te
         command_stream::ShaderCmdStream* scs = new command_stream::ShaderCmdStream;
         scs->shader_handle = _shader_handle;
         scs->uniforms = _uniforms;
+        scs->samplers = _samplers;
         RenderContext::Command set_shader = { 0, (void*)scs, command_stream::CommandType::BIND_SHADER_OBJECT };
         context->commands().push_back(set_shader);
     }

@@ -1,7 +1,7 @@
 #ifndef RENDERER_RENDER_TEXTURE_OBJECT_H
 #define RENDERER_RENDER_TEXTURE_OBJECT_H
 
-#include "renderer/resource/RenderObject.h"
+#include "renderer/runtime/RenderObject.h"
 #include "common/Texture.h"
 
 namespace te
@@ -32,6 +32,7 @@ namespace te
         uint32      _width;
         uint32      _height;
         uint32      _depth;
+        int         _tex_unit; // this may be changed in each render pass
     };
 }
 

@@ -34,6 +34,24 @@ namespace te
     private:
         std::unordered_map<String, ShaderUniform>  _uniforms;
     };
+
+    struct ShaderSampler
+    {
+        int     loc;
+        int     tex_unit;
+    };
+
+    class ShaderSamplers
+    {
+    public:
+        auto& getSamplers() { return _samplers; }
+
+        bool hasSampler(const String& name);
+        void addSampler(const String& name, int tex_unit);
+
+    private:
+        std::unordered_map<String, ShaderSampler> _samplers;
+    };
 }
 
 #endif // COMMON_SHADER_UNIFORM_H

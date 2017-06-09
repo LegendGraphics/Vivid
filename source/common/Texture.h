@@ -22,6 +22,7 @@ namespace te
         uint32 getHeight() const { return _height; }
         uint32 getDepth() const { return _depth; }
         uint8* getData() const { return _img; }
+        String getName() const { return _semantic_name; }
 
         void setWidth(uint32 width) { _width = width; }
         void setHeight(uint32 height) { _height = height; }

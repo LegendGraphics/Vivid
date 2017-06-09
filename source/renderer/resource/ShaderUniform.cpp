@@ -1,4 +1,4 @@
-#include "common/ShaderUniform.h"
+#include "renderer/resource/ShaderUniform.h"
 #include "io/Logger.h"
 
 namespace te
@@ -37,6 +37,27 @@ namespace te
         else
         {
             cLog << StringUtils::format("Uniform %s already exists in the shader", name);
+        }
+    }
+
+    bool ShaderSamplers::hasSampler(const String & name)
+    {
+        if (_samplers.find(name) != _samplers.end()) return true;
+        else return false;
+    }
+
+    void ShaderSamplers::addSampler(const String & name, int tex_unit)
+    {
+        if (!hasSampler(name))
+        {
+            ShaderSampler sampler;
+            sampler.loc = -1;
+            sampler.tex_unit = tex_unit;
+            _samplers.insert({ name, sampler });
+        }
+        else
+        {
+            cLog << StringUtils::format("Sampler %s already exists in the shader", name);
         }
     }
 

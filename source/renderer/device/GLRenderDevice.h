@@ -126,11 +126,18 @@ namespace te
         //ShaderObject _default_shader;
         GLRenderTarget _default_render_target;
 
-        uint32                _cur_base_index, _cur_base_vertex, _cur_num_indices;
-        uint32                _cur_vao, _new_vao;
-        int                _vp_x, _vp_y, _vp_width, _vp_height;
+        uint32              _cur_base_index, _cur_base_vertex, _cur_num_indices;
+        uint32              _cur_vao, _new_vao;
+        int                 _vp_x, _vp_y, _vp_width, _vp_height;
+        struct TexSlot
+        {
+            uint32      tex_handle;
+            uint32      tex_unit;
+            TexSlot(uint32 handle, uint32 unit) : tex_handle(handle), tex_unit(unit) {};
+        };
+        std::vector<TexSlot>    _cur_tex_slots;
         
-        uint32                _pending_mask;
+        uint32              _pending_mask;
 
     };
 }

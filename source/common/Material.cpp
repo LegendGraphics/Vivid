@@ -20,6 +20,17 @@ namespace te
         return ResourceMapper::getInstance()->get<ShaderManager>()->getShader(_shader);
     }
 
+    std::vector<TexturePtr> Material::getTextures()
+    {
+        std::vector<TexturePtr> textures;
+        for (auto& sampler : _samplers)
+        {
+            textures.push_back(
+                ResourceMapper::getInstance()->get<TextureManager>()->getTexture(sampler.second.texture));
+        }
+        return textures;
+    }
+
     void Material::setShaderUniforms()
     {
         ShaderUniforms* shader_uniforms = &getShader()->uniforms;

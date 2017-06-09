@@ -1,4 +1,4 @@
-#include "renderer/resource/RenderMeshObject.h"
+#include "renderer/runtime/RenderMeshObject.h"
 
 #include "renderer/device/RenderContext.h"
 #include "renderer/device/RenderDevice.h"

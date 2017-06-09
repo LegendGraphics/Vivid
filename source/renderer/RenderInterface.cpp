@@ -7,7 +7,6 @@
 #include "renderer/runtime/RenderObjectManager.h"
 #include "renderer/RenderWorld.h"
 #include "renderer/runtime/RenderCamera.h"
-#include "renderer/resource/RenderMeshObject.h"
 
 #ifdef USE_GL
 #include "renderer/device/GLRenderDevice.h"

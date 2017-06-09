@@ -1,5 +1,5 @@
 #include "renderer/runtime/StateStream.h"
-
+#include "common/Texture.h"
 
 namespace te
 {
@@ -10,6 +10,13 @@ namespace te
 
     TextureStreamMsg::~TextureStreamMsg()
     {
+        if (_data) delete static_cast<Data*>(_data);
+    }
+
+    void TextureStreamMsg::setHandle(Handle handle)
+    {
+        _handle = handle;
+        static_cast<Data*>(_data)->texture->setROHandle(handle);
     }
 
     void TextureStreamMsg::update(RenderObject* render_object, RenderResourceContext* rrc)
@@ -35,6 +42,7 @@ namespace te
         //// get model matrix
         //Data* data = static_cast<Data*>(_data);
         //rmo->setModelMat(data->model_mat);
+        rto->parseStreamMsg(this); // set text unit here
 
         rto->render(rc);
     }

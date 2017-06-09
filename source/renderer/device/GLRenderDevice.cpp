@@ -6,7 +6,7 @@
 
 #include "renderer/runtime/RenderCamera.h"
 #include "renderer/resource/VertexLayout.h"
-#include "common/ShaderUniform.h"
+#include "renderer/resource/ShaderUniform.h"
 
 #include "math/Vector4.h"
 #include "io/Logger.h"
@@ -119,8 +119,10 @@ namespace te
                 //}
 
                 // TODO: need to be changed, set uniform value in engine part
-                if (c_stream->shader_handle != 0xFFFFFFFF)
+                if (0xFFFFFFFF != c_stream->shader_handle)
                 {
+                    if (_cur_shader_handle != c_stream->shader_handle)
+                        bindShader(c_stream->shader_handle);
                     // TODO
                     // use setShaderConst()
                     // header of all uniform data is in ShaderCmdStream::data
@@ -129,6 +131,12 @@ namespace te
                     {
                         setShaderConst(uniform.second.loc, shader_data::UniformType(uniform.second.value.type), &uniform.second.value.data[0]);
                     }
+
+                    for (auto& sampler : c_stream->samplers->getSamplers())
+                    {
+                        glUniform1i(sampler.second.loc, (int)sampler.second.tex_unit);
+                    }
+
                     delete c_stream;
                 }
                 else
@@ -200,6 +208,15 @@ namespace te
             else if (command_stream::CommandType::SET_RENDER_TARGET == command.command_type)
             {
 
+            }
+            else if (command_stream::CommandType::UPDATE_TEXTURE == command.command_type)
+            {
+                command_stream::TextureCmdStream* t_stream = static_cast<command_stream::TextureCmdStream*>(command.head);
+
+                _cur_tex_slots.push_back(TexSlot(t_stream->tex_handle, t_stream->tex_unit));
+                _pending_mask |= PM_TEXTURES;
+
+                delete t_stream;
             }
         }
 
@@ -297,12 +314,17 @@ namespace te
                 resource_stream::ShaderStream* s_stream
                     = static_cast<resource_stream::ShaderStream*>(msg.head);
                 GPUResourceHandle* res = s_stream->res;
-                (*res) = createShader(s_stream->vs.c_str(), s_stream->fs.c_str(), vertex_layout::PNTB);
+                (*res) = createShader(s_stream->vs.c_str(), s_stream->fs.c_str(), s_stream->layout_type);
                 bindShader(*res);
 
                 for (auto& uniform : s_stream->uniforms->getUniforms())
                 {
                     uniform.second.loc = getShaderConstLoc(*res, uniform.first.c_str());
+                }
+
+                for (auto& sampler : s_stream->samplers->getSamplers())
+                {
+                    sampler.second.loc = getShaderConstLoc(*res, sampler.first.c_str());
                 }
 
                 delete s_stream;
@@ -314,6 +336,9 @@ namespace te
                 GPUResourceHandle* res = t_stream->res;
                 (*res) = createTexture(t_stream->width, t_stream->height, t_stream->depth,
                     t_stream->type, t_stream->format, t_stream->has_mips);
+                updateTextureData((*res), 0, t_stream->raw_data); // TODO: TextureStream doesn't pass mip level in...
+
+                delete t_stream;
             }
         }
 
@@ -663,8 +688,8 @@ namespace te
         glBindTexture(tex.gl_type, tex.gl_obj);
         glTexParameteri(tex.gl_type, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameteri(tex.gl_type, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        glActiveTexture(GL_TEXTURE0);
         glBindTexture(tex.gl_type, 0);
+        glActiveTexture(GL_TEXTURE0);
 
         return _textures.add(tex);
     }
@@ -703,6 +728,7 @@ namespace te
         // How about ImageCube?
        
         glBindTexture(tex.gl_type, 0);
+        glActiveTexture(GL_TEXTURE0);
     }
 
     void GLRenderDevice::commitGeneralUniforms()
@@ -746,6 +772,22 @@ namespace te
           _prev_shader_handle = _cur_shader_handle;
 
           glBindVertexArray(_vaos.getRef(_cur_vao));
+          _pending_mask &= ~PM_VERTLAYOUT;
+        }
+
+        if (mask & PM_TEXTURES)
+        {
+            for (TexSlot& slot : _cur_tex_slots)
+            {
+                glActiveTexture(GL_TEXTURE0 + slot.tex_unit);
+                GLTexture& tex = _textures.getRef(slot.tex_handle);
+                glBindTexture(tex.gl_type, tex.gl_obj);
+
+                // TODO: apply sampler state
+            }
+            _cur_tex_slots.clear();
+
+            _pending_mask &= ~PM_TEXTURES;
         }
       }
       return true;

@@ -4,6 +4,7 @@
 namespace te
 {
     class ShaderUniforms;
+    class ShaderSamplers;
     namespace command_stream
     {
         enum class CommandType : uint8
@@ -36,6 +37,13 @@ namespace te
         {
             uint32          shader_handle;
             ShaderUniforms* uniforms;
+            ShaderSamplers* samplers;
+        };
+
+        struct TextureCmdStream
+        {
+            uint32 tex_handle;
+            uint32 tex_unit;
         };
 
         struct RenderTargetCmdStream
