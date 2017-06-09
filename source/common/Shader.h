@@ -48,7 +48,7 @@ namespace te
     class Shader : public Resource
     {
     public:
-        using UniformTypeMap = std::unordered_map<String, ShaderUniformType>;
+        using UniformTypeMap = std::unordered_map<String, shader_data::UniformType>;
 
         static UniformTypeMap uni_type_map;
 

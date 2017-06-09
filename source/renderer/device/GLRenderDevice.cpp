@@ -3,9 +3,10 @@
 #include "renderer/device/GLRenderDevice.h"
 #include "renderer/device/RenderContext.h"
 #include "renderer/resource/RenderResourceContext.h"
+
 #include "renderer/runtime/RenderCamera.h"
 #include "renderer/resource/VertexLayout.h"
-#include "renderer/resource/ResourceStream.h"
+#include "common/ShaderUniform.h"
 
 #include "math/Vector4.h"
 #include "io/Logger.h"
@@ -76,16 +77,16 @@ namespace te
         // For current dev stage, we simply let the device do the actual command
         for (RenderContext::Command& command : context->commands())
         {
-            if (RenderContext::CommandType::UPDATE_INDEX_BUFFER == command.command_type)
+            if (command_stream::CommandType::UPDATE_INDEX_BUFFER == command.command_type)
             {
-                RenderContext::IndexCmdStream* c_stream = static_cast<RenderContext::IndexCmdStream*>(command.head);
+                command_stream::IndexCmdStream* c_stream = static_cast<command_stream::IndexCmdStream*>(command.head);
                 //_newIndexBuf = c_stream->bufHandle;
                 //_indexFormat = c_stream->idxFormat;
                 delete c_stream;
             }
-            else if (RenderContext::CommandType::UPDATE_VERTEX_BUFFER == command.command_type)
+            else if (command_stream::CommandType::UPDATE_VERTEX_BUFFER == command.command_type)
             {
-                RenderContext::VertexCmdStream* c_stream = static_cast<RenderContext::VertexCmdStream*>(command.head);
+                command_stream::VertexCmdStream* c_stream = static_cast<command_stream::VertexCmdStream*>(command.head);
                 // each shader has an array of a structure InputLayouts { bool valid; int8 attribIndices[16]; }
                 // it's related to how the vertex buffer is organized in OpenGL
                 _new_vao = c_stream->vao_handle;
@@ -97,7 +98,7 @@ namespace te
                 _pending_mask |= PM_VERTLAYOUT;
                 delete c_stream;
             }
-            else if (RenderContext::CommandType::BIND_SHADER_OBJECT == command.command_type)
+            else if (command_stream::CommandType::BIND_SHADER_OBJECT == command.command_type)
             {
                 //// set camera
                 //RenderCamera* curCamera = context->_camera;
@@ -110,7 +111,7 @@ namespace te
 
 
                 // set shader
-                RenderContext::ShaderCmdStream* c_stream = static_cast<RenderContext::ShaderCmdStream*>(command.head);
+                command_stream::ShaderCmdStream* c_stream = static_cast<command_stream::ShaderCmdStream*>(command.head);
 
                 //// set uniform value from camera, may be not proper
                 //for (auto& uniform : c_stream->uniforms.getUniforms())
@@ -126,7 +127,7 @@ namespace te
                     // ShaderCmdStream::variables give information for how to read
                     for (auto& uniform : c_stream->uniforms->getUniforms())
                     {
-                        setShaderConst(uniform.second.loc, shader_data::Class(uniform.second.value.type), &uniform.second.value.data[0]);
+                        setShaderConst(uniform.second.loc, shader_data::UniformType(uniform.second.value.type), &uniform.second.value.data[0]);
                     }
                     delete c_stream;
                 }
@@ -186,17 +187,17 @@ namespace te
                 setShaderConst(world_mat_loc, shader_data::MATRIX4X4, c_stream->world_mat.ptr());
 
             }*/
-            else if (RenderContext::CommandType::RENDER == command.command_type)
+            else if (command_stream::CommandType::RENDER == command.command_type)
             {
                 draw();
             }
-            else if (RenderContext::CommandType::CLEAR == command.command_type)
+            else if (command_stream::CommandType::CLEAR == command.command_type)
             {
-                RenderContext::ClearCmdStream* c_stream = static_cast<RenderContext::ClearCmdStream*>(command.head);
+                command_stream::ClearCmdStream* c_stream = static_cast<command_stream::ClearCmdStream*>(command.head);
                 clear(c_stream->clear_color, c_stream->color_rgba, c_stream->clear_depth, c_stream->depth);
                 delete c_stream;
             }
-            else if (RenderContext::CommandType::SET_RENDER_TARGET == command.command_type)
+            else if (command_stream::CommandType::SET_RENDER_TARGET == command.command_type)
             {
 
             }
@@ -209,32 +210,32 @@ namespace te
     {
         for (RenderResourceContext::Message& msg : context->messages())
         {
-            if (RenderResourceContext::MessageType::ALLOC_INDEX_BUFFER == msg.type)
+            if (resource_stream::MessageType::ALLOC_INDEX_BUFFER == msg.type)
             {
                 // default type unsigned int
-                vertex_layout::IndexStream* i_stream
-                    = static_cast<vertex_layout::IndexStream*>(msg.head);
+                resource_stream::IndexStream* i_stream
+                    = static_cast<resource_stream::IndexStream*>(msg.head);
                 GPUResourceHandle* res = i_stream->res;
                 //ASSERT(RenderResource::INDEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 (*res) = createIndexBuffer(i_stream->size, i_stream->raw_data);
                 
                 delete i_stream;
             }
-            else if (RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER == msg.type)
+            else if (resource_stream::MessageType::ALLOC_VERTEX_BUFFER == msg.type)
             {
                 // default type float
-                vertex_layout::VertexStream* v_stream
-                    = static_cast<vertex_layout::VertexStream*>(msg.head);
+                resource_stream::VertexStream* v_stream
+                    = static_cast<resource_stream::VertexStream*>(msg.head);
                 GPUResourceHandle* res = v_stream->res;
                 //ASSERT(RenderResource::VERTEX_STREAM == res->type, "Render Resource Type doesn't match!");
                 (*res) = createVertexBuffer(v_stream->size, v_stream->stride, v_stream->raw_data);
 
                 delete v_stream;
             }
-            else if (RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION == msg.type)
+            else if (resource_stream::MessageType::ALLOC_VERTEX_DECLARATION == msg.type)
             {
-                vertex_layout::VertexDeclarationStream* vd_stream
-                    = static_cast<vertex_layout::VertexDeclarationStream*>(msg.head);
+                resource_stream::VertexDeclarationStream* vd_stream
+                    = static_cast<resource_stream::VertexDeclarationStream*>(msg.head);
                 GPUResourceHandle* res = vd_stream->res;
                 //ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
 
@@ -291,10 +292,10 @@ namespace te
 
                 delete vd_stream;
             }
-            else if (RenderResourceContext::MessageType::ALLOC_SHADER == msg.type)
+            else if (resource_stream::MessageType::ALLOC_SHADER == msg.type)
             {
-                shader_data::ShaderStream* s_stream
-                    = static_cast<shader_data::ShaderStream*>(msg.head);
+                resource_stream::ShaderStream* s_stream
+                    = static_cast<resource_stream::ShaderStream*>(msg.head);
                 GPUResourceHandle* res = s_stream->res;
                 (*res) = createShader(s_stream->vs.c_str(), s_stream->fs.c_str(), vertex_layout::PNTB);
                 bindShader(*res);
@@ -306,10 +307,10 @@ namespace te
 
                 delete s_stream;
             }
-            else if (RenderResourceContext::MessageType::ALLOC_TEXTURE == msg.type)
+            else if (resource_stream::MessageType::ALLOC_TEXTURE == msg.type)
             {
-                texture_data::TextureStream* t_stream
-                    = static_cast<texture_data::TextureStream*>(msg.head);
+                resource_stream::TextureStream* t_stream
+                    = static_cast<resource_stream::TextureStream*>(msg.head);
                 GPUResourceHandle* res = t_stream->res;
                 (*res) = createTexture(t_stream->width, t_stream->height, t_stream->depth,
                     t_stream->type, t_stream->format, t_stream->has_mips);
@@ -553,7 +554,7 @@ namespace te
         return glGetUniformLocation(shader.gl_program_obj, name);
     }
 
-    void GLRenderDevice::setShaderConst(int loc, shader_data::Class type, void * values, uint32 count)
+    void GLRenderDevice::setShaderConst(int loc, shader_data::UniformType type, void * values, uint32 count)
     {
         switch (type)
         {
@@ -590,7 +591,7 @@ namespace te
         _cur_shader_handle = shader_handle;
     }
 
-    uint32 GLRenderDevice::createRenderBuffer(uint32 width, uint32 height, texture_data::Format format, bool depth, uint32 num_col_bufs)
+    uint32 GLRenderDevice::createRenderBuffer(uint32 width, uint32 height, image_data::Format format, bool depth, uint32 num_col_bufs)
     {
         GLRenderTarget render_target;
         glGenFramebuffers(1, &render_target.gl_fbo);
@@ -601,7 +602,7 @@ namespace te
             {
                 glBindFramebuffer(GL_FRAMEBUFFER, render_target.gl_fbo);
                 // create color texture
-                uint32 tex_obj = createTexture(width, height, 1, texture_data::IMAGE2D, texture_data::RGBA32F, false);
+                uint32 tex_obj = createTexture(width, height, 1, image_data::IMAGE2D, image_data::RGBA32F, false);
                // ASSERT(tex_obj != 0, "Not a Valid Texture Object!");
                 updateTextureData(tex_obj, 0, nullptr);
                 // attach the texture to fbo
@@ -619,7 +620,7 @@ namespace te
         {
             glBindFramebuffer(GL_FRAMEBUFFER, render_target.gl_fbo);
             // create a depth texture
-            uint32 tex_obj = createTexture(width, height, 1, texture_data::IMAGE2D, texture_data::DEPTH, false);
+            uint32 tex_obj = createTexture(width, height, 1, image_data::IMAGE2D, image_data::DEPTH, false);
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_COMPARE_MODE, GL_NONE);
             updateTextureData(tex_obj, 0, nullptr);
             GLTexture& tex = _textures.getRef(tex_obj);
@@ -635,7 +636,7 @@ namespace te
         return _render_targets.add(render_target);
     }
 
-    uint32 GLRenderDevice::createTexture(int width, int height, int depth, texture_data::Type type, texture_data::Format format, bool has_mips)
+    uint32 GLRenderDevice::createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool has_mips)
     {
         GLTexture tex;
         tex.format = format;
@@ -646,13 +647,13 @@ namespace te
 
         switch (type)
         {
-        case texture_data::IMAGE2D:
+        case image_data::IMAGE2D:
             tex.gl_type = GL_TEXTURE_2D;
             break;
-        case texture_data::IMAGE3D:
+        case image_data::IMAGE3D:
             tex.gl_type = GL_TEXTURE_3D;
             break;
-        case texture_data::IMAGECUBE:
+        case image_data::IMAGECUBE:
             tex.gl_type = GL_TEXTURE_CUBE_MAP;
             break;
         }
@@ -678,24 +679,24 @@ namespace te
         int input_format = GL_BGRA, input_type = GL_UNSIGNED_BYTE;
         switch (tex.format)
         {
-        case texture_data::RGBA16F:
+        case image_data::RGBA16F:
             input_format = GL_RGBA;
             input_type = GL_FLOAT;
             break;
-        case texture_data::RGBA32F:
+        case image_data::RGBA32F:
             input_format = GL_RGBA;
             input_type = GL_FLOAT;
             break;
-        case texture_data::DEPTH:
+        case image_data::DEPTH:
             input_format = GL_DEPTH_COMPONENT;
             input_type = GL_FLOAT;
         };
 
-        if (tex.gl_type == texture_data::IMAGE2D)
+        if (tex.gl_type == image_data::IMAGE2D)
         {
             glTexImage2D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 0, input_format, input_type, pixels);
         }
-        else if (tex.gl_type == texture_data::IMAGE3D)
+        else if (tex.gl_type == image_data::IMAGE3D)
         {
             glTexImage3D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 256, 0, input_format, input_type, pixels);
         }

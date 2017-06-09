@@ -1,13 +1,27 @@
 #ifndef RENDERER_RESOURCE_STREAM_H
 #define RENDERER_RESOURCE_STREAM_H
 
-#include "common/Shader.h"
+#include "base/Types.h"
+
+#include "renderer/resource/ShaderDataType.h"
 #include "renderer/resource/VertexLayoutType.h"
+#include "renderer/resource/Image.h"
 
 namespace te
 {
-    namespace vertex_layout
+    class ShaderUniforms;
+    namespace resource_stream
     {
+        enum class MessageType : uint8
+        {
+            ALLOC_VERTEX_BUFFER, DEALLOC_VERTEX_BUFFER,
+            ALLOC_VERTEX_DECLARATION, DEALLOC_VERTEX_DECLARATION,
+            ALLOC_INDEX_BUFFER, DEALLOC_INDEX_BUFFER,
+            ALLOC_SHADER, DEALLOC_SHADER,
+            ALLOC_RENDER_TARGET, DEALLOC_RENDER_TARGET,
+            ALLOC_TEXTURE, DEALLOC_TEXTURE, REALLOC_TEXTURE,
+        };
+
         struct IndexStream
         {
             uint32 size; // size in bytes
@@ -32,32 +46,6 @@ namespace te
             GPUHandle*              index_buffer;
             GPUHandle*              res;
         };
-    }
-
-    namespace shader_data
-    {
-        enum Class {
-            SCALAR = 0,
-            VECTOR2,
-            VECTOR3,
-            VECTOR4,
-            MATRIX4X4,
-            UINT,
-            INT,
-            BOOL,
-
-            SCALAR_ARRAY,
-            VECTOR2_ARRAY,
-            VECTOR3_ARRAY,
-            VECTOR4_ARRAY,
-            MATRIX4X4_ARRAY,
-            UINT_ARRAY,
-            INT_ARRAY,
-            BOOL_ARRAY,
-
-            UNKNOWN_CLASS,
-            NUM_CLASSES = UNKNOWN_CLASS
-        };
 
         struct ShaderStream
         {
@@ -65,27 +53,6 @@ namespace te
             String              vs;
             String              fs;
             ShaderUniforms*     uniforms;
-        };
-    }
-
-    namespace texture_data
-    {
-        enum Type {
-            IMAGE2D,
-            IMAGE3D,
-            IMAGECUBE,
-            UNKNOWN
-        };
-
-        enum Format {
-            Unknown,
-            BGRA8,
-            DXT1,
-            DXT3,
-            DXT5,
-            RGBA16F,
-            RGBA32F,
-            DEPTH
         };
 
         struct TextureStream
@@ -95,8 +62,8 @@ namespace te
             uint32              width;
             uint32              height;
             uint32              depth;
-            Type                type;
-            Format              format;
+            image_data::Type    type;
+            image_data::Format  format;
             bool                has_mips;
         };
     }

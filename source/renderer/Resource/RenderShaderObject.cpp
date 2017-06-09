@@ -42,29 +42,29 @@ namespace te
 
     void RenderShaderObject::createShader(RenderResourceContext* context)
     {
-        shader_data::ShaderStream* ss = new shader_data::ShaderStream;
+        resource_stream::ShaderStream* ss = new resource_stream::ShaderStream;
         ss->res = &_shader_handle;
         ss->vs = _vs;
         ss->fs = _fs;
         ss->uniforms = _uniforms;
 
         RenderResourceContext::Message allc_shader = {
-            RenderResourceContext::MessageType::ALLOC_SHADER, (void*)ss };
+            resource_stream::MessageType::ALLOC_SHADER, (void*)ss };
         context->messages().push_back(allc_shader);
     }
 
     void RenderShaderObject::setShader(RenderContext* context)
     {
-        RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
+        command_stream::ShaderCmdStream* scs = new command_stream::ShaderCmdStream;
         scs->shader_handle = _shader_handle;
         scs->uniforms = _uniforms;
-        RenderContext::Command set_shader = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
+        RenderContext::Command set_shader = { 0, (void*)scs, command_stream::CommandType::BIND_SHADER_OBJECT };
         context->commands().push_back(set_shader);
     }
 
     void RenderShaderObject::setDraw(RenderContext* context)
     {
-        RenderContext::Command draw = { 0, nullptr, RenderContext::CommandType::RENDER };
+        RenderContext::Command draw = { 0, nullptr, command_stream::CommandType::RENDER };
         context->commands().push_back(draw);
     }
 }

@@ -1,8 +1,7 @@
 #ifndef RENDERER_GL_RENDER_DEVICE_H
 #define RENDERER_GL_RENDER_DEVICE_H
 
-#include "renderer/Device/RenderDevice.h"
-#include "renderer/resource/ResourceStream.h"
+#include "renderer/device/RenderDevice.h"
 
 namespace te
 {
@@ -21,7 +20,7 @@ namespace te
     {
         uint32 gl_obj;
         uint32 gl_type;
-        texture_data::Format format;
+        image_data::Format format;
         int    width, height, depth;
         bool   has_mips;
     };
@@ -83,15 +82,15 @@ namespace te
         bool configShaderVertexLayout(uint32 program_obj, vertex_layout::Type vl_type);
         bool linkShaderProgram(uint32 program_obj);
         int getShaderConstLoc(uint32 shader_handle, const char* name);
-        void setShaderConst(int loc, shader_data::Class type, void* values, uint32 count = 1);
+        void setShaderConst(int loc, shader_data::UniformType type, void* values, uint32 count = 1);
         void bindShader(uint32 shader_handle);
 
         // RenderBuffer
-        uint32 createRenderBuffer(uint32 width, uint32 height, texture_data::Format format,
+        uint32 createRenderBuffer(uint32 width, uint32 height, image_data::Format format,
             bool depth, uint32 num_col_bufs);
 
         // Textures
-        uint32 createTexture(int width, int height, int depth, texture_data::Type type, texture_data::Format format, bool has_mips);
+        uint32 createTexture(int width, int height, int depth, image_data::Type type, image_data::Format format, bool has_mips);
         void updateTextureData(uint32 tex_obj, int mip_level, const void* pixels);
 
     protected:

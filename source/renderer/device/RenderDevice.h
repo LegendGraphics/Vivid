@@ -4,9 +4,9 @@
 #include "base/Types.h"
 #include "base/Assert.h"
 
-//#include "renderer/resource/ShaderObject.h"
-#include "renderer/Resource/RenderTexture.h"
-#include "renderer/Resource/VertexLayout.h"
+#include "renderer/resource/Image.h"
+#include "renderer/resource/VertexLayoutType.h"
+#include "renderer/resource/ShaderDataType.h"
 
 namespace te
 {
@@ -73,8 +73,6 @@ namespace te
         // commands to RenderContext, RenderContext will call actual Graphic API
         virtual void dispatch(RenderContext* context) = 0;
         virtual void dispatch(RenderResourceContext* context) = 0;
-
-        VertexLayoutPredefinition* getVertexDeclarationDefinition(); // initialize vertex declaration for this device
 
     protected:
         VertexLayoutPredefinition* _vertex_declaration;

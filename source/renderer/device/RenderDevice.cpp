@@ -2,6 +2,7 @@
 
 #include "renderer/device/RenderContext.h"
 #include "renderer/resource/RenderResourceContext.h"
+#include "renderer/resource/VertexLayout.h"
 
 namespace te
 {
@@ -58,11 +59,4 @@ namespace te
         }
         _render_resource_contexts.erase(it);
     }
-
-    VertexLayoutPredefinition * RenderDevice::getVertexDeclarationDefinition()
-    {
-        return _vertex_declaration;
-    }
-
-
 }

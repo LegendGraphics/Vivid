@@ -1,8 +1,9 @@
 #include "renderer/RenderWorld.h"
 
 #include "common/Pipeline.h"
-#include "renderer/Device/RenderContext.h"
-#include "renderer/Device/RenderDevice.h"
+#include "renderer/device/CommandStream.h"
+#include "renderer/device/RenderContext.h"
+#include "renderer/device/RenderDevice.h"
 
 namespace te
 {
@@ -46,7 +47,7 @@ namespace te
                     renderKernel(stream, params, render_context);
                     break;
                 case PipelineCommandType::ClearTarget:
-                    RenderContext::ClearCmdStream* ccs = new RenderContext::ClearCmdStream;
+                    command_stream::ClearCmdStream* ccs = new command_stream::ClearCmdStream;
                     ccs->clear_color = pc.paras[1].toBool() || pc.paras[2].toBool()
                         || pc.paras[3].toBool() || pc.paras[4].toBool();
                     ccs->clear_depth = pc.paras[0].toBool();
@@ -55,7 +56,7 @@ namespace te
                     ccs->color_rgba[2] = pc.paras[7].toFloat();
                     ccs->color_rgba[3] = pc.paras[8].toFloat();
                     ccs->depth = 1.f;
-                    RenderContext::Command clear_target = { 0, (void*)ccs, RenderContext::CommandType::CLEAR };
+                    RenderContext::Command clear_target = { 0, (void*)ccs, command_stream::CommandType::CLEAR };
                     render_context->commands().push_back(clear_target);
                     break;
                 }

@@ -9,7 +9,7 @@ namespace te
         else return false;
     }
 
-    void ShaderUniforms::setUniform(const String& name, const float* value, int size, ShaderUniformType type)
+    void ShaderUniforms::setUniform(const String& name, const float* value, int size, shader_data::UniformType type)
     {
         if (hasUniform(name))
         {
@@ -24,7 +24,7 @@ namespace te
         }
     }
 
-    void ShaderUniforms::addUniform(const String& name, ShaderUniformType type)
+    void ShaderUniforms::addUniform(const String& name, shader_data::UniformType type)
     {
         if (!hasUniform(name))
         {

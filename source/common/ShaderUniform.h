@@ -1,37 +1,14 @@
 #ifndef COMMON_SHADER_UNIFORM_H
 #define COMMON_SHADER_UNIFORM_H
 
-#include <unordered_map>
-#include "base/String.h"
+#include "base/Types.h"
+#include "renderer/resource/ShaderDataType.h"
 
 namespace te
 {
-    enum class ShaderUniformType
-    {
-        SCALAR = 0,
-        VECTOR2,
-        VECTOR3,
-        VECTOR4,
-        MATRIX4X4,
-        UINT,
-        INT,
-        BOOL,
-
-        SCALAR_ARRAY,
-        VECTOR2_ARRAY,
-        VECTOR3_ARRAY,
-        VECTOR4_ARRAY,
-        MATRIX4X4_ARRAY,
-        UINT_ARRAY,
-        INT_ARRAY,
-        BOOL_ARRAY,
-
-        UNKNOWN_CLASS,
-    };
-
     struct ShaderUniformValue
     {
-        ShaderUniformType           type;
+        shader_data::UniformType    type;
         std::vector<float>          data;
         size_t                      size;
     };
@@ -51,8 +28,8 @@ namespace te
         auto& getUniforms() { return _uniforms; }
 
         bool hasUniform(const String& name);
-        void addUniform(const String& name, ShaderUniformType type);
-        void setUniform(const String& name, const float* value, int size, ShaderUniformType type);
+        void addUniform(const String& name, shader_data::UniformType type);
+        void setUniform(const String& name, const float* value, int size, shader_data::UniformType type);
 
     private:
         std::unordered_map<String, ShaderUniform>  _uniforms;

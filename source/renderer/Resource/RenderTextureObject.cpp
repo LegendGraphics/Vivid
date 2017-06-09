@@ -39,17 +39,17 @@ namespace te
 
     void RenderTextureObject::allocTexture(RenderResourceContext* context)
     {
-        texture_data::TextureStream* ts = new texture_data::TextureStream;
+        resource_stream::TextureStream* ts = new resource_stream::TextureStream;
         ts->res = &_tex_handle;
         ts->raw_data = &_img;
         ts->width = _width;
         ts->height = _height;
         ts->depth = _depth;
-        ts->type = texture_data::Type::IMAGE2D; // Hard code currently
-        ts->format = texture_data::Format::BGRA8; 
+        ts->type = image_data::Type::IMAGE2D; // Hard code currently
+        ts->format = image_data::Format::BGRA8;
 
         RenderResourceContext::Message allc_texture = {
-            RenderResourceContext::MessageType::ALLOC_TEXTURE, (void*)ts };
+            resource_stream::MessageType::ALLOC_TEXTURE, (void*)ts };
         context->messages().push_back(allc_texture);
     }
 }

@@ -36,6 +36,7 @@ namespace te
         image_data::Type    _type;
         image_data::Format  _format;
         Handle              _render_object;
+        String              _semantic_name;
     };
 
     using TexturePtr = RefPtr<Texture>;
