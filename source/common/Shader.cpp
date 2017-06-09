@@ -16,11 +16,11 @@ namespace te
     Shader::UniformTypeMap Shader::uni_type_map =
     {
         // Predefined types
-        { "float", ShaderUniformType::SCALAR },
-        { "float2", ShaderUniformType::VECTOR2 },
-        { "float3", ShaderUniformType::VECTOR3 },
-        { "float4", ShaderUniformType::VECTOR4 },
-        { "mat4", ShaderUniformType::MATRIX4X4 }
+        { "float", shader_data::SCALAR },
+        { "float2", shader_data::VECTOR2 },
+        { "float3", shader_data::VECTOR3 },
+        { "float4", shader_data::VECTOR4 },
+        { "mat4", shader_data::MATRIX4X4 }
         // ...
     };
 

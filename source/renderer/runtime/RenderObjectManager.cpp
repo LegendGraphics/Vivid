@@ -1,7 +1,7 @@
 #include "renderer/runtime/RenderObjectManager.h"
 
 #include "renderer/RenderWorld.h"
-#include "renderer/resource/RenderMeshObject.h"
+#include "renderer/runtime/RenderMeshObject.h"
 #include "renderer/runtime/RenderCamera.h"
 
 #include "common/ClassType.hpp"

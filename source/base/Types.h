@@ -1,6 +1,10 @@
 #ifndef BASE_TYPES_H
 #define BASE_TYPES_H
 
+#include <vector>
+#include <unordered_map>
+#include "base/String.h"
+
 namespace te 
 {
     typedef unsigned char uint8;

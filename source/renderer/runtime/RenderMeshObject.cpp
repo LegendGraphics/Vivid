@@ -1,4 +1,4 @@
-#include "renderer/resource/RenderMeshObject.h"
+#include "renderer/runtime/RenderMeshObject.h"
 
 #include "renderer/device/RenderContext.h"
 #include "renderer/device/RenderDevice.h"
@@ -40,12 +40,12 @@ namespace te
         //context->commands().push_back(setIndexBuffer);
 
         // set vertex buffer
-        RenderContext::VertexCmdStream* vcs = new RenderContext::VertexCmdStream;
+        command_stream::VertexCmdStream* vcs = new command_stream::VertexCmdStream;
         vcs->vao_handle = _vao;
         vcs->base_index = 0;
         vcs->base_vertex = 0;
         vcs->num_indices = _num_indices;
-        RenderContext::Command setVertexBuffer = { 0, (void*)vcs, RenderContext::CommandType::UPDATE_VERTEX_BUFFER };
+        RenderContext::Command setVertexBuffer = { 0, (void*)vcs, command_stream::CommandType::UPDATE_VERTEX_BUFFER };
         context->commands().push_back(setVertexBuffer);
 
         //bool useDebug = true;
@@ -103,19 +103,19 @@ namespace te
 
     void RenderMeshObject::allocIndexBuffer(RenderResourceContext * context)
     {
-        vertex_layout::IndexStream* is = new vertex_layout::IndexStream;
+        resource_stream::IndexStream* is = new resource_stream::IndexStream;
         is->res = &_index_buffer;
         is->size = 4 * (*_index_array).size();
         is->raw_data = &(*_index_array)[0];
 
         RenderResourceContext::Message allc_is = {
-            RenderResourceContext::MessageType::ALLOC_INDEX_BUFFER, (void*)is };
+            resource_stream::MessageType::ALLOC_INDEX_BUFFER, (void*)is };
         context->messages().push_back(allc_is);
     }
 
     void RenderMeshObject::allocVertexBuffer(RenderResourceContext * context)
     {
-        vertex_layout::VertexStream* vs = new vertex_layout::VertexStream;
+        resource_stream::VertexStream* vs = new resource_stream::VertexStream;
         vs->res = &_vertex_buffer;
         vs->size = (*_vertex_array).sizeInBytes();//4 * m->getVertices().size(); // 12 float for each vertex(PNTB)
         vs->stride = (*_vertex_array).sizeInBytes() / (*_vertex_array).size();
@@ -123,13 +123,13 @@ namespace te
                                                   //float* aa = &m->getVertices()[0];
 
         RenderResourceContext::Message allc_vs = {
-            RenderResourceContext::MessageType::ALLOC_VERTEX_BUFFER, (void*)vs };
+            resource_stream::MessageType::ALLOC_VERTEX_BUFFER, (void*)vs };
         context->messages().push_back(allc_vs);
     }
 
     void RenderMeshObject::allocVertexDeclaration(RenderResourceContext * context)
     {
-        vertex_layout::VertexDeclarationStream* vds = new vertex_layout::VertexDeclarationStream;
+        resource_stream::VertexDeclarationStream* vds = new resource_stream::VertexDeclarationStream;
         vds->res = &_vao;
         vds->layout_type = _layout_type;
 
@@ -137,18 +137,18 @@ namespace te
         vds->vertex_buffers.push_back(&_vertex_buffer);
 
         RenderResourceContext::Message allc_vd = {
-            RenderResourceContext::MessageType::ALLOC_VERTEX_DECLARATION, (void*)vds };
+            resource_stream::MessageType::ALLOC_VERTEX_DECLARATION, (void*)vds };
         context->messages().push_back(allc_vd);
     }
 
     void RenderMeshObject::setVertexContext(RenderContext* context)
     {
-        RenderContext::VertexCmdStream* vcs = new RenderContext::VertexCmdStream;
+        command_stream::VertexCmdStream* vcs = new command_stream::VertexCmdStream;
         vcs->vao_handle = _vao;
         vcs->base_index = 0;
         vcs->base_vertex = 0;
         vcs->num_indices = _num_indices;
-        RenderContext::Command set_vertex_buffer = { 0, (void*)vcs, RenderContext::CommandType::UPDATE_VERTEX_BUFFER };
+        RenderContext::Command set_vertex_buffer = { 0, (void*)vcs, command_stream::CommandType::UPDATE_VERTEX_BUFFER };
         context->commands().push_back(set_vertex_buffer);
     }
 

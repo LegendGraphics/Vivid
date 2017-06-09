@@ -1,7 +1,7 @@
 #ifndef RENDERER_RENDER_MESH_OBJECT_H
 #define RENDERER_RENDER_MESH_OBJECT_H
 
-#include "renderer/resource/RenderObject.h"
+#include "renderer/runtime/RenderObject.h"
 #include "renderer/resource/VertexLayoutType.h"
 #include "common/Mesh.h"
 #include "math/Matrix.h"

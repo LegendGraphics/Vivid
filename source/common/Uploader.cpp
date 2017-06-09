@@ -32,12 +32,14 @@ namespace te
     void UploadToRender::assembleUpdateMsg()
     {
         updateMesh();
+        updateTexture();
         updateShader();
     }
 
     void UploadToRender::assembleRenderMsg()
     {
         renderMesh();
+        renderTexture();
         renderShader();
     }
 
@@ -57,10 +59,17 @@ namespace te
     {
         if (hasComponent<MeshRender>())
         {
-            /*TextureStreamMsg* msg = new TextureStreamMsg;
             MeshRender* mr = getComponent<MeshRender>();
-            msg->feedData(mr->getMesh().get());
-            _renderer->_stream.push_back(msg);*/
+            std::vector<TexturePtr> textures = mr->getMaterial()->getTextures();
+            for (TexturePtr texture : textures)
+            {
+                TextureStreamMsg::Data* msg_data = new TextureStreamMsg::Data;
+                msg_data->texture = texture.get();
+                TextureStreamMsg* msg = new TextureStreamMsg(stream_message::UPDATE,
+                    texture->getROHandle(),
+                    msg_data);
+                _renderer->_stream.push_back(msg);
+            }
         }
     }
 
@@ -71,9 +80,12 @@ namespace te
         if (hasComponent<MeshRender>())
         {
             MeshRender* mr = getComponent<MeshRender>();
+            ShaderStreamMsg::Data* msg_data = new ShaderStreamMsg::Data;
+            msg_data->shader = mr->getMaterial()->getShader().get();
+            msg_data->mesh = mr->getMesh().get();
             ShaderStreamMsg* msg = new ShaderStreamMsg(stream_message::UPDATE,
                 mr->getMaterial()->getShader()->getROHandle(),
-                mr->getMaterial()->getShader().get());
+                msg_data);
             _renderer->_stream.push_back(msg);
         }
     }
@@ -94,10 +106,19 @@ namespace te
     {
         if (hasComponent<MeshRender>())
         {
-            /*TextureStreamMsg* msg = new TextureStreamMsg;
             MeshRender* mr = getComponent<MeshRender>();
-            msg->feedData(mr->getMesh().get());
-            _renderer->_stream.push_back(msg);*/
+            std::vector<TexturePtr> textures = mr->getMaterial()->getTextures();
+            ShaderPtr shader = mr->getMaterial()->getShader();
+            for (TexturePtr texture : textures)
+            {
+                TextureStreamMsg::Data* msg_data = new TextureStreamMsg::Data;
+                msg_data->texture = texture.get();
+                msg_data->shader = shader.get();
+                TextureStreamMsg* msg = new TextureStreamMsg(stream_message::RENDER,
+                    texture->getROHandle(),
+                    msg_data);
+                _renderer->_stream.push_back(msg);
+            }
         }
     }
 
@@ -120,7 +141,7 @@ namespace te
             MeshRender* mr = getComponent<MeshRender>();
             MaterialPtr mtl = mr->getMaterial();
             setSpaceState(mtl);
-            setCameraState(mtl);
+            setCameraState(mtl); // TODO: this should be moved out to a separate DataStreamMsg
             mtl->setShaderUniforms();
         }
     }

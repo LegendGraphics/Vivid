@@ -1,9 +1,9 @@
 #ifndef RENDERER_STATE_STREAM_H
 #define RENDERER_STATE_STREAM_H
 
-#include "renderer/resource/RenderMeshObject.h"
-#include "renderer/resource/RenderShaderObject.h"
-#include "renderer/resource/RenderTextureObject.h"
+#include "renderer/runtime/RenderMeshObject.h"
+#include "renderer/runtime/RenderShaderObject.h"
+#include "renderer/runtime/RenderTextureObject.h"
 
 
 namespace te
@@ -220,14 +220,15 @@ namespace te
     class ShaderStreamMsg : public ResourceStreamMsg
     {
     public:
+        struct Data {
+            Shader*     shader;
+            Mesh*       mesh;
+        };
+    public:
         ShaderStreamMsg(stream_message::ActionType type, Handle handle, void* data);
         virtual ~ShaderStreamMsg();
 
-        virtual void setHandle(Handle handle)
-        {
-            _handle = handle;
-            static_cast<Shader*>(_data)->setROHandle(handle);
-        }
+        virtual void setHandle(Handle handle);
         virtual RenderObject* createRenderObject() { return new RenderShaderObject; }
 
     protected:
@@ -237,14 +238,16 @@ namespace te
 
     class TextureStreamMsg : public ResourceStreamMsg
     {
+    public:
+        struct Data {
+            Texture*     texture;
+            Shader*      shader;
+        };
+    public:
         TextureStreamMsg(stream_message::ActionType type, Handle handle, void* data);
         virtual ~TextureStreamMsg();
 
-        virtual void setHandle(Handle handle)
-        {
-            _handle = handle;
-            static_cast<Texture*>(_data)->setROHandle(handle);
-        }
+        virtual void setHandle(Handle handle);
         virtual RenderObject* createRenderObject() { return new RenderTextureObject; }
 
     protected:

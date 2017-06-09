@@ -1,4 +1,4 @@
-#include "renderer/resource/RenderShaderObject.h"
+#include "renderer/runtime/RenderShaderObject.h"
 
 #include "renderer/device/RenderContext.h"
 #include "renderer/device/RenderDevice.h"
@@ -6,6 +6,8 @@
 #include "renderer/resource/RenderResourceContext.h"
 #include "renderer/resource/ResourceStream.h"
 #include "renderer/runtime/StateStream.h"
+
+#include "common/Mesh.h"
 
 namespace te
 {
@@ -22,49 +24,55 @@ namespace te
 
     void RenderShaderObject::update(RenderResourceContext* context)
     {
-        createShader(context);
+        if (0xFFFFFFFF == _shader_handle)
+            createShader(context);
     }
 
     void RenderShaderObject::render(RenderContext* context)
     {
         setShader(context);
-        setDraw(context);
+        setDraw(context); // TODO: this should be moved out to a single DataStreamMsg
     }
 
     void RenderShaderObject::parseStreamMsg(StateStreamMsg* msg)
     {
-        Shader* shader = static_cast<Shader*>(msg->getData());
+        ShaderStreamMsg::Data* msg_data = static_cast<ShaderStreamMsg::Data*>(msg->getData());
 
-        _vs = shader->getVertexShaderContext();
-        _fs = shader->getFragmentShaderContext();
-        _uniforms = &shader->uniforms;
+        _vs = msg_data->shader->getVertexShaderContext();
+        _fs = msg_data->shader->getFragmentShaderContext();
+        _uniforms = &(msg_data->shader->uniforms);
+        _samplers = &(msg_data->shader->samplers);
+        _layout_type = msg_data->mesh->getLayoutType();
     }
 
     void RenderShaderObject::createShader(RenderResourceContext* context)
     {
-        shader_data::ShaderStream* ss = new shader_data::ShaderStream;
+        resource_stream::ShaderStream* ss = new resource_stream::ShaderStream;
         ss->res = &_shader_handle;
         ss->vs = _vs;
         ss->fs = _fs;
         ss->uniforms = _uniforms;
+        ss->samplers = _samplers;
+        ss->layout_type = _layout_type;
 
         RenderResourceContext::Message allc_shader = {
-            RenderResourceContext::MessageType::ALLOC_SHADER, (void*)ss };
+            resource_stream::MessageType::ALLOC_SHADER, (void*)ss };
         context->messages().push_back(allc_shader);
     }
 
     void RenderShaderObject::setShader(RenderContext* context)
     {
-        RenderContext::ShaderCmdStream* scs = new RenderContext::ShaderCmdStream;
+        command_stream::ShaderCmdStream* scs = new command_stream::ShaderCmdStream;
         scs->shader_handle = _shader_handle;
         scs->uniforms = _uniforms;
-        RenderContext::Command set_shader = { 0, (void*)scs, RenderContext::CommandType::BIND_SHADER_OBJECT };
+        scs->samplers = _samplers;
+        RenderContext::Command set_shader = { 0, (void*)scs, command_stream::CommandType::BIND_SHADER_OBJECT };
         context->commands().push_back(set_shader);
     }
 
     void RenderShaderObject::setDraw(RenderContext* context)
     {
-        RenderContext::Command draw = { 0, nullptr, RenderContext::CommandType::RENDER };
+        RenderContext::Command draw = { 0, nullptr, command_stream::CommandType::RENDER };
         context->commands().push_back(draw);
     }
 }

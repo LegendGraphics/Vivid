@@ -3,6 +3,7 @@
 
 #include "common/Resource.h"
 #include "common/Shader.h"
+#include "common/Texture.h"
 #include "math/Vector3.h"
 #include "math/Matrix.h"
 
@@ -26,6 +27,7 @@ namespace te
         void unload();
 
         ShaderPtr   getShader();
+        std::vector<TexturePtr> getTextures();
 
         void setUniform(const String& name, float a, float b, float c, float d);
 
@@ -45,15 +47,17 @@ namespace te
         void setShaderUniforms();
     public:
         bool hasUniform(const String& name);
-        void setUniform(const String& name, const float* value, int size, ShaderUniformType type);
+        void setUniform(const String& name, const float* value, int size, shader_data::UniformType type);
         float* getUniformValue(const String& name);
         int getUniformSize(const String& name);
-        ShaderUniformType getUniformType(const String& name);
+        shader_data::UniformType getUniformType(const String& name);
 
         // shader, texture...
     protected:
+        // semantic name is hold in Texture already, but for fast access, use a map here
+        using MaterialSamplerMap = std::unordered_map<String, MaterialSampler>;
+        MaterialSamplerMap              _samplers;
         ResourceHandle                  _shader;
-        std::vector<MaterialSampler>    _samplers;
         ShaderUniformValueMap           _uniform_map;
     };
 

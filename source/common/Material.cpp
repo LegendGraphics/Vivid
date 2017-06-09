@@ -20,6 +20,17 @@ namespace te
         return ResourceMapper::getInstance()->get<ShaderManager>()->getShader(_shader);
     }
 
+    std::vector<TexturePtr> Material::getTextures()
+    {
+        std::vector<TexturePtr> textures;
+        for (auto& sampler : _samplers)
+        {
+            textures.push_back(
+                ResourceMapper::getInstance()->get<TextureManager>()->getTexture(sampler.second.texture));
+        }
+        return textures;
+    }
+
     void Material::setShaderUniforms()
     {
         ShaderUniforms* shader_uniforms = &getShader()->uniforms;
@@ -31,7 +42,7 @@ namespace te
 
     float Material::getFloat(const String& name)
     {
-        if (getUniformType(name) == ShaderUniformType::SCALAR)
+        if (getUniformType(name) == shader_data::SCALAR)
             return *getUniformValue(name);
         else
         {
@@ -42,7 +53,7 @@ namespace te
 
     Vector3 Material::getVector3(const String& name)
     {
-        if (getUniformType(name) == ShaderUniformType::VECTOR3)
+        if (getUniformType(name) == shader_data::VECTOR3)
         {
             float* value = getUniformValue(name);
             return Vector3(value[0], value[1], value[2]);
@@ -56,7 +67,7 @@ namespace te
 
     Matrix Material::getMatrix(const String& name)
     {
-        if (getUniformType(name) == ShaderUniformType::MATRIX4X4)
+        if (getUniformType(name) == shader_data::MATRIX4X4)
         {
             float* value = getUniformValue(name);
             return Matrix(value[0], value[1], value[2], value[3],
@@ -78,13 +89,13 @@ namespace te
         if (shader->uniforms.hasUniform(name))
         {
             auto& uniforms = shader->uniforms.getUniforms();
-            if (uniforms[name].value.type == ShaderUniformType::SCALAR)
+            if (uniforms[name].value.type == shader_data::SCALAR)
                 setFloat(name, a);
-            else if (uniforms[name].value.type == ShaderUniformType::VECTOR2)
+            else if (uniforms[name].value.type == shader_data::VECTOR2)
                 setVector2(name, a, b);
-            else if (uniforms[name].value.type == ShaderUniformType::VECTOR3)
+            else if (uniforms[name].value.type == shader_data::VECTOR3)
                 setVector3(name, a, b, c);
-            else if (uniforms[name].value.type == ShaderUniformType::VECTOR4)
+            else if (uniforms[name].value.type == shader_data::VECTOR4)
                 setVector4(name, a, b, c, d);
         }
     }
@@ -92,7 +103,7 @@ namespace te
 
     void Material::setFloat(const String& name, float value)
     {
-        setUniform(name, &value, 1, ShaderUniformType::SCALAR);
+        setUniform(name, &value, 1, shader_data::SCALAR);
     }
 
     void Material::setVector2(const String& name, float a, float b)
@@ -102,7 +113,7 @@ namespace te
 
     void Material::setVector2(const String& name, const Vector2& value)
     {
-        setUniform(name, &value.x, 2, ShaderUniformType::VECTOR2);
+        setUniform(name, &value.x, 2, shader_data::VECTOR2);
     }
 
     void Material::setVector3(const String& name, float a, float b, float c)
@@ -112,7 +123,7 @@ namespace te
 
     void Material::setVector3(const String& name, const Vector3& value)
     {
-        setUniform(name, &value.x, 3, ShaderUniformType::VECTOR3);
+        setUniform(name, &value.x, 3, shader_data::VECTOR3);
     }
 
     void Material::setVector4(const String& name, float a, float b, float c, float d)
@@ -122,12 +133,12 @@ namespace te
 
     void Material::setVector4(const String& name, const Vector4& value)
     {
-        setUniform(name, &value.x, 4, ShaderUniformType::VECTOR4);
+        setUniform(name, &value.x, 4, shader_data::VECTOR4);
     }
 
     void Material::setMatrix(const String& name, const Matrix& value)
     {
-        setUniform(name, value.ptr(), 4 * 4, ShaderUniformType::MATRIX4X4);
+        setUniform(name, value.ptr(), 4 * 4, shader_data::MATRIX4X4);
     }
 
     bool Material::hasUniform(const String& name)
@@ -136,7 +147,7 @@ namespace te
         else return false;
     }
 
-    void Material::setUniform(const String& name, const float* value, int size, ShaderUniformType type)
+    void Material::setUniform(const String& name, const float* value, int size, shader_data::UniformType type)
     {
         if (hasUniform(name))
         {
@@ -169,10 +180,10 @@ namespace te
         else return 0;
     }
 
-    ShaderUniformType Material::getUniformType(const String& name)
+    shader_data::UniformType Material::getUniformType(const String& name)
     {
         if (hasUniform(name)) return _uniform_map[name].type;
-        else return ShaderUniformType::UNKNOWN_CLASS;
+        else return shader_data::UNKNOWN_CLASS;
     }
 
 

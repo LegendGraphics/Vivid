@@ -1,7 +1,7 @@
 #ifndef RENDERER_RENDER_CAMERA_H
 #define RENDERER_RENDER_CAMERA_H
 
-#include "renderer/resource/RenderObject.h"
+#include "renderer/runtime/RenderObject.h"
 #include "math/Matrix.h"
 
 namespace te

@@ -1,4 +1,4 @@
-#include "common/ShaderUniform.h"
+#include "renderer/resource/ShaderUniform.h"
 #include "io/Logger.h"
 
 namespace te
@@ -9,7 +9,7 @@ namespace te
         else return false;
     }
 
-    void ShaderUniforms::setUniform(const String& name, const float* value, int size, ShaderUniformType type)
+    void ShaderUniforms::setUniform(const String& name, const float* value, int size, shader_data::UniformType type)
     {
         if (hasUniform(name))
         {
@@ -24,7 +24,7 @@ namespace te
         }
     }
 
-    void ShaderUniforms::addUniform(const String& name, ShaderUniformType type)
+    void ShaderUniforms::addUniform(const String& name, shader_data::UniformType type)
     {
         if (!hasUniform(name))
         {
@@ -37,6 +37,27 @@ namespace te
         else
         {
             cLog << StringUtils::format("Uniform %s already exists in the shader", name);
+        }
+    }
+
+    bool ShaderSamplers::hasSampler(const String & name)
+    {
+        if (_samplers.find(name) != _samplers.end()) return true;
+        else return false;
+    }
+
+    void ShaderSamplers::addSampler(const String & name, int tex_unit)
+    {
+        if (!hasSampler(name))
+        {
+            ShaderSampler sampler;
+            sampler.loc = -1;
+            sampler.tex_unit = tex_unit;
+            _samplers.insert({ name, sampler });
+        }
+        else
+        {
+            cLog << StringUtils::format("Sampler %s already exists in the shader", name);
         }
     }
 

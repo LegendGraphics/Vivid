@@ -2,7 +2,7 @@
 #define COMMON_SHADER_H
 
 #include "common/Resource.h"
-#include "common/ShaderUniform.h"
+#include "renderer/resource/ShaderUniform.h"
 
 namespace te
 {
@@ -48,7 +48,7 @@ namespace te
     class Shader : public Resource
     {
     public:
-        using UniformTypeMap = std::unordered_map<String, ShaderUniformType>;
+        using UniformTypeMap = std::unordered_map<String, shader_data::UniformType>;
 
         static UniformTypeMap uni_type_map;
 
@@ -68,6 +68,7 @@ namespace te
         Handle getROHandle() { return _render_object; }
 
         ShaderUniforms      uniforms;
+        ShaderSamplers      samplers;
 
     protected:
         String              _vs_context;
