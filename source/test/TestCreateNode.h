@@ -32,7 +32,7 @@ int main(int argc, char** argv)
     scene2->getSceneRoot()->addComponent<MeshFilter>();
     scene2->getSceneRoot()->getComponent<MeshFilter>()->load("cube_emptyTags.mesh");*/
 
-    Node* node = Node::create("cube.node.xml");
+    Node* node = Node::create("duck.node.xml");
     //Node* node1 = Node::create("cube1.node.xml");
 
     NodeTree* node_tree = new NodeTree(node);

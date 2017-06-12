@@ -127,7 +127,7 @@ namespace te
                 for (int j = 0; j < vertex_num; ++j)
                 {
                     memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
-                    memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                    memcpy(&mesh->_vertices.tex(j, 0).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                 }
                 break;
                 //case 5:		// Texture2
@@ -159,6 +159,15 @@ namespace te
         {
             memcpy(&mesh->_triangles[i], data_ptr, sizeof(int)); data_ptr += sizeof(int);
         }
+
+        for (int i = 0; i < 5; ++i)
+            cLog << mesh->_vertices.position(i);
+
+        for (int i = 0; i < 9; ++i)
+            std::cout << mesh->_triangles[i] << std::endl;
+
+        for (int i = 2100; i < 2108; ++i)
+            std::cout << mesh->_vertices.tex(i,0).x << " " << mesh->_vertices.tex(i,0).y << std::endl;
 
         return true;
     }

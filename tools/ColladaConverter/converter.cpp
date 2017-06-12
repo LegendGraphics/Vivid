@@ -290,6 +290,10 @@ void Converter::calcTangentSpaceBasis( vector<Vertex> &verts )
         log( "   Maybe two faces point in opposite directions and share same vertices" );
     }
 }
+// Important Function!
+//     0 -- 3
+//     | \  |
+//     1 -- 2   construct (0,1,2), (0,2,3) triangles
 
 void Converter::processMeshes(bool optimize)
 {
@@ -340,8 +344,10 @@ void Converter::processMeshes(bool optimize)
                 {
                     Vertex &v = _vertices[vertList[l]];
 
-                    if (v.storedPos == iTriGroup.getPos(iTriGroup.indices[k].posIndex) &&
-                        v.storedNormal == iTriGroup.getNormal(iTriGroup.indices[k].normIndex) /*&&
+                    // if two vertices are in the same position, they're the same one...
+                    // Currently don't consider other attributes... so same positions with different normals are sharing the same vertex
+                    if (v.storedPos == iTriGroup.getPos(iTriGroup.indices[k].posIndex) /*&&
+                        v.storedNormal == iTriGroup.getNormal(iTriGroup.indices[k].normIndex) &&
                         v.texCoords[0] == iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[0], 0) &&
                         v.texCoords[1] == iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[1], 1) &&
                         v.texCoords[2] == iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[2], 2) &&
@@ -374,7 +380,7 @@ void Converter::processMeshes(bool optimize)
                         v.pos.z *= -1;
                     }
 
-                    // Texture coordinates
+                    // Texture coordinates, three axis?
                     v.texCoords[0] = iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[0], 0);
                     v.texCoords[1] = iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[1], 1);
                     v.texCoords[2] = iTriGroup.getTexCoords(iTriGroup.indices[k].texIndex[2], 2);
@@ -475,12 +481,12 @@ bool Converter::writeMesh( const string &assetPath, const string &assetName )
     }
 
     // Write header
-    unsigned int version = 1;
+    int version = 1;
     fwrite( "TEM", 3, 1, f );
     fwrite( &version, sizeof( int ), 1, f ); 
     
-    unsigned int vertex_type = _daeDoc.libGeometries.getVertexType();
-    unsigned int count = -1;
+    int vertex_type = _daeDoc.libGeometries.getVertexType();
+    int count = -1;
     fwrite(&vertex_type, sizeof(int), 1, f);
 
     // vertex type with different number of attributes
@@ -503,9 +509,11 @@ bool Converter::writeMesh( const string &assetPath, const string &assetName )
     }
 
     // Write vertex stream data
-    fwrite( &count, sizeof( int ), 1, f );
+    fwrite(&count, sizeof(int), 1, f);
+
     int vert_count = (unsigned int)_vertices.size();
     fwrite( &vert_count, sizeof( int ), 1, f );
+
 
     for( unsigned int i = 0; i < count; ++i )
     {        

@@ -77,7 +77,7 @@ struct DaeTriGroup
     std::string                texSourceId[4];
     DaeSource                  *texSource[4];
     std::string                matId;
-    std::vector< IndexEntry >  indices;
+    std::vector< IndexEntry >  indices;    // Three IndexEntry(posId, norId, texId) composed to a triangle 
 
 
     DaeTriGroup()
