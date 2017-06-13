@@ -166,8 +166,8 @@ namespace te
         for (int i = 0; i < 9; ++i)
             std::cout << mesh->_triangles[i] << std::endl;
 
-        for (int i = 2100; i < 2108; ++i)
-            std::cout << mesh->_vertices.tex(i,0).x << " " << mesh->_vertices.tex(i,0).y << std::endl;
+         for (int i = 2100; i < 2108; ++i)
+             std::cout << mesh->_vertices.tex(i,0).x << " " << mesh->_vertices.tex(i,0).y << std::endl;
 
         return true;
     }
@@ -471,7 +471,7 @@ namespace te
         char *data = nullptr;
         int size = 0;
 
-        FileUtils::streamFromBinaryFile(res, data, size);
+        FileUtils::streamFromBinaryFile(_data_path + res, data, size);
 
         XMLDoc doc;
         doc.parseBuffer(data, size);
@@ -553,7 +553,7 @@ namespace te
     {
         char *data = nullptr;
         int size = 0;
-        FileUtils::streamFromBinaryFile(res, data, size);
+        FileUtils::streamFromBinaryFile(_data_path + res, data, size);
         if (data == nullptr) return false;
 
         XMLDoc doc;
@@ -608,7 +608,7 @@ namespace te
     {
         char *data = nullptr;
         int size = 0;
-        FileUtils::loadShader(res, data, size);
+        FileUtils::loadShader(_data_path + res, data, size);
         if (data == nullptr) return "";
 
         return String(data);

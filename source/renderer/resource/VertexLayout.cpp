@@ -66,6 +66,8 @@ namespace te
             { "normal", 0, 3, 12 },
             { "tangent", 0, 3, 24 },
             { "bitangent", 0, 3, 36 },
+            { "tex1", 0, 2, 48 },
+            { "tex2", 0, 2, 56}
             //{ "texCoords0", 3, 2, 0 }, -- bug exists
         };
     }
