@@ -17,7 +17,7 @@ namespace te
         {
             if ("PNTB" == str)
                 return PNTB;
-            else return Position;
+            else return P;
         }
     }
 
@@ -25,7 +25,7 @@ namespace te
     {
         // order of the vertex layout attribute
         // corresponding to the location in shader!
-        vertex_layout_map[vertex_layout::Position] = {
+        vertex_layout_map[vertex_layout::P] = {
             { "vertPos", 0, 3, 0 }
         };
 
@@ -66,7 +66,8 @@ namespace te
             { "normal", 0, 3, 12 },
             { "tangent", 0, 3, 24 },
             { "bitangent", 0, 3, 36 },
-            //{ "texCoords0", 3, 2, 0 }, -- bug exists
+            { "texCoords0", 0, 2, 48 }, 
+            { "texCoords1", 0, 2, 56 }, 
         };
     }
     const VertexLayout & VertexLayoutPredefinition::getLayout(vertex_layout::Type vl_type)

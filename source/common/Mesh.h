@@ -19,16 +19,36 @@ namespace te
 // Another way to do so is a bottom-up method by encapsulating VertexBuffer from memory structure to upper layer structure.
 // Which one is better? Of course not this one....
 
-    enum class VertexAttribute
-    {
-        VERTEX_POSITION,
-        VERTEX_NORMAL,
-        VERTEX_TANGENT,
-        VERTEX_BITANGENT,
-        VERTEX_SKINNED,
-        VERTEX_TEXCOORD0,
-        VERTEX_TEXCOORD1
-    };
+    //namespace vertex_layout
+    //{
+    //    enum VertexAttribute
+    //    {
+    //        POSITION = 1 << 0,
+    //        NORMAL = 1 << 1,
+    //        TANGENT = 1 << 2,
+    //        BITANGENT = 1 << 3,
+    //        TEXTURE1 = 1 << 4,
+    //        TEXTURE2 = 1 << 5
+    //    };
+
+    //    enum Type {
+    //        P = VertexAttribute::POSITION,
+
+    //        PN = VertexAttribute::POSITION + VertexAttribute::NORMAL,
+
+    //        PNTB = VertexAttribute::POSITION + VertexAttribute::NORMAL
+    //        + VertexAttribute::TANGENT + VertexAttribute::BITANGENT,
+
+    //        PNTB_TEX = VertexAttribute::POSITION + VertexAttribute::NORMAL
+    //        + VertexAttribute::TANGENT + VertexAttribute::BITANGENT
+    //        + VertexAttribute::TEXTURE1,
+
+    //        PNTB_SKINNED,
+    //        Overlay, // Position with Texture Coordinate
+    //        Model,
+    //        Partical,
+    //    };
+    //}
 
     struct Vertex_P
     {
@@ -160,7 +180,7 @@ namespace te
 
             virtual void initialize(size_t size, void*& array) { array = new Vertex_PNTB_TEX_Array(size); }
             virtual void* buffer(void*& array) { return &(*((Vertex_PNTB_TEX_Array*)(array)))[0].position.x; }
-            virtual size_t sizeInBytes(size_t size, void*& array) { return sizeof(Vertex_PNTB_TEX_Array) * size; }
+            virtual size_t sizeInBytes(size_t size, void*& array) { return sizeof(Vertex_PNTB_TEX) * size; }
             virtual Vector3& position(size_t index, void*& array) { return (*((Vertex_PNTB_TEX_Array*)(array)))[index].position; }
             virtual Vector3& normal(size_t index, void*& array) { return (*((Vertex_PNTB_TEX_Array*)(array)))[index].normal; }
             virtual Vector3& tangent(size_t index, void*& array) { return (*((Vertex_PNTB_TEX_Array*)(array)))[index].tangent; }
@@ -199,7 +219,7 @@ namespace te
             if (_type) delete _type;
             switch (type)
             {
-            case vertex_layout::Position:
+            case vertex_layout::P:
                 _type = new P_Array;
                 break;
             case vertex_layout::PN:
@@ -282,12 +302,6 @@ namespace te
         VertexArray& getVertices() { return _vertices; }
         IndexArray& getTriangles() { return _triangles; }
         vertex_layout::Type getLayoutType() { return _layout_type; }
-        /*void setVertexDeclaration(ResourceHandle res_handle) { _vertex_declaration = res_handle; };
-        void setIndexBuffer(ResourceHandle res_handle) { _index_buffer = res_handle; };
-        void setVertexBuffer(ResourceHandle res_handle) { _vertex_buffer = res_handle; };
-        ResourceHandle getVertexDeclaration() { return _vertex_declaration; }
-        ResourceHandle getIndexBuffer() { return _index_buffer; }
-        ResourceHandle getVertexBuffer() { return _vertex_buffer; }*/
         void setROHandle(Handle handle) { _render_object = handle; }
         Handle getROHandle() { return _render_object; }
 

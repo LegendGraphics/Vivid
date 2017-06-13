@@ -484,96 +484,198 @@ bool Converter::writeMesh( const string &assetPath, const string &assetName )
     int version = 1;
     fwrite( "TEM", 3, 1, f );
     fwrite( &version, sizeof( int ), 1, f ); 
-    
+
     int vertex_type = _daeDoc.libGeometries.getVertexType();
-    int count = -1;
+    bool usTB = true;   // using tangent and bitangent attributes
+    
+    if (usTB) vertex_type |= DaeGeometry::TANGENT;
+    if (usTB) vertex_type |= DaeGeometry::BITANGENT;
     fwrite(&vertex_type, sizeof(int), 1, f);
 
-    // vertex type with different number of attributes
-    // 0 == position, 
-    // 1 == position and normal, 
-    // 2 == position, normal and texture1
-    switch (vertex_type) 
-    {
-    case 0:
-        count = 1;
-        break;
-    case 1:
-        count = 2;
-        break;
-    case 2:
-        count = 3;
-        break;
-    default:
-        break;
-    }
+    //// count number of vertex attributes
+    int count = 0;
+    if (vertex_type & DaeGeometry::POSITION) count += 1;
+    if (vertex_type & DaeGeometry::NORMAL) count += 1;
+    if (vertex_type & DaeGeometry::TANGENT) count += 1;
+    if (vertex_type & DaeGeometry::BITANGENT) count += 1;
+    if (vertex_type & DaeGeometry::TEXTURE1) count += 1;
+    if (vertex_type & DaeGeometry::TEXTURE2) count += 1;
+
+
+    //// vertex type with different number of attributes
+    //// 0 == position, 
+    //// 1 == position and normal,
+    //// 2 == position, normal, tangent, bitangent
+    //// 3 == position, normal tangent, bitangent, and texture1
+    //switch (vertex_type) 
+    //{
+    //case 0:
+    //    count = 1;
+    //    break;
+    //case 1:
+    //    count = 2;
+    //    break;
+    //case 2:
+    //    count = 3;
+    //    break;
+    //default:
+    //    break;
+    //}
 
     // Write vertex stream data
     fwrite(&count, sizeof(int), 1, f);
 
     int vert_count = (unsigned int)_vertices.size();
-    fwrite( &vert_count, sizeof( int ), 1, f );
+    fwrite(&vert_count, sizeof(int), 1, f);
 
 
-    for( unsigned int i = 0; i < count; ++i )
-    {        
-        short sh;
-        unsigned int streamElemSize;
-        
-        switch( i )
+    short sh;
+    unsigned int streamElemSize;
+
+    if (vertex_type & DaeGeometry::POSITION)
+    {
+        int id = DaeGeometry::POSITION;
+        fwrite(&id, sizeof(int), 1, f);
+        streamElemSize = 3 * sizeof(float); fwrite(&streamElemSize, sizeof(int), 1, f);
+        for (unsigned int j = 0; j < vert_count; ++j)
         {
-        case 0:		// Position
-            fwrite( &i, sizeof( int ), 1, f );
-            streamElemSize = 3 * sizeof( float ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < vert_count; ++j )
-            {
-                fwrite( &_vertices[j].pos.x, sizeof( float ), 1, f );
-                fwrite( &_vertices[j].pos.y, sizeof( float ), 1, f );
-                fwrite( &_vertices[j].pos.z, sizeof( float ), 1, f );
-            }
-            break;
-        case 1:		// Normal
-            fwrite( &i, sizeof( int ), 1, f );
-            streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-            for( unsigned int j = 0; j < vert_count; ++j )
-            {
-                sh = (short)(_vertices[j].normal.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
-                sh = (short)(_vertices[j].normal.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
-                sh = (short)(_vertices[j].normal.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
-            }
-            break;
-        case 2:		// Texture1
-            fwrite(&i, sizeof(int), 1, f);
-            streamElemSize = 2 * sizeof(float); fwrite(&streamElemSize, sizeof(int), 1, f);
-            for (unsigned int j = 0; j < vert_count; ++j)
-            {
-                fwrite(&_vertices[j].texCoords[0].x, sizeof(float), 1, f);
-                fwrite(&_vertices[j].texCoords[0].y, sizeof(float), 1, f);
-               // fwrite(&_vertices[j].texCoords[0].z, sizeof(float), 1, f);
-            }
-            break;
-        //case 2:		// Tangent
-        //    fwrite( &i, sizeof( int ), 1, f );
-        //    streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-        //    for( unsigned int j = 0; j < vert_count; ++j )
-        //    {
-        //        sh = (short)(_vertices[j].tangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
-        //        sh = (short)(_vertices[j].tangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
-        //        sh = (short)(_vertices[j].tangent.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
-        //    }
-        //    break;
-        //case 3:		// Bitangent
-        //    fwrite( &i, sizeof( int ), 1, f );
-        //    streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
-        //    for( unsigned int j = 0; j < vert_count; ++j )
-        //    {
-        //        sh = (short)(_vertices[j].bitangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
-        //        sh = (short)(_vertices[j].bitangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
-        //        sh = (short)(_vertices[j].bitangent.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
-        //    }
-        //    break;
+            fwrite(&_vertices[j].pos.x, sizeof(float), 1, f);
+            fwrite(&_vertices[j].pos.y, sizeof(float), 1, f);
+            fwrite(&_vertices[j].pos.z, sizeof(float), 1, f);
         }
     }
+
+    if (vertex_type & DaeGeometry::NORMAL)
+    {
+        int id = DaeGeometry::NORMAL;
+        fwrite(&id, sizeof(int), 1, f);
+        streamElemSize = 3 * sizeof(short); fwrite(&streamElemSize, sizeof(int), 1, f);
+        for (unsigned int j = 0; j < vert_count; ++j)
+        {
+            sh = (short)(_vertices[j].normal.x * 32767); fwrite(&sh, sizeof(short), 1, f);
+            sh = (short)(_vertices[j].normal.y * 32767); fwrite(&sh, sizeof(short), 1, f);
+            sh = (short)(_vertices[j].normal.z * 32767); fwrite(&sh, sizeof(short), 1, f);
+        }
+    }
+
+    if (vertex_type & DaeGeometry::TANGENT)
+    {
+        int id = DaeGeometry::TANGENT;
+        fwrite(&id, sizeof(int), 1, f);
+
+        streamElemSize = 3 * sizeof(short); fwrite(&streamElemSize, sizeof(int), 1, f);
+        for (unsigned int j = 0; j < vert_count; ++j)
+        {
+            sh = (short)(_vertices[j].tangent.x * 32767); fwrite(&sh, sizeof(short), 1, f);
+            sh = (short)(_vertices[j].tangent.y * 32767); fwrite(&sh, sizeof(short), 1, f);
+            sh = (short)(_vertices[j].tangent.z * 32767); fwrite(&sh, sizeof(short), 1, f);
+        }
+    }
+
+    if (vertex_type & DaeGeometry::BITANGENT)
+    {
+        int id = DaeGeometry::BITANGENT;
+        fwrite(&id, sizeof(int), 1, f);
+
+        streamElemSize = 3 * sizeof(short); fwrite(&streamElemSize, sizeof(int), 1, f);
+        for (unsigned int j = 0; j < vert_count; ++j)
+        {
+            sh = (short)(_vertices[j].bitangent.x * 32767); fwrite(&sh, sizeof(short), 1, f);
+            sh = (short)(_vertices[j].bitangent.y * 32767); fwrite(&sh, sizeof(short), 1, f);
+            sh = (short)(_vertices[j].bitangent.z * 32767); fwrite(&sh, sizeof(short), 1, f);
+        }
+
+    }
+
+    if (vertex_type & DaeGeometry::TEXTURE1)
+    {
+        int id = DaeGeometry::TEXTURE1;
+        fwrite(&id, sizeof(int), 1, f);
+
+        streamElemSize = 2 * sizeof(float); fwrite(&streamElemSize, sizeof(int), 1, f);
+        for (unsigned int j = 0; j < vert_count; ++j)
+        {
+            fwrite(&_vertices[j].texCoords[0].x, sizeof(float), 1, f);
+            fwrite(&_vertices[j].texCoords[0].y, sizeof(float), 1, f);
+            // fwrite(&_vertices[j].texCoords[0].z, sizeof(float), 1, f);  using only 2d texture
+        }
+    }
+
+    if (vertex_type & DaeGeometry::TEXTURE2)
+    {
+        int id = DaeGeometry::TEXTURE2;
+        fwrite(&id, sizeof(int), 1, f);
+
+        streamElemSize = 2 * sizeof(float); fwrite(&streamElemSize, sizeof(int), 1, f);
+        for (unsigned int j = 0; j < vert_count; ++j)
+        {
+            fwrite(&_vertices[j].texCoords[1].x, sizeof(float), 1, f);
+            fwrite(&_vertices[j].texCoords[1].y, sizeof(float), 1, f);
+            // fwrite(&_vertices[j].texCoords[0].z, sizeof(float), 1, f);  using only 2d texture
+        }
+    }
+
+
+
+    //for( unsigned int i = 0; i < count; ++i )
+    //{        
+    //    short sh;
+    //    unsigned int streamElemSize;
+    //    
+    //    switch( i )
+    //    {
+    //    case 0:		// Position
+    //        fwrite( &i, sizeof( int ), 1, f );
+    //        streamElemSize = 3 * sizeof( float ); fwrite( &streamElemSize, sizeof( int ), 1, f );
+    //        for( unsigned int j = 0; j < vert_count; ++j )
+    //        {
+    //            fwrite( &_vertices[j].pos.x, sizeof( float ), 1, f );
+    //            fwrite( &_vertices[j].pos.y, sizeof( float ), 1, f );
+    //            fwrite( &_vertices[j].pos.z, sizeof( float ), 1, f );
+    //        }
+    //        break;
+    //    case 1:		// Normal
+    //        fwrite( &i, sizeof( int ), 1, f );
+    //        streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
+    //        for( unsigned int j = 0; j < vert_count; ++j )
+    //        {
+    //            sh = (short)(_vertices[j].normal.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
+    //            sh = (short)(_vertices[j].normal.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
+    //            sh = (short)(_vertices[j].normal.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
+    //        }
+    //        break;
+    //    case 2:		// Tangent
+    //        fwrite( &i, sizeof( int ), 1, f );
+    //        streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
+    //        for( unsigned int j = 0; j < vert_count; ++j )
+    //        {
+    //            sh = (short)(_vertices[j].tangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
+    //            sh = (short)(_vertices[j].tangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
+    //            sh = (short)(_vertices[j].tangent.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
+    //        }
+    //        break;
+    //    case 3:		// Bitangent
+    //        fwrite( &i, sizeof( int ), 1, f );
+    //        streamElemSize = 3 * sizeof( short ); fwrite( &streamElemSize, sizeof( int ), 1, f );
+    //        for( unsigned int j = 0; j < vert_count; ++j )
+    //        {
+    //            sh = (short)(_vertices[j].bitangent.x * 32767); fwrite( &sh, sizeof( short ), 1, f );
+    //            sh = (short)(_vertices[j].bitangent.y * 32767); fwrite( &sh, sizeof( short ), 1, f );
+    //            sh = (short)(_vertices[j].bitangent.z * 32767); fwrite( &sh, sizeof( short ), 1, f );
+    //        }
+    //        break;
+    //    case 4:		// Texture1
+    //        fwrite(&i, sizeof(int), 1, f);
+    //        streamElemSize = 2 * sizeof(float); fwrite(&streamElemSize, sizeof(int), 1, f);
+    //        for (unsigned int j = 0; j < vert_count; ++j)
+    //        {
+    //            fwrite(&_vertices[j].texCoords[0].x, sizeof(float), 1, f);
+    //            fwrite(&_vertices[j].texCoords[0].y, sizeof(float), 1, f);
+    //            // fwrite(&_vertices[j].texCoords[0].z, sizeof(float), 1, f);
+    //        }
+    //        break;
+    //    }
+    //}
 
     // Write triangle indices
     int idx_count = _indices.size();

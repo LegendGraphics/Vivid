@@ -52,6 +52,8 @@ namespace te
                 mr->getMesh()->getROHandle(), 
                 mr->getMesh().get());
             _renderer->_stream.push_back(msg);
+            auto aa = mr->getMesh()->getLayoutType();
+            int a = aa;
         }
     }
 

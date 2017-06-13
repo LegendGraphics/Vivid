@@ -56,6 +56,7 @@ namespace te
         mesh->_vertices.convert(vertex_layout::Type(vertex_type));
         mesh->_vertices.initialize(vertex_num);
 
+
         for (int i = 0; i < attribute_num; ++i)
         {
             short sh;
@@ -64,9 +65,8 @@ namespace te
             memcpy(&elem_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
             String errormsg;
 
-            switch (stream_id)
+            if (stream_id == vertex_layout::VertexAttribute::POSITION)
             {
-            case 0:		// Position
                 if (elem_size != 12)
                 {
                     errormsg = "Invalid position base stream";
@@ -78,8 +78,9 @@ namespace te
                     memcpy(&mesh->_vertices.position(j).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                     memcpy(&mesh->_vertices.position(j).z, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                 }
-                break;
-            case 1:		// Normal
+            }
+            else if (stream_id == vertex_layout::VertexAttribute::NORMAL)
+            {
                 if (elem_size != 6)
                 {
                     errormsg = "Invalid normal base stream";
@@ -91,34 +92,37 @@ namespace te
                     memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).y = sh / 32767.0f;
                     memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).z = sh / 32767.0f;
                 }
-                break;
-                //case 2:		// Tangent
-                //    if (elem_size != 6)
-                //    {
-                //        errormsg = "Invalid tangent base stream";
-                //        break;
-                //    }
-                //    for (int j = 0; j < vertex_num; ++j)
-                //    {
-                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).x = sh / 32767.0f;
-                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).y = sh / 32767.0f;
-                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).z = sh / 32767.0f;
-                //    }
-                //    break;
-                //case 3:		// Bitangent
-                //    if (elem_size != 6)
-                //    {
-                //        errormsg = "Invalid bitangent base stream";
-                //        break;
-                //    }
-                //    for (int j = 0; j < vertex_num; ++j)
-                //    {
-                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).x = sh / 32767.0f;
-                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).y = sh / 32767.0f;
-                //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).z = sh / 32767.0f;
-                //    }
-                //    break;
-            case 2:		// Texture1
+            }
+            else if (stream_id == vertex_layout::VertexAttribute::TANGENT)
+            {
+                if (elem_size != 6)
+                {
+                    errormsg = "Invalid tangent base stream";
+                    break;
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).x = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).y = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).z = sh / 32767.0f;
+                }
+            }
+            else if (stream_id == vertex_layout::VertexAttribute::BITANGENT)
+            {
+                if (elem_size != 6)
+                {
+                    errormsg = "Invalid bitangent base stream";
+                    break;
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).x = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).y = sh / 32767.0f;
+                    memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).z = sh / 32767.0f;
+                }
+            }
+            else if (stream_id == vertex_layout::VertexAttribute::TEXTURE1)
+            {
                 if (elem_size != 8)
                 {
                     errormsg = "Invalid texture 1 base stream";
@@ -129,26 +133,119 @@ namespace te
                     memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                     memcpy(&mesh->_vertices.tex(j, 0).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
                 }
-                break;
-                //case 5:		// Texture2
-                //    if (elem_size != 8)
-                //    {
-                //        errormsg = "Invalid texture 2 base stream";
-                //        break;
-                //    }
-                //    for (int j = 0; j < vertex_num; ++j)
-                //    {
-                //        memcpy(&sh, data_ptr, sizeof(float)); data_ptr += sizeof(float); mesh->_vertices.tex(j, 1).x = sh;
-                //        memcpy(&sh, data_ptr, sizeof(float)); data_ptr += sizeof(float); mesh->_vertices.tex(j, 1).y = sh;
-                //    }
-                //    break;
-
-            default:
-                data_ptr += elem_size * vertex_num;
-                continue;
             }
-            cLog << errormsg;
+            else if (stream_id == vertex_layout::VertexAttribute::TEXTURE2)
+            {
+                if (elem_size != 8)
+                {
+                    errormsg = "Invalid texture 2 base stream";
+                    break;
+                }
+                for (int j = 0; j < vertex_num; ++j)
+                {
+                    memcpy(&mesh->_vertices.tex(j, 1).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                    memcpy(&mesh->_vertices.tex(j, 1).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+                }
+            }
         }
+
+        //for (int i = 0; i < attribute_num; ++i)
+        //{
+        //    short sh;
+        //    int stream_id, elem_size;
+        //    memcpy(&stream_id, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        //    memcpy(&elem_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
+        //    String errormsg;
+
+        //    switch (stream_id)
+        //    {
+        //    case 0:		// Position
+        //        if (elem_size != 12)
+        //        {
+        //            errormsg = "Invalid position base stream";
+        //            break;
+        //        }
+        //        for (int j = 0; j < vertex_num; ++j)
+        //        {
+        //            memcpy(&mesh->_vertices.position(j).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+        //            memcpy(&mesh->_vertices.position(j).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+        //            memcpy(&mesh->_vertices.position(j).z, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+        //        }
+        //        break;
+        //    case 1:		// Normal
+        //        if (elem_size != 6)
+        //        {
+        //            errormsg = "Invalid normal base stream";
+        //            break;
+        //        }
+        //        for (int j = 0; j < vertex_num; ++j)
+        //        {
+        //            memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).x = sh / 32767.0f;
+        //            memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).y = sh / 32767.0f;
+        //            memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.normal(j).z = sh / 32767.0f;
+        //        }
+        //        break;
+        //        //case 2:		// Tangent
+        //        //    if (elem_size != 6)
+        //        //    {
+        //        //        errormsg = "Invalid tangent base stream";
+        //        //        break;
+        //        //    }
+        //        //    for (int j = 0; j < vertex_num; ++j)
+        //        //    {
+        //        //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).x = sh / 32767.0f;
+        //        //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).y = sh / 32767.0f;
+        //        //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.tangent(j).z = sh / 32767.0f;
+        //        //    }
+        //        //    break;
+        //        //case 3:		// Bitangent
+        //        //    if (elem_size != 6)
+        //        //    {
+        //        //        errormsg = "Invalid bitangent base stream";
+        //        //        break;
+        //        //    }
+        //        //    for (int j = 0; j < vertex_num; ++j)
+        //        //    {
+        //        //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).x = sh / 32767.0f;
+        //        //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).y = sh / 32767.0f;
+        //        //        memcpy(&sh, data_ptr, sizeof(short)); data_ptr += sizeof(short); mesh->_vertices.bitangent(j).z = sh / 32767.0f;
+        //        //    }
+        //        //    break;
+        //    case 2:		// Texture1
+        //        if (elem_size != 8)
+        //        {
+        //            errormsg = "Invalid texture 1 base stream";
+        //            break;
+        //        }
+        //        for (int j = 0; j < vertex_num; ++j)
+        //        {
+        //            //float a, b;
+        //            //memcpy(&a, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+        //            //memcpy(&b, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+
+        //            memcpy(&mesh->_vertices.tex(j, 0).x, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+        //            memcpy(&mesh->_vertices.tex(j, 0).y, data_ptr, sizeof(float)); data_ptr += sizeof(float);
+        //        }
+        //        break;
+        //        //case 5:		// Texture2
+        //        //    if (elem_size != 8)
+        //        //    {
+        //        //        errormsg = "Invalid texture 2 base stream";
+        //        //        break;
+        //        //    }
+        //        //    for (int j = 0; j < vertex_num; ++j)
+        //        //    {
+        //        //        memcpy(&sh, data_ptr, sizeof(float)); data_ptr += sizeof(float); mesh->_vertices.tex(j, 1).x = sh;
+        //        //        memcpy(&sh, data_ptr, sizeof(float)); data_ptr += sizeof(float); mesh->_vertices.tex(j, 1).y = sh;
+        //        //    }
+        //        //    break;
+
+        //    default:
+        //        data_ptr += elem_size * vertex_num;
+        //        continue;
+        //    }
+        //    cLog << errormsg;
+        //}
 
         // triangle stream
         int indice_num;
@@ -159,15 +256,6 @@ namespace te
         {
             memcpy(&mesh->_triangles[i], data_ptr, sizeof(int)); data_ptr += sizeof(int);
         }
-
-        for (int i = 0; i < 5; ++i)
-            cLog << mesh->_vertices.position(i);
-
-        for (int i = 0; i < 9; ++i)
-            std::cout << mesh->_triangles[i] << std::endl;
-
-        for (int i = 2100; i < 2108; ++i)
-            std::cout << mesh->_vertices.tex(i,0).x << " " << mesh->_vertices.tex(i,0).y << std::endl;
 
         return true;
     }
