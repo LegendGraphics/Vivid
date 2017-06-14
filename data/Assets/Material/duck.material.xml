@@ -1,0 +1,5 @@
+<Material class="Translucent.MyClass">
+    <Shader source="Shader/shader_texture.xml" />
+    <Sampler name="albedoMap" map="Image/duck.png" />
+    <Uniform name="color" a="0.0" b="1.0" c="0.5" d="1.0" />
+</Material>

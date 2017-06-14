@@ -57,8 +57,7 @@ namespace te
         // shader, texture...
     protected:
         // semantic name is hold in Texture already, but for fast access, use a map here
-        using MaterialSamplerMap = std::unordered_map<String, ResourceHandle>;
-        MaterialSamplerMap              _samplers;
+        ShaderSamplerValueMap           _samplers;
         ResourceHandle                  _shader;
         ShaderUniformValueMap           _uniform_map;
     };

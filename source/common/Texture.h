@@ -22,12 +22,13 @@ namespace te
         uint32 getHeight() const { return _height; }
         uint32 getDepth() const { return _depth; }
         uint8* getData() const { return _img; }
-        String getName() const { return _semantic_name; }
+        int getTexUnit() const { return _tex_unit; }
 
         void setWidth(uint32 width) { _width = width; }
         void setHeight(uint32 height) { _height = height; }
         void setDepth(uint32 depth) { _depth = depth; }
         void setData(uint8* data) { _img = data; }
+        void setTexUnit(int tex_unit) { _tex_unit = tex_unit; }
 
         void setROHandle(Handle handle) { _render_object = handle; }
         Handle getROHandle() { return _render_object; }
@@ -37,7 +38,7 @@ namespace te
         image_data::Type    _type;
         image_data::Format  _format;
         Handle              _render_object;
-        String              _semantic_name;
+        int                 _tex_unit;
     };
 
     using TexturePtr = RefPtr<Texture>;

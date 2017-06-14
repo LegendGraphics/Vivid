@@ -605,7 +605,8 @@ namespace te
             }
 
             String name = node1.getAttribute("name");
-            ResourceHandle texture = ResourceMapper::getInstance()->get<TextureManager>()->create(node1.getAttribute("map"));
+            String img = ASSETS_PATH + node1.getAttribute("map");
+            ResourceHandle texture = ResourceMapper::getInstance()->get<TextureManager>()->create(img);
             material->setTexture(name, texture);
 
             node1 = node1.getNextSibling("Sampler");
@@ -830,5 +831,7 @@ namespace te
                 bottom.toFloat(), top.toFloat(), znear.toFloat(), zfar.toFloat()));
 
         }
+
+        return true;
     }
 }
