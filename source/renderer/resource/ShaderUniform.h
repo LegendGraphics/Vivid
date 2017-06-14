@@ -41,6 +41,7 @@ namespace te
         int     tex_unit;
     };
 
+    // store run-time samplers in shader
     class ShaderSamplers
     {
     public:

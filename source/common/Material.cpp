@@ -82,6 +82,16 @@ namespace te
         }
     }
 
+    void Material::setTexture(const String& name, ResourceHandle texture)
+    {
+        ShaderPtr shader = ResourceMapper::getInstance()->get<ShaderManager>()->getShader(_shader);
+        if (shader->samplers.hasSampler(name))
+        {
+            _samplers.insert({ name, texture });
+        }
+    }
+
+
     // get uniform type from shader
     void Material::setUniform(const String& name, float a, float b, float c, float d)
     {
