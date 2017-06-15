@@ -541,7 +541,7 @@ namespace te
     bool ResourceLoader::load(Texture* texture, const String& res)
     {
         int x, y, n;
-        unsigned char *data = stbi_load(res.c_str(), &x, &y, &n, 0);
+        unsigned char *data = stbi_load((_data_path + res).c_str(), &x, &y, &n, 0);
 
         if (data == nullptr) return false;
 
