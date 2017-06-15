@@ -701,7 +701,7 @@ namespace te
         glActiveTexture(GL_TEXTURE0 + 15);
         glBindTexture(tex.gl_type, tex.gl_obj);
 
-        int input_format = GL_BGRA, input_type = GL_UNSIGNED_BYTE;
+        int input_internal_format = GL_RGBA, input_format = GL_BGRA, input_type = GL_UNSIGNED_BYTE;
         switch (tex.format)
         {
         case image_data::RGBA16F:
@@ -715,15 +715,26 @@ namespace te
         case image_data::DEPTH:
             input_format = GL_DEPTH_COMPONENT;
             input_type = GL_FLOAT;
+            break;
+        case image_data::BGR8:
+            input_internal_format = GL_RGB;
+            input_format = GL_BGR;
+            input_type = GL_UNSIGNED_BYTE;
+            break;
+        case image_data::RGB8:
+            input_internal_format = GL_RGB;
+            input_format = GL_RGB;
+            input_type = GL_UNSIGNED_BYTE;
+            break;
         };
 
-        if (tex.gl_type == image_data::IMAGE2D)
+        if (tex.gl_type == GL_TEXTURE_2D)
         {
-            glTexImage2D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 0, input_format, input_type, pixels);
+            glTexImage2D(tex.gl_type, mip_level, input_internal_format, tex.width, tex.height, 0, input_format, input_type, pixels);
         }
-        else if (tex.gl_type == image_data::IMAGE3D)
+        else if (tex.gl_type == GL_TEXTURE_3D)
         {
-            glTexImage3D(tex.gl_type, mip_level, input_format, tex.width, tex.height, 256, 0, input_format, input_type, pixels);
+            glTexImage3D(tex.gl_type, mip_level, input_internal_format, tex.width, tex.height, 256, 0, input_format, input_type, pixels);
         }
         // How about ImageCube?
        
@@ -743,6 +754,8 @@ namespace te
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
+            glEnable(GL_DEPTH_TEST);
+            glDepthFunc(GL_LEQUAL);
             // base index is the start index of sub-component (3*numFace)
             // base vertex is the start vertex of sub-component (3*numVert)
             glDrawElementsBaseVertex(GL_TRIANGLES,

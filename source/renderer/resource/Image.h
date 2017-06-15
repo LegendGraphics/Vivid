@@ -14,6 +14,8 @@ namespace te
 
         enum Format {
             Unknown,
+            BGR8,
+            RGB8,
             BGRA8,
             DXT1,
             DXT3,

@@ -1,9 +1,10 @@
-
-in vec2 texCoords;
+#version 430
+in vec2 g_texPos;
+in vec3 g_normal;
 uniform sampler2D albedoMap;
 
 void main()  
 {  
-    vec4 color = texture2D(albedoMap,texCoords.xy);
-    gl_FragColor = color;  
+    vec4 color = texture(albedoMap,g_texPos);
+    gl_FragColor = color;
 }  

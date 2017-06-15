@@ -48,12 +48,13 @@ namespace te
     {
         resource_stream::TextureStream* ts = new resource_stream::TextureStream;
         ts->res = &_tex_handle;
-        ts->raw_data = &_img;
+        ts->raw_data = _img;
         ts->width = _width;
         ts->height = _height;
         ts->depth = _depth;
         ts->type = image_data::Type::IMAGE2D; // Hard code currently
-        ts->format = image_data::Format::BGRA8;
+        ts->format = image_data::Format::RGB8;
+        ts->has_mips = false;
 
         RenderResourceContext::Message allc_texture = {
             resource_stream::MessageType::ALLOC_TEXTURE, (void*)ts };
