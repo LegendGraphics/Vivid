@@ -743,6 +743,8 @@ namespace te
             glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             glEnable(GL_CULL_FACE);
             glCullFace(GL_BACK);
+            glEnable(GL_DEPTH_TEST);
+            glDepthFunc(GL_LEQUAL);
             // base index is the start index of sub-component (3*numFace)
             // base vertex is the start vertex of sub-component (3*numVert)
             glDrawElementsBaseVertex(GL_TRIANGLES,

@@ -559,7 +559,7 @@ namespace te
         char *data = nullptr;
         int size = 0;
 
-        FileUtils::streamFromBinaryFile(res, data, size);
+        FileUtils::streamFromBinaryFile(_data_path + res, data, size);
 
         XMLDoc doc;
         doc.parseBuffer(data, size);
@@ -641,7 +641,7 @@ namespace te
     {
         char *data = nullptr;
         int size = 0;
-        FileUtils::streamFromBinaryFile(res, data, size);
+        FileUtils::streamFromBinaryFile(_data_path + res, data, size);
         if (data == nullptr) return false;
 
         XMLDoc doc;
@@ -696,7 +696,7 @@ namespace te
     {
         char *data = nullptr;
         int size = 0;
-        FileUtils::loadShader(res, data, size);
+        FileUtils::loadShader(_data_path + res, data, size);
         if (data == nullptr) return "";
 
         return String(data);
@@ -706,7 +706,7 @@ namespace te
     {
         char *data = nullptr;
         int size = 0;
-        FileUtils::streamFromBinaryFile(res, data, size);
+        FileUtils::streamFromBinaryFile(_data_path + res, data, size);
         if (data == nullptr) return false;
 
         XMLDoc doc;

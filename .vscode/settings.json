@@ -3,6 +3,11 @@
     "cmake.buildDirectory": "${workspaceRoot}-build",
     "cmake.generator": "Visual Studio 14 2015 Win64",
     "files.associations": {
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "array": "cpp",
+        "vector": "cpp",
+        "xstring": "cpp",
+        "xutility": "cpp",
+        "xlocale": "cpp"
     }
 }

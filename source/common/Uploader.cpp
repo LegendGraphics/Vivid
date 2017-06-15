@@ -32,14 +32,14 @@ namespace te
     void UploadToRender::assembleUpdateMsg()
     {
         updateMesh();
-        updateTexture();
+        //updateTexture();
         updateShader();
     }
 
     void UploadToRender::assembleRenderMsg()
     {
         renderMesh();
-        renderTexture();
+        //renderTexture();
         renderShader();
     }
 

@@ -6,5 +6,884 @@
     },
     "description": "Emit debug information without performing optimizations"
   },
-  "activeEnvironments": []
+  "activeEnvironments": [],
+  "codeModel": {
+    "configurations": [
+      {
+        "name": "Debug",
+        "projects": [
+          {
+            "buildDirectory": "E:/linsrc/tinyengine-build",
+            "name": "TinyEngine",
+            "sourceDirectory": "E:/linsrc/TinyEngine",
+            "targets": [
+              {
+                "buildDirectory": "E:/linsrc/tinyengine-build",
+                "fileGroups": [
+                  {
+                    "isGenerated": true,
+                    "sources": [
+                      "../tinyengine-build/CMakeFiles/b78527ad2670ce848a6655ef6acb7581/generate.stamp.rule"
+                    ]
+                  }
+                ],
+                "fullName": "ZERO_CHECK",
+                "name": "ZERO_CHECK",
+                "sourceDirectory": "E:/linsrc/TinyEngine",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "E:/linsrc/tinyengine-build/source/Debug/TinyEngine.exe",
+                  "E:/linsrc/tinyengine-build/source/Debug/TinyEngine.lib",
+                  "E:/linsrc/tinyengine-build/source/Debug/TinyEngine.pdb"
+                ],
+                "buildDirectory": "E:/linsrc/tinyengine-build/source",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "common/Camera.h",
+                      "common/ClassType.hpp",
+                      "common/Clone.h",
+                      "common/Component.h",
+                      "common/ComponentContainer.h",
+                      "common/Material.h",
+                      "common/Mesh.h",
+                      "common/MeshRender.h",
+                      "common/Node.h",
+                      "common/NodeVisitor.h",
+                      "common/Pipeline.h",
+                      "common/Resource.h",
+                      "common/Scene.h",
+                      "common/Shader.h",
+                      "common/SpaceState.h",
+                      "common/Texture.h",
+                      "common/Uploader.h",
+                      "math/MathUtils.h",
+                      "math/Matrix.h",
+                      "math/Quaternion.h",
+                      "math/Transform.h",
+                      "math/Vector2.h",
+                      "math/Vector3.h",
+                      "math/Vector4.h",
+                      "renderer/RenderInterface.h",
+                      "renderer/RenderWorld.h",
+                      "renderer/device/CommandStream.h",
+                      "renderer/device/GLRenderDevice.h",
+                      "renderer/device/GPUObjectManager.h",
+                      "renderer/device/RenderContext.h",
+                      "renderer/device/RenderDevice.h",
+                      "renderer/resource/HandleObjects.hpp",
+                      "renderer/resource/Image.h",
+                      "renderer/resource/RenderResource.h",
+                      "renderer/resource/RenderResourceContext.h",
+                      "renderer/resource/RenderTexture.h",
+                      "renderer/resource/ResourceStream.h",
+                      "renderer/resource/ShaderDataType.h",
+                      "renderer/resource/ShaderUniform.h",
+                      "renderer/resource/VertexLayout.h",
+                      "renderer/resource/VertexLayoutType.h",
+                      "renderer/runtime/RenderCamera.h",
+                      "renderer/runtime/RenderMeshObject.h",
+                      "renderer/runtime/RenderObject.h",
+                      "renderer/runtime/RenderObjectManager.h",
+                      "renderer/runtime/RenderShaderObject.h",
+                      "renderer/runtime/RenderTextureObject.h",
+                      "renderer/runtime/StateStream.h",
+                      "base/Assert.h",
+                      "base/Director.h",
+                      "base/EnumOperator.hpp",
+                      "base/Event.h",
+                      "base/EventDispatcher.h",
+                      "base/EventListener.h",
+                      "base/Ref.h",
+                      "base/RefPtr.hpp",
+                      "base/Singleton.hpp",
+                      "base/String.h",
+                      "base/Timer.h",
+                      "base/Types.h",
+                      "base/Variant.h",
+                      "io/FileUtils.h",
+                      "io/Logger.h",
+                      "io/ResourceLoader.h",
+                      "shape/BoundingBox.h",
+                      "shape/BoundingSphere.h",
+                      "shape/Frustum.h",
+                      "shape/Plane.h",
+                      "shape/Ray.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1  ",
+                    "defines": [
+                      "USE_GL"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "e:/linsrc/tinyengine/source"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/glew/include"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/glfw/include"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/rapid_xml/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "main.cpp",
+                      "common/Camera.cpp",
+                      "common/Clone.cpp",
+                      "common/Component.cpp",
+                      "common/ComponentContainer.cpp",
+                      "common/Material.cpp",
+                      "common/Mesh.cpp",
+                      "common/MeshRender.cpp",
+                      "common/Node.cpp",
+                      "common/NodeVisitor.cpp",
+                      "common/Pipeline.cpp",
+                      "common/Resource.cpp",
+                      "common/Scene.cpp",
+                      "common/Shader.cpp",
+                      "common/SpaceState.cpp",
+                      "common/Texture.cpp",
+                      "common/Uploader.cpp",
+                      "math/MathUtils.cpp",
+                      "math/Matrix.cpp",
+                      "math/Quaternion.cpp",
+                      "math/Transform.cpp",
+                      "math/Vector2.cpp",
+                      "math/Vector3.cpp",
+                      "math/Vector4.cpp",
+                      "renderer/RenderInterface.cpp",
+                      "renderer/RenderWorld.cpp",
+                      "renderer/device/GLRenderDevice.cpp",
+                      "renderer/device/GPUObjectManager.cpp",
+                      "renderer/device/RenderContext.cpp",
+                      "renderer/device/RenderDevice.cpp",
+                      "renderer/resource/RenderResourceContext.cpp",
+                      "renderer/resource/RenderTexture.cpp",
+                      "renderer/resource/ShaderUniform.cpp",
+                      "renderer/resource/VertexLayout.cpp",
+                      "renderer/runtime/MeshStreamMsg.cpp",
+                      "renderer/runtime/RenderCamera.cpp",
+                      "renderer/runtime/RenderMeshObject.cpp",
+                      "renderer/runtime/RenderObjectManager.cpp",
+                      "renderer/runtime/RenderShaderObject.cpp",
+                      "renderer/runtime/RenderTextureObject.cpp",
+                      "renderer/runtime/ShaderStreamMsg.cpp",
+                      "renderer/runtime/StateStream.cpp",
+                      "renderer/runtime/TextureStreamMsg.cpp",
+                      "base/Director.cpp",
+                      "base/Event.cpp",
+                      "base/EventDispatcher.cpp",
+                      "base/EventListener.cpp",
+                      "base/Ref.cpp",
+                      "base/String.cpp",
+                      "base/Timer.cpp",
+                      "base/Variant.cpp",
+                      "io/FileUtils.cpp",
+                      "io/Logger.cpp",
+                      "io/ResourceLoader.cpp",
+                      "shape/BoundingBox.cpp",
+                      "shape/BoundingSphere.cpp",
+                      "shape/Frustum.cpp",
+                      "shape/Plane.cpp",
+                      "shape/Ray.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "TinyEngine.exe",
+                "linkFlags": "/machine:x64 /debug /INCREMENTAL /subsystem:console",
+                "linkLanguageFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MDd /Zi /Ob0 /Od /RTC1",
+                "linkLibraries": "glu32.lib opengl32.lib E:\\linsrc\\TinyEngine\\cmake\\..\\3rdparty\\glew\\lib\\glew32.lib E:\\linsrc\\TinyEngine\\cmake\\..\\3rdparty\\glfw\\lib\\glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+                "linkerLanguage": "CXX",
+                "name": "TinyEngine",
+                "sourceDirectory": "E:/linsrc/TinyEngine/source",
+                "type": "EXECUTABLE"
+              },
+              {
+                "buildDirectory": "E:/linsrc/tinyengine-build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "E:/linsrc/TinyEngine",
+                "type": "UTILITY"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "Release",
+        "projects": [
+          {
+            "buildDirectory": "E:/linsrc/tinyengine-build",
+            "name": "TinyEngine",
+            "sourceDirectory": "E:/linsrc/TinyEngine",
+            "targets": [
+              {
+                "buildDirectory": "E:/linsrc/tinyengine-build",
+                "fileGroups": [
+                  {
+                    "isGenerated": true,
+                    "sources": [
+                      "../tinyengine-build/CMakeFiles/b78527ad2670ce848a6655ef6acb7581/generate.stamp.rule"
+                    ]
+                  }
+                ],
+                "fullName": "ZERO_CHECK",
+                "name": "ZERO_CHECK",
+                "sourceDirectory": "E:/linsrc/TinyEngine",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "E:/linsrc/tinyengine-build/source/Release/TinyEngine.exe",
+                  "E:/linsrc/tinyengine-build/source/Release/TinyEngine.lib",
+                  "E:/linsrc/tinyengine-build/source/Release/TinyEngine.pdb"
+                ],
+                "buildDirectory": "E:/linsrc/tinyengine-build/source",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "common/Camera.h",
+                      "common/ClassType.hpp",
+                      "common/Clone.h",
+                      "common/Component.h",
+                      "common/ComponentContainer.h",
+                      "common/Material.h",
+                      "common/Mesh.h",
+                      "common/MeshRender.h",
+                      "common/Node.h",
+                      "common/NodeVisitor.h",
+                      "common/Pipeline.h",
+                      "common/Resource.h",
+                      "common/Scene.h",
+                      "common/Shader.h",
+                      "common/SpaceState.h",
+                      "common/Texture.h",
+                      "common/Uploader.h",
+                      "math/MathUtils.h",
+                      "math/Matrix.h",
+                      "math/Quaternion.h",
+                      "math/Transform.h",
+                      "math/Vector2.h",
+                      "math/Vector3.h",
+                      "math/Vector4.h",
+                      "renderer/RenderInterface.h",
+                      "renderer/RenderWorld.h",
+                      "renderer/device/CommandStream.h",
+                      "renderer/device/GLRenderDevice.h",
+                      "renderer/device/GPUObjectManager.h",
+                      "renderer/device/RenderContext.h",
+                      "renderer/device/RenderDevice.h",
+                      "renderer/resource/HandleObjects.hpp",
+                      "renderer/resource/Image.h",
+                      "renderer/resource/RenderResource.h",
+                      "renderer/resource/RenderResourceContext.h",
+                      "renderer/resource/RenderTexture.h",
+                      "renderer/resource/ResourceStream.h",
+                      "renderer/resource/ShaderDataType.h",
+                      "renderer/resource/ShaderUniform.h",
+                      "renderer/resource/VertexLayout.h",
+                      "renderer/resource/VertexLayoutType.h",
+                      "renderer/runtime/RenderCamera.h",
+                      "renderer/runtime/RenderMeshObject.h",
+                      "renderer/runtime/RenderObject.h",
+                      "renderer/runtime/RenderObjectManager.h",
+                      "renderer/runtime/RenderShaderObject.h",
+                      "renderer/runtime/RenderTextureObject.h",
+                      "renderer/runtime/StateStream.h",
+                      "base/Assert.h",
+                      "base/Director.h",
+                      "base/EnumOperator.hpp",
+                      "base/Event.h",
+                      "base/EventDispatcher.h",
+                      "base/EventListener.h",
+                      "base/Ref.h",
+                      "base/RefPtr.hpp",
+                      "base/Singleton.hpp",
+                      "base/String.h",
+                      "base/Timer.h",
+                      "base/Types.h",
+                      "base/Variant.h",
+                      "io/FileUtils.h",
+                      "io/Logger.h",
+                      "io/ResourceLoader.h",
+                      "shape/BoundingBox.h",
+                      "shape/BoundingSphere.h",
+                      "shape/Frustum.h",
+                      "shape/Plane.h",
+                      "shape/Ray.h",
+                      "CMakeLists.txt"
+                    ]
+                  },
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG  ",
+                    "defines": [
+                      "USE_GL"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "e:/linsrc/tinyengine/source"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/glew/include"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/glfw/include"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/rapid_xml/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "main.cpp",
+                      "common/Camera.cpp",
+                      "common/Clone.cpp",
+                      "common/Component.cpp",
+                      "common/ComponentContainer.cpp",
+                      "common/Material.cpp",
+                      "common/Mesh.cpp",
+                      "common/MeshRender.cpp",
+                      "common/Node.cpp",
+                      "common/NodeVisitor.cpp",
+                      "common/Pipeline.cpp",
+                      "common/Resource.cpp",
+                      "common/Scene.cpp",
+                      "common/Shader.cpp",
+                      "common/SpaceState.cpp",
+                      "common/Texture.cpp",
+                      "common/Uploader.cpp",
+                      "math/MathUtils.cpp",
+                      "math/Matrix.cpp",
+                      "math/Quaternion.cpp",
+                      "math/Transform.cpp",
+                      "math/Vector2.cpp",
+                      "math/Vector3.cpp",
+                      "math/Vector4.cpp",
+                      "renderer/RenderInterface.cpp",
+                      "renderer/RenderWorld.cpp",
+                      "renderer/device/GLRenderDevice.cpp",
+                      "renderer/device/GPUObjectManager.cpp",
+                      "renderer/device/RenderContext.cpp",
+                      "renderer/device/RenderDevice.cpp",
+                      "renderer/resource/RenderResourceContext.cpp",
+                      "renderer/resource/RenderTexture.cpp",
+                      "renderer/resource/ShaderUniform.cpp",
+                      "renderer/resource/VertexLayout.cpp",
+                      "renderer/runtime/MeshStreamMsg.cpp",
+                      "renderer/runtime/RenderCamera.cpp",
+                      "renderer/runtime/RenderMeshObject.cpp",
+                      "renderer/runtime/RenderObjectManager.cpp",
+                      "renderer/runtime/RenderShaderObject.cpp",
+                      "renderer/runtime/RenderTextureObject.cpp",
+                      "renderer/runtime/ShaderStreamMsg.cpp",
+                      "renderer/runtime/StateStream.cpp",
+                      "renderer/runtime/TextureStreamMsg.cpp",
+                      "base/Director.cpp",
+                      "base/Event.cpp",
+                      "base/EventDispatcher.cpp",
+                      "base/EventListener.cpp",
+                      "base/Ref.cpp",
+                      "base/String.cpp",
+                      "base/Timer.cpp",
+                      "base/Variant.cpp",
+                      "io/FileUtils.cpp",
+                      "io/Logger.cpp",
+                      "io/ResourceLoader.cpp",
+                      "shape/BoundingBox.cpp",
+                      "shape/BoundingSphere.cpp",
+                      "shape/Frustum.cpp",
+                      "shape/Plane.cpp",
+                      "shape/Ray.cpp"
+                    ]
+                  }
+                ],
+                "fullName": "TinyEngine.exe",
+                "linkFlags": "/machine:x64 /INCREMENTAL:NO /subsystem:console",
+                "linkLanguageFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O2 /Ob2 /DNDEBUG",
+                "linkLibraries": "glu32.lib opengl32.lib E:\\linsrc\\TinyEngine\\cmake\\..\\3rdparty\\glew\\lib\\glew32.lib E:\\linsrc\\TinyEngine\\cmake\\..\\3rdparty\\glfw\\lib\\glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+                "linkerLanguage": "CXX",
+                "name": "TinyEngine",
+                "sourceDirectory": "E:/linsrc/TinyEngine/source",
+                "type": "EXECUTABLE"
+              },
+              {
+                "buildDirectory": "E:/linsrc/tinyengine-build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "E:/linsrc/TinyEngine",
+                "type": "UTILITY"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "MinSizeRel",
+        "projects": [
+          {
+            "buildDirectory": "E:/linsrc/tinyengine-build",
+            "name": "TinyEngine",
+            "sourceDirectory": "E:/linsrc/TinyEngine",
+            "targets": [
+              {
+                "buildDirectory": "E:/linsrc/tinyengine-build",
+                "fileGroups": [
+                  {
+                    "isGenerated": true,
+                    "sources": [
+                      "../tinyengine-build/CMakeFiles/b78527ad2670ce848a6655ef6acb7581/generate.stamp.rule"
+                    ]
+                  }
+                ],
+                "fullName": "ZERO_CHECK",
+                "name": "ZERO_CHECK",
+                "sourceDirectory": "E:/linsrc/TinyEngine",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "E:/linsrc/tinyengine-build/source/MinSizeRel/TinyEngine.exe",
+                  "E:/linsrc/tinyengine-build/source/MinSizeRel/TinyEngine.lib",
+                  "E:/linsrc/tinyengine-build/source/MinSizeRel/TinyEngine.pdb"
+                ],
+                "buildDirectory": "E:/linsrc/tinyengine-build/source",
+                "fileGroups": [
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O1 /Ob1 /DNDEBUG  ",
+                    "defines": [
+                      "USE_GL"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "e:/linsrc/tinyengine/source"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/glew/include"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/glfw/include"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/rapid_xml/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "main.cpp",
+                      "common/Camera.cpp",
+                      "common/Clone.cpp",
+                      "common/Component.cpp",
+                      "common/ComponentContainer.cpp",
+                      "common/Material.cpp",
+                      "common/Mesh.cpp",
+                      "common/MeshRender.cpp",
+                      "common/Node.cpp",
+                      "common/NodeVisitor.cpp",
+                      "common/Pipeline.cpp",
+                      "common/Resource.cpp",
+                      "common/Scene.cpp",
+                      "common/Shader.cpp",
+                      "common/SpaceState.cpp",
+                      "common/Texture.cpp",
+                      "common/Uploader.cpp",
+                      "math/MathUtils.cpp",
+                      "math/Matrix.cpp",
+                      "math/Quaternion.cpp",
+                      "math/Transform.cpp",
+                      "math/Vector2.cpp",
+                      "math/Vector3.cpp",
+                      "math/Vector4.cpp",
+                      "renderer/RenderInterface.cpp",
+                      "renderer/RenderWorld.cpp",
+                      "renderer/device/GLRenderDevice.cpp",
+                      "renderer/device/GPUObjectManager.cpp",
+                      "renderer/device/RenderContext.cpp",
+                      "renderer/device/RenderDevice.cpp",
+                      "renderer/resource/RenderResourceContext.cpp",
+                      "renderer/resource/RenderTexture.cpp",
+                      "renderer/resource/ShaderUniform.cpp",
+                      "renderer/resource/VertexLayout.cpp",
+                      "renderer/runtime/MeshStreamMsg.cpp",
+                      "renderer/runtime/RenderCamera.cpp",
+                      "renderer/runtime/RenderMeshObject.cpp",
+                      "renderer/runtime/RenderObjectManager.cpp",
+                      "renderer/runtime/RenderShaderObject.cpp",
+                      "renderer/runtime/RenderTextureObject.cpp",
+                      "renderer/runtime/ShaderStreamMsg.cpp",
+                      "renderer/runtime/StateStream.cpp",
+                      "renderer/runtime/TextureStreamMsg.cpp",
+                      "base/Director.cpp",
+                      "base/Event.cpp",
+                      "base/EventDispatcher.cpp",
+                      "base/EventListener.cpp",
+                      "base/Ref.cpp",
+                      "base/String.cpp",
+                      "base/Timer.cpp",
+                      "base/Variant.cpp",
+                      "io/FileUtils.cpp",
+                      "io/Logger.cpp",
+                      "io/ResourceLoader.cpp",
+                      "shape/BoundingBox.cpp",
+                      "shape/BoundingSphere.cpp",
+                      "shape/Frustum.cpp",
+                      "shape/Plane.cpp",
+                      "shape/Ray.cpp"
+                    ]
+                  },
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "common/Camera.h",
+                      "common/ClassType.hpp",
+                      "common/Clone.h",
+                      "common/Component.h",
+                      "common/ComponentContainer.h",
+                      "common/Material.h",
+                      "common/Mesh.h",
+                      "common/MeshRender.h",
+                      "common/Node.h",
+                      "common/NodeVisitor.h",
+                      "common/Pipeline.h",
+                      "common/Resource.h",
+                      "common/Scene.h",
+                      "common/Shader.h",
+                      "common/SpaceState.h",
+                      "common/Texture.h",
+                      "common/Uploader.h",
+                      "math/MathUtils.h",
+                      "math/Matrix.h",
+                      "math/Quaternion.h",
+                      "math/Transform.h",
+                      "math/Vector2.h",
+                      "math/Vector3.h",
+                      "math/Vector4.h",
+                      "renderer/RenderInterface.h",
+                      "renderer/RenderWorld.h",
+                      "renderer/device/CommandStream.h",
+                      "renderer/device/GLRenderDevice.h",
+                      "renderer/device/GPUObjectManager.h",
+                      "renderer/device/RenderContext.h",
+                      "renderer/device/RenderDevice.h",
+                      "renderer/resource/HandleObjects.hpp",
+                      "renderer/resource/Image.h",
+                      "renderer/resource/RenderResource.h",
+                      "renderer/resource/RenderResourceContext.h",
+                      "renderer/resource/RenderTexture.h",
+                      "renderer/resource/ResourceStream.h",
+                      "renderer/resource/ShaderDataType.h",
+                      "renderer/resource/ShaderUniform.h",
+                      "renderer/resource/VertexLayout.h",
+                      "renderer/resource/VertexLayoutType.h",
+                      "renderer/runtime/RenderCamera.h",
+                      "renderer/runtime/RenderMeshObject.h",
+                      "renderer/runtime/RenderObject.h",
+                      "renderer/runtime/RenderObjectManager.h",
+                      "renderer/runtime/RenderShaderObject.h",
+                      "renderer/runtime/RenderTextureObject.h",
+                      "renderer/runtime/StateStream.h",
+                      "base/Assert.h",
+                      "base/Director.h",
+                      "base/EnumOperator.hpp",
+                      "base/Event.h",
+                      "base/EventDispatcher.h",
+                      "base/EventListener.h",
+                      "base/Ref.h",
+                      "base/RefPtr.hpp",
+                      "base/Singleton.hpp",
+                      "base/String.h",
+                      "base/Timer.h",
+                      "base/Types.h",
+                      "base/Variant.h",
+                      "io/FileUtils.h",
+                      "io/Logger.h",
+                      "io/ResourceLoader.h",
+                      "shape/BoundingBox.h",
+                      "shape/BoundingSphere.h",
+                      "shape/Frustum.h",
+                      "shape/Plane.h",
+                      "shape/Ray.h",
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "TinyEngine.exe",
+                "linkFlags": "/machine:x64 /INCREMENTAL:NO /subsystem:console",
+                "linkLanguageFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /O1 /Ob1 /DNDEBUG",
+                "linkLibraries": "glu32.lib opengl32.lib E:\\linsrc\\TinyEngine\\cmake\\..\\3rdparty\\glew\\lib\\glew32.lib E:\\linsrc\\TinyEngine\\cmake\\..\\3rdparty\\glfw\\lib\\glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+                "linkerLanguage": "CXX",
+                "name": "TinyEngine",
+                "sourceDirectory": "E:/linsrc/TinyEngine/source",
+                "type": "EXECUTABLE"
+              },
+              {
+                "buildDirectory": "E:/linsrc/tinyengine-build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "E:/linsrc/TinyEngine",
+                "type": "UTILITY"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "name": "RelWithDebInfo",
+        "projects": [
+          {
+            "buildDirectory": "E:/linsrc/tinyengine-build",
+            "name": "TinyEngine",
+            "sourceDirectory": "E:/linsrc/TinyEngine",
+            "targets": [
+              {
+                "buildDirectory": "E:/linsrc/tinyengine-build",
+                "fileGroups": [
+                  {
+                    "isGenerated": true,
+                    "sources": [
+                      "../tinyengine-build/CMakeFiles/b78527ad2670ce848a6655ef6acb7581/generate.stamp.rule"
+                    ]
+                  }
+                ],
+                "fullName": "ZERO_CHECK",
+                "name": "ZERO_CHECK",
+                "sourceDirectory": "E:/linsrc/TinyEngine",
+                "type": "UTILITY"
+              },
+              {
+                "artifacts": [
+                  "E:/linsrc/tinyengine-build/source/RelWithDebInfo/TinyEngine.exe",
+                  "E:/linsrc/tinyengine-build/source/RelWithDebInfo/TinyEngine.lib",
+                  "E:/linsrc/tinyengine-build/source/RelWithDebInfo/TinyEngine.pdb"
+                ],
+                "buildDirectory": "E:/linsrc/tinyengine-build/source",
+                "fileGroups": [
+                  {
+                    "compileFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /Zi /O2 /Ob1 /DNDEBUG  ",
+                    "defines": [
+                      "USE_GL"
+                    ],
+                    "includePath": [
+                      {
+                        "path": "e:/linsrc/tinyengine/source"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/glew/include"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/glfw/include"
+                      },
+                      {
+                        "path": "E:/linsrc/TinyEngine/cmake/../3rdparty/rapid_xml/include"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "main.cpp",
+                      "common/Camera.cpp",
+                      "common/Clone.cpp",
+                      "common/Component.cpp",
+                      "common/ComponentContainer.cpp",
+                      "common/Material.cpp",
+                      "common/Mesh.cpp",
+                      "common/MeshRender.cpp",
+                      "common/Node.cpp",
+                      "common/NodeVisitor.cpp",
+                      "common/Pipeline.cpp",
+                      "common/Resource.cpp",
+                      "common/Scene.cpp",
+                      "common/Shader.cpp",
+                      "common/SpaceState.cpp",
+                      "common/Texture.cpp",
+                      "common/Uploader.cpp",
+                      "math/MathUtils.cpp",
+                      "math/Matrix.cpp",
+                      "math/Quaternion.cpp",
+                      "math/Transform.cpp",
+                      "math/Vector2.cpp",
+                      "math/Vector3.cpp",
+                      "math/Vector4.cpp",
+                      "renderer/RenderInterface.cpp",
+                      "renderer/RenderWorld.cpp",
+                      "renderer/device/GLRenderDevice.cpp",
+                      "renderer/device/GPUObjectManager.cpp",
+                      "renderer/device/RenderContext.cpp",
+                      "renderer/device/RenderDevice.cpp",
+                      "renderer/resource/RenderResourceContext.cpp",
+                      "renderer/resource/RenderTexture.cpp",
+                      "renderer/resource/ShaderUniform.cpp",
+                      "renderer/resource/VertexLayout.cpp",
+                      "renderer/runtime/MeshStreamMsg.cpp",
+                      "renderer/runtime/RenderCamera.cpp",
+                      "renderer/runtime/RenderMeshObject.cpp",
+                      "renderer/runtime/RenderObjectManager.cpp",
+                      "renderer/runtime/RenderShaderObject.cpp",
+                      "renderer/runtime/RenderTextureObject.cpp",
+                      "renderer/runtime/ShaderStreamMsg.cpp",
+                      "renderer/runtime/StateStream.cpp",
+                      "renderer/runtime/TextureStreamMsg.cpp",
+                      "base/Director.cpp",
+                      "base/Event.cpp",
+                      "base/EventDispatcher.cpp",
+                      "base/EventListener.cpp",
+                      "base/Ref.cpp",
+                      "base/String.cpp",
+                      "base/Timer.cpp",
+                      "base/Variant.cpp",
+                      "io/FileUtils.cpp",
+                      "io/Logger.cpp",
+                      "io/ResourceLoader.cpp",
+                      "shape/BoundingBox.cpp",
+                      "shape/BoundingSphere.cpp",
+                      "shape/Frustum.cpp",
+                      "shape/Plane.cpp",
+                      "shape/Ray.cpp"
+                    ]
+                  },
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "common/Camera.h",
+                      "common/ClassType.hpp",
+                      "common/Clone.h",
+                      "common/Component.h",
+                      "common/ComponentContainer.h",
+                      "common/Material.h",
+                      "common/Mesh.h",
+                      "common/MeshRender.h",
+                      "common/Node.h",
+                      "common/NodeVisitor.h",
+                      "common/Pipeline.h",
+                      "common/Resource.h",
+                      "common/Scene.h",
+                      "common/Shader.h",
+                      "common/SpaceState.h",
+                      "common/Texture.h",
+                      "common/Uploader.h",
+                      "math/MathUtils.h",
+                      "math/Matrix.h",
+                      "math/Quaternion.h",
+                      "math/Transform.h",
+                      "math/Vector2.h",
+                      "math/Vector3.h",
+                      "math/Vector4.h",
+                      "renderer/RenderInterface.h",
+                      "renderer/RenderWorld.h",
+                      "renderer/device/CommandStream.h",
+                      "renderer/device/GLRenderDevice.h",
+                      "renderer/device/GPUObjectManager.h",
+                      "renderer/device/RenderContext.h",
+                      "renderer/device/RenderDevice.h",
+                      "renderer/resource/HandleObjects.hpp",
+                      "renderer/resource/Image.h",
+                      "renderer/resource/RenderResource.h",
+                      "renderer/resource/RenderResourceContext.h",
+                      "renderer/resource/RenderTexture.h",
+                      "renderer/resource/ResourceStream.h",
+                      "renderer/resource/ShaderDataType.h",
+                      "renderer/resource/ShaderUniform.h",
+                      "renderer/resource/VertexLayout.h",
+                      "renderer/resource/VertexLayoutType.h",
+                      "renderer/runtime/RenderCamera.h",
+                      "renderer/runtime/RenderMeshObject.h",
+                      "renderer/runtime/RenderObject.h",
+                      "renderer/runtime/RenderObjectManager.h",
+                      "renderer/runtime/RenderShaderObject.h",
+                      "renderer/runtime/RenderTextureObject.h",
+                      "renderer/runtime/StateStream.h",
+                      "base/Assert.h",
+                      "base/Director.h",
+                      "base/EnumOperator.hpp",
+                      "base/Event.h",
+                      "base/EventDispatcher.h",
+                      "base/EventListener.h",
+                      "base/Ref.h",
+                      "base/RefPtr.hpp",
+                      "base/Singleton.hpp",
+                      "base/String.h",
+                      "base/Timer.h",
+                      "base/Types.h",
+                      "base/Variant.h",
+                      "io/FileUtils.h",
+                      "io/Logger.h",
+                      "io/ResourceLoader.h",
+                      "shape/BoundingBox.h",
+                      "shape/BoundingSphere.h",
+                      "shape/Frustum.h",
+                      "shape/Plane.h",
+                      "shape/Ray.h",
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "TinyEngine.exe",
+                "linkFlags": "/machine:x64 /debug /INCREMENTAL /subsystem:console",
+                "linkLanguageFlags": "/DWIN32 /D_WINDOWS /W3 /GR /EHsc /MD /Zi /O2 /Ob1 /DNDEBUG",
+                "linkLibraries": "glu32.lib opengl32.lib E:\\linsrc\\TinyEngine\\cmake\\..\\3rdparty\\glew\\lib\\glew32.lib E:\\linsrc\\TinyEngine\\cmake\\..\\3rdparty\\glfw\\lib\\glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib",
+                "linkerLanguage": "CXX",
+                "name": "TinyEngine",
+                "sourceDirectory": "E:/linsrc/TinyEngine/source",
+                "type": "EXECUTABLE"
+              },
+              {
+                "buildDirectory": "E:/linsrc/tinyengine-build",
+                "fileGroups": [
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "CMakeLists.txt"
+                    ]
+                  }
+                ],
+                "fullName": "ALL_BUILD",
+                "name": "ALL_BUILD",
+                "sourceDirectory": "E:/linsrc/TinyEngine",
+                "type": "UTILITY"
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "cookie": "0.5657652510490452",
+    "inReplyTo": "codemodel",
+    "type": "reply"
+  }
 }
