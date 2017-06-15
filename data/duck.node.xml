@@ -8,7 +8,7 @@
 		</SpaceState>
 		<MeshRender>
 			<Geometry name="Mesh/duck.mesh"/>
-            <Material name="Material/cube_emptyTags.material.xml"/>
+            <Material name="Material/duck.material.xml"/>
 		</MeshRender>
         <UploadToRender>
 		</UploadToRender>

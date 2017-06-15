@@ -35,21 +35,13 @@ namespace te
 
     void RenderTextureObject::parseStreamMsg(StateStreamMsg* msg)
     {
-        TextureStreamMsg::Data* msg_data = static_cast<TextureStreamMsg::Data*>(msg->getData());
+        Texture* texture = static_cast<Texture*>(msg->getData());
 
-        if (stream_message::UPDATE == msg->getActionType())
-        {
-            _width = msg_data->texture->getWidth();
-            _height = msg_data->texture->getHeight();
-            _depth = msg_data->texture->getDepth();
-            _img = msg_data->texture->getData();
-        }
-        else if (stream_message::RENDER == msg->getActionType())
-        {
-            ShaderSamplers& samplers = msg_data->shader->samplers;
-            if (samplers.hasSampler(msg_data->texture->getName()))
-                _tex_unit = samplers.getSamplers()[msg_data->texture->getName()].tex_unit;
-        }
+        _width = texture->getWidth();
+        _height = texture->getHeight();
+        _depth = texture->getDepth();
+        _img = texture->getData();
+        _tex_unit = texture->getTexUnit();
     }
 
     void RenderTextureObject::allocTexture(RenderResourceContext* context)

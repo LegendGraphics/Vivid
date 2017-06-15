@@ -52,8 +52,6 @@ namespace te
                 mr->getMesh()->getROHandle(), 
                 mr->getMesh().get());
             _renderer->_stream.push_back(msg);
-            auto aa = mr->getMesh()->getLayoutType();
-            int a = aa;
         }
     }
 
@@ -65,11 +63,9 @@ namespace te
             std::vector<TexturePtr> textures = mr->getMaterial()->getTextures();
             for (TexturePtr texture : textures)
             {
-                TextureStreamMsg::Data* msg_data = new TextureStreamMsg::Data;
-                msg_data->texture = texture.get();
                 TextureStreamMsg* msg = new TextureStreamMsg(stream_message::UPDATE,
                     texture->getROHandle(),
-                    msg_data);
+                    texture.get());
                 _renderer->_stream.push_back(msg);
             }
         }
@@ -110,15 +106,11 @@ namespace te
         {
             MeshRender* mr = getComponent<MeshRender>();
             std::vector<TexturePtr> textures = mr->getMaterial()->getTextures();
-            ShaderPtr shader = mr->getMaterial()->getShader();
             for (TexturePtr texture : textures)
             {
-                TextureStreamMsg::Data* msg_data = new TextureStreamMsg::Data;
-                msg_data->texture = texture.get();
-                msg_data->shader = shader.get();
                 TextureStreamMsg* msg = new TextureStreamMsg(stream_message::RENDER,
                     texture->getROHandle(),
-                    msg_data);
+                    texture.get());
                 _renderer->_stream.push_back(msg);
             }
         }

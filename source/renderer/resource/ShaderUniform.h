@@ -2,6 +2,7 @@
 #define COMMON_SHADER_UNIFORM_H
 
 #include "base/Types.h"
+#include "common/Resource.h"
 #include "renderer/resource/ShaderDataType.h"
 
 namespace te
@@ -41,6 +42,10 @@ namespace te
         int     tex_unit;
     };
 
+    using ShaderSamplerValueMap = std::unordered_map<String, ResourceHandle>;
+
+
+    // store run-time samplers in shader
     class ShaderSamplers
     {
     public:

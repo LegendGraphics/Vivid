@@ -139,6 +139,7 @@ namespace te
         add<PipelineManager>();
         add<ShaderManager>();
         add<MaterialManager>();
+        add<TextureManager>();
     }
 
     void ResourceMapper::clear()

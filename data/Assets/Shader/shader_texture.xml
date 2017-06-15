@@ -10,7 +10,7 @@
         <Sampler name="albedoMap"/>
     </Samplers>
     <GLSL>
-        <Vertex name="Shader/glsl/vertex.glsl"/>
-        <Fragment name="Shader/glsl/fragment.glsl"/>
+        <Vertex name="Shader/glsl/ver_texture.glsl"/>
+        <Fragment name="Shader/glsl/frag_texture.glsl"/>
     </GLSL>
 </Shader>

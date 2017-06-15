@@ -239,11 +239,6 @@ namespace te
     class TextureStreamMsg : public ResourceStreamMsg
     {
     public:
-        struct Data {
-            Texture*     texture;
-            Shader*      shader;
-        };
-    public:
         TextureStreamMsg(stream_message::ActionType type, Handle handle, void* data);
         virtual ~TextureStreamMsg();
 

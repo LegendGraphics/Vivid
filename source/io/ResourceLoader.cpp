@@ -604,10 +604,10 @@ namespace te
                 return false;
             }
 
-            MaterialSampler sampler;
-            sampler.tag = node1.getAttribute("name");
-            //sampler.texture = ResourceMapper::getInstance()->get<TextureManager>()->create(node1.getAttribute("map"));
-            //material->_samplers.push_back(sampler);
+            String name = node1.getAttribute("name");
+            String img = ASSETS_PATH + node1.getAttribute("map");
+            ResourceHandle texture = ResourceMapper::getInstance()->get<TextureManager>()->create(img);
+            material->setTexture(name, texture);
 
             node1 = node1.getNextSibling("Sampler");
         }
@@ -673,6 +673,23 @@ namespace te
                 // set uniform
                 shader->uniforms.addUniform(name, Shader::uni_type_map[type]);
                 node2 = node2.getNextSibling("Uniform");
+            }
+        }
+
+        // Parse samplers
+        node1 = rootNode.getFirstChild("Samplers");
+        if (!node1.isEmpty())
+        {
+            int tex_unit = 0;   // indicate texture unit for current sampler
+            XMLNode node2 = node1.getFirstChild("Sampler");
+            while (!node2.isEmpty())
+            {
+                // TODO: add sampler uniform
+                String name = node2.getAttribute("name");
+
+                // set sampler uniform
+                shader->samplers.addSampler(name, tex_unit++);
+                node2 = node2.getNextSibling("Sampler");
             }
         }
 
@@ -814,5 +831,7 @@ namespace te
                 bottom.toFloat(), top.toFloat(), znear.toFloat(), zfar.toFloat()));
 
         }
+
+        return true;
     }
 }

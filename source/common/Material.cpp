@@ -26,7 +26,7 @@ namespace te
         for (auto& sampler : _samplers)
         {
             textures.push_back(
-                ResourceMapper::getInstance()->get<TextureManager>()->getTexture(sampler.second.texture));
+                ResourceMapper::getInstance()->get<TextureManager>()->getTexture(sampler.second));
         }
         return textures;
     }
@@ -81,6 +81,20 @@ namespace te
             return Matrix();
         }
     }
+
+    // get texture unit from shader
+    void Material::setTexture(const String& name, ResourceHandle texture)
+    {
+        ShaderPtr shader = ResourceMapper::getInstance()->get<ShaderManager>()->getShader(_shader);
+        if (shader->samplers.hasSampler(name))
+        {
+            auto& samplers = shader->samplers.getSamplers();
+            TexturePtr tex_ptr = ResourceMapper::getInstance()->get<TextureManager>()->getTexture(texture);
+            tex_ptr->setTexUnit(samplers[name].tex_unit);
+            _samplers.insert({ name, texture });
+        }
+    }
+
 
     // get uniform type from shader
     void Material::setUniform(const String& name, float a, float b, float c, float d)

@@ -9,11 +9,11 @@
 
 namespace te
 {
-    struct MaterialSampler
-    {
-        ResourceHandle  texture;
-        String          tag;
-    };
+    //struct MaterialSampler
+    //{
+    //    ResourceHandle  texture;
+    //    String          tag;    // semantic name of sampler in shader
+    //};
 
     class Material : public Resource
     {
@@ -44,6 +44,8 @@ namespace te
         void setVector4(const String& name, const Vector4& value);
         void setMatrix(const String& name, const Matrix& value);
 
+        void setTexture(const String& name, ResourceHandle texture);
+
         void setShaderUniforms();
     public:
         bool hasUniform(const String& name);
@@ -55,8 +57,7 @@ namespace te
         // shader, texture...
     protected:
         // semantic name is hold in Texture already, but for fast access, use a map here
-        using MaterialSamplerMap = std::unordered_map<String, MaterialSampler>;
-        MaterialSamplerMap              _samplers;
+        ShaderSamplerValueMap           _samplers;
         ResourceHandle                  _shader;
         ShaderUniformValueMap           _uniform_map;
     };
