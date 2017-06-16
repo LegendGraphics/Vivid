@@ -1,6 +1,0 @@
-## Build Solution with CMake in VS Code ##
-
-- install CMake Tools extention
-- install C/C++ Tools extention
-- run CMake: Configure
-- run CMake: Build
