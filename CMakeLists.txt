@@ -3,4 +3,4 @@ project (TinyEngine)
  
 add_definitions(-DUSE_GL)
 add_subdirectory(source)
-#add_subdirectory(experimental)
+add_subdirectory(bindings/python)

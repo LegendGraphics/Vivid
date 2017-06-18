@@ -28,6 +28,7 @@
 #ifndef COMMON_SCENE_H
 #define COMMON_SCENE_H
 
+#include "base/Platform.h"
 #include "base/Ref.h"
 #include "common/Clone.h"
 
@@ -37,7 +38,7 @@ namespace te
     class Camera;
 
     // Scene can be constructed from resource, just like the node
-    class Scene: public Ref, public Cloneable
+    class TE_DLL_EXPORT Scene: public Ref, public Cloneable
     {
     public:
         Scene();

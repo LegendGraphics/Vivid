@@ -1,6 +1,7 @@
 #ifndef BASE_DIRECTOR_H
 #define BASE_DIRECTOR_H
 
+#include "base/Platform.h"
 #include "base/Timer.h"
 #include "base/Singleton.hpp"
 #include "math/Vector2.h"
@@ -24,7 +25,7 @@ namespace te
     class ResourceMapper;
     class RenderInterface;
 
-    class Director: public Singleton<Director>
+    class TE_DLL_EXPORT Director: public Singleton<Director>
     {
     public:
         void setActiveScene(Scene* active_scene);

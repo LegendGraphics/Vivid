@@ -4,6 +4,7 @@
 #include <vector>
 #include <type_traits>
 
+#include "base/Platform.h"
 #include "base/Ref.h"
 #include "base/Refptr.hpp"
 #include "common/Clone.h"
@@ -33,7 +34,7 @@ namespace te
         SCENE
     };
 
-    class Node: public Ref, public Cloneable
+    class TE_DLL_EXPORT Node: public Ref, public Cloneable
     {
     public:
         static Node* create(const String& res);
@@ -116,7 +117,7 @@ namespace te
     }
 
 
-    class NodeTree : public Ref, public Cloneable
+    class TE_DLL_EXPORT NodeTree : public Ref, public Cloneable
     {
     public:
         NodeTree();

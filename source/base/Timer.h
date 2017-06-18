@@ -2,12 +2,12 @@
 #define BASE_TIMER_H
 
 #include <chrono>
-
+#include "base/Platform.h"
 using namespace std::chrono;
 
 namespace te
 {
-    class Timer
+    class TE_DLL_EXPORT Timer
     {
     private:
         using TimePoint = system_clock::time_point;

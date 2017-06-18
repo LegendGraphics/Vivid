@@ -12,8 +12,11 @@ set(GLFW_LIBRARY_DIR		    ${GLFW_DIR}/lib)
 set(GLFW_LIBRARY		    optimized ${GLFW_LIBRARY_DIR}/glfw3.lib 
                             debug ${GLFW_LIBRARY_DIR}/glfw3.lib)  
 
+set(PYBIND11_DIR               ${3rdParty_DIR}/pybind11)
+set(PYBIND11_INCLUDE_DIR		${PYBIND11_DIR}/include)         
+
 set(RAPID_XML_DIR               ${3rdParty_DIR}/rapid_xml)
-set(RAPID_XML_INCLUDE_DIR		${RAPID_XML_DIR}/include)                           
+set(RAPID_XML_INCLUDE_DIR		${RAPID_XML_DIR}/include)                   
 
 #set(SOIL_DIR		            ${3rdParty_DIR}/SOIL)
 #set(SOIL_INCLUDE_DIR		    ${SOIL_DIR}/include)

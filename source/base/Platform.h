@@ -5,6 +5,7 @@ namespace te
 {
 
     // CODE FROM OGRE
+#define  TE_DYNAMIC_LIB
 
 
     /* Initial platform/compiler-related stuff to set.
@@ -94,7 +95,7 @@ namespace te
     || TE_PLATFORM == TE_PLATFORM_APPLE_IOS || TE_PLATFORM == TE_PLATFORM_ANDROID
 
     // Enable GCC symbol visibility
-#   if defined( OGRE_GCC_VISIBILITY )
+#   if defined( TE_GCC_VISIBILITY )
 #       define TE_DLL_EXPORT  __attribute__ ((visibility("default")))
 #       define TE_DLL_PRIVATE __attribute__ ((visibility("hidden")))
 #   else
@@ -114,22 +115,21 @@ namespace te
 
 #endif
 
-
-    // Integer formats of fixed bit width
-    typedef unsigned int uint32;
-    typedef unsigned short uint16;
-    typedef unsigned char uint8;
-    typedef int int32;
-    typedef short int16;
-    typedef char int8;
-    // define uint64 type
-#if TE_COMPILER == TE_COMPILER_MSVC
-    typedef unsigned __int64 uint64;
-    typedef __int64 int64;
-#else
-    typedef unsigned long long uint64;
-    typedef long long int64;
-#endif
+//    // Integer formats of fixed bit width
+//    typedef unsigned int uint32;
+//    typedef unsigned short uint16;
+//    typedef unsigned char uint8;
+//    typedef int int32;
+//    typedef short int16;
+//    typedef char int8;
+//    // define uint64 type
+//#if TE_COMPILER == TE_COMPILER_MSVC
+//    typedef unsigned __int64 uint64;
+//    typedef __int64 int64;
+//#else
+//    typedef unsigned long long uint64;
+//    typedef long long int64;
+//#endif
 
 
 }

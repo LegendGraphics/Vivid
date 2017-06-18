@@ -13,7 +13,6 @@ include_directories (${CMAKE_SOURCE_DIR}/source)
 include_directories(${GLEW_INCLUDE_DIR})
 include_directories(${GLFW_INCLUDE_DIR})
 include_directories(${RAPID_XML_INCLUDE_DIR})
-#include_directories(${SOIL_INCLUDE_DIR})
 #include_directories(${LUA_INCLUDE_DIR})
 #include_directories(${TOLUAPP_INCLUDE_DIR})
 
@@ -39,7 +38,8 @@ source_group("base"                 FILES ${base} )
 source_group("io"                   FILES ${io} )
 source_group("shape"                FILES ${shape} )
 
-
-ADD_EXECUTABLE ( TinyEngine main.cpp ${common} ${math} ${renderer} ${base} ${io} ${shape})
+# Create shared library
+add_library(TinyEngine SHARED ${common} ${math} ${renderer} ${base} ${io} ${shape})
+#ADD_EXECUTABLE ( TinyEngine main.cpp ${common} ${math} ${renderer} ${base} ${io} ${shape})
 target_link_libraries(TinyEngine ${OPENGL_LIBRARIES} ${GLEW_LIBRARY} ${GLFW_LIBRARY})
 
