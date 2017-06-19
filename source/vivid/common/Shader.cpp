@@ -1,7 +1,7 @@
 #include "vivid/common/Shader.h"
 #include "vivid/io/ResourceLoader.h"
 
-namespace te
+namespace vivid
 {
     //Shader::Uniforms Shader::prefined_uniforms =
     //{

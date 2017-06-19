@@ -3,7 +3,7 @@
 #include <cstdarg>
 #include "vivid/base/String.h"
 
-namespace te
+namespace vivid
 {
     FileLogger* Singleton<FileLogger>::_singleton = nullptr;
 

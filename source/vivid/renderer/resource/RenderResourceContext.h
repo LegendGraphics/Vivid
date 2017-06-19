@@ -5,7 +5,7 @@
 
 #include "vivid/renderer/resource/ResourceStream.h"
 
-namespace te
+namespace vivid
 {
     class RenderResourceContext
     {

@@ -8,7 +8,7 @@
 #include "vivid/math/Transform.h"
 #include "vivid/shape/Frustum.h"
 
-namespace te
+namespace vivid
 {
     // Using right-handed coordinate system for world coordinate system
     // Y-axis is up direction

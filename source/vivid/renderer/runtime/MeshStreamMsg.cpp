@@ -1,6 +1,6 @@
 #include "vivid/renderer/runtime/StateStream.h"
 
-namespace te
+namespace vivid
 {
     MeshStreamMsg::MeshStreamMsg(stream_message::ActionType type, Handle handle, void* data)
         :ResourceStreamMsg(type, handle, data)

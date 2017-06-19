@@ -5,7 +5,7 @@
 
 #include "vivid/renderer/device/CommandStream.h"
 
-namespace te
+namespace vivid
 {
     class RenderCamera; // used in RenderContext, to pass the camera
     // matrix into XXXRenderDevice. Just for current dev stage

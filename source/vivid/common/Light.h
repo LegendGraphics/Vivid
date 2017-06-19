@@ -4,7 +4,7 @@
 #include "vivid/common/Component.h"
 #include "vivid/math/Vector4.h"
 
-namespace te
+namespace vivid
 {
     struct Color
     {

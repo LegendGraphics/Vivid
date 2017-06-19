@@ -4,7 +4,7 @@
 #include "vivid/renderer/runtime/RenderObject.h"
 #include "vivid/math/Matrix.h"
 
-namespace te
+namespace vivid
 {
     struct CameraData
     {

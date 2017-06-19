@@ -1,6 +1,6 @@
 #include "vivid/shape/BoundingBox.h"
 
-namespace te
+namespace vivid
 {
     BoundingBox::BoundingBox(const Vector3& center, const Vector3& size)
     {

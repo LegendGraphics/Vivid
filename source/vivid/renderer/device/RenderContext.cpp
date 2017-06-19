@@ -1,6 +1,6 @@
 #include "RenderContext.h"
 
-namespace te
+namespace vivid
 {
   RenderContext::RenderContext()
   {

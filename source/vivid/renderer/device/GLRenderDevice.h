@@ -3,7 +3,7 @@
 
 #include "vivid/renderer/device/RenderDevice.h"
 
-namespace te
+namespace vivid
 {
     // =====================================
     // attribute related definition start

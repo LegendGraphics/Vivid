@@ -8,7 +8,7 @@
 #include "vivid/renderer/resource/VertexLayoutType.h"
 #include "vivid/renderer/resource/ShaderDataType.h"
 
-namespace te
+namespace vivid
 {
     class RenderContext;
     class RenderResourceContext;

@@ -4,7 +4,7 @@
 
 
 
-namespace te
+namespace vivid
 {
     Vector3::Vector3()
         :x(0.0),

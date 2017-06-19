@@ -4,7 +4,7 @@
 #include "vivid/renderer/resource/RenderResourceContext.h"
 #include "vivid/renderer/resource/VertexLayout.h"
 
-namespace te
+namespace vivid
 {
     RenderDevice::RenderDevice()
     {

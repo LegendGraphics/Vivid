@@ -12,7 +12,7 @@
 
 #include "vivid/renderer/resource/VertexLayoutType.h"
 
-namespace te
+namespace vivid
 {
 
 // I use a top-down method of using polymorphism + virtual function tricks to code the run-time status of the different vertex type.

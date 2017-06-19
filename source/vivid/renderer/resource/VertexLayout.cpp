@@ -1,6 +1,6 @@
 #include "vivid/renderer/resource/VertexLayout.h"
 
-namespace te
+namespace vivid
 {
     namespace vertex_layout
     {

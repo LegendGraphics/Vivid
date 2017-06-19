@@ -1,7 +1,7 @@
 #ifndef RENDERER_IMAGE_H
 #define RENDERER_IMAGE_H
 
-namespace te
+namespace vivid
 {
     namespace image_data
     {

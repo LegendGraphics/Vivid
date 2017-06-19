@@ -6,7 +6,7 @@
 #include "vivid/common/Mesh.h"
 #include "vivid/math/Matrix.h"
 
-namespace te
+namespace vivid
 {
     class RenderContext;
     class RenderResourceContext;

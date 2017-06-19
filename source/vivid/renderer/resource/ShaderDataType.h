@@ -1,7 +1,7 @@
 #ifndef RENDERER_SHADER_DATA_TYPE_H
 #define RENDERER_SHADER_DATA_TYPE_H
 
-namespace te
+namespace vivid
 {
     namespace shader_data
     {

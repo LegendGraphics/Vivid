@@ -1,6 +1,6 @@
 #include "vivid/base/Timer.h"
 
-namespace te
+namespace vivid
 {
     Timer::Timer()
         :_enabled(false),

@@ -8,7 +8,7 @@
 
 class GLFWwindow;
 
-namespace te
+namespace vivid
 {
     // init engine modules:
     //   - scene module

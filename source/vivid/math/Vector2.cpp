@@ -3,7 +3,7 @@
 #include <cmath>
 
 
-namespace te
+namespace vivid
 {
     Vector2::Vector2()
         :x(0.0),

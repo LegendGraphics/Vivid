@@ -4,7 +4,7 @@
 #include "utXML.h"
 #include "vivid/base/String.h"
 
-namespace te
+namespace vivid
 {
     class Mesh;
     class MetaNode;

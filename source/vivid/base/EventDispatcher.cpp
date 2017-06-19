@@ -5,7 +5,7 @@
 #include "vivid/base/EventListener.h"
 #include "vivid/io/Logger.h"
 
-namespace te
+namespace vivid
 {
     EventDispatcher* Singleton<EventDispatcher>::_singleton = nullptr;
 

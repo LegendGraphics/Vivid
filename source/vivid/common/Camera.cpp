@@ -5,7 +5,7 @@
 #include "vivid/base/EventDispatcher.h"
 #include "vivid/base/Director.h"
 
-namespace te
+namespace vivid
 {
     const Vector3 WorldCoordinate::WORLD_UP(0, 1, 0);
     const Vector3 WorldCoordinate::WORLD_RIGHT(1, 0, 0);

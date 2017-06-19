@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include "vivid/base/Event.h"
 
-namespace te
+namespace vivid
 {
     class EventListenerBase
     {

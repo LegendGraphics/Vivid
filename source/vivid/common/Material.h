@@ -7,7 +7,7 @@
 #include "vivid/math/Vector3.h"
 #include "vivid/math/Matrix.h"
 
-namespace te
+namespace vivid
 {
     //struct MaterialSampler
     //{

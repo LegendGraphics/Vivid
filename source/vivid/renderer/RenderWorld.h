@@ -5,7 +5,7 @@
 #include "vivid/renderer/runtime/RenderObject.h"
 #include "vivid/renderer/runtime/StateStream.h"
 
-namespace te
+namespace vivid
 {
     // RenderWorld is the entrance of all "render" aspect things of the game world
     class RenderWorld : public RenderObject

@@ -1,7 +1,7 @@
 #include "vivid/renderer/runtime/StateStream.h"
 #include "vivid/common/Texture.h"
 
-namespace te
+namespace vivid
 {
     TextureStreamMsg::TextureStreamMsg(stream_message::ActionType type, Handle handle, void* data)
         :ResourceStreamMsg(type, handle, data)

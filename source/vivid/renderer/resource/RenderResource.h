@@ -4,7 +4,7 @@
 #include <vector>
 #include "vivid/base/Types.h"
 
-namespace te
+namespace vivid
 {
     struct RenderResource
     {

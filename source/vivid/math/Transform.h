@@ -4,7 +4,7 @@
 #include "vivid/math/Matrix.h"
 #include "vivid/math/Quaternion.h"
 
-namespace te
+namespace vivid
 {
     class Transform
     {

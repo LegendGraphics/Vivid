@@ -1,7 +1,7 @@
 #ifndef RENDERER_COMMAND_STREAM_H
 #define RENDERER_COMMAND_STREAM_H
 
-namespace te
+namespace vivid
 {
     class ShaderUniforms;
     class ShaderSamplers;

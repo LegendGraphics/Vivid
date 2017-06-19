@@ -12,7 +12,7 @@
 #include "vivid/io/Logger.h"
 #include "vivid/renderer/RenderInterface.h"
 
-namespace te
+namespace vivid
 {
     Director* Singleton<Director>::_singleton = nullptr;
 

@@ -3,7 +3,7 @@
 
 #include "vivid/math/Vector3.h"
 
-namespace te
+namespace vivid
 {
     class Plane
     {

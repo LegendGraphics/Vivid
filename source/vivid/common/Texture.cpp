@@ -1,7 +1,7 @@
 #include "vivid/common/Texture.h"
 #include "vivid/io/ResourceLoader.h"
 
-namespace te
+namespace vivid
 {
     bool Texture::load(const String & res)
     {

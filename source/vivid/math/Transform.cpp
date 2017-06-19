@@ -1,6 +1,6 @@
 #include "vivid/math/Transform.h"
 
-namespace te
+namespace vivid
 {
     Transform::Transform()
     {

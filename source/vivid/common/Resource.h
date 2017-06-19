@@ -13,12 +13,12 @@
 #include "vivid/common/ClassType.hpp"
 #include "vivid/base/Singleton.hpp"
 
-namespace te
+namespace vivid
 {
     const int MAX_AMOUNT_OF_RES_MANAGER = 12;
 }
 
-namespace te
+namespace vivid
 {
     enum class ResourceType : unsigned long
     {

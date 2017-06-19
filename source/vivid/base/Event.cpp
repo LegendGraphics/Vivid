@@ -1,7 +1,7 @@
 
 #include "vivid/base/Event.h"
 
-namespace te
+namespace vivid
 {
     Event::Event()
         :_type(EventType::UNDEFINED)

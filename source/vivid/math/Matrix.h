@@ -11,7 +11,7 @@
                     _m[(row)][3] = (v4);
 
 
-namespace te
+namespace vivid
 {
 
     class Mat4x4

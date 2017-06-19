@@ -7,7 +7,7 @@
 #include "vivid/renderer/resource/VertexLayoutType.h"
 #include "vivid/renderer/resource/Image.h"
 
-namespace te
+namespace vivid
 {
     namespace resource_stream
     {

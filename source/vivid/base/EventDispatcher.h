@@ -7,7 +7,7 @@
 #include "vivid/base/EventListener.h"
 #include "vivid/base/Singleton.hpp"
 
-namespace te
+namespace vivid
 {
     class Event;
     class EventListenerBase;

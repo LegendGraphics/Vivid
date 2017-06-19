@@ -4,7 +4,7 @@
 #include "vivid/renderer/runtime/RenderObject.h"
 #include "vivid/common/Texture.h"
 
-namespace te
+namespace vivid
 {
     class RenderResourceContext;
     class RenderContext;

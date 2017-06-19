@@ -1,6 +1,6 @@
 #include "vivid/base/Variant.h"
 
-namespace te
+namespace vivid
 {
     class Var::VariantType
     {

@@ -1,6 +1,6 @@
 #include "vivid/shape/BoundingSphere.h"
 
-namespace te
+namespace vivid
 {
     BoundingSphere::BoundingSphere(const Vector3& center, float radius)
         :_center(center),

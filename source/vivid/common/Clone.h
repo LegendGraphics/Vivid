@@ -4,7 +4,7 @@
 #define ENABLE_CLONE(CLASS)                                                                     \
 virtual CLASS* clone(const CopyOperator& copyop) const { return new CLASS(*this, copyop); }
 
-namespace te
+namespace vivid
 {
     class Node;
     class NodeTree;

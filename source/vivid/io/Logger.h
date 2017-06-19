@@ -10,10 +10,10 @@
 #include "vivid/math/Matrix.h"
 #include "vivid/math/Quaternion.h"
 
-#define cLog *(te::ConsoleLogger::getInstance())
-#define fLog *(te::FileLogger::getInstance())
+#define cLog *(vivid::ConsoleLogger::getInstance())
+#define fLog *(vivid::FileLogger::getInstance())
 
-namespace te
+namespace vivid
 {
     class FileLogger: public Singleton<FileLogger>
     {

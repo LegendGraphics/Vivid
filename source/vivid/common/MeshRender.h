@@ -5,7 +5,7 @@
 #include "vivid/common/Mesh.h"
 #include "vivid/common/Material.h"
 
-namespace te
+namespace vivid
 {
     // containing render resource: mesh, material, light...
     class MeshRender: public ComData

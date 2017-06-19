@@ -4,7 +4,7 @@
 #include "vivid/base/Variant.h"
 #include "vivid/common/Resource.h"
 
-namespace te
+namespace vivid
 {
     // attribute table
     struct PipelineAttribute

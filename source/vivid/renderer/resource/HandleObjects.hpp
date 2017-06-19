@@ -6,7 +6,7 @@
 #include "vivid/base/Types.h"
 
 
-namespace te
+namespace vivid
 {
     template<class T>
     class HandleObjects

@@ -1,6 +1,6 @@
 #include "vivid/common/MeshRender.h"
 
-namespace te
+namespace vivid
 {
     MeshRender::MeshRender()
         :ComData(ComponentType::MESH_RENDER),

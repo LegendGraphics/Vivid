@@ -1,7 +1,7 @@
 #ifndef RENDERER_VERTEX_LAYOUT_TYPE_H
 #define RENDERER_VERTEX_LAYOUT_TYPE_H
 
-namespace te
+namespace vivid
 {
     namespace vertex_layout
     {

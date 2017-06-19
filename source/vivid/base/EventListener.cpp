@@ -1,7 +1,7 @@
 
 #include "vivid/base/EventListener.h"
 
-namespace te
+namespace vivid
 {
     EventListenerBase::EventListenerBase(ListenType listen_type)
         :_listen_type(listen_type)

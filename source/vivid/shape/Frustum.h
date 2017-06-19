@@ -5,7 +5,7 @@
 #include "vivid/shape/BoundingBox.h"
 #include "vivid/math/Matrix.h"
 
-namespace te
+namespace vivid
 {
     class Node;
 

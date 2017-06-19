@@ -4,7 +4,7 @@
 #include "vivid/common/Resource.h"
 #include "vivid/renderer/resource/Image.h"
 
-namespace te 
+namespace vivid 
 {
 
     class Texture : public Resource

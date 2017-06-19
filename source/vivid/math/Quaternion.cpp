@@ -5,7 +5,7 @@
 // the matrix forms may be not consistent, as for the difference between left-hand and right-hand rotation
 // the order of euler angles also matters
 // need to debug with model data
-namespace te
+namespace vivid
 {
     // confirmed
     // https://en.wikipedia.org/wiki/Quaternions_and_spatial_rotation#Quaternion-derived_rotation_matrix

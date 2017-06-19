@@ -1,7 +1,7 @@
 #ifndef MATH_MATH_UTILS_H
 #define MATH_MATH_UTILS_H
 
-namespace te
+namespace vivid
 {
     class MathUtils
     {

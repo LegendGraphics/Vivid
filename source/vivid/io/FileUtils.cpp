@@ -1,7 +1,7 @@
 #include "vivid/io/FileUtils.h"
 #include <fstream>
 
-namespace te
+namespace vivid
 {
     void FileUtils::streamFromBinaryFile(const String& filename, char*& data, int& size)
     {

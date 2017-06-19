@@ -6,7 +6,7 @@
 #include "vivid/common/MeshRender.h"
 #include "vivid/renderer/RenderInterface.h"
 
-namespace te
+namespace vivid
 {
     UploadToRender::UploadToRender()
         :Render(ComponentType::UPLOAD_TO_RENDER)

@@ -3,7 +3,7 @@
 #include "vivid/io/ResourceLoader.h"
 #include "vivid/io/Logger.h"
 
-namespace te
+namespace vivid
 {
     bool Material::load(const String & res)
     {

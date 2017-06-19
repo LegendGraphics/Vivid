@@ -4,7 +4,7 @@
 #include <cstddef>
 #include "vivid/base/Types.h"
 
-namespace te
+namespace vivid
 {
     template <typename TBase>
     class ClassTypeId

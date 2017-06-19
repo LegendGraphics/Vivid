@@ -3,7 +3,7 @@
 #include "vivid/io/ResourceLoader.h"
 
 
-namespace te
+namespace vivid
 {
     
     Mesh::Mesh()

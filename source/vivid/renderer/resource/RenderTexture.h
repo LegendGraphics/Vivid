@@ -3,7 +3,7 @@
 
 #include "vivid/renderer/resource/RenderResource.h"
 
-namespace te
+namespace vivid
 {
 
     /*enum class IndexFormat : uint8

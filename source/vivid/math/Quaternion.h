@@ -4,7 +4,7 @@
 #include "vivid/math/Vector3.h"
 #include "vivid/math/Matrix.h"
 
-namespace te
+namespace vivid
 {
     // In TinyEngine we use right-hand system and ZYX order for Euler Angles
     class Quaternion

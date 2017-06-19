@@ -3,7 +3,7 @@
 
 #include "vivid/base/String.h"
 
-namespace te
+namespace vivid
 {
     class Var
     {

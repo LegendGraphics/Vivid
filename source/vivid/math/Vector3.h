@@ -4,7 +4,7 @@
 
 #include <vector>
 
-namespace te
+namespace vivid
 {
     class Vector3
     {

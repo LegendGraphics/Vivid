@@ -1,7 +1,7 @@
 
 #include "vivid/base/Ref.h"
 
-namespace te
+namespace vivid
 {
     Ref::Ref()
         :_reference_count(0)

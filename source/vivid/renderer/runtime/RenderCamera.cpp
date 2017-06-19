@@ -1,6 +1,6 @@
 #include "vivid/renderer/runtime/RenderCamera.h"
 
-namespace te
+namespace vivid
 {
     RenderObject::Type RenderCamera::TYPE = RenderObject::NOT_INITIALIZED;
     RenderCamera::RenderCamera(CameraData::ProjectionType type, float near_range, float far_range,

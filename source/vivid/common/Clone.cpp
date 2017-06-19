@@ -5,7 +5,7 @@
 #include "vivid/common/Scene.h"
 #include "vivid/common/Camera.h"
 
-namespace te
+namespace vivid
 {
     Node* CopyOperator::operator()(const Node* node) const
     {

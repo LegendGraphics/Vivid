@@ -9,7 +9,7 @@
 /// object reaches under zero, it will be deleted.
 
 
-namespace te
+namespace vivid
 {
     // cycle reference problem exists...
     class Ref

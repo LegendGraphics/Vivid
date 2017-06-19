@@ -1,7 +1,7 @@
 #include "vivid/renderer/resource/ShaderUniform.h"
 #include "vivid/io/Logger.h"
 
-namespace te
+namespace vivid
 {
     bool ShaderUniforms::hasUniform(const String& name)
     {

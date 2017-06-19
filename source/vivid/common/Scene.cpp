@@ -1,7 +1,7 @@
 //#include "vivid/common/Scene.h"
 //#include "../3rdparty/rapid_xml/include/utXML.h"
 //
-//namespace te
+//namespace vivid
 //{
 //    void SceneGraphRes::release()
 //    {
@@ -143,7 +143,7 @@
 #include "vivid/common/Camera.h"
 #include "vivid/common/Node.h"
 
-namespace te
+namespace vivid
 {
     Scene::Scene()
         :_scene_root(new NodeTree),

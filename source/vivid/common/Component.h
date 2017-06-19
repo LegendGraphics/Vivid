@@ -9,7 +9,7 @@
 #include "vivid/common/Clone.h"
 
 
-namespace te
+namespace vivid
 {
     class Node;
 

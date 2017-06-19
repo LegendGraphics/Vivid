@@ -12,7 +12,7 @@
 #include "vivid/renderer/device/GLRenderDevice.h"
 #endif
 
-namespace te
+namespace vivid
 {
     RenderInterface* Singleton<RenderInterface>::_singleton = nullptr;
 

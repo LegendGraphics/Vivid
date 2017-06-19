@@ -7,7 +7,7 @@
 #include "vivid/math/Vector2.h"
 #include "vivid/math/Vector3.h"
 
-namespace te
+namespace vivid
 {
     class Vector4
     {

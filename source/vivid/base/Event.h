@@ -1,7 +1,7 @@
 #ifndef BASE_EVENT_H
 #define BASE_EVENT_H
 
-namespace te
+namespace vivid
 {
     using EventKey = unsigned int;
 

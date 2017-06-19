@@ -5,7 +5,7 @@
 #include <unordered_map>
 #include "vivid/base/String.h"
 
-namespace te 
+namespace vivid 
 {
     typedef unsigned char uint8;
     typedef signed char int8;

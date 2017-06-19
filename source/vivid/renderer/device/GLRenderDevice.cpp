@@ -11,7 +11,7 @@
 #include "vivid/math/Vector4.h"
 #include "vivid/io/Logger.h"
 
-namespace te
+namespace vivid
 {
     static const char *defaultShaderVS =
         "#version 430\n"
@@ -465,7 +465,7 @@ namespace te
         return defaultShaderFS;
     }
 
-    te::uint32 GLRenderDevice::createShader(const char* vertex_shader_src, const char* fragment_shader_src, vertex_layout::Type vl_type)
+    vivid::uint32 GLRenderDevice::createShader(const char* vertex_shader_src, const char* fragment_shader_src, vertex_layout::Type vl_type)
     {
         uint32 program_obj = createShaderProgram(vertex_shader_src, fragment_shader_src);
         if (0 == program_obj) return 0;

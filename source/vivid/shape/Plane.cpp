@@ -1,6 +1,6 @@
 #include "vivid/shape/Plane.h"
 
-namespace te
+namespace vivid
 {
     Plane::Plane() {}
 

@@ -7,7 +7,7 @@
 #include "vivid/common/SpaceState.h"
 #include "vivid/renderer/runtime/StateStream.h"
 
-namespace te
+namespace vivid
 {
     class UploadToRender : public Render
     {

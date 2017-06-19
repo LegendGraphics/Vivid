@@ -5,7 +5,7 @@
 #include "vivid/renderer/device/RenderContext.h"
 #include "vivid/renderer/device/RenderDevice.h"
 
-namespace te
+namespace vivid
 {
     void RenderWorld::renderKernel(StateStream& stream, RenderParams& params, RenderContext* render_context)
     {

@@ -9,7 +9,7 @@
 
 #include "vivid/common/Mesh.h"
 
-namespace te
+namespace vivid
 {
     RenderObject::Type RenderShaderObject::TYPE = RenderObject::NOT_INITIALIZED;
 

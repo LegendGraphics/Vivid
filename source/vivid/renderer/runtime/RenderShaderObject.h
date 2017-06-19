@@ -7,7 +7,7 @@
 #include "vivid/renderer/runtime/RenderObject.h"
 #include "vivid/common/Shader.h"
 
-namespace te
+namespace vivid
 {
     class RenderResourceContext;
     class RenderContext;

@@ -6,7 +6,7 @@
 #include "vivid/renderer/resource/VertexLayoutType.h"
 #include "vivid/renderer/resource/RenderResource.h"
 
-namespace te
+namespace vivid
 {
     // Vertex Layout should be loaded from file like pipeline resource
 

@@ -6,7 +6,7 @@
 #include "vivid/math/Quaternion.h"
 #include "vivid/math/Transform.h"
 
-namespace te
+namespace vivid
 {
     // store position, scale and rotation data
     class SpaceState : public ComData

@@ -1,7 +1,7 @@
 #include "vivid/renderer/runtime/StateStream.h"
 #include "vivid/renderer/RenderWorld.h"
 
-namespace te
+namespace vivid
 {
     void ResourceStreamMsg::process(RenderContext* rc, RenderResourceContext* rrc, RenderWorld* rw)
     {

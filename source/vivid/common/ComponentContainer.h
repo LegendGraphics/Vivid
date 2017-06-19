@@ -6,12 +6,12 @@
 
 #include "vivid/common/Clone.h"
 
-namespace te
+namespace vivid
 {
     const int MAX_AMOUNT_OF_COMPONENTS = 12;
 }
 
-namespace te
+namespace vivid
 {
     class Component;
     class Node;

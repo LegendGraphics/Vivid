@@ -3,7 +3,7 @@
 
 #include "vivid/base/Assert.h"
 
-namespace te
+namespace vivid
 {
     template <typename T>
     class Singleton

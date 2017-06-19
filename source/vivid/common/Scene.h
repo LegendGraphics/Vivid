@@ -3,7 +3,7 @@
 //
 //#include "vivid/common/Resource.h"
 //
-//namespace te
+//namespace vivid
 //{
 //    // xml file
 //    class SceneGraphRes : public Resource
@@ -32,7 +32,7 @@
 #include "vivid/base/Ref.h"
 #include "vivid/common/Clone.h"
 
-namespace te
+namespace vivid
 {
     class NodeTree;
     class Camera;

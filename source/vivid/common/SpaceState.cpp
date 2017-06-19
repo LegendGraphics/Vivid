@@ -4,7 +4,7 @@
 
 #include <cmath>
 
-namespace te
+namespace vivid
 {
     SpaceState::SpaceState()
         :ComData(ComponentType::SPACE_STATE),

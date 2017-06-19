@@ -7,7 +7,7 @@
 #include "vivid/renderer/resource/HandleObjects.hpp"
 #include "vivid/renderer/runtime/StateStream.h"
 
-namespace te
+namespace vivid
 {
     //--------------- Typical Use Case of RenderInterface ---------------//
     //

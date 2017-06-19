@@ -1,6 +1,6 @@
 #include "vivid/shape/Ray.h"
 
-namespace te
+namespace vivid
 {
     Ray::Ray(const Vector3& origin, const Vector3& direction)
         :_origin(origin),

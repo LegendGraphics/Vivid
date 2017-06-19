@@ -3,7 +3,7 @@
 #include "vivid/math/Quaternion.h"
 #include "vivid/math/MathUtils.h"
 
-namespace te
+namespace vivid
 {
     Mat4x4::Mat4x4()
     {

@@ -4,7 +4,7 @@
 #include <string>
 #include <cstdarg>
 
-namespace te
+namespace vivid
 {
     typedef std::string String;
     // Utility class for manipulating String

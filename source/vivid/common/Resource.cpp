@@ -5,7 +5,7 @@
 #include "vivid/common/Shader.h"
 #include "vivid/common/Material.h"
 
-namespace te
+namespace vivid
 {
     Resource::Resource()
     {}

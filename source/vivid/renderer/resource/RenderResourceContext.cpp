@@ -1,6 +1,6 @@
 #include "vivid/renderer/resource/RenderResourceContext.h"
 
-namespace te
+namespace vivid
 {
     RenderResourceContext::RenderResourceContext()
     {

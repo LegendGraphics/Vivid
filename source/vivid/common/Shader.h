@@ -4,7 +4,7 @@
 #include "vivid/common/Resource.h"
 #include "vivid/renderer/resource/ShaderUniform.h"
 
-namespace te
+namespace vivid
 {
     //enum class ShaderUniformType
     //{

@@ -5,7 +5,7 @@
 #include "vivid/base/Platform.h"
 using namespace std::chrono;
 
-namespace te
+namespace vivid
 {
     class TE_DLL_EXPORT Timer
     {

@@ -1,6 +1,6 @@
 #include "vivid/base/String.h"
 
-namespace te
+namespace vivid
 {
     String StringUtils::format(const char* format, ...)
     {

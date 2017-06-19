@@ -2,7 +2,7 @@
 #include "vivid/math/Vector4.h"
 #include <cmath>
 
-namespace te
+namespace vivid
 {
     Vector4::Vector4()
         :x(0.0),

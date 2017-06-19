@@ -15,7 +15,7 @@
 #include "vivid/renderer/runtime/StateStream.h"
 
 
-namespace te
+namespace vivid
 {
 
     class NodeVisitor;

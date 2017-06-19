@@ -1,7 +1,7 @@
 #ifndef BASE_PLATFORM_H
 #define BASE_PLATFORM_H
 
-namespace te 
+namespace vivid 
 {
 
     // CODE FROM OGRE

@@ -13,7 +13,7 @@
 #include "vivid/common/Mesh.h"
 
 #include "vivid/io/Logger.h"
-namespace te
+namespace vivid
 {
     NodeVisitor::NodeVisitor()
         :_traversal_mode(TraversalMode::TRAVERSE_NONE),

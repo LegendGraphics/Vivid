@@ -15,7 +15,7 @@
 #include "vivid/common/Shader.h"
 #include "vivid/common/Uploader.h"
 
-namespace te
+namespace vivid
 {
     String ResourceLoader::_data_path = "";
     void ResourceLoader::setDataPath(const String& res)

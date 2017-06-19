@@ -1,7 +1,7 @@
 #ifndef RENDERER_GPU_OBJECT_MANAGER_H
 #define RENDERER_GPU_OBJECT_MANAGER_H
 
-namespace te
+namespace vivid
 {
     class GPUObjectManager
     {

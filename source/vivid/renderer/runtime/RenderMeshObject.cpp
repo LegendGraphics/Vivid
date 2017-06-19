@@ -7,7 +7,7 @@
 #include "vivid/renderer/resource/ResourceStream.h"
 #include "vivid/renderer/runtime/StateStream.h"
 
-namespace te
+namespace vivid
 {
     RenderObject::Type RenderMeshObject::TYPE = RenderObject::NOT_INITIALIZED;
 

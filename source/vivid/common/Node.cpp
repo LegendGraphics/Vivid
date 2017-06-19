@@ -8,7 +8,7 @@
 #include "vivid/common/Uploader.h"
 #include "vivid/io/ResourceLoader.h"
 
-namespace te
+namespace vivid
 {
 
     Node* Node::create(const String& res)

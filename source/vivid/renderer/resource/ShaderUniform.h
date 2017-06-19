@@ -5,7 +5,7 @@
 #include "vivid/common/Resource.h"
 #include "vivid/renderer/resource/ShaderDataType.h"
 
-namespace te
+namespace vivid
 {
     struct ShaderUniformValue
     {

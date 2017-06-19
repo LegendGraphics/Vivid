@@ -2,7 +2,7 @@
 #include "vivid/common/Component.h"
 #include "vivid/base/Assert.h"
 
-namespace te
+namespace vivid
 {
     ComponentContainer::ComponentContainer()
         :_owner(nullptr)

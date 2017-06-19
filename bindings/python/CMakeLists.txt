@@ -17,5 +17,5 @@ FILE( GLOB pybind_cpp               "*.cpp*" )
 add_subdirectory(pybind11)
 pybind11_add_module(PyVivid ${pybind_cpp})
 target_link_libraries(PyVivid ${PYTHON_LIBRARIES} Vivid)
-set_target_properties(PyVivid PROPERTIES SUFFIX ".pvd")
+set_target_properties(PyVivid PROPERTIES SUFFIX ".pyd")
 

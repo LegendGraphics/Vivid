@@ -1,7 +1,7 @@
 #include "vivid/shape/Frustum.h"
 #include "vivid/math/MathUtils.h"
 
-namespace te
+namespace vivid
 {
     void Frustum::buildFrustum(const Matrix& view_mat, const Matrix& proj_mat)
     {

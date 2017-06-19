@@ -6,7 +6,7 @@
 
 #include "vivid/common/ClassType.hpp"
 
-namespace te
+namespace vivid
 {
     template <class T>
     RenderObject::Type getRenderObjectTypeId()

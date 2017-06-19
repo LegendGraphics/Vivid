@@ -1,7 +1,7 @@
 #ifndef COMMON_REFPTR_HPP
 #define COMMON_REFPTR_HPP
 
-namespace te
+namespace vivid
 {
     template <typename T>
     class RefPtr

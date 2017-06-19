@@ -1,6 +1,6 @@
 #include "vivid/common/Component.h"
 
-namespace te
+namespace vivid
 {
     Component::Component()
         :_enabled(true),
