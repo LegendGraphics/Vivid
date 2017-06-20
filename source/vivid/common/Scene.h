@@ -38,7 +38,7 @@ namespace vivid
     class Camera;
 
     // Scene can be constructed from resource, just like the node
-    class TE_DLL_EXPORT Scene: public Ref, public Cloneable
+    class VIVID_DLL_EXPORT Scene: public Ref, public Cloneable
     {
     public:
         Scene();

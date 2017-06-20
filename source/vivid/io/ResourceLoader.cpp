@@ -271,6 +271,7 @@ namespace vivid
         doc.parseBuffer(data, size);
         if (doc.hasError())
         {
+            printf(/*"MetaNode:%s\n", */"duck.node.xml");
             cLog << "XML parsing error";
             return false;
         }
@@ -352,6 +353,7 @@ namespace vivid
         doc.parseBuffer(data, size);
         if (doc.hasError())
         {
+            cLog << StringUtils::format("Pipeline:%s", res.c_str());
             cLog << "XML parsing error";
             return false;
         }
@@ -567,6 +569,7 @@ namespace vivid
         doc.parseBuffer(data, size);
         if (doc.hasError())
         {
+            cLog << StringUtils::format("Material:%s", res);
             cLog << "XML parsing error";
             return false;
         }
@@ -650,6 +653,7 @@ namespace vivid
         doc.parseBuffer(data, size);
         if (doc.hasError())
         {
+            cLog << StringUtils::format("Shader:%s", res);
             cLog << "XML parsing error";
             return false;
         }

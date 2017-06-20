@@ -7,7 +7,7 @@ using namespace std::chrono;
 
 namespace vivid
 {
-    class TE_DLL_EXPORT Timer
+    class VIVID_DLL_EXPORT Timer
     {
     private:
         using TimePoint = system_clock::time_point;

@@ -34,7 +34,7 @@ namespace vivid
         SCENE
     };
 
-    class TE_DLL_EXPORT Node: public Ref, public Cloneable
+    class VIVID_DLL_EXPORT Node: public Ref, public Cloneable
     {
     public:
         static Node* create(const String& res);
@@ -117,7 +117,7 @@ namespace vivid
     }
 
 
-    class TE_DLL_EXPORT NodeTree : public Ref, public Cloneable
+    class VIVID_DLL_EXPORT NodeTree : public Ref, public Cloneable
     {
     public:
         NodeTree();

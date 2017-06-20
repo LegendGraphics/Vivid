@@ -14,7 +14,7 @@
 
 namespace vivid
 {
-    Director* Singleton<Director>::_singleton = nullptr;
+    template<> Director* Singleton<Director>::_singleton = nullptr;
 
     bool Director::initialize()
     {
@@ -138,6 +138,8 @@ namespace vivid
             cLog << ("Unable to initialize GLEW ... exiting");
             exit(EXIT_FAILURE);
         }
+
+        //Test2::num = Test2();
 
     }
 

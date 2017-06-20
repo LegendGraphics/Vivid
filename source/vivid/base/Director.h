@@ -25,7 +25,7 @@ namespace vivid
     class ResourceMapper;
     class RenderInterface;
 
-    class TE_DLL_EXPORT Director: public Singleton<Director>
+    class VIVID_DLL_EXPORT Director: public Singleton<Director>
     {
     public:
         void setActiveScene(Scene* active_scene);

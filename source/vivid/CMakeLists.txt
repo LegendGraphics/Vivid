@@ -16,6 +16,9 @@ include_directories(${RAPID_XML_INCLUDE_DIR})
 #include_directories(${LUA_INCLUDE_DIR})
 #include_directories(${TOLUAPP_INCLUDE_DIR})
 
+add_definitions(-DUSE_GL)
+add_definitions(-DVIVID_DYNAMIC_LIB)
+
   
 FILE( GLOB common               "common/*.*" ) 
 FILE( GLOB math                 "math/*.*" )  

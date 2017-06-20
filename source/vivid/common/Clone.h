@@ -1,6 +1,8 @@
 #ifndef COMMON_CLONE_H
 #define COMMON_CLONE_H
 
+#include "vivid/base/Platform.h"
+
 #define ENABLE_CLONE(CLASS)                                                                     \
 virtual CLASS* clone(const CopyOperator& copyop) const { return new CLASS(*this, copyop); }
 
@@ -13,7 +15,7 @@ namespace vivid
     class Scene;
     class Camera;
 
-    class CopyOperator
+    class VIVID_DLL_EXPORT CopyOperator
     {
     public:
         enum Options

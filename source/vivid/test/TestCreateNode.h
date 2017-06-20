@@ -5,7 +5,7 @@
 #include "common/MeshRender.h"
 #include "base/Singleton.hpp"
 #include "io/ResourceLoader.h"
-using namespace te;
+using namespace vivid;
 
 int main(int argc, char** argv)
 { 
