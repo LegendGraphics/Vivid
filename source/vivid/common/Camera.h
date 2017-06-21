@@ -104,6 +104,9 @@ namespace vivid
         };
 
     public:
+
+        static CameraState* create(const String& res);
+
         CameraState();
         virtual ~CameraState();
 

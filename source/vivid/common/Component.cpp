@@ -2,6 +2,23 @@
 
 namespace vivid
 {
+    bool ComponentRegister::registerCom(const String& name, ComponentCreator creator, int id)
+    {
+        if (_cmap.find(name) != _cmap.end())
+            return false;
+        else
+        {
+            _cmap.insert({name, {creator, id}});
+            return true;
+        }
+    }
+
+    void ComponentRegister::unregisterCom(const String& name)
+    {
+        if (_cmap.find(name) != _cmap.end())
+            _cmap.erase(name);
+    }
+
     Component::Component()
         :_enabled(true),
         _owner(nullptr),

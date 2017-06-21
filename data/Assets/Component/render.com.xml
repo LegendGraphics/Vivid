@@ -1,0 +1,4 @@
+<MeshRender>
+	<Geometry name="Mesh/cube_emptyTags.mesh"/>
+    <Material name="Material/cube_emptyTags.material.xml"/>
+</MeshRender>

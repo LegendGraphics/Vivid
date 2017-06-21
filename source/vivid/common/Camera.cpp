@@ -4,6 +4,7 @@
 #include "vivid/common/SpaceState.h"
 #include "vivid/base/EventDispatcher.h"
 #include "vivid/base/Director.h"
+#include "vivid/io/ResourceLoader.h"
 
 namespace vivid
 {
@@ -42,6 +43,14 @@ namespace vivid
         //return camera_state->getFrustum().cullBox(bb);
         return true;
     }
+
+    CameraState* CameraState::create(const String& res)
+    {
+        CameraState* cs = new CameraState;
+        ResourceLoader::load(cs, res);
+        return cs;
+    }
+
 
     CameraState::CameraState()
         :ComData(ComponentType::CAMERA_STATE)
@@ -136,7 +145,7 @@ namespace vivid
     }
 
     FocusCameraBehavior::FocusCameraBehavior()
-        :Behavior(ComponentType::LOGIC_BEHAVVIVID_IOR)
+        :Behavior(ComponentType::LOGIC_BEHAVIOR)
     {}
 
     void FocusCameraBehavior::update()

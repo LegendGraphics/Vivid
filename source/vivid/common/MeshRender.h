@@ -11,8 +11,12 @@ namespace vivid
     class MeshRender: public ComData
     {
     public:
+        static MeshRender* create(const String& res);
+
         MeshRender();
         MeshRender(const String& mesh_res, const String& material_res);
+
+        bool load(const String& mesh_res, const String& material_res);
 
         bool loadMesh(const String& res);
         bool loadMaterial(const String& res);

@@ -14,6 +14,9 @@ namespace vivid
     class Material;
     class Shader;
     class CameraState;
+    class MeshRender;
+    class SpaceState;
+
 
     // currently use simply string
     // in the future we need FileSystem which could be made by python
@@ -36,6 +39,8 @@ namespace vivid
         static const String parseGLSL(const String& res);
 
         static bool load(CameraState* camera_state, const String& res);
+        static bool load(MeshRender* mesh_render, const String& res);
+        static bool load(SpaceState* space_state, const String& res);
 
         static String _data_path;
     };

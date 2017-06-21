@@ -4,8 +4,11 @@
 #include <string>
 #include <array>
 #include <bitset>
+#include <unordered_map>
+#include <functional>
 
 #include "vivid/base/String.h"
+#include "vivid/base/Singleton.hpp"
 #include "vivid/common/Clone.h"
 
 
@@ -21,8 +24,22 @@ namespace vivid
         SPACE_STATE,
         CAMERA_STATE,
         MESH_RENDER,
-        LOGIC_BEHAVVIVID_IOR,
+        LOGIC_BEHAVIOR,
         UPLOAD_TO_RENDER
+    };
+
+
+    class ComponentRegister: public Singleton<ComponentRegister>
+    {
+    private:
+        using ComponentCreator = std::function<Component*(const String& res)>;
+        using ComponentMap = std::unordered_map<String, std::tuple<ComponentCreator, int>>;
+
+    public:
+        bool registerCom(const String& name, ComponentCreator creator, int id);
+        void unregisterCom(const String& name);
+    private:
+        ComponentMap    _cmap;
     };
 
     class Component: public Cloneable
