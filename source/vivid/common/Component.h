@@ -1,5 +1,5 @@
-#ifndef COMMON_COMPONENT_H
-#define COMMON_COMPONENT_H
+#ifndef VIVID_COMMON_COMPONENT_H
+#define VIVID_COMMON_COMPONENT_H
 
 #include <string>
 #include <array>
@@ -21,7 +21,7 @@ namespace vivid
         SPACE_STATE,
         CAMERA_STATE,
         MESH_RENDER,
-        LOGIC_BEHAVIOR,
+        LOGIC_BEHAVVIVID_IOR,
         UPLOAD_TO_RENDER
     };
 
@@ -117,4 +117,4 @@ namespace vivid
 }
 
 
-#endif // COMMON_COMPONENT_H
+#endif // VIVID_COMMON_COMPONENT_H

@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDER_DEVICE_H
-#define RENDERER_RENDER_DEVICE_H
+#ifndef VIVID_RENDERER_RENDER_DEVICE_H
+#define VIVID_RENDERER_RENDER_DEVICE_H
 
 #include "vivid/base/Types.h"
 #include "vivid/base/Assert.h"

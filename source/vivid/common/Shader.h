@@ -1,5 +1,5 @@
-#ifndef COMMON_SHADER_H
-#define COMMON_SHADER_H
+#ifndef VIVID_COMMON_SHADER_H
+#define VIVID_COMMON_SHADER_H
 
 #include "vivid/common/Resource.h"
 #include "vivid/renderer/resource/ShaderUniform.h"
@@ -91,4 +91,4 @@ namespace vivid
     };
 }
 
-#endif // COMMON_SHADER_H
+#endif // VIVID_COMMON_SHADER_H

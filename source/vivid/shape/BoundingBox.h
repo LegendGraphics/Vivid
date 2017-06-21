@@ -1,5 +1,5 @@
-#ifndef COMMON_BOUNDING_BOX_H
-#define COMMON_BOUNDING_BOX_H
+#ifndef VIVID_SHAPE_BOUNDING_BOX_H
+#define VIVID_SHAPE_BOUNDING_BOX_H
 
 #include "vivid/math/Vector3.h"
 
@@ -26,4 +26,4 @@ namespace vivid
         Vector3 _min;
     };
 }
-#endif // COMMON_BOUNDING_BOX_H
+#endif // VIVID_SHAPE_BOUNDING_BOX_H

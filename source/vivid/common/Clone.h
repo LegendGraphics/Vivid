@@ -1,5 +1,5 @@
-#ifndef COMMON_CLONE_H
-#define COMMON_CLONE_H
+#ifndef VIVID_COMMON_CLONE_H
+#define VIVID_COMMON_CLONE_H
 
 #include "vivid/base/Platform.h"
 
@@ -49,4 +49,4 @@ namespace vivid
 }
 
 
-#endif // COMMON_CLONE_H
+#endif // VIVID_COMMON_CLONE_H

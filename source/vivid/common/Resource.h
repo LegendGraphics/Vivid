@@ -1,5 +1,5 @@
-#ifndef COMMON_RESOURCE_H
-#define COMMON_RESOURCE_H
+#ifndef VIVID_COMMON_RESOURCE_H
+#define VIVID_COMMON_RESOURCE_H
 
 #include <unordered_map>
 #include <bitset>
@@ -177,4 +177,4 @@ namespace vivid
     }
 }
 
-#endif // COMMON_RESOURCE_H
+#endif // VIVID_COMMON_RESOURCE_H

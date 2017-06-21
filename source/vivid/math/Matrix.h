@@ -1,5 +1,5 @@
-#ifndef MATH_MAT4X4_H
-#define MATH_MAT4X4_H
+#ifndef VIVID_MATH_MAT4X4_H
+#define VIVID_MATH_MAT4X4_H
 
 #include "vivid/math/Vector4.h"
 #include "vivid/base/Assert.h"
@@ -135,4 +135,4 @@ namespace vivid
     typedef Mat4x4 Matrix;
 }
 
-#endif // MATH_MAT4X4_H
+#endif // VIVID_MATH_MAT4X4_H

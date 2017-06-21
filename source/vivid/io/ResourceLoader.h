@@ -1,5 +1,5 @@
-#ifndef IO_RESOURCE_LOADER_H
-#define IO_RESOURCE_LOADER_H
+#ifndef VIVID_IO_RESOURCE_LOADER_H
+#define VIVID_IO_RESOURCE_LOADER_H
 
 #include "utXML.h"
 #include "vivid/base/String.h"
@@ -41,4 +41,4 @@ namespace vivid
     };
 }
 
-#endif // IO_RESOURCE_LOADER_H
+#endif // VIVID_IO_RESOURCE_LOADER_H

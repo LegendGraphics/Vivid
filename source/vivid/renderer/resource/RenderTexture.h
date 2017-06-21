@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDER_TEXTURE_H
-#define RENDERER_RENDER_TEXTURE_H
+#ifndef VIVID_RENDERER_RENDER_TEXTURE_H
+#define VIVID_RENDERER_RENDER_TEXTURE_H
 
 #include "vivid/renderer/resource/RenderResource.h"
 

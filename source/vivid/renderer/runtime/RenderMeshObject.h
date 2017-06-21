@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDER_MESH_OBJECT_H
-#define RENDERER_RENDER_MESH_OBJECT_H
+#ifndef VIVID_RENDERER_RENDER_MESH_OBJECT_H
+#define VIVID_RENDERER_RENDER_MESH_OBJECT_H
 
 #include "vivid/renderer/runtime/RenderObject.h"
 #include "vivid/renderer/resource/VertexLayoutType.h"

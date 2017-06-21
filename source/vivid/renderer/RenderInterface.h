@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDER_INTERFACE_H
-#define RENDERER_RENDER_INTERFACE_H
+#ifndef VIVID_RENDERER_RENDER_INTERFACE_H
+#define VIVID_RENDERER_RENDER_INTERFACE_H
 
 #include "vivid/base/Types.h"
 #include "vivid/base/Singleton.hpp"

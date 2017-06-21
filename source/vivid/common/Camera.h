@@ -1,5 +1,5 @@
-#ifndef COMMON_CAMERA_H
-#define COMMON_CAMERA_H
+#ifndef VIVID_COMMON_CAMERA_H
+#define VIVID_COMMON_CAMERA_H
 
 #include "vivid/base/Event.h"
 #include "vivid/common/Node.h"
@@ -158,4 +158,4 @@ namespace vivid
 }
 
 
-#endif // COMMON_CAMERA_H
+#endif // VIVID_COMMON_CAMERA_H

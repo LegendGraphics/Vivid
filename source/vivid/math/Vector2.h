@@ -1,6 +1,6 @@
 
-#ifndef MATH_VECTOR2_H
-#define MATH_VECTOR2_H
+#ifndef VIVID_MATH_VECTOR2_H
+#define VIVID_MATH_VECTOR2_H
 
 #include <vector>
 
@@ -58,4 +58,4 @@ namespace vivid
 }
 
 
-#endif // MATH_VECTOR2_H
+#endif // VIVID_MATH_VECTOR2_H

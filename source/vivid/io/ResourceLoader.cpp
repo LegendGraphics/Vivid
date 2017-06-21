@@ -65,7 +65,7 @@ namespace vivid
             memcpy(&elem_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
             String errormsg;
 
-            if (stream_id == vertex_layout::VertexAttribute::POSITION)
+            if (stream_id == vertex_layout::VertexAttribute::POSITVIVID_ION)
             {
                 if (elem_size != 12)
                 {

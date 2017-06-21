@@ -1,5 +1,5 @@
-#ifndef IO_LOGGER_H
-#define IO_LOGGER_H
+#ifndef VIVID_IO_LOGGER_H
+#define VIVID_IO_LOGGER_H
 
 #include <ostream>
 #include <fstream>
@@ -42,4 +42,4 @@ namespace vivid
     };
 }
 
-#endif // IO_LOGGER_H
+#endif // VIVID_IO_LOGGER_H

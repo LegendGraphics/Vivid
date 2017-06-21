@@ -1,5 +1,5 @@
-#ifndef IO_FILE_UTILS_H
-#define IO_FILE_UTILS_H
+#ifndef VIVID_IO_FILE_UTILS_H
+#define VIVID_IO_FILE_UTILS_H
 
 #include "vivid/base/String.h"
 
@@ -16,4 +16,4 @@ namespace vivid
     };
 }
 
-#endif // IO_FILE_UTILS_H
+#endif // VIVID_IO_FILE_UTILS_H

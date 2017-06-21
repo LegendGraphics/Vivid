@@ -137,7 +137,7 @@ namespace vivid
         vds->vertex_buffers.push_back(&_vertex_buffer);
 
         RenderResourceContext::Message allc_vd = {
-            resource_stream::MessageType::ALLOC_VERTEX_DECLARATION, (void*)vds };
+            resource_stream::MessageType::ALLOC_VERTEX_DECLARATVIVID_ION, (void*)vds };
         context->messages().push_back(allc_vd);
     }
 

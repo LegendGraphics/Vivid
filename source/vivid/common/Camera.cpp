@@ -136,7 +136,7 @@ namespace vivid
     }
 
     FocusCameraBehavior::FocusCameraBehavior()
-        :Behavior(ComponentType::LOGIC_BEHAVIOR)
+        :Behavior(ComponentType::LOGIC_BEHAVVIVID_IOR)
     {}
 
     void FocusCameraBehavior::update()

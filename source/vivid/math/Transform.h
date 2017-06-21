@@ -1,5 +1,5 @@
-#ifndef MATH_TRANSFORM_H
-#define MATH_TRANSFORM_H
+#ifndef VIVID_MATH_TRANSFORM_H
+#define VIVID_MATH_TRANSFORM_H
 
 #include "vivid/math/Matrix.h"
 #include "vivid/math/Quaternion.h"
@@ -42,4 +42,4 @@ namespace vivid
 }
 
 
-#endif // MATH_TRANSFORM_H
+#endif // VIVID_MATH_TRANSFORM_H

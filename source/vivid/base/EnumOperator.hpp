@@ -1,5 +1,5 @@
-#ifndef COMMON_ENUM_OPERATOR_HPP
-#define COMMON_ENUM_OPERATOR_HPP
+#ifndef VIVID_COMMON_ENUM_OPERATOR_HPP
+#define VIVID_COMMON_ENUM_OPERATOR_HPP
 
 #define ENABLE_ENUM_OPERATOR_IN(T,INT_T) \
 namespace vivid{                            \
@@ -15,4 +15,4 @@ inline T&   operator    ^=  (T& x, T y)     {   x = x ^ y;  return x;   }; \
 
 #define ENABLE_ENUM_OPERATOR(T) ENABLE_ENUM_OPERATOR_IN(T, int)
 
-#endif // COMMON_ENUM_OPERATOR_HPP
+#endif // VIVID_COMMON_ENUM_OPERATOR_HPP

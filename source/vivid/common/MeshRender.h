@@ -1,5 +1,5 @@
-#ifndef COMMON_MESH_RENDER_H
-#define COMMON_MESH_RENDER_H
+#ifndef VIVID_COMMON_MESH_RENDER_H
+#define VIVID_COMMON_MESH_RENDER_H
 
 #include "vivid/common/Component.h"
 #include "vivid/common/Mesh.h"
@@ -29,4 +29,4 @@ namespace vivid
 }
 
 
-#endif // COMMON_MESH_RENDER_H
+#endif // VIVID_COMMON_MESH_RENDER_H

@@ -1,5 +1,5 @@
-#ifndef COMMON_MATERIAL_H
-#define COMMON_MATERIAL_H
+#ifndef VIVID_COMMON_MATERIAL_H
+#define VIVID_COMMON_MATERIAL_H
 
 #include "vivid/common/Resource.h"
 #include "vivid/common/Shader.h"
@@ -77,4 +77,4 @@ namespace vivid
     };
 }
 
-#endif // COMMON_MATERIAL_H
+#endif // VIVID_COMMON_MATERIAL_H

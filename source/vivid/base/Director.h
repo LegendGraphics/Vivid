@@ -1,5 +1,5 @@
-#ifndef BASE_DIRECTOR_H
-#define BASE_DIRECTOR_H
+#ifndef VIVID_BASE_DIRECTOR_H
+#define VIVID_BASE_DIRECTOR_H
 
 #include "vivid/base/Platform.h"
 #include "vivid/base/Timer.h"
@@ -66,4 +66,4 @@ namespace vivid
 }
 
 
-#endif // BASE_DIRECTOR_H
+#endif // VIVID_BASE_DIRECTOR_H

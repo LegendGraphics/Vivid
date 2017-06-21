@@ -1,5 +1,5 @@
-#ifndef COMMON_RAY_H
-#define COMMON_RAY_H
+#ifndef VIVID_SHAPE_RAY_H
+#define VIVID_SHAPE_RAY_H
 
 #include "vivid/math/Vector3.h"
 
@@ -17,4 +17,4 @@ namespace vivid
     };
 }
 
-#endif // COMMON_RAY_H
+#endif // VIVID_SHAPE_RAY_H

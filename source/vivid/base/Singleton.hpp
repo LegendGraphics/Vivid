@@ -1,5 +1,5 @@
-#ifndef BASE_SINGLETON_H
-#define BASE_SINGLETON_H
+#ifndef VIVID_BASE_SINGLETON_H
+#define VIVID_BASE_SINGLETON_H
 
 #include "vivid/base/Assert.h"
 
@@ -38,4 +38,4 @@ namespace vivid
 
 }
 
-#endif // BASE_SINGLETON_H
+#endif // VIVID_BASE_SINGLETON_H

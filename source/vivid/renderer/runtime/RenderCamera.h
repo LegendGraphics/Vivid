@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDER_CAMERA_H
-#define RENDERER_RENDER_CAMERA_H
+#ifndef VIVID_RENDERER_RENDER_CAMERA_H
+#define VIVID_RENDERER_RENDER_CAMERA_H
 
 #include "vivid/renderer/runtime/RenderObject.h"
 #include "vivid/math/Matrix.h"

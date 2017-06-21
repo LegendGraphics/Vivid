@@ -81,7 +81,7 @@ namespace vivid
             while (iter != _component_map.end())
             {
                 Component* component = *iter;
-                if (component && component->getType() == ComponentType::LOGIC_BEHAVIOR)
+                if (component && component->getType() == ComponentType::LOGIC_BEHAVVIVID_IOR)
                 {
                     Behavior* behavior = dynamic_cast<Behavior*>(component);
                     behavior->update();

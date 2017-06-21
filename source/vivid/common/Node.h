@@ -1,5 +1,5 @@
-#ifndef COMMON_NODE_H
-#define COMMON_NODE_H
+#ifndef VIVID_COMMON_NODE_H
+#define VIVID_COMMON_NODE_H
 
 #include <vector>
 #include <type_traits>
@@ -179,4 +179,4 @@ namespace vivid
     };
 }
 
-#endif // COMMON_NODE_H
+#endif // VIVID_COMMON_NODE_H

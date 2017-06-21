@@ -1,5 +1,5 @@
-#ifndef BASE_STRING_H
-#define BASE_STRING_H
+#ifndef VIVID_BASE_STRING_H
+#define VIVID_BASE_STRING_H
 
 #include <string>
 #include <cstdarg>
@@ -18,4 +18,4 @@ namespace vivid
 
 }
 
-#endif // BASE_STRING_H
+#endif // VIVID_BASE_STRING_H

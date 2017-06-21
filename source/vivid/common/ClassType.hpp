@@ -1,5 +1,5 @@
-#ifndef COMMON_CLASS_TYPE_HPP
-#define COMMON_CLASS_TYPE_HPP
+#ifndef VIVID_COMMON_CLASS_TYPE_HPP
+#define VIVID_COMMON_CLASS_TYPE_HPP
 
 #include <cstddef>
 #include "vivid/base/Types.h"
@@ -40,4 +40,4 @@ namespace vivid
 
 
 
-#endif // COMMON_CLASS_TYPE_HPP
+#endif // VIVID_COMMON_CLASS_TYPE_HPP

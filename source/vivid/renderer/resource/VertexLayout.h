@@ -1,5 +1,5 @@
-#ifndef RENDERER_VERTEX_LAYOUT_H
-#define RENDERER_VERTEX_LAYOUT_H
+#ifndef VIVID_RENDERER_VERTEX_LAYOUT_H
+#define VIVID_RENDERER_VERTEX_LAYOUT_H
 #include <unordered_map>
 #include "vivid/base/Types.h"
 #include "vivid/base/String.h"

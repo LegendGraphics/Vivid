@@ -1,5 +1,5 @@
-#ifndef COMMON_SPACE_STATE_H
-#define COMMON_SPACE_STATE_H
+#ifndef VIVID_COMMON_SPACE_STATE_H
+#define VIVID_COMMON_SPACE_STATE_H
 
 #include "vivid/common/Component.h"
 #include "vivid/math/Vector3.h"
@@ -73,4 +73,4 @@ namespace vivid
 }
 
 
-#endif // COMMON_SPACE_STATE_H
+#endif // VIVID_COMMON_SPACE_STATE_H

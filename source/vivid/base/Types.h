@@ -1,5 +1,5 @@
-#ifndef BASE_TYPES_H
-#define BASE_TYPES_H
+#ifndef VIVID_BASE_TYPES_H
+#define VIVID_BASE_TYPES_H
 
 #include <vector>
 #include <unordered_map>
@@ -19,4 +19,4 @@ namespace vivid
 }
 
 
-#endif // BASE_TYPES_H
+#endif // VIVID_BASE_TYPES_H

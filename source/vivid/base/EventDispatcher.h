@@ -1,5 +1,5 @@
-#ifndef BASE_EVENT_DISPATCHER_H
-#define BASE_EVENT_DISPATCHER_H
+#ifndef VIVID_BASE_EVENT_DISPATCHER_H
+#define VIVID_BASE_EVENT_DISPATCHER_H
 
 #include <unordered_map>
 #include <vector>
@@ -73,4 +73,4 @@ namespace vivid
 }
 
 
-#endif // BASE_EVENT_DISPATCHER_H
+#endif // VIVID_BASE_EVENT_DISPATCHER_H

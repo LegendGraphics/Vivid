@@ -1,5 +1,5 @@
-#ifndef BASE_VARIANT_H
-#define BASE_VARIANT_H
+#ifndef VIVID_BASE_VARIANT_H
+#define VIVID_BASE_VARIANT_H
 
 #include "vivid/base/String.h"
 
@@ -74,4 +74,4 @@ namespace vivid
     };
 }
 
-#endif // BASE_VARIANT_H
+#endif // VIVID_BASE_VARIANT_H

@@ -1,5 +1,5 @@
-#ifndef COMMON_UPLOADER_H
-#define COMMON_UPLOADER_H
+#ifndef VIVID_COMMON_UPLOADER_H
+#define VIVID_COMMON_UPLOADER_H
 
 #include "vivid/common/Component.h"
 #include "vivid/common/Material.h"
@@ -49,6 +49,6 @@ namespace vivid
     };
 }
 
-#endif // COMMON_UPLOADER_H
+#endif // VIVID_COMMON_UPLOADER_H
 
 

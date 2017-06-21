@@ -1,5 +1,5 @@
-#ifndef COMMON_PLANE_H
-#define COMMON_PLANE_H
+#ifndef VIVID_SHAPE_PLANE_H
+#define VIVID_SHAPE_PLANE_H
 
 #include "vivid/math/Vector3.h"
 
@@ -30,4 +30,4 @@ namespace vivid
 
 
 
-#endif // COMMON_PLANE_H
+#endif // VIVID_SHAPE_PLANE_H
