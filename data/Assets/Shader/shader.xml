@@ -6,9 +6,6 @@
         <Uniform name="viewMat" type="mat4"/>
         <Uniform name="worldMat" type="mat4"/>
     </Uniforms>
-    <Samplers>
-        <Sampler name="albedoMap"/>
-    </Samplers>
     <GLSL>
         <Vertex name="Shader/glsl/vertex.glsl"/>
         <Fragment name="Shader/glsl/fragment.glsl"/>

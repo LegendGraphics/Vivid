@@ -1,7 +1,8 @@
 <!-- Node -->
 <Node>
 	<Components>
-        <Component type="SpaceState" name="Component/space.com.xml">
-        <Component type="MeshRender" name="Component/render.com.xml">
+        <Component type="SpaceState" name="Component/space.com.xml"/>
+        <Component type="MeshRender" name="Component/render.com.xml"/>
+        <Component type="UploadToRender" name=""/>
 	</Components>
 </Node>

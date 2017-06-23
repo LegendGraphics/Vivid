@@ -1,6 +1,6 @@
 <!-- Node -->
 <Node>
 	<Components>
-		<Component type="CameraState" name="Component/camera.com.xml">
+		<Component type="CameraState" name="Component/camera.com.xml"/>
 	</Components>
 </Node>
