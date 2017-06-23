@@ -56,7 +56,7 @@ namespace vivid
     enum class LightType
     {
         SPOT,
-        DIRECTVIVID_IONAL,
+        DIRECTIONAL,
         POINT,
         AREA
     };

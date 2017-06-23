@@ -12,6 +12,11 @@ namespace vivid
     class UploadToRender : public Render
     {
     public:
+        static UploadToRender* create(const String& res);
+        static int typeId();
+
+        virtual int getTypeId();
+
         UploadToRender();
 
         void setActionType(stream_message::ActionType type);

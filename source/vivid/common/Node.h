@@ -63,11 +63,7 @@ namespace vivid
         template <typename C>
         bool hasComponent();
 
-        // need to check type, slower than template methods
         void addComponent(Component* component);
-        void removeComponent(ComponentType type);
-        Component* getComponent(ComponentType type);
-        bool hasComponent(ComponentType type);
 
         void updateBehavior();
         void updateRender();

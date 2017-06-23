@@ -15,4 +15,6 @@
 
 //#include "test/TestEvents.h"
 
+//#include "test/TestComponent.h"
+
 #include "test/TestCreateNode.h"

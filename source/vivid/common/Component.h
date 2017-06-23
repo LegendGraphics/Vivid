@@ -38,6 +38,9 @@ namespace vivid
     public:
         bool registerCom(const String& name, ComponentCreator creator, int id);
         void unregisterCom(const String& name);
+
+        bool hasRegistered(const String& name);
+        Component* createComponent(const String& name, const String& res, int id);
     private:
         ComponentMap    _cmap;
     };
@@ -68,6 +71,9 @@ namespace vivid
 
         template <typename C>
         C* getComponent();
+
+        virtual int getTypeId() { return -1; };
+
 
     protected:
         String              _name;
@@ -101,6 +107,9 @@ namespace vivid
 
         ENABLE_CLONE(ComData);
 
+        virtual int getTypeId() { return -1; };
+
+
     };
 
     class Behavior : public Component
@@ -112,6 +121,9 @@ namespace vivid
         virtual ~Behavior() = default;
 
         ENABLE_CLONE(Behavior);
+
+        virtual int getTypeId() { return -1; };
+
 
         virtual void init();
         virtual void update();
@@ -126,6 +138,8 @@ namespace vivid
         virtual ~Render() = default;
 
         ENABLE_CLONE(Render);
+
+        virtual int getTypeId() { return -1; };
 
         virtual void init();
         virtual void update();

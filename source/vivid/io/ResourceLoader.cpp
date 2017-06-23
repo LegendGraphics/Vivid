@@ -295,6 +295,8 @@ namespace vivid
                 String name(node1.getAttribute("name"));
 
                 // create Components and add to Node
+                Component* component = ComponentRegister::getInstance()->createComponent(type, ASSETS_PATH + name, 0);
+                meta_node->components.push_back(component);
             }
 
             node1 = node1.getNextSibling();
@@ -813,13 +815,12 @@ namespace vivid
             return false;
         }
 
-        XMLNode node1 = rootNode.getFirstChild();
-        if (!node1.isEmpty())
+        if (!rootNode.isEmpty())
         {
-            XMLNode geo_node = node1.getFirstChild("Geometry");
+            XMLNode geo_node = rootNode.getFirstChild("Geometry");
             String geo_name = geo_node.getAttribute("name");
 
-            XMLNode mat_node = node1.getFirstChild("Material");
+            XMLNode mat_node = rootNode.getFirstChild("Material");
             String mat_name = mat_node.getAttribute("name");
 
             mesh_render->load(ASSETS_PATH + geo_name, ASSETS_PATH + mat_name);
@@ -848,20 +849,19 @@ namespace vivid
             return false;
         }
 
-        XMLNode node1 = rootNode.getFirstChild();
-        if (!node1.isEmpty())
+        if (!rootNode.isEmpty())
         {
-            XMLNode position_node = node1.getFirstChild("Position");
+            XMLNode position_node = rootNode.getFirstChild("Position");
             float px = Var(position_node.getAttribute("x", "0")).toFloat();
             float py = Var(position_node.getAttribute("y", "0")).toFloat();
             float pz = Var(position_node.getAttribute("z", "0")).toFloat();
 
-            XMLNode scale_node = node1.getFirstChild("Scale");
+            XMLNode scale_node = rootNode.getFirstChild("Scale");
             float sx = Var(scale_node.getAttribute("x", "0")).toFloat();
             float sy = Var(scale_node.getAttribute("y", "0")).toFloat();
             float sz = Var(scale_node.getAttribute("z", "0")).toFloat();
 
-            XMLNode rotation_node = node1.getFirstChild("Rotation");
+            XMLNode rotation_node = rootNode.getFirstChild("Rotation");
             float rx = Var(rotation_node.getAttribute("x", "0")).toFloat();
             float ry = Var(rotation_node.getAttribute("y", "0")).toFloat();
             float rz = Var(rotation_node.getAttribute("z", "0")).toFloat();

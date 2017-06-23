@@ -12,6 +12,9 @@ namespace vivid
     {
     public:
         static MeshRender* create(const String& res);
+        static int typeId();
+
+        virtual int getTypeId();
 
         MeshRender();
         MeshRender(const String& mesh_res, const String& material_res);

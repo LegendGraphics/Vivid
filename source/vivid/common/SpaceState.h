@@ -19,6 +19,12 @@ namespace vivid
         };
 
     public:
+
+        static SpaceState* create(const String& res);
+        static int typeId();
+
+        virtual int getTypeId();
+
         SpaceState();
         SpaceState(const Vector3& position, const Vector3& scale, const Vector3& rotation);
         SpaceState(const Vector3& position);

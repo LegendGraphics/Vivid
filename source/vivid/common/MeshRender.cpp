@@ -11,6 +11,15 @@ namespace vivid
         return mr;
     }
 
+    int MeshRender::typeId()
+    {
+        return getComponentTypeId<MeshRender>();
+    }
+
+    int MeshRender::getTypeId()
+    {
+        return MeshRender::typeId();
+    }
 
     MeshRender::MeshRender()
         :ComData(ComponentType::MESH_RENDER),
@@ -35,7 +44,7 @@ namespace vivid
             flag = false;
         }
 
-        if (loadMaterial(material_res))
+        if (!loadMaterial(material_res))
         {
             cLog << "No such material resource";
             flag = false;

@@ -51,6 +51,15 @@ namespace vivid
         return cs;
     }
 
+    int CameraState::typeId()
+    {
+        return getComponentTypeId<CameraState>();
+    }
+
+    int CameraState::getTypeId()
+    {
+        return CameraState::typeId();
+    }
 
     CameraState::CameraState()
         :ComData(ComponentType::CAMERA_STATE)
