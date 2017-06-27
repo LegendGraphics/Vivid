@@ -1,5 +1,5 @@
-#ifndef BASE_EVENT_LISTENER_H
-#define BASE_EVENT_LISTENER_H
+#ifndef VIVID_BASE_EVENT_LISTENER_H
+#define VIVID_BASE_EVENT_LISTENER_H
 
 #include <functional>
 #include <unordered_map>
@@ -61,4 +61,4 @@ namespace vivid
 }
 
 
-#endif // BASE_EVENT_LISTENER_H
+#endif // VIVID_BASE_EVENT_LISTENER_H

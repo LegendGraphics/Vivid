@@ -1,5 +1,5 @@
-#ifndef COMMON_LIGHT_H
-#define COMMON_LIGHT_H
+#ifndef VIVID_COMMON_LIGHT_H
+#define VIVID_COMMON_LIGHT_H
 
 #include "vivid/common/Component.h"
 #include "vivid/math/Vector4.h"
@@ -75,5 +75,5 @@ namespace vivid
 }
 
 
-#endif // COMMON_LIGHT_H
+#endif // VIVID_COMMON_LIGHT_H
 

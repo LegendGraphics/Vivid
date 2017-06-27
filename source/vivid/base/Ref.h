@@ -1,5 +1,5 @@
-#ifndef COMMON_REF_H
-#define COMMON_REF_H
+#ifndef VIVID_COMMON_REF_H
+#define VIVID_COMMON_REF_H
 
 #include "vivid/base/Assert.h"
 /// Ref` is a base class for an object whose lifetime is managed by a ref.
@@ -40,4 +40,4 @@ namespace vivid
     };
 }
 
-#endif // COMMON_REF_H
+#endif // VIVID_COMMON_REF_H

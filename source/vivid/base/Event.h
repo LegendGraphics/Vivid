@@ -1,5 +1,5 @@
-#ifndef BASE_EVENT_H
-#define BASE_EVENT_H
+#ifndef VIVID_BASE_EVENT_H
+#define VIVID_BASE_EVENT_H
 
 namespace vivid
 {
@@ -79,4 +79,4 @@ namespace vivid
 }
 
 
-#endif // BASE_EVENT_H
+#endif // VIVID_BASE_EVENT_H

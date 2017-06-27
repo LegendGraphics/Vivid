@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDER_WORLD_H
-#define RENDERER_RENDER_WORLD_H
+#ifndef VIVID_RENDERER_RENDER_WORLD_H
+#define VIVID_RENDERER_RENDER_WORLD_H
 
 #include "vivid/renderer/resource/HandleObjects.hpp"
 #include "vivid/renderer/runtime/RenderObject.h"

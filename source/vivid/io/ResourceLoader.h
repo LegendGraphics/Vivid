@@ -1,5 +1,5 @@
-#ifndef IO_RESOURCE_LOADER_H
-#define IO_RESOURCE_LOADER_H
+#ifndef VIVID_IO_RESOURCE_LOADER_H
+#define VIVID_IO_RESOURCE_LOADER_H
 
 #include "utXML.h"
 #include "vivid/base/String.h"
@@ -14,6 +14,9 @@ namespace vivid
     class Material;
     class Shader;
     class CameraState;
+    class MeshRender;
+    class SpaceState;
+
 
     // currently use simply string
     // in the future we need FileSystem which could be made by python
@@ -36,9 +39,11 @@ namespace vivid
         static const String parseGLSL(const String& res);
 
         static bool load(CameraState* camera_state, const String& res);
+        static bool load(MeshRender* mesh_render, const String& res);
+        static bool load(SpaceState* space_state, const String& res);
 
         static String _data_path;
     };
 }
 
-#endif // IO_RESOURCE_LOADER_H
+#endif // VIVID_IO_RESOURCE_LOADER_H

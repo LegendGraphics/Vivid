@@ -1,11 +1,29 @@
 
 #include "vivid/common/SpaceState.h"
 #include "vivid/common/Node.h"
+#include "vivid/io/ResourceLoader.h"
 
 #include <cmath>
 
 namespace vivid
 {
+    SpaceState* SpaceState::create(const String& res)
+    {
+        SpaceState* ss = new SpaceState;
+        ResourceLoader::load(ss, res);
+        return ss;
+    }
+
+    int SpaceState::typeId()
+    {
+        return getComponentTypeId<SpaceState>();
+    }
+
+    int SpaceState::getTypeId()
+    {
+        return SpaceState::typeId();
+    }
+
     SpaceState::SpaceState()
         :ComData(ComponentType::SPACE_STATE),
         _local_scale(1, 1, 1),

@@ -65,7 +65,7 @@ namespace vivid
             memcpy(&elem_size, data_ptr, sizeof(int)); data_ptr += sizeof(int);
             String errormsg;
 
-            if (stream_id == vertex_layout::VertexAttribute::POSITION)
+            if (stream_id == vertex_layout::VertexAttribute::POSITVIVID_ION)
             {
                 if (elem_size != 12)
                 {
@@ -271,7 +271,7 @@ namespace vivid
         doc.parseBuffer(data, size);
         if (doc.hasError())
         {
-            printf(/*"MetaNode:%s\n", */"duck.node.xml");
+            cLog << StringUtils::format("MetaNode:%s", res);
             cLog << "XML parsing error";
             return false;
         }
@@ -289,50 +289,14 @@ namespace vivid
         XMLNode node1 = com_node.getFirstChild();
         while (!node1.isEmpty())
         {
-            if (strcmp(node1.getName(), "SpaceState") == 0)
+            if (strcmp(node1.getName(), "Component") == 0)
             {
-                XMLNode position_node = node1.getFirstChild("Position");
-                float px = (float)atof(position_node.getAttribute("x", "0"));
-                float py = (float)atof(position_node.getAttribute("y", "0"));
-                float pz = (float)atof(position_node.getAttribute("z", "0"));
+                String type(node1.getAttribute("type"));
+                String name(node1.getAttribute("name"));
 
-                XMLNode scale_node = node1.getFirstChild("Scale");
-                float sx = (float)atof(scale_node.getAttribute("x", "0"));
-                float sy = (float)atof(scale_node.getAttribute("y", "0"));
-                float sz = (float)atof(scale_node.getAttribute("z", "0"));
-
-                XMLNode rotation_node = node1.getFirstChild("Rotation");
-                float rx = (float)atof(rotation_node.getAttribute("x", "0"));
-                float ry = (float)atof(rotation_node.getAttribute("y", "0"));
-                float rz = (float)atof(rotation_node.getAttribute("z", "0"));
-
-                SpaceState* space_status = new SpaceState(Vector3(px, py, pz), Vector3(sx, sy, sz), Vector3(rx, ry, rz));
-                meta_node->components.push_back(space_status);
-            }
-            else if (strcmp(node1.getName(), "MeshRender") == 0)
-            {
-                XMLNode geo_node = node1.getFirstChild("Geometry");
-                String geo_name = geo_node.getAttribute("name");
-
-                XMLNode mat_node = node1.getFirstChild("Material");
-                String mat_name = mat_node.getAttribute("name");
-
-                MeshRender* mesh_render = new MeshRender(ASSETS_PATH + geo_name, ASSETS_PATH + mat_name);
-                meta_node->components.push_back(mesh_render);
-            }
-            else if (strcmp(node1.getName(), "UploadToRender") == 0)
-            {
-                UploadToRender* uploader = new UploadToRender();
-                meta_node->components.push_back(uploader);
-            }
-            else if (strcmp(node1.getName(), "CameraState") == 0)
-            {
-                XMLNode camera_node = node1.getFirstChild("Camera");
-                String camera_name = camera_node.getAttribute("name");
-
-                CameraState* camera_state = new CameraState();
-                load(camera_state, camera_name);
-                meta_node->components.push_back(camera_state);
+                // create Components and add to Node
+                Component* component = ComponentRegister::getInstance()->createComponent(type, ASSETS_PATH + name, 0);
+                meta_node->components.push_back(component);
             }
 
             node1 = node1.getNextSibling();
@@ -741,9 +705,9 @@ namespace vivid
         }
 
         XMLNode rootNode = doc.getRootNode();
-        if (strcmp(rootNode.getName(), "Camera") != 0)
+        if (strcmp(rootNode.getName(), "CameraState") != 0)
         {
-            cLog << "Not a camera resource file";
+            cLog << "Not a camera state component file";
             return false;
         }
 
@@ -765,6 +729,18 @@ namespace vivid
         node1 = rootNode.getFirstChild("ViewPort");
         if (!node1.isEmpty())
         {
+            Var x = String(node1.getAttribute("x"));
+            Var y = String(node1.getAttribute("y"));
+            Var w = String(node1.getAttribute("w"));
+            Var h = String(node1.getAttribute("h"));
+
+            camera_state->setViewPort(Vector4(x.toFloat(), y.toFloat(), w.toFloat(), h.toFloat()));
+        }
+
+        // View Transform
+        node1 = rootNode.getFirstChild("ViewTransform");
+        if (!node1.isEmpty())
+        {
             XMLNode node2 = node1.getFirstChild("Position");
             Var x = String(node1.getAttribute("x"));
             Var y = String(node1.getAttribute("y"));
@@ -784,30 +760,6 @@ namespace vivid
             Vector3 up(x.toFloat(), y.toFloat(), z.toFloat());
 
             camera_state->setViewTransform(CameraState::CameraViewParas(position, center, up));
-        }
-
-        // View Transform
-        node1 = rootNode.getFirstChild("ViewTransform");
-        if (!node1.isEmpty())
-        {
-            Var x = String(node1.getAttribute("x"));
-            Var y = String(node1.getAttribute("y"));
-            Var w = String(node1.getAttribute("w"));
-            Var h = String(node1.getAttribute("h"));
-
-            camera_state->setViewPort(Vector4(x.toFloat(), y.toFloat(), w.toFloat(), h.toFloat()));
-        }
-
-        // View Transform
-        node1 = rootNode.getFirstChild("ViewTransform");
-        if (!node1.isEmpty())
-        {
-            Var x = String(node1.getAttribute("x"));
-            Var y = String(node1.getAttribute("y"));
-            Var w = String(node1.getAttribute("w"));
-            Var h = String(node1.getAttribute("h"));
-
-            camera_state->setViewPort(Vector4(x.toFloat(), y.toFloat(), w.toFloat(), h.toFloat()));
         }
 
         // Perspective Transform
@@ -839,5 +791,87 @@ namespace vivid
         }
 
         return true;
+    }
+
+    bool ResourceLoader::load(MeshRender* mesh_render, const String& res)
+    {
+        char *data = nullptr;
+        int size = 0;
+        FileUtils::streamFromBinaryFile(_data_path + res, data, size);
+        if (data == nullptr) return false;
+
+        XMLDoc doc;
+        doc.parseBuffer(data, size);
+        if (doc.hasError())
+        {
+            cLog << "XML parsing error";
+            return false;
+        }
+
+        XMLNode rootNode = doc.getRootNode();
+        if (strcmp(rootNode.getName(), "MeshRender") != 0)
+        {
+            cLog << "Not a mesh render component file";
+            return false;
+        }
+
+        if (!rootNode.isEmpty())
+        {
+            XMLNode geo_node = rootNode.getFirstChild("Geometry");
+            String geo_name = geo_node.getAttribute("name");
+
+            XMLNode mat_node = rootNode.getFirstChild("Material");
+            String mat_name = mat_node.getAttribute("name");
+
+            mesh_render->load(ASSETS_PATH + geo_name, ASSETS_PATH + mat_name);
+        }
+    }
+
+    bool ResourceLoader::load(SpaceState* space_state, const String& res)
+    {
+        char *data = nullptr;
+        int size = 0;
+        FileUtils::streamFromBinaryFile(_data_path + res, data, size);
+        if (data == nullptr) return false;
+
+        XMLDoc doc;
+        doc.parseBuffer(data, size);
+        if (doc.hasError())
+        {
+            cLog << "XML parsing error";
+            return false;
+        }
+
+        XMLNode rootNode = doc.getRootNode();
+        if (strcmp(rootNode.getName(), "SpaceState") != 0)
+        {
+            cLog << "Not a space state component file";
+            return false;
+        }
+
+        if (!rootNode.isEmpty())
+        {
+            XMLNode position_node = rootNode.getFirstChild("Position");
+            float px = Var(position_node.getAttribute("x", "0")).toFloat();
+            float py = Var(position_node.getAttribute("y", "0")).toFloat();
+            float pz = Var(position_node.getAttribute("z", "0")).toFloat();
+
+            XMLNode scale_node = rootNode.getFirstChild("Scale");
+            float sx = Var(scale_node.getAttribute("x", "0")).toFloat();
+            float sy = Var(scale_node.getAttribute("y", "0")).toFloat();
+            float sz = Var(scale_node.getAttribute("z", "0")).toFloat();
+
+            XMLNode rotation_node = rootNode.getFirstChild("Rotation");
+            float rx = Var(rotation_node.getAttribute("x", "0")).toFloat();
+            float ry = Var(rotation_node.getAttribute("y", "0")).toFloat();
+            float rz = Var(rotation_node.getAttribute("z", "0")).toFloat();
+
+            space_state->translate(px, py, pz);
+            space_state->scale(sx, sy, sz);
+            space_state->rotate(rx, ry, rz);
+        }
+
+        return true;
+
     }
 }

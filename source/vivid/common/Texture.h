@@ -1,5 +1,5 @@
-#ifndef COMMON_TEXTURE_H
-#define COMMON_TEXTURE_H
+#ifndef VIVID_COMMON_TEXTURE_H
+#define VIVID_COMMON_TEXTURE_H
 
 #include "vivid/common/Resource.h"
 #include "vivid/renderer/resource/Image.h"
@@ -56,4 +56,4 @@ namespace vivid
     };
 }
 
-#endif // COMMON_TEXTURE_H
+#endif // VIVID_COMMON_TEXTURE_H

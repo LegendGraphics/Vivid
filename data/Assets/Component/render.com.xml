@@ -1,0 +1,4 @@
+<MeshRender>
+	<Geometry name="Mesh/duck.mesh"/>
+    <Material name="Material/duck.material.xml"/>
+</MeshRender>

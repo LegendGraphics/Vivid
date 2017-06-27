@@ -1,5 +1,5 @@
-#ifndef BASE_ASSERT_H
-#define BASE_ASSERT_H
+#ifndef VIVID_BASE_ASSERT_H
+#define VIVID_BASE_ASSERT_H
 
 #include <iostream>
 #include <cassert>
@@ -10,4 +10,4 @@
 #define ASSERT          assert
 #define STATIC_ASSERT   static_assert
 
-#endif // BASE_ASSERT_H
+#endif // VIVID_BASE_ASSERT_H

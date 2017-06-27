@@ -1,6 +1,6 @@
 
-#ifndef MATH_VECTOR3_H
-#define MATH_VECTOR3_H
+#ifndef VIVID_MATH_VECTOR3_H
+#define VIVID_MATH_VECTOR3_H
 
 #include <vector>
 
@@ -55,4 +55,4 @@ namespace vivid
     typedef Vector3 Vec3f;
 }
 
-#endif // MATH_VECTOR3_H
+#endif // VIVID_MATH_VECTOR3_H

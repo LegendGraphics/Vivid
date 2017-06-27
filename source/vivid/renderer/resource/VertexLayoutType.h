@@ -7,7 +7,7 @@ namespace vivid
     {
         enum VertexAttribute
         {
-            POSITION = 1 << 0,
+            POSITVIVID_ION = 1 << 0,
             NORMAL = 1 << 1,
             TANGENT = 1 << 2,
             BITANGENT = 1 << 3,
@@ -16,14 +16,14 @@ namespace vivid
         };
 
         enum Type {
-            P = VertexAttribute::POSITION,
+            P = VertexAttribute::POSITVIVID_ION,
 
-            PN = VertexAttribute::POSITION + VertexAttribute::NORMAL,
+            PN = VertexAttribute::POSITVIVID_ION + VertexAttribute::NORMAL,
 
-            PNTB = VertexAttribute::POSITION + VertexAttribute::NORMAL
+            PNTB = VertexAttribute::POSITVIVID_ION + VertexAttribute::NORMAL
             + VertexAttribute::TANGENT + VertexAttribute::BITANGENT,
 
-            PNTB_TEX = VertexAttribute::POSITION + VertexAttribute::NORMAL
+            PNTB_TEX = VertexAttribute::POSITVIVID_ION + VertexAttribute::NORMAL
             + VertexAttribute::TANGENT + VertexAttribute::BITANGENT
             + VertexAttribute::TEXTURE1,
 

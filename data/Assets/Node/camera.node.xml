@@ -1,10 +1,6 @@
 <!-- Node -->
 <Node>
 	<Components>
-		<CameraState>
-			<Camera name="Camera/default.camera.xml"/>
-		</CameraState>
-        <UploadToRender>
-		</UploadToRender>
+		<Component type="CameraState" name="Component/camera.com.xml"/>
 	</Components>
 </Node>

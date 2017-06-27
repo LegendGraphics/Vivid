@@ -1,5 +1,5 @@
-#ifndef COMMON_SPACE_STATE_H
-#define COMMON_SPACE_STATE_H
+#ifndef VIVID_COMMON_SPACE_STATE_H
+#define VIVID_COMMON_SPACE_STATE_H
 
 #include "vivid/common/Component.h"
 #include "vivid/math/Vector3.h"
@@ -19,6 +19,12 @@ namespace vivid
         };
 
     public:
+
+        static SpaceState* create(const String& res);
+        static int typeId();
+
+        virtual int getTypeId();
+
         SpaceState();
         SpaceState(const Vector3& position, const Vector3& scale, const Vector3& rotation);
         SpaceState(const Vector3& position);
@@ -73,4 +79,4 @@ namespace vivid
 }
 
 
-#endif // COMMON_SPACE_STATE_H
+#endif // VIVID_COMMON_SPACE_STATE_H

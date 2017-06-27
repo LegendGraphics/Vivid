@@ -1,5 +1,5 @@
-#ifndef COMMON_PIPELINE_RESOURCE_H
-#define COMMON_PIPELINE_RESOURCE_H
+#ifndef VIVID_COMMON_PIPELINE_RESOURCE_H
+#define VIVID_COMMON_PIPELINE_RESOURCE_H
 
 #include "vivid/base/Variant.h"
 #include "vivid/common/Resource.h"
@@ -171,4 +171,4 @@ namespace vivid
     };
 }
 
-#endif // COMMON_PIPELINE_RESOURCE_H
+#endif // VIVID_COMMON_PIPELINE_RESOURCE_H

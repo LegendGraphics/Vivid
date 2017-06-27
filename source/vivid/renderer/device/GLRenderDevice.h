@@ -1,5 +1,5 @@
-#ifndef RENDERER_GL_RENDER_DEVICE_H
-#define RENDERER_GL_RENDER_DEVICE_H
+#ifndef VIVID_RENDERER_GL_RENDER_DEVICE_H
+#define VIVID_RENDERER_GL_RENDER_DEVICE_H
 
 #include "vivid/renderer/device/RenderDevice.h"
 

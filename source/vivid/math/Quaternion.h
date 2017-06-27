@@ -1,5 +1,5 @@
-#ifndef MATH_QUATERNION_H
-#define MATH_QUATERNION_H
+#ifndef VIVID_MATH_QUATERNVIVID_ION_H
+#define VIVID_MATH_QUATERNVIVID_ION_H
 
 #include "vivid/math/Vector3.h"
 #include "vivid/math/Matrix.h"
@@ -99,4 +99,4 @@ namespace vivid
 
 
 
-#endif // MATH_QUATERNION_H
+#endif // VIVID_MATH_QUATERNVIVID_ION_H

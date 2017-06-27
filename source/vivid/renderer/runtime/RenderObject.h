@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDER_OBJECT_H
-#define RENDERER_RENDER_OBJECT_H
+#ifndef VIVID_RENDERER_RENDER_OBJECT_H
+#define VIVID_RENDERER_RENDER_OBJECT_H
 
 #include "vivid/base/Types.h"
 

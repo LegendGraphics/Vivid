@@ -1,5 +1,5 @@
-#ifndef COMMON_BOUNDING_SPHERE_H
-#define COMMON_BOUNDING_SPHERE_H
+#ifndef VIVID_SHAPE_BOUNDING_SPHERE_H
+#define VIVID_SHAPE_BOUNDING_SPHERE_H
 
 #include "vivid/math/Vector3.h"
 
@@ -22,4 +22,4 @@ namespace vivid
         float _radius;
     };
 }
-#endif // COMMON_BOUNDING_SPHERE_H
+#endif // VIVID_SHAPE_BOUNDING_SPHERE_H

@@ -12,6 +12,10 @@
 #include "vivid/io/Logger.h"
 #include "vivid/renderer/RenderInterface.h"
 
+#include "vivid/common/SpaceState.h"
+#include "vivid/common/MeshRender.h"
+#include "vivid/common/Uploader.h"
+
 namespace vivid
 {
     template<> Director* Singleton<Director>::_singleton = nullptr;
@@ -21,6 +25,13 @@ namespace vivid
         // init engine modules
         RenderInterface::getInstance()->init();
         RenderInterface::getInstance()->registerWorld();
+
+        // init components
+        ComponentRegister::getInstance()->registerCom("SpaceState", &SpaceState::create, 0);
+        ComponentRegister::getInstance()->registerCom("CameraState", &CameraState::create, 0);
+        ComponentRegister::getInstance()->registerCom("MeshRender", &MeshRender::create, 0);
+        ComponentRegister::getInstance()->registerCom("UploadToRender", &UploadToRender::create, 0);
+
         return true;
     }
 

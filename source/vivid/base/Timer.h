@@ -1,5 +1,5 @@
-#ifndef BASE_TIMER_H
-#define BASE_TIMER_H
+#ifndef VIVID_BASE_TIMER_H
+#define VIVID_BASE_TIMER_H
 
 #include <chrono>
 #include "vivid/base/Platform.h"
@@ -31,4 +31,4 @@ namespace vivid
 }
 
 
-#endif // BASE_TIMER_H
+#endif // VIVID_BASE_TIMER_H

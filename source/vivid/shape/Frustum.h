@@ -1,5 +1,5 @@
-#ifndef COMMON_FRUSTUM_H
-#define COMMON_FRUSTUM_H
+#ifndef VIVID_SHAPE_FRUSTUM_H
+#define VIVID_SHAPE_FRUSTUM_H
 
 #include "vivid/shape/Plane.h"
 #include "vivid/shape/BoundingBox.h"
@@ -35,4 +35,4 @@ namespace vivid
 
 
 
-#endif // COMMON_FRUSTUM_H
+#endif // VIVID_SHAPE_FRUSTUM_H

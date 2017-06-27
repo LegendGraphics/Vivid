@@ -2,6 +2,37 @@
 
 namespace vivid
 {
+    template<> ComponentRegister* Singleton<ComponentRegister>::_singleton = nullptr;
+
+    bool ComponentRegister::registerCom(const String& name, ComponentCreator creator, int id)
+    {
+        if (_cmap.find(name) != _cmap.end())
+            return false;
+        else
+        {
+            _cmap.insert({name, {creator, id}});
+            return true;
+        }
+    }
+
+    void ComponentRegister::unregisterCom(const String& name)
+    {
+        if (_cmap.find(name) != _cmap.end())
+            _cmap.erase(name);
+    }
+
+    bool ComponentRegister::hasRegistered(const String& name)
+    {
+        if (_cmap.find(name) != _cmap.end()) return true;
+        else return false;
+    }
+
+    Component* ComponentRegister::createComponent(const String& name, const String& res, int id)
+    {
+        if (hasRegistered(name)) return std::get<0>(_cmap[name])(res);
+        else return nullptr;
+    }
+
     Component::Component()
         :_enabled(true),
         _owner(nullptr),

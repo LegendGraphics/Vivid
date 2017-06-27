@@ -1,16 +1,8 @@
 <!-- Node -->
 <Node>
 	<Components>
-		<SpaceState>
-			<Position x="0.0" y="0.0" z="0.0"/>
-			<Scale x="1.0" y="1.0" z="1.0"/>
-			<Rotation x="0.0" y="0.0" z="0.0"/>
-		</SpaceState>
-		<MeshRender>
-			<Geometry name="Mesh/duck.mesh"/>
-            <Material name="Material/cube_emptyTags.material.xml"/>
-		</MeshRender>
-        <UploadToRender>
-		</UploadToRender>
+        <Component type="SpaceState" name="Component/space.com.xml"/>
+        <Component type="MeshRender" name="Component/render.com.xml"/>
+        <Component type="UploadToRender" name=""/>
 	</Components>
 </Node>

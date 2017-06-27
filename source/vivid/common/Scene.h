@@ -1,5 +1,5 @@
-//#ifndef COMMON_SCENE_H
-//#define COMMON_SCENE_H
+//#ifndef VIVID_COMMON_SCENE_H
+//#define VIVID_COMMON_SCENE_H
 //
 //#include "vivid/common/Resource.h"
 //
@@ -23,10 +23,10 @@
 //    };
 //}
 //
-//#endif // COMMON_SCENE_H
+//#endif // VIVID_COMMON_SCENE_H
 
-#ifndef COMMON_SCENE_H
-#define COMMON_SCENE_H
+#ifndef VIVID_COMMON_SCENE_H
+#define VIVID_COMMON_SCENE_H
 
 #include "vivid/base/Platform.h"
 #include "vivid/base/Ref.h"
@@ -60,4 +60,4 @@ namespace vivid
 
 }
 
-#endif // COMMON_SCENE_H
+#endif // VIVID_COMMON_SCENE_H

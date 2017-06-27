@@ -1,5 +1,5 @@
-#ifndef COMMON_REFPTR_HPP
-#define COMMON_REFPTR_HPP
+#ifndef VIVID_COMMON_REFPTR_HPP
+#define VIVID_COMMON_REFPTR_HPP
 
 namespace vivid
 {
@@ -103,4 +103,4 @@ namespace vivid
 }
 
 
-#endif // COMMON_REFPTR_HPP
+#endif // VIVID_COMMON_REFPTR_HPP

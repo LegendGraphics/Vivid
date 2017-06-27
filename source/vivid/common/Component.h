@@ -1,11 +1,14 @@
-#ifndef COMMON_COMPONENT_H
-#define COMMON_COMPONENT_H
+#ifndef VIVID_COMMON_COMPONENT_H
+#define VIVID_COMMON_COMPONENT_H
 
 #include <string>
 #include <array>
 #include <bitset>
+#include <unordered_map>
+#include <functional>
 
 #include "vivid/base/String.h"
+#include "vivid/base/Singleton.hpp"
 #include "vivid/common/Clone.h"
 
 
@@ -23,6 +26,23 @@ namespace vivid
         MESH_RENDER,
         LOGIC_BEHAVIOR,
         UPLOAD_TO_RENDER
+    };
+
+
+    class ComponentRegister: public Singleton<ComponentRegister>
+    {
+    private:
+        using ComponentCreator = std::function<Component*(const String& res)>;
+        using ComponentMap = std::unordered_map<String, std::tuple<ComponentCreator, int>>;
+
+    public:
+        bool registerCom(const String& name, ComponentCreator creator, int id);
+        void unregisterCom(const String& name);
+
+        bool hasRegistered(const String& name);
+        Component* createComponent(const String& name, const String& res, int id);
+    private:
+        ComponentMap    _cmap;
     };
 
     class Component: public Cloneable
@@ -51,6 +71,9 @@ namespace vivid
 
         template <typename C>
         C* getComponent();
+
+        virtual int getTypeId() { return -1; };
+
 
     protected:
         String              _name;
@@ -84,6 +107,9 @@ namespace vivid
 
         ENABLE_CLONE(ComData);
 
+        virtual int getTypeId() { return -1; };
+
+
     };
 
     class Behavior : public Component
@@ -95,6 +121,9 @@ namespace vivid
         virtual ~Behavior() = default;
 
         ENABLE_CLONE(Behavior);
+
+        virtual int getTypeId() { return -1; };
+
 
         virtual void init();
         virtual void update();
@@ -110,6 +139,8 @@ namespace vivid
 
         ENABLE_CLONE(Render);
 
+        virtual int getTypeId() { return -1; };
+
         virtual void init();
         virtual void update();
     };
@@ -117,4 +148,4 @@ namespace vivid
 }
 
 
-#endif // COMMON_COMPONENT_H
+#endif // VIVID_COMMON_COMPONENT_H

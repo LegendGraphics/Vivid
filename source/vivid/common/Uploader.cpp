@@ -8,6 +8,23 @@
 
 namespace vivid
 {
+    UploadToRender* UploadToRender::create(const String& res)
+    {
+        UploadToRender* ur = new UploadToRender;
+        return ur;
+    }
+
+    int UploadToRender::typeId()
+    {
+        return getComponentTypeId<UploadToRender>();
+    }
+
+    int UploadToRender::getTypeId()
+    {
+        return UploadToRender::typeId();
+    }
+
+
     UploadToRender::UploadToRender()
         :Render(ComponentType::UPLOAD_TO_RENDER)
     {

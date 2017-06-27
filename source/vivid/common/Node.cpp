@@ -78,47 +78,10 @@ namespace vivid
 
     void Node::addComponent(Component* component)
     {
-        ComponentType type = component->getType();
-        if (type == ComponentType::SPACE_STATE)
-            addComponent(component, getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_RENDER)
-            addComponent(component, getComponentTypeId<MeshRender>());
-        else if (type == ComponentType::UPLOAD_TO_RENDER)
-            addComponent(component, getComponentTypeId<UploadToRender>());
-
+        addComponent(component, component->getTypeId());
     }
 
-    void Node::removeComponent(ComponentType type)
-    {
-        if (type == ComponentType::SPACE_STATE)
-            removeComponent(getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_RENDER)
-            removeComponent(getComponentTypeId<MeshRender>());
-        else if (type == ComponentType::UPLOAD_TO_RENDER)
-            removeComponent(getComponentTypeId<UploadToRender>());
-    }
-
-    Component* Node::getComponent(ComponentType type)
-    {
-        if (type == ComponentType::SPACE_STATE)
-            return getComponent(getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_RENDER)
-            return getComponent(getComponentTypeId<MeshRender>());
-        else if (type == ComponentType::UPLOAD_TO_RENDER)
-            return getComponent(getComponentTypeId<UploadToRender>());
-        else return nullptr;
-    }
-
-    bool Node::hasComponent(ComponentType type)
-    {
-        if (type == ComponentType::SPACE_STATE)
-            return hasComponent(getComponentTypeId<SpaceState>());
-        else if (type == ComponentType::MESH_RENDER)
-            return hasComponent(getComponentTypeId<MeshRender>());
-        else if (type == ComponentType::UPLOAD_TO_RENDER)
-            return hasComponent(getComponentTypeId<UploadToRender>());
-        else return false;
-    }
+    
 
 
     NodeTree::NodeTree()

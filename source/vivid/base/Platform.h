@@ -1,5 +1,5 @@
-#ifndef BASE_PLATFORM_H
-#define BASE_PLATFORM_H
+#ifndef VIVID_BASE_PLATFORM_H
+#define VIVID_BASE_PLATFORM_H
 
 namespace vivid 
 {
@@ -12,7 +12,7 @@ namespace vivid
 #define VIVID_PLATFORM_WIN32 1
 #define VIVID_PLATFORM_LINUX 2
 #define VIVID_PLATFORM_APPLE 3
-#define VIVID_PLATFORM_APPLE_IOS 4
+#define VIVID_PLATFORM_APPLE_VIVID_IOS 4
 #define VIVID_PLATFORM_ANDROID 5
 
 #define VIVID_COMPILER_MSVC 1
@@ -43,8 +43,8 @@ namespace vivid
 #elif defined( __APPLE_CC__)
     // Device                                                     Simulator
     // Both requiring OS version 4.0 or greater
-#   if __ENVIRONMENT_IPHONE_OS_VERSION_MIN_REQUIRED__ >= 40000 || __IPHONE_OS_VERSION_MIN_REQUIRED >= 40000
-#       define VIVID_PLATFORM VIVID_PLATFORM_APPLE_IOS
+#   if __ENVIRONMENT_IPHONE_OS_VERSVIVID_ION_MIN_REQUIRED__ >= 40000 || __IPHONE_OS_VERSVIVID_ION_MIN_REQUIRED >= 40000
+#       define VIVID_PLATFORM VIVID_PLATFORM_APPLE_VIVID_IOS
 #   else
 #       define VIVID_PLATFORM VIVID_PLATFORM_APPLE
 #   endif
@@ -91,7 +91,7 @@ namespace vivid
 
     // Linux/Apple/iOs/Android Settings
 #if VIVID_PLATFORM == VIVID_PLATFORM_LINUX || VIVID_PLATFORM == VIVID_PLATFORM_APPLE \
-    || VIVID_PLATFORM == VIVID_PLATFORM_APPLE_IOS || VIVID_PLATFORM == VIVID_PLATFORM_ANDROID
+    || VIVID_PLATFORM == VIVID_PLATFORM_APPLE_VIVID_IOS || VIVID_PLATFORM == VIVID_PLATFORM_ANDROID
 
     // Enable GCC symbol visibility
 #   if defined( VIVID_GCC_VISIBILITY )
@@ -133,4 +133,4 @@ namespace vivid
 
 }
 
-#endif // BASE_PLATFORM_H
+#endif // VIVID_BASE_PLATFORM_H

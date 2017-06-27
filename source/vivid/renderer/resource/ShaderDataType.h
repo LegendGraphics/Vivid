@@ -1,5 +1,5 @@
-#ifndef RENDERER_SHADER_DATA_TYPE_H
-#define RENDERER_SHADER_DATA_TYPE_H
+#ifndef VIVID_RENDERER_SHADER_DATA_TYPE_H
+#define VIVID_RENDERER_SHADER_DATA_TYPE_H
 
 namespace vivid
 {
@@ -31,4 +31,4 @@ namespace vivid
     }
 }
 
-#endif // RENDERER_SHADER_DATA_TYPE_H
+#endif // VIVID_RENDERER_SHADER_DATA_TYPE_H

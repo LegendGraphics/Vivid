@@ -1,5 +1,5 @@
-#ifndef RENDERER_STATE_STREAM_H
-#define RENDERER_STATE_STREAM_H
+#ifndef VIVID_RENDERER_STATE_STREAM_H
+#define VIVID_RENDERER_STATE_STREAM_H
 
 #include "vivid/renderer/runtime/RenderMeshObject.h"
 #include "vivid/renderer/runtime/RenderShaderObject.h"

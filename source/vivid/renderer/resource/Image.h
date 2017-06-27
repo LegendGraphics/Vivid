@@ -1,5 +1,5 @@
-#ifndef RENDERER_IMAGE_H
-#define RENDERER_IMAGE_H
+#ifndef VIVID_RENDERER_IMAGE_H
+#define VIVID_RENDERER_IMAGE_H
 
 namespace vivid
 {

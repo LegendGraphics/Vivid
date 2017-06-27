@@ -1,5 +1,5 @@
-#ifndef MATH_MATH_UTILS_H
-#define MATH_MATH_UTILS_H
+#ifndef VIVID_MATH_VIVID_MATH_UTILS_H
+#define VIVID_MATH_VIVID_MATH_UTILS_H
 
 namespace vivid
 {
@@ -15,4 +15,4 @@ namespace vivid
     
 }
 
-#endif // MATH_MATH_UTILS_H
+#endif // VIVID_MATH_VIVID_MATH_UTILS_H

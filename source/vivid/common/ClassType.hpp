@@ -1,5 +1,5 @@
-#ifndef COMMON_CLASS_TYPE_HPP
-#define COMMON_CLASS_TYPE_HPP
+#ifndef VIVID_COMMON_CLASS_TYPE_HPP
+#define VIVID_COMMON_CLASS_TYPE_HPP
 
 #include <cstddef>
 #include "vivid/base/Types.h"
@@ -14,9 +14,14 @@ namespace vivid
         template <typename T>
         static int getTypeId()
         {
-            static const int id = _next_type_id++;
+            static const int id = _next_type_id++;      // initialize the id at the first time, then it's been skipped.
             return id;
         } ///< do not abuse this class, it will generate tons of functions.
+
+        static int getNextTypeId()
+        {
+            return _next_type_id;
+        }
 
     private:
         static int _next_type_id;
@@ -40,4 +45,4 @@ namespace vivid
 
 
 
-#endif // COMMON_CLASS_TYPE_HPP
+#endif // VIVID_COMMON_CLASS_TYPE_HPP

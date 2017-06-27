@@ -1,5 +1,5 @@
-#ifndef COMMON_NODE_H
-#define COMMON_NODE_H
+#ifndef VIVID_COMMON_NODE_H
+#define VIVID_COMMON_NODE_H
 
 #include <vector>
 #include <type_traits>
@@ -63,11 +63,7 @@ namespace vivid
         template <typename C>
         bool hasComponent();
 
-        // need to check type, slower than template methods
         void addComponent(Component* component);
-        void removeComponent(ComponentType type);
-        Component* getComponent(ComponentType type);
-        bool hasComponent(ComponentType type);
 
         void updateBehavior();
         void updateRender();
@@ -179,4 +175,4 @@ namespace vivid
     };
 }
 
-#endif // COMMON_NODE_H
+#endif // VIVID_COMMON_NODE_H

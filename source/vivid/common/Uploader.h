@@ -1,5 +1,5 @@
-#ifndef COMMON_UPLOADER_H
-#define COMMON_UPLOADER_H
+#ifndef VIVID_COMMON_UPLOADER_H
+#define VIVID_COMMON_UPLOADER_H
 
 #include "vivid/common/Component.h"
 #include "vivid/common/Material.h"
@@ -12,6 +12,11 @@ namespace vivid
     class UploadToRender : public Render
     {
     public:
+        static UploadToRender* create(const String& res);
+        static int typeId();
+
+        virtual int getTypeId();
+
         UploadToRender();
 
         void setActionType(stream_message::ActionType type);
@@ -49,6 +54,6 @@ namespace vivid
     };
 }
 
-#endif // COMMON_UPLOADER_H
+#endif // VIVID_COMMON_UPLOADER_H
 
 

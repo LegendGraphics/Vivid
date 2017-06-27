@@ -249,12 +249,12 @@ namespace vivid
 
                 delete v_stream;
             }
-            else if (resource_stream::MessageType::ALLOC_VERTEX_DECLARATION == msg.type)
+            else if (resource_stream::MessageType::ALLOC_VERTEX_DECLARATVIVID_ION == msg.type)
             {
                 resource_stream::VertexDeclarationStream* vd_stream
                     = static_cast<resource_stream::VertexDeclarationStream*>(msg.head);
                 GPUResourceHandle* res = vd_stream->res;
-                //ASSERT(RenderResource::VERTEX_DECLARATION == res->type, "Render Resource Type doesn't match!");
+                //ASSERT(RenderResource::VERTEX_DECLARATVIVID_ION == res->type, "Render Resource Type doesn't match!");
 
                 const VertexLayout& vl = _vertex_declaration->getLayout(vd_stream->layout_type);
                 // rearrange the vertex buffers here

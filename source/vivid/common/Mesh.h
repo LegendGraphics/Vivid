@@ -1,5 +1,5 @@
-#ifndef COMMON_MESH_H
-#define COMMON_MESH_H
+#ifndef VIVID_COMMON_MESH_H
+#define VIVID_COMMON_MESH_H
 
 #include "vivid/common/Clone.h"
 #include "vivid/math/Vector4.h"
@@ -23,7 +23,7 @@ namespace vivid
     //{
     //    enum VertexAttribute
     //    {
-    //        POSITION = 1 << 0,
+    //        POSITVIVID_ION = 1 << 0,
     //        NORMAL = 1 << 1,
     //        TANGENT = 1 << 2,
     //        BITANGENT = 1 << 3,
@@ -32,14 +32,14 @@ namespace vivid
     //    };
 
     //    enum Type {
-    //        P = VertexAttribute::POSITION,
+    //        P = VertexAttribute::POSITVIVID_ION,
 
-    //        PN = VertexAttribute::POSITION + VertexAttribute::NORMAL,
+    //        PN = VertexAttribute::POSITVIVID_ION + VertexAttribute::NORMAL,
 
-    //        PNTB = VertexAttribute::POSITION + VertexAttribute::NORMAL
+    //        PNTB = VertexAttribute::POSITVIVID_ION + VertexAttribute::NORMAL
     //        + VertexAttribute::TANGENT + VertexAttribute::BITANGENT,
 
-    //        PNTB_TEX = VertexAttribute::POSITION + VertexAttribute::NORMAL
+    //        PNTB_TEX = VertexAttribute::POSITVIVID_ION + VertexAttribute::NORMAL
     //        + VertexAttribute::TANGENT + VertexAttribute::BITANGENT
     //        + VertexAttribute::TEXTURE1,
 
@@ -336,4 +336,4 @@ namespace vivid
 
 
 
-#endif // COMMON_MESH_H
+#endif // VIVID_COMMON_MESH_H

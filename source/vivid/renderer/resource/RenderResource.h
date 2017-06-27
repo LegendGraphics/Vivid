@@ -1,5 +1,5 @@
-#ifndef RENDERER_RENDER_RESOURCE_H
-#define RENDERER_RENDER_RESOURCE_H
+#ifndef VIVID_RENDERER_RENDER_RESOURCE_H
+#define VIVID_RENDERER_RENDER_RESOURCE_H
 
 #include <vector>
 #include "vivid/base/Types.h"
@@ -14,7 +14,7 @@ namespace vivid
             TEXTURE,
             INDEX_STREAM,
             VERTEX_STREAM,
-            VERTEX_DECLARATION,
+            VERTEX_DECLARATVIVID_ION,
             SHADER,
             OTHER,
             NOT_INITIALIZED = 0xFFFFFFFF

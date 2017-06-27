@@ -1,5 +1,5 @@
-#ifndef COMMON_NODE_VISITOR_H
-#define COMMON_NODE_VISITOR_H
+#ifndef VIVID_COMMON_NODE_VISITOR_H
+#define VIVID_COMMON_NODE_VISITOR_H
 
 #include "vivid/base/Refptr.hpp"
 #include "vivid/base/Ref.h"
@@ -113,4 +113,4 @@ namespace vivid
 
 }
 
-#endif // COMMON_NODE_VISITOR_H
+#endif // VIVID_COMMON_NODE_VISITOR_H
