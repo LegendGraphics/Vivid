@@ -14,7 +14,7 @@
 
 namespace vivid
 {
-    RenderInterface* Singleton<RenderInterface>::_singleton = nullptr;
+    template<> RenderInterface* Singleton<RenderInterface>::_singleton = nullptr;
 
     bool RenderInterface::init()
     {
